@@ -1,0 +1,9 @@
+{
+  "name": "math",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "mathjs": "^3.16.3"
+  }
+}

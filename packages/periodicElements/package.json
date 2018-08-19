@@ -1,0 +1,9 @@
+{
+  "name": "periodicElements",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "periodic-table": "^0.0.8"
+  }
+}
