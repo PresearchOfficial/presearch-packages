@@ -8,6 +8,9 @@
     "merge-dependencies": "./bin/merge-dependencies",
     "create-package": "./bin/create-package.sh"
   },
+  "pre-commit": [
+    "merge-dependencies"
+  ],
   "author": "",
   "license": "",
   "dependencies": {
@@ -17,5 +20,8 @@
     "mathjs": "^3.16.3",
     "wordnetjs": "^0.3.0",
     "node-fetch": "^1.7.3"
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2"
   }
 }
