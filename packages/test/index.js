@@ -3,7 +3,7 @@
 /*
   helper tagged template function - sanitize
   helper css classes
-  create package command - npm run create-pacakge <somePackageName>
+  X create package command - npm run create-pacakge <somePackageName>
     if does not exist
       create dir
       create index.js
