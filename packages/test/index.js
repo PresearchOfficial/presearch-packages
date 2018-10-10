@@ -1,19 +1,5 @@
 'use strict';
 
-/*
-  helper tagged template function - sanitize
-  helper css classes
-  X create package command - npm run create-pacakge <somePackageName>
-    if does not exist
-      create dir
-      create index.js
-      create readme.md
-      run npm init
-      provide information for package.json
-  test package command - npm run test <packageName>
-  X run merge dependencies every git push
-*/
-
 async function test() {
   return render`
     <div class="red">
