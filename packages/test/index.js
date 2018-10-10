@@ -11,7 +11,7 @@
       run npm init
       provide information for package.json
   test package command - npm run test <packageName>
-  run merge dependencies every git push
+  X run merge dependencies every git push
 */
 
 async function test() {
