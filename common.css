@@ -1,0 +1,71 @@
+.answerContain {
+  flex: 1;
+  padding: 10px 0;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #ddd;
+}
+.answerInner {
+  flex: 1;
+  display: flex;
+}
+.answerRow {
+  display: flex;
+}
+.answerCol {
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (min-width: 1200px) {
+  .answerInner {
+    width: calc(95% - 70px);
+    max-width: 1200px;
+    margin: 15px auto 15px 70px;
+    flex-flow: row nowrap; 
+  }
+}
+
+@media screen and (min-width: 840px) and (max-width: 1199px) {
+  .answerInner {
+    width: 95%;
+    max-width: 1200px;
+    margin: 15px auto;
+    flex-flow: row nowrap; 
+  }
+}
+
+@media screen and (min-width: 840px) {
+  .answerContain {
+    flex-flow: row nowrap;
+  }
+  .answerRow {
+    flex-flow: row nowrap;
+  }
+  .mainCol {
+    width: 55%;
+  }
+  .sideCol {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 839px) {
+  .answerInner {
+    width: 95%;
+    margin: 15px auto;
+    flex-flow: column-reverse nowrap; 
+  }
+  .answerContain {
+    flex-flow: column nowrap;
+  }
+  .answerRow {
+    flex-flow: column nowrap;
+  }
+  .mainCol {
+    width: 100%;
+  }
+  .sideCol {
+    width: 100%;
+  }
+}
+
