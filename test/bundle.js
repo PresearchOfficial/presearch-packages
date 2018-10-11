@@ -61,6 +61,7 @@ async function apod() {
       }
       .apodLink {
         color: #1a0dab;
+        text-decoration: none;
       }
       
       @media screen and (min-width: 840px) {
