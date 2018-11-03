@@ -5,8 +5,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config({path: `./.env`});
 }
 
-console.log(process.env.CRYPTO_API_KEY);
-
 const cryptoMap = [
   { id: 1,
     name: 'Bitcoin',
@@ -13267,8 +13265,8 @@ async function cryptoInfo() {
     const metaDataResult = await metaDataRes.json();
     const currentDataResult = await currentDataRes.json();
 
-    const meta = metaDataResult['1'].data;
-    const current = currentDataResult['1'].data;
+    const meta = metaDataResult.data['1'];
+    const current = currentDataResult.data['1'];
     
     console.log(meta);
     console.log(current)
