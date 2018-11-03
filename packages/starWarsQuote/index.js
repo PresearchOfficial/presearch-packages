@@ -365,8 +365,22 @@ const quotes = [
 ];
 
 function starWarsQuote(query) {
-  return quotes[Math.floor(Math.random() * quotes.length)];
+  const quote = quotes[Math.floor(Math.random() * quotes.length)];
+
+  return `
+    <div class="mainCol">
+      <h1 class="starWarsQuote">"${quote}"</h1>
+    </div>
+    <style>
+      .starWarsQuote {
+        margin-left: 15px
+      }
+    </style>
+  `;
 }
+
+// This line is for testing package with browserify bundle 
+window.starWarsQuote = starWarsQuote();
 
 function trigger(query) {
   return query === 'starwars quote' || query === 'star wars quote';
