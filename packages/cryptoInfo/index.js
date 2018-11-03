@@ -13271,14 +13271,8 @@ async function cryptoInfo() {
     const metaDataResult = await metaDataRes.json();
     const currentDataResult = await currentDataRes.json();
 
-    console.log(metaDataResult);
-    console.log(currentDataResult);
-
-    const meta = metaDataResult.data['1'];
-    const current = currentDataResult.data['1'];
-    
-    console.log(meta);
-    console.log(current)
+    const meta = metaDataResult.data[currentId];
+    const current = currentDataResult.data[currentId];
     
     const quote = Object.values(current.quote)[0];
     const updatedOn = new Date(current.last_updated);
