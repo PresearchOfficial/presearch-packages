@@ -2,8 +2,8 @@
 const wn = require('wordnetjs');
 
 // param: query
-async function dict() {
-  const query = 'define car';
+async function dict(query) {
+  // const query = 'define car';
   const word = query.replace('define', '');
   const data = wn.lookup(word.trim());
   const nounArr = data.filter(item => item.syntactic_category === 'Noun');

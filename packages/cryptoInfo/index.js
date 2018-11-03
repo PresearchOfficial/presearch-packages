@@ -13244,9 +13244,6 @@ const CURRENT_MARKET_DATA_ENDPOINT = 'https://pro-api.coinmarketcap.com/v1/crypt
 
 let currentId = null;
 
-// TESTING PACKAGE
-currentId = 2245;
-
 async function cryptoInfo() {
   try {
     const metaDataRes = await fetch(`${META_DATA_ENDPOINT}?id=${currentId}`, {
