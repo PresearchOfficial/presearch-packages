@@ -13451,7 +13451,7 @@ async function cryptoInfo() {
   }
 }
 
-window.cryptoInfo = cryptoInfo();
+// window.cryptoInfo = cryptoInfo();
 
 async function trigger(query) {
   for (let item of cryptoMap) {

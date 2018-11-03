@@ -91,7 +91,7 @@ async function dict() {
 }
 
 // This line is for testing package with browserify bundle 
-window.dict = dict("define cat");
+// window.dict = dict("define cat");
 
 async function trigger(query) {
   return query.includes('define');

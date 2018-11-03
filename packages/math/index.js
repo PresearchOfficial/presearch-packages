@@ -20,7 +20,7 @@ async function math(query) {
 }
 
 // This line is for testing package with browserify bundle 
-window.math = math("2 + 2");
+// window.math = math("2 + 2");
 
 async function trigger(query) {
   try {

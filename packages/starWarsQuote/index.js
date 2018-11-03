@@ -380,7 +380,7 @@ function starWarsQuote(query) {
 }
 
 // This line is for testing package with browserify bundle 
-window.starWarsQuote = starWarsQuote();
+// window.starWarsQuote = starWarsQuote();
 
 function trigger(query) {
   return query === 'starwars quote' || query === 'star wars quote';

@@ -41,7 +41,7 @@ async function periodicElements(query) {
 }
 
 // This line is for testing package with browserify bundle 
-window.periodic = periodicElements("H");
+// window.periodic = periodicElements("H");
 
 async function trigger(query) {
   return query.match(/^\w{1,2}$/);

@@ -77,7 +77,7 @@ async function apod() {
 }
 
 // This line is for testing package with browserify bundle 
-window.apod = apod();
+// window.apod = apod();
 
 async function trigger(query) {
   return query.toLowerCase() === 'apod';
