@@ -13239,6 +13239,12 @@ const cryptoMap = [
   }
 ];
 
+const formatNumber = (x) => {
+  var parts = x.toString().split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return parts.join('.');
+}
+
 const META_DATA_ENDPOINT = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/info';
 const CURRENT_MARKET_DATA_ENDPOINT = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
 
