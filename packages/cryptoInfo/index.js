@@ -13269,6 +13269,10 @@ async function cryptoInfo() {
 
     const meta = metaDataResult.data;
     const current = currentDataResult.data;
+    
+    console.log(meta);
+    console.log(current)
+
     const quote = Object.values(current.quote)[0];
     const updatedOn = new Date(current.last_updated);
 
