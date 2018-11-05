@@ -24,7 +24,7 @@ async function apod() {
           ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
           <p class="apodDate">${data.date}</p>
           <p class="apodDesc">${data.explanation}</p>
-          <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a> 
+          <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@ async function apod() {
         color: #1a0dab;
         text-decoration: none;
       }
-      
+
       @media screen and (min-width: 840px) {
         .apodIframe {
           height: calc(30vw - 55px) !important;
@@ -76,7 +76,7 @@ async function apod() {
   `;
 }
 
-// This line is for testing package with browserify bundle 
+// This line is for testing package with browserify bundle
 // window.apod = apod();
 
 async function trigger(query) {
