@@ -14,7 +14,7 @@ $ cd presearch-packages && npm install
 ## Development
 
 ```
-$ cd server && npm start
+$ cd server && npm install && npm start
 ```
 
 Packages available at: `http://localhost:4000/package?query=apod&packageKey=apod`
