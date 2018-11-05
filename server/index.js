@@ -12,13 +12,10 @@ app.get('/', (req, res) => res.send('Nothing.'));
 app.get('/package', async (req, res) => {
   const packageKey = req.query.packageKey;
   const query = req.query.query;
-  if (packageKey in packageObject) {
-    const trigger = await packageObject[packageKey].trigger(query);
-    if (trigger) {
-      const result = await packageObject[packageKey][packageKey](query);
-      console.log(result, query, packageKey);
-      res.send(result);
-    }
+  const trigger = await packageObject[packageKey].trigger(query);
+  if (packageKey in packageObject && trigger) {
+    const result = await packageObject[packageKey][packageKey](query);
+    res.send(result);
   }
   else {
     res.status('400');
