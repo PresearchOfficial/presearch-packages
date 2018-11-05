@@ -21,7 +21,10 @@ Packages available at: `http://localhost:4000/package?query=apod&packageKey=apod
 
 Change the query and packageKey parameters accordingly
 
-Place API keys in a `.env` file at the root of the project for development
+Place API keys in a `.env` file at the root of the project for development:
+```
+MY_API_KEY=fooandotherstuff
+```
 
 Include API keys from `.env`:
 ```
@@ -29,6 +32,14 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config({path: `${__dirname}/../../.env`});
 }
 ```
+
+Access API keys from package:
+```
+const API_KEY = process.env.MY_API_KEY
+```
+
+The `.env` file is included in the .gitignore
+*Do not push your API keys to the presearch-packages repository*
 
 ## Contributing
 
