@@ -39,6 +39,7 @@ const API_KEY = process.env.MY_API_KEY
 ```
 
 The `.env` file is included in the .gitignore
+
 *Do not push your API keys to the presearch-packages repository*
 
 ## Contributing
