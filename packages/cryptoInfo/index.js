@@ -2,7 +2,7 @@
 const fetch = require('node-fetch');
 
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({path: `./.env`});
+  require('dotenv').config({path: `${__dirname}/../../.env`});
 }
 
 const cryptoMap = [
@@ -13235,7 +13235,7 @@ const cryptoMap = [
     slug: 'able',
     is_active: 1,
     first_historical_data: '2018-08-24T02:59:28.000Z',
-    last_historical_data: '2018-08-27T04:59:23.000Z' 
+    last_historical_data: '2018-08-27T04:59:23.000Z'
   }
 ];
 
@@ -13268,16 +13268,12 @@ async function cryptoInfo() {
       }
     });
 
-    console.log("Data: ", );
-
     const metaDataResult = await metaDataRes.json();
     const currentDataResult = await currentDataRes.json();
 
     const meta = metaDataResult.data[currentId];
     const current = currentDataResult.data[currentId];
 
-    console.log("Data: ", meta, current)
-    
     const quote = Object.values(current.quote)[0];
     const updatedOn = new Date(current.last_updated);
 
@@ -13297,7 +13293,7 @@ async function cryptoInfo() {
                 `<div class="tag">${meta.category.toUpperCase()}</div>`
               }
               ${(meta.tags !== null) && meta.tags.map((tag, index) => (
-                `<div 
+                `<div
                   class="tag"
                   key="${index}"
                   style="backgroundColor: #0c9"
@@ -13310,7 +13306,7 @@ async function cryptoInfo() {
               ${quote.price &&
                 `<div class="priceItem">
                   <p class="priceLabel">Price</p>
-                  <h1 
+                  <h1
                     class="price"
                     style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: '#ff5050`}"
                   >
@@ -13321,7 +13317,7 @@ async function cryptoInfo() {
               ${quote.percent_change_1h &&
                 `<div class="priceItem">
                   <p class="priceLabel">Hourly</p>
-                  <h1 
+                  <h1
                     class="price"
                     style="${(quote.percent_change_1h > 0) ? `color: #00b386` : `color: '#ff5050`}"
                   >
@@ -13332,7 +13328,7 @@ async function cryptoInfo() {
               ${quote.percent_change_24h &&
                 `<div class="priceItem">
                   <p class="priceLabel">Daily</p>
-                  <h1 
+                  <h1
                     class="price"
                     style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: '#ff5050`}"
                   >
@@ -13342,8 +13338,8 @@ async function cryptoInfo() {
               }
               ${quote.percent_change_7d &&
                 `<div class="priceItem">
-                  <p class="priceLabel">Weekly</p>  
-                  <h1 
+                  <p class="priceLabel">Weekly</p>
+                  <h1
                     class="price"
                     style="${(quote.percent_change_7d > 0) ? `color: #00b386` : `color: '#ff5050`}"
                   >
@@ -13517,7 +13513,7 @@ async function cryptoInfo() {
         .price {
           font-size: 20px;
           font-weight: normal;
-          color: #444; 
+          color: #444;
           margin: 5px 0;
         }
         .price span {
@@ -13580,7 +13576,7 @@ async function cryptoInfo() {
         .supplyContain {
           padding: 20px 0 0;
         }
-        
+
         @media screen and (max-width: 840px) {
           .answerInner {
             flex-direction: column;
@@ -13601,8 +13597,6 @@ async function cryptoInfo() {
     console.error(error);
   }
 }
-
-// window.cryptoInfo = cryptoInfo();
 
 async function trigger(query) {
   for (let item of cryptoMap) {
