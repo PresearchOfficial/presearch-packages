@@ -13268,20 +13268,24 @@ async function cryptoInfo() {
       }
     });
 
+    console.log("Data: ", );
+
     const metaDataResult = await metaDataRes.json();
     const currentDataResult = await currentDataRes.json();
 
     const meta = metaDataResult.data[currentId];
     const current = currentDataResult.data[currentId];
+
+    console.log("Data: ", meta, current)
     
     const quote = Object.values(current.quote)[0];
     const updatedOn = new Date(current.last_updated);
 
     return `
       <script defer src="https://use.fontawesome.com/releases/v5.4.1/js/all.js" integrity="sha384-L469/ELG4Bg9sDQbl0hvjMq8pOcqFgkSpwhwnslzvVVGpDjYJ6wJJyYjvG3u8XW7" crossorigin="anonymous"></script>
-      <div class="answerCol">
+      <div class="answerCol cryptoAnswerCol">
         <div class="answerRow">
-          <div class="mainCol">
+          <div class="mainCol cryptoMainCol">
             <div class="headerRow">
               ${meta.logo &&
                 `<img src="${meta.logo}" class="logo" alt="" />`
@@ -13409,7 +13413,7 @@ async function cryptoInfo() {
               : ``
             }
           </div>
-          <div class="sideContain">
+          <div class="sideCol sideContain">
             ${current.cmc_rank &&
               `<h3 class="rank">Ranked <span>${current.cmc_rank}</span> by CoinMarketCap</h3>`
             }
@@ -13448,6 +13452,149 @@ async function cryptoInfo() {
           </div>
         </div>
       </div>
+      <style>
+        .cryptoAnswerCol {
+          flex: 1;
+        }
+        .answerInner {
+          flex: 1;
+          display: flex;
+          flex-flow: row nowrap;
+          margin: 15px;
+        }
+        .cryptoMainCol {
+          padding: 15px;
+          box-sizing: border-box;
+        }
+        .cryptoSideContain {
+          box-sizing: border-box;
+          padding: 15px 15px 15px 60px;
+        }
+        .headerRow {
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+        }
+        .logo {
+          height: 30px;
+          width: 30px;
+          margin-right: 15px;
+        }
+        .name {
+          margin: 0;
+          font-size: 24px;
+        }
+        .tag {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px 10px;
+          border-radius: 5px;
+          background-color: #09C;
+          color: white;
+          margin: 5px 0 5px 15px;
+          font-size: 10px;
+        }
+        .priceRow {
+          display: flex;
+          flex-flow: row nowrap;
+          align-items: center;
+          justify-content: space-between;
+          padding: 30px 0 10px;
+        }
+        .priceItem {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          padding-bottom: 10px;
+        }
+        .priceLabel {
+          font-size: 10px;
+          color: #666;
+          margin: 0;
+        }
+        .price {
+          font-size: 20px;
+          font-weight: normal;
+          color: #444; 
+          margin: 5px 0;
+        }
+        .price span {
+          font-size: 14px;
+          color: #666;
+        }
+        .linkItem {
+          display: inline-flex;
+          flex-direction: row;
+          padding: 8px 15px 8px 10px;
+          background-color: #ddd;
+          margin: 5px 10px 5px 0;
+          border-radius: 5px;
+        }
+        .linkItem:hover {
+          background-color: #ccc;
+        }
+        .linkItem span {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+        .explorer {
+          padding: 20px 0 15px;
+        }
+        .explorerTitle {
+          font-size: 14px;
+          color: #444;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding-bottom: 10px;
+        }
+        .explorerTitle span {
+          margin-left: 10px;
+        }
+        .explorerOuter {
+          padding: 4px 0;
+        }
+        .explorerLink span {
+          color: #1a0dab;
+        }
+        .explorerLink:visited {
+          color: #609;
+        }
+        .rank {
+          margin: 0;
+        }
+        .rank span {
+          background-color: #0c9;
+          padding: 0 15px;
+          margin: 0 5px;
+          border-radius: 20px;
+          font-size: 14px;
+          min-width: 40px;
+          line-height: 40px;
+          color: white;
+          box-sizing: border-box;
+          display: inline-block;
+        }
+        .supplyContain {
+          padding: 20px 0 0;
+        }
+        
+        @media screen and (max-width: 840px) {
+          .answerInner {
+            flex-direction: column;
+            margin: 0;
+          }
+          .sideContain {
+            padding: 0 15px;
+          }
+          .priceRow {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+        }
+      </style>
     `;
   }
   catch (error) {
