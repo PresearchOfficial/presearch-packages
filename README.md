@@ -34,11 +34,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 Developing a new package for the Presearch engine:
 
-- Create a new branch `<username>/<packageKey>`
 - Install `presearch-packages` if you have not already done so
+- Create a new branch `<username>/<packageKey>`
+- Switch to your new branch
 - Run `npm create-package <packageName>`
-- Test package using local development server
+- Develop and test package using local development server
 - Create a pull request with the packageKey
-- If API keys are required email them to dev@presearch.io with the pull request number in the subject
+- If API key(s) are required email them to dev@presearch.io with the pull request number in the subject and the key in the body
 - Your pull request will be merged in if the package is correct and relevant
-- Email dev@presearch.io with any questions
+- Email dev@presearch.io with any questions other questions
