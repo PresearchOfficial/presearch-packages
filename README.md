@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 Access API keys from package:
 ```
-const API_KEY = process.env.MY_API_KEY
+const API_KEY = process.env.MY_API_KEY;
 ```
 
 The `.env` file is included in the .gitignore
