@@ -49,7 +49,7 @@ Developing a new package for the Presearch engine:
 - Install `presearch-packages` if you have not already done so
 - Create a new branch `<username>/<packageKey>`
 - Switch to your new branch
-- Run `npm create-package <packageName>`
+- Run `npm run create-package <packageName>`
 - Develop and test package using local development server
 - Create a pull request with the packageKey
 - If API key(s) are required email them to dev@presearch.io with the pull request number in the subject and the key in the body

@@ -13283,69 +13283,79 @@ async function cryptoInfo() {
         <div class="answerRow">
           <div class="mainCol cryptoMainCol">
             <div class="headerRow">
-              ${meta.logo &&
-                `<img src="${meta.logo}" class="logo" alt="" />`
+              ${meta.logo
+                ? `<img src="${meta.logo}" class="logo" alt="" />`
+                : ``
               }
-              ${(meta.name && meta.symbol) &&
-                `<h2 class="name">${meta.name} (${meta.symbol})</h2>`
+              ${(meta.name && meta.symbol)
+                ? `<h2 class="name">${meta.name} (${meta.symbol})</h2>`
+                : ``
               }
-              ${meta.category &&
-                `<div class="tag">${meta.category.toUpperCase()}</div>`
+              ${meta.category
+                ? `<div class="tag">${meta.category.toUpperCase()}</div>`
+                : ``
               }
-              ${(meta.tags !== null) && meta.tags.map((tag, index) => (
-                `<div
-                  class="tag"
-                  key="${index}"
-                  style="backgroundColor: #0c9"
-                >
-                  ${tag.toUpperCase()}
-                </div>`
-              ))}
+              ${(meta.tags !== null) 
+                ? meta.tags.map((tag, index) => (
+                    `<div
+                      class="tag"
+                      key="${index}"
+                      style="backgroundColor: #0c9"
+                    >
+                      ${tag.toUpperCase()}
+                    </div>`
+                  ))
+                : ``
+              }
             </div>
             <div class="priceRow">
-              ${quote.price &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Price</p>
-                  <h1
-                    class="price"
-                    style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: '#ff5050`}"
-                  >
-                    ${formatNumber(quote.price.toFixed(4))}<span> USD</span>
-                  </h1>
-                </div>`
+              ${quote.price 
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Price</p>
+                    <h1
+                      class="price"
+                      style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: #ff5050`}"
+                    >
+                      ${formatNumber(quote.price.toFixed(4))}<span> USD</span>
+                    </h1>
+                  </div>`
+                : ``
               }
-              ${quote.percent_change_1h &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Hourly</p>
-                  <h1
-                    class="price"
-                    style="${(quote.percent_change_1h > 0) ? `color: #00b386` : `color: '#ff5050`}"
-                  >
-                    ${quote.percent_change_1h.toFixed(4)}%
-                  </h1>
-                </div>`
+              ${quote.percent_change_1h
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Hourly</p>
+                    <h1
+                      class="price"
+                      style="${(quote.percent_change_1h > 0) ? `color: #00b386` : `color: #ff5050`}"
+                    >
+                      ${quote.percent_change_1h.toFixed(4)}%
+                    </h1>
+                  </div>`
+                : ``
               }
-              ${quote.percent_change_24h &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Daily</p>
-                  <h1
-                    class="price"
-                    style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: '#ff5050`}"
-                  >
-                    ${quote.percent_change_24h.toFixed(4)}%
-                  </h1>
-                </div>`
+              ${quote.percent_change_24h
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Daily</p>
+                    <h1
+                      class="price"
+                      style="${(quote.percent_change_24h > 0) ? `color: #00b386` : `color: #ff5050`}"
+                    >
+                      ${quote.percent_change_24h.toFixed(4)}%
+                    </h1>
+                  </div>`
+                : ``
               }
-              ${quote.percent_change_7d &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Weekly</p>
-                  <h1
-                    class="price"
-                    style="${(quote.percent_change_7d > 0) ? `color: #00b386` : `color: '#ff5050`}"
-                  >
-                    ${quote.percent_change_7d.toFixed(4)}%
-                  </h1>
-                </div>`
+              ${quote.percent_change_7d
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Weekly</p>
+                    <h1
+                      class="price"
+                      style="${(quote.percent_change_7d > 0) ? `color: #00b386` : `color: #ff5050`}"
+                    >
+                      ${quote.percent_change_7d.toFixed(4)}%
+                    </h1>
+                  </div>`
+                : ``
               }
             </div>
             <div class="linkContain">
@@ -13381,13 +13391,13 @@ async function cryptoInfo() {
               ))}
               ${meta.urls.reddit.map((item, index) => (
                 `<a href="${item}" key="${index}" class="linkItem">
-                  <i class="fa fa-reddit-alien"></i>
+                  <i class="fab fa-reddit-alien"></i>
                   <span>Reddit</span>
                 </a>`
               ))}
               ${meta.urls.twitter.map((item, index) => (
                 `<a href="${item}" key="${index}" class="linkItem">
-                  <i class="fa fa-twitter"></i>
+                  <i class="fab fa-twitter"></i>
                   <span>Twitter</span>
                 </a>`
               ))}
@@ -13400,7 +13410,7 @@ async function cryptoInfo() {
                         <span>${item}</span>
                       </a>
                     </div>`
-                  ))}
+                  )).join('')}
                 </div>`
               }
             </div>
@@ -13410,39 +13420,45 @@ async function cryptoInfo() {
             }
           </div>
           <div class="sideCol sideContain">
-            ${current.cmc_rank &&
-              `<h3 class="rank">Ranked <span>${current.cmc_rank}</span> by CoinMarketCap</h3>`
+            ${current.cmc_rank
+              ? `<h3 class="rank">Ranked <span>${current.cmc_rank}</span> by CoinMarketCap</h3>`
+              : ``
             }
             <div class="supplyContain">
-              ${quote.market_cap &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Market Cap</p>
-                  <h1 class="price">${formatNumber(quote.market_cap.toFixed(0))} <span>USD</span></h1>
-                </div>`
+              ${quote.market_cap
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Market Cap</p>
+                    <h1 class="price">${formatNumber(quote.market_cap.toFixed(0))} <span>USD</span></h1>
+                  </div>`
+                : ``
               }
-              ${quote.volume_24h &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Volume 24h</p>
-                  <h1 class="price">${formatNumber(quote.volume_24h.toFixed(0))} <span>USD</span></h1>
-                </div>`
+              ${quote.volume_24h
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Volume 24h</p>
+                    <h1 class="price">${formatNumber(quote.volume_24h.toFixed(0))} <span>USD</span></h1>
+                  </div>`
+                : ``
               }
-              ${current.circulating_supply &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Circulating Supply</p>
-                  <h1 class="price">${formatNumber(current.circulating_supply)}</h1>
-                </div>`
+              ${current.circulating_supply
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Circulating Supply</p>
+                    <h1 class="price">${formatNumber(current.circulating_supply)}</h1>
+                  </div>`
+                : ``
               }
-              ${current.total_supply &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Total Supply</p>
-                  <h1 class="price">${formatNumber(current.total_supply)}</h1>
-                </div>`
+              ${current.total_supply
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Total Supply</p>
+                    <h1 class="price">${formatNumber(current.total_supply)}</h1>
+                  </div>`
+                : ``
               }
-              ${current.max_supply &&
-                `<div class="priceItem">
-                  <p class="priceLabel">Max Supply</p>
-                  <h1 class="price">${formatNumber(current.max_supply)}</h1>
-                </div>`
+              ${current.max_supply
+                ? `<div class="priceItem">
+                    <p class="priceLabel">Max Supply</p>
+                    <h1 class="price">${formatNumber(current.max_supply)}</h1>
+                  </div>`
+                : ``
               }
             </div>
           </div>
@@ -13527,6 +13543,7 @@ async function cryptoInfo() {
           background-color: #ddd;
           margin: 5px 10px 5px 0;
           border-radius: 5px;
+          text-decoration: none;
         }
         .linkItem:hover {
           background-color: #ccc;
@@ -13551,6 +13568,7 @@ async function cryptoInfo() {
         }
         .explorerOuter {
           padding: 4px 0;
+          overflow: hidden;
         }
         .explorerLink span {
           color: #1a0dab;

@@ -13,17 +13,18 @@ async function apod() {
       <h3 class="apodLabel">Astronomy Picture of the Day</h3>
       <div class="answerRow">
         <div class="mainCol">
-          ${data.url &&
-            data.media_type === 'video'
-            ? `<iframe src="${data.url}" title="${data.title}" class="apodIframe" type="text/html" frameBorder="0"></iframe>`
-            : `<img src="${data.url}" class="apodImage" alt="${data.title}" />`
+          ${data.url
+            ? data.media_type === 'video'
+              ? `<iframe src="${data.url}" title="${data.title}" class="apodIframe" type="text/html" frameBorder="0"></iframe>`
+              : `<img src="${data.url}" class="apodImage" alt="${data.title}" />`
+            : ``
           }
         </div>
         <div class="sideCol apodSideContain">
-          <h2 class="apodName">${data.title}</h2>
+          ${data.title ? `<h2 class="apodName">${data.title}</h2>` : ``}
           ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
-          <p class="apodDate">${data.date}</p>
-          <p class="apodDesc">${data.explanation}</p>
+          ${data.data ? `<p class="apodDate">${data.date}</p>` : ``}
+          ${data.explanation ? `<p class="apodDesc">${data.explanation}</p>` : ``}
           <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
         </div>
       </div>
