@@ -82,6 +82,7 @@ async function dictionary(query) {
 				}
 				.dictOL {
 					margin-bottom: -10px;
+					padding-left: 20px;
 				}
 				.dictOL > li {
 					margin-bottom: 10px;
