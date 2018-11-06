@@ -11,7 +11,5 @@
   ],
   "author": "BDesBrisay",
   "license": "MIT",
-  "dependencies": {
-    "oxford-dictionary": "^1.4.1"
-  }
+  "dependencies": {}
 }
