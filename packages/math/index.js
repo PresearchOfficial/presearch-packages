@@ -7,7 +7,7 @@ async function math(query) {
   return `
     <div class="mainCol mathContain">
       <p>${query}</p>
-      <h1>${typeof data === 'number' && data}</h1>
+      <h1>${typeof data === 'number' ? data : ``}</h1>
       ${(data && data.value) ? `<h1>${data.value}</h1>` : ``}
     </div>
     <style>

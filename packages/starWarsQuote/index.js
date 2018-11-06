@@ -369,7 +369,7 @@ function starWarsQuote(query) {
 
   return `
     <div class="mainCol">
-      <h1 class="starWarsQuote">"${quote}"</h1>
+      <h1 class="starWarsQuote">"${quote ? quote : ``}"</h1>
     </div>
     <style>
       .starWarsQuote {

@@ -22,7 +22,7 @@ async function periodicElements(query) {
     filteredData = Object.keys(data).filter((item) => fieldNames.includes(item));
     return `
       <div class="mainCol elementContain">
-        <h1>${data.name}</h1>
+        <h1>${data.name ? data.name : ``}</h1>
         ${filteredData.map((key, index) => (
           `<p key="${index}"><strong>${unCamelCase(key)}:</strong> ${data[key]}</p>`
         )).join('')}
