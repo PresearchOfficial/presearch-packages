@@ -15,13 +15,17 @@
   display: flex;
   flex-direction: column;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
 @media screen and (min-width: 1200px) {
   .answerInner {
     width: calc(95% - 70px);
     max-width: 1200px;
     margin: 15px auto 15px 70px;
-    flex-flow: row nowrap; 
+    flex-flow: row nowrap;
   }
 }
 
@@ -30,7 +34,7 @@
     width: 95%;
     max-width: 1200px;
     margin: 15px auto;
-    flex-flow: row nowrap; 
+    flex-flow: row nowrap;
   }
 }
 
@@ -53,7 +57,7 @@
   .answerInner {
     width: 95%;
     margin: 15px auto;
-    flex-flow: column-reverse nowrap; 
+    flex-flow: column-reverse nowrap;
   }
   .answerContain {
     flex-flow: column nowrap;

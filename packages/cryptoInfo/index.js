@@ -13419,7 +13419,7 @@ async function cryptoInfo() {
               : ``
             }
           </div>
-          <div class="sideCol sideContain">
+          <div class="sideCol cryptoSideContain">
             ${current.cmc_rank
               ? `<h3 class="rank">Ranked <span>${current.cmc_rank}</span> by CoinMarketCap</h3>`
               : ``

@@ -13,14 +13,23 @@ const app = express();
 const PORT = 4000;
 
 app.get('/', async (req, res) => {
-  console.log('stuff');
   const commonCss = await readFileAsync(`${__dirname}/../common.css`);
   const packageKey = req.query.packageKey;
   const query = req.query.query;
   const trigger = await packageObject[packageKey].trigger(query);
   if (packageKey in packageObject && trigger) {
     const result = await packageObject[packageKey][packageKey](query);
-    res.send(`${result}<style type="text/css">${commonCss}</style>`);
+    res.send(`
+      <div class="answerInner">${result}</div>
+      <style type="text/css">
+        ${commonCss}
+        body {
+          margin: 0;
+          font-family: Lato,Helvetica,sans-serif;
+          letter-spacing: .1px;
+        }
+      </style>
+    `);
   }
   else {
     res.status('400');

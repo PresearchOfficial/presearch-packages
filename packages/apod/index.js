@@ -23,7 +23,7 @@ async function apod() {
         <div class="sideCol apodSideContain">
           ${data.title ? `<h2 class="apodName">${data.title}</h2>` : ``}
           ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
-          ${data.data ? `<p class="apodDate">${data.date}</p>` : ``}
+          ${data.date ? `<p class="apodDate">${data.date}</p>` : ``}
           ${data.explanation ? `<p class="apodDesc">${data.explanation}</p>` : ``}
           <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
         </div>
