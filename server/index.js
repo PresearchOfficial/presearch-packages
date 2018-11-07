@@ -25,6 +25,8 @@ app.get('/', async (req, res) => {
         ${commonCss}
         body {
           margin: 0;
+          padding: 10px 0;
+          background-color: #f2f2f2;
           font-family: Lato,Helvetica,sans-serif;
           letter-spacing: .1px;
         }
