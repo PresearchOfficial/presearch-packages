@@ -17,7 +17,7 @@ $ cd presearch-packages && npm install
 $ cd server && npm install && npm start
 ```
 
-Packages available at: `http://localhost:4000/package?query=apod&packageKey=apod`
+Packages available at: `http://localhost:4000/?query=<sampleQuery>&packageKey=<packageKey>`
 
 Change the query and packageKey parameters accordingly
 
