@@ -2,6 +2,10 @@
 
 *Open source instant information packages for the Presearch engine*
 
+## Video Walkthrough
+
+[![Presearch Packages Open Source Contribution Process](https://img.youtube.com/vi/xLNFI12Vdas/0.jpg)](https://www.youtube.com/watch?v=xLNFI12Vdas)
+
 ## Install
 
 In order to install and use presearch-packages you need to have Node.js and NPM installed locally. [Node.js install](https://nodejs.org/en/download/)
