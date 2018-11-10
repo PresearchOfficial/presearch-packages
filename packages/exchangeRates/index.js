@@ -1,4 +1,5 @@
 'use strict';
+
 var https = require('https');
 var currentPrice;
 var usd;
@@ -6,11 +7,12 @@ var cad;
 var eur;
 var gbp;
 
-    var options = {
-        host: 'api.nbp.pl',
-        path: '/api/exchangerates/tables/a/?format=json',
-        headers: {'User-Agent': 'request'}
-    };
+var options = {
+    host: 'api.nbp.pl',
+    path: '/api/exchangerates/tables/a/?format=json',
+    headers: {'User-Agent': 'request'}
+};
+
 https.get(options, function (res) {
     var json = '';
     res.on('data', function (chunk) {
@@ -36,7 +38,6 @@ https.get(options, function (res) {
 });
 
 function exchangeRates(query) {
-
     query = query.toLowerCase();
     var amount = query.match(/\d+/g).map(Number);
     var first;
@@ -157,32 +158,34 @@ function exchangeRates(query) {
 
 
     return `
-      <div class="mainCol">
+        <div class="mainCol">
         <h1 class="exchangeRates">${amount} ${first} = ${summary} ${second}</h1>
-        <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator. The prices are given for information only</p>
-      </div>
-      
-      <style>
+        <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator. The prices are given for information only.</p>
+        </div>
+        
+        <style>
         .exchangeRates {
-          margin-left: 15px;
+            margin-left: 15px;
         }
         .smallText {
             font-size: small;
             margin-left: 15px;
             width:50%;
-          }
-      </style>
+            }
+        </style>
     `;
-  };
-  function trigger(query) {
-      query = query.toLowerCase();
-      if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") || 
-      query.includes("usd to pln") || query.includes("usd to eur") || query.includes("usd to gbp") || query.includes("usd to cad") || 
-      query.includes("eur to usd") || query.includes("eur to pln") || query.includes("eur to gbp") ||query.includes("eur to cad") ||
-      query.includes("cad to usd") || query.includes("cad to pln") || query.includes("cad to gbp") || query.includes("cad to eur")){
+}
+
+function trigger(query) {
+    query = query.toLowerCase();
+
+    if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") || 
+    query.includes("usd to pln") || query.includes("usd to eur") || query.includes("usd to gbp") || query.includes("usd to cad") || 
+    query.includes("eur to usd") || query.includes("eur to pln") || query.includes("eur to gbp") ||query.includes("eur to cad") ||
+    query.includes("cad to usd") || query.includes("cad to pln") || query.includes("cad to gbp") || query.includes("cad to eur")) {
         var iWantToExchange = query;
-      }
+    }
     return query === iWantToExchange;
-  }
+}
   
   module.exports = { exchangeRates, trigger };
