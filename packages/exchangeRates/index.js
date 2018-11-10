@@ -51,17 +51,17 @@ function exchangeRates(query) {
     if(query.includes("usd to eur")){
         first ="USD";
         second = "EUR";
-        currentPrice = usd / eur;
+        currentPrice = eur / usd;
     }
     if(query.includes("usd to cad")){
         first ="USD";
         second = "CAD";
-        currentPrice = usd / cad;
+        currentPrice = cad / usd;
     }
     if(query.includes("usd to gbp")){
         first ="USD";
         second = "BGP";
-        currentPrice = usd / gbp;
+        currentPrice = gbp / usd;
     }
     if(query.includes("pln to usd")){
         first ="PLN";
@@ -86,17 +86,17 @@ function exchangeRates(query) {
     if(query.includes("eur to usd")){
         first ="EUR";
         second = "USD";
-        currentPrice = eur / usd;
+        currentPrice = usd / eur;
     }
     if(query.includes("eur to gbp")){
         first ="EUR";
         second = "GBP";
-        currentPrice = eur / gbp;
+        currentPrice = gbp / eur;
     }
     if(query.includes("eur to cad")){
         first ="EUR";
         second = "CAD";
-        currentPrice = eur / cad;
+        currentPrice = cad / eur;
     }
     if(query.includes("eur to pln")){
         first ="EUR";
@@ -107,17 +107,17 @@ function exchangeRates(query) {
     if(query.includes("cad to usd")){
         first ="CAD";
         second = "USD";
-        currentPrice = cad / usd;
+        currentPrice = usd / cad;
     }
     if(query.includes("cad to eur")){
         first ="CAD";
         second = "EUR";
-        currentPrice = cad / eur;
+        currentPrice = eur / cad;
     }
     if(query.includes("cad to gbp")){
         first ="CAD";
         second = "GBP";
-        currentPrice = cad / gbp;
+        currentPrice = gbp / cad;
     }
     if(query.includes("cad to pln")){
         first ="CAD";
@@ -128,17 +128,17 @@ function exchangeRates(query) {
     if(query.includes("gbp to usd")){
         first ="GBP";
         second = "USD";
-        currentPrice = gbp / usd;
+        currentPrice = usd / gbp;
     }
     if(query.includes("gbp to eur")){
         first ="GBP";
         second = "EUR";
-        currentPrice = gbp / usd;
+        currentPrice = usd / gbp;
     }
     if(query.includes("gbp to cad")){
         first ="GBP";
         second = "CAD";
-        currentPrice = gbp / cad;
+        currentPrice = cad / gbp;
     }
     if(query.includes("gbp to pln")){
         first ="GBP";
