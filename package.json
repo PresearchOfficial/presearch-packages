@@ -1,1 +1,31 @@
-{"name":"packages","version":"1.0.0","description":"","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1","merge-dependencies":"./bin/merge-dependencies","add-package-json":"git add package.json","create-package":"./bin/create-package.sh"},"pre-commit":["merge-dependencies","add-package-json"],"author":"","license":"","dependencies":{"create-react-app":"^2.1.1","dotenv":"^6.1.0","mathjs":"^3.16.3","mathsteps":"^0.1.6","node-fetch":"^1.7.3","periodic-table":"^0.0.8","wikijs":"^4.2.1"},"devDependencies":{"dotenv":"^6.1.0","pre-commit":"^1.2.2"}}
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "merge-dependencies": "./bin/merge-dependencies",
+    "add-package-json": "git add package.json",
+    "create-package": "./bin/create-package.sh"
+  },
+  "pre-commit": [
+    "merge-dependencies",
+    "add-package-json"
+  ],
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "create-react-app": "^2.1.1",
+    "dotenv": "^6.1.0",
+    "mathjs": "^3.16.3",
+    "mathsteps": "^0.1.6",
+    "node-fetch": "^1.7.3",
+    "periodic-table": "^0.0.8",
+    "wikijs": "^4.2.1"
+  },
+  "devDependencies": {
+    "dotenv": "^6.1.0",
+    "pre-commit": "^1.2.2"
+  }
+}
