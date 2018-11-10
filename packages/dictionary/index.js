@@ -7,103 +7,75 @@ if (process.env.NODE_ENV !== 'production') {
 
 async function dictionary(query) {
 	try {
-
 		const word = query.replace('define', '').trim();
-		const result = await fetch(`https://googledictionaryapi.eu-gb.mybluemix.net/?define=${word}`, { method: 'GET' })
+		const result = await fetch(`https://owlbot.info/api/v2/dictionary/${word}?format=json`, { method: 'GET' })
 			.then(res => res.json())
 		
-		const entries = result.meaning ? Object.keys(result.meaning) : [];
-
-		return `
-			<div class="mainCol dictMainCol">
-				<h2 class="dictWord">${word}</h2>
-				${result.phonetic ? `<span class="dictPhonetic">/${result.phonetic}/</span>` : ``}
-				${entries.map((item, i) => (`
-					<div class="dictDefContain" key="${i}">
-						<span class="dictDefType">${item}</span>
-						<ol class="dictOL">
-							${result.meaning[item].map((point, idx) => (`
-								<li key="${idx}">
-									${point.definition 
-										? `<span class="dictDef">
-												${point.definition}
-											</span>`
-										: ``
-									}
-									${point.synonyms 
-										? `<span class="dictSyn">
-												<br>
-												<i>synonyms</i>
-												${point.synonyms.map((syn, index) => (`
-													${syn}${index !== point.synonyms.length - 1 ? `,` : ``}
-												`)).join('')}
-											</span>`
-										: ``
-									}
-									${point.example 
-										? `<span class="dictExample">
-												<br>
-												"${point.example}"
-											</span>`
-										: ``
-									}
-								</li>
-							`)).join('')}
-						</ol>
-					</div>
-				`)).join('')}
-			</div>
-			<style>
-				.definitionContain {
-					display: flex;
-					flex-flow: row nowrap;
-					font-size: 14px;
-				}
-				.dictMainCol {
-					padding: 0 15px 15px;
-					box-sizing: border-box;
-				}
-				.dictWord {
-					margin: 0px 0px 5px;
-					font-size: 28px;
-				}
-				.dictPhonetic {
-					font-size: 16px;
-					color: #666
-				}
-				.dictDefContain {
-					display: flex;
-					flex-direction: column;
-				}
-				.dictDefType {
-					font-size: 16px;
-					font-weight: bold;
-					margin: 15px 0 0;
-				}
-				.dictOL {
-					margin-bottom: -10px;
-					padding-left: 20px;
-				}
-				.dictOL > li {
-					margin-bottom: 10px;
-				}
-				.dictDef {
-					color: #333;
-				}
-				.dictSyn {
-					color: #444;
-					font-size: 14px;
-				}
-				.dictSyn > i {
-					color: #888;
-					font-size: 14px;
-				}
-				.dictExample {
-					color: #444;
-					font-size: 14px;
-				}
-			</style>
-		`;
+		if (result.length) {
+			let definitions = [];
+			result.map((item) => {
+				if (definitions[item.type]) definitions[item.type].push(item);
+				else definitions[item.type] = [item];
+			});
+			
+			return `
+				<div class="mainCol dictMainCol">
+					<h2 class="dictWord">${word}</h2>
+					${Object.keys(definitions).map((item, i) => (
+						`<div key="${i}" class="dictDefContain">
+							<h3 class="dictDefType">${item}</h3>
+							<ol class="dictOL">
+								${definitions[item].map((entry, idx) => (
+									`<li key="${idx}">
+										${entry.definition ? `<p class="dictDef">${entry.definition}</p>` : ``}
+										${entry.example ? `<span class="dictDef"><i>examples </i>"${entry.example}"</span>` : ``}
+									</li>`
+								)).join('')}
+							</ol>
+						</div>`
+					)).join('') || ``}
+				</div>
+				<style>
+					.dictMainCol {
+						padding: 0 15px 15px;
+						box-sizing: border-box;
+					}
+					.dictWord {
+						margin: 0px 0px 5px;
+						font-size: 28px;
+					}
+					.dictDefContain {
+						display: flex;
+						flex-direction: column;
+					}
+					.dictDefType {
+						font-size: 16px;
+						font-weight: bold;
+						margin: 15px 0 0;
+					}
+					.dictOL {
+						margin-bottom: 0px;
+						padding-left: 30px;
+					}
+					.dictOL > li {
+						margin: 0 0 20px;
+					}
+					.dictDef {
+						color: #333;
+						margin: 3px 0;
+					}
+					.dictDef > i {
+						color: #888;
+						font-size: 14px;
+					}
+					.dictExample {
+						color: #444;
+						font-size: 14px;
+					}
+				</style>
+			`;
+		}
+		throw Error('No definition found.');
 	}
 	catch (e) {
 		console.error(e);
