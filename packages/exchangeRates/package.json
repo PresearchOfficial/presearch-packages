@@ -1,13 +1,12 @@
 {
   "name": "exchangerates",
   "version": "1.0.0",
-  "description": "",
+  "description": "This package allows you to convert currencies via Presearch",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "",
-  "dependencies": {
-  }
+  "author": "jejopl",
+  "license": "MIT",
+  "dependencies": {}
 }

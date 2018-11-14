@@ -39,10 +39,11 @@ https.get(options, function (res) {
 
 function exchangeRates(query) {
     query = query.toLowerCase();
-    var amount = query.match(/\d+/g).map(Number);
+    var amount = query.split(' ').join('');
+    amount = amount.split(',').join('');
+    amount = amount.match(/\d+/g).map(Number);
     var first;
     var second;
-
     if(query.includes("usd to pln")){
         first ="USD";
         second = "PLN";
@@ -133,7 +134,7 @@ function exchangeRates(query) {
     if(query.includes("gbp to eur")){
         first ="GBP";
         second = "EUR";
-        currentPrice = usd / gbp;
+        currentPrice = eur / gbp;
     }
     if(query.includes("gbp to cad")){
         first ="GBP";
@@ -145,32 +146,31 @@ function exchangeRates(query) {
         second = "PLN";
         currentPrice = gbp;
     }
-
-
     
+
     if(second === "PLN"){
-        var summary = amount * currentPrice;
+        var summary = amount[0] * currentPrice;
     } else {
-        var summary = amount / currentPrice;
+        var summary = amount[0] / currentPrice;
     }
     
-    var summary = summary.toFixed(2);
-
+    summary = summary.toFixed(2);
+    summary = parseFloat(summary).toLocaleString('en')
 
     return `
         <div class="mainCol">
-        <h1 class="exchangeRates">${amount} ${first} = ${summary} ${second}</h1>
+        <h1 class="exchangeRates">${amount[0].toLocaleString('en')} ${first} = ${summary} ${second}</h1>
         <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator. The prices are given for information only.</p>
         </div>
         
         <style>
         .exchangeRates {
             margin-left: 15px;
+            line-height: normal;
         }
         .smallText {
             font-size: small;
             margin-left: 15px;
-            width:50%;
             }
         </style>
     `;
@@ -182,7 +182,8 @@ function trigger(query) {
     if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") || 
     query.includes("usd to pln") || query.includes("usd to eur") || query.includes("usd to gbp") || query.includes("usd to cad") || 
     query.includes("eur to usd") || query.includes("eur to pln") || query.includes("eur to gbp") ||query.includes("eur to cad") ||
-    query.includes("cad to usd") || query.includes("cad to pln") || query.includes("cad to gbp") || query.includes("cad to eur")) {
+    query.includes("cad to usd") || query.includes("cad to pln") || query.includes("cad to gbp") || query.includes("cad to eur") ||
+    query.includes("gbp to usd") || query.includes("gbp to pln") || query.includes("gbp to cad") || query.includes("gbp to eur")) {
         var iWantToExchange = query;
     }
     return query === iWantToExchange;
