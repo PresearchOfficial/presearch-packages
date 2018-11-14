@@ -155,7 +155,7 @@ function exchangeRates(query) {
     }
     
     summary = summary.toFixed(2);
-    summary = parseFloat(summary).toLocaleString('en')
+    summary = parseFloat(summary).toLocaleString('en');
 
     return `
         <div class="mainCol">
