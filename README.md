@@ -15,7 +15,7 @@ $ git clone https://github.com/PresearchOfficial/presearch-packages
 $ cd presearch-packages && npm install
 ```
 
-*Please do not fork the repo, simply clone it instead.*
+*Please do not perform development from a fork, simply clone it instead.*
 
 ## Development
 
