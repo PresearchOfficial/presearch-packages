@@ -61,3 +61,41 @@ Developing a new package for the Presearch engine:
 - If API key(s) are required email them to dev@presearch.io with the pull request number in the subject and the key in the body
 - Your pull request will be merged in if the package is correct and relevant
 - Email dev@presearch.io with any questions other questions
+
+## Package Evaluation Guide
+
+Review Step:
+
+Open up the pull request for the package and take a look a the file changes under the `Files changed` tab
+
+You're going to need to look over these files for any malicious code
+
+- Look for proper indentation
+- Check for readability
+  - Are variable names expressive? 
+  - Is it indented properly? 
+  - Did the author use proper syntax?
+- Check all http requests to outer api's and make sure only the data used is being returned and nothing else
+- Check any scripts being inserted for suspicious activity
+- Check the code for quality
+  - Is it concise? 
+  - Is it effective code? 
+  - Are there any uneccesary steps being taken? 
+  - Is there repetition that could be minimized? 
+  - Is it built to allow easy future maintenance?
+- Check that there are no api keys or other sensitive data exposed
+- Lastly, just make sure you understand each line and what it does
+   
+Testing Step:
+
+- Switch to the appropriate branch and update your local repo (git pull)
+- Navigate to `http://localhost:4000/?query=<sampleQuery>&packageKey=<packageKey>` and insert the appropriate query and packageKey parameters
+- Make sure everything loads and works as expected
+  - If something behaves differently than described by the creator then take note of that
+- Check the console in your browsers developers menu for errors or warnings
+
+Feedback Step:
+
+If at any stage in this process you found an error or something was off or you have a question for the author, leave explicit, detailed comments on the pull request for the author to go through and fix.
+
+
