@@ -173,6 +173,7 @@ function exchangeRates(query) {
             line-height: normal;
             font-family: 'Open Sans', sans-serif;
             letter-spacing: normal;
+            margin-bottom: 0px;
         }
         .smallText {
             font-size: 10px;
