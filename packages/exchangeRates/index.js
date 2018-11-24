@@ -158,19 +158,29 @@ function exchangeRates(query) {
     summary = parseFloat(summary).toLocaleString('en');
 
     return `
-        <div class="mainCol">
-        <h1 class="exchangeRates">${amount[0].toLocaleString('en')} ${first} = ${summary} ${second}</h1>
-        <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator. The prices are given for information only.</p>
+        <div class="mainCol" style="background: #eff2f5;">
+        <p class="exchangeRates">
+            <span style="font-size:20px; color:#333;">${amount[0].toLocaleString('en')} ${first} =</span>
+            <br />
+            <span style="font-size:30px; color:#111;">${summary} ${second}</span>
+        </p>
+        <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator.<br />The prices are given for information only.</p>
         </div>
         
         <style>
         .exchangeRates {
             margin-left: 15px;
             line-height: normal;
+            font-family: 'Open Sans', sans-serif;
+            letter-spacing: normal;
+            margin-bottom: 0px;
         }
         .smallText {
-            font-size: small;
+            font-size: 10px;
             margin-left: 15px;
+            font-family: 'Open Sans', sans-serif;
+            letter-spacing: normal;
+            color: #777;
             }
         </style>
     `;
