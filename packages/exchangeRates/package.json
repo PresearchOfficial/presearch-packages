@@ -1,5 +1,5 @@
 {
-  "name": "exchangerates",
+  "name": "exchangeRates",
   "version": "1.0.0",
   "description": "This package allows you to convert currencies via Presearch",
   "main": "index.js",

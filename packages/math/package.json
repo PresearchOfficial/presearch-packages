@@ -1,8 +1,10 @@
 {
   "name": "math",
+  "description": "Calculator",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "author": "PresearchOfficial",
   "dependencies": {
     "mathjs": "^3.16.3"
   }
