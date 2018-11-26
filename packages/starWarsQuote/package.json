@@ -1,11 +1,11 @@
 {
-  "name": "starwarsquote",
+  "name": "starWarsQuote",
   "version": "1.0.0",
-  "description": "",
+  "description": "Star Wars Quote",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "PresearchOfficial",
   "license": "ISC"
 }

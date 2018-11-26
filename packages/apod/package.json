@@ -1,7 +1,7 @@
 {
   "name": "apod",
   "version": "1.0.0",
-  "description": "",
+  "description": "Astronomy Picture of the Day",
   "main": "index.js",
   "dependencies": {
     "node-fetch": "^1.7.3"
@@ -10,6 +10,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "PresearchOfficla",
+  "license": "MIT"
 }
