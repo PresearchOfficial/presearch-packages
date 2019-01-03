@@ -1,0 +1,37 @@
+#color-picker { position: relative; height: 320px; background: #F1F7E0; color: #333; font: 16pt Arial,Helvetica,sans-serif; text-align: center; width: 920px;
+position: relative;margin: 0 auto;}
+#color-picker table { width: 100%; font-size: 80%; }
+#color-picker th { font-weight: normal; padding: 0 5px; }
+#color-picker table input { width: 10em; color: #FFF; border: 1px solid #999; background: #262626; padding: 2px 5px; }
+#color-picker table input:focus { border-color: #FFF !important; color: #FFF !important; }
+#color-picker table input.short { width: 3em; text-align: center !important; }
+#color-picker button { width: 180px; height: 50px; margin: 10px 0; }
+
+#color-picker .panel { position: absolute; top: 0; width: 220px; }
+#color-picker .panel .red { color: #F99; }
+#color-picker .panel .red input { border-color: #F99; color: #F99; }
+#color-picker .panel .grn { color: #9F9; }
+#color-picker .panel .grn input { border-color: #9F9; color: #9F9; }
+#color-picker .panel .blu { color: #9CF; }
+#color-picker .panel .blu input { border-color: #9CF; color: #9CF; }
+
+#color-picker .panel.bgcolor { left: 0; }
+#color-picker .panel.bgcolor th { text-align: right; }
+#color-picker .panel.bgcolor td { text-align: left; }
+#color-picker .panel.bgcolor table input { text-align: left; }
+
+#color-picker .panel.fgcolor { right: 0; }
+#color-picker .panel.fgcolor th { text-align: left; }
+#color-picker .panel.fgcolor td { text-align: right; }
+#color-picker .panel.fgcolor table input { text-align: right; }
+
+#color-picker #picker-preview {
+	margin: 0 auto;
+	padding: 60px 0;
+	width: 440px;
+	border: 4px solid #000;
+	text-align: center;
+	font-size: 110%;
+	font-weight: bold;
+	border-radius: 15px;
+}
