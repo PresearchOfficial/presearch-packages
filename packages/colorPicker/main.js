@@ -2,12 +2,6 @@ const color = {r:0, g:255, b:0}; // set up a start color
 const mainPickerPos = {x:100, y:100};
 let updateColor = false;
 
-
-
-addEventListener('mouseover', function(event) {
-
-});
-
 function rgbToHex(rgb) { 
     var hex = Number(rgb).toString(16);
     if (hex.length < 2) {
@@ -70,8 +64,6 @@ function layer1F() {
 }
 
 function layer2F() {
-
-
 
     const layer1 = document.getElementById('layer1');
     const ctx1 = layer1.getContext('2d');
@@ -227,8 +219,6 @@ function layer1Small() { // generate 'rainbow' for small canvas
         y -= 5;
     }
 
-    
-
 }
 
 function updatePickerColor() {
@@ -312,8 +302,6 @@ function layer2Small() {
             color.r = currentColor.data[0];
             color.g = currentColor.data[1];
             color.b = currentColor.data[2];
-            
-            
         }
 
     });
@@ -354,6 +342,5 @@ window.onload = function() {
                 item.value = temp;
             },500);
         });
-    })
+    });
 }
-    
