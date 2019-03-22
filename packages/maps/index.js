@@ -2,7 +2,7 @@
 
 const cityList = require('./city-list.json'); // World city list with coords
 const fetch = require('node-fetch')
-const API_KEY = '5b3ce3597851110001cf6248d6003371b8714a2b808449c26bd1ab65'
+const API_KEY = API_KEY
 
 function maps(query) {
 	query = query.toLowerCase();
