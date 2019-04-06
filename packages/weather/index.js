@@ -2,7 +2,7 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 const path = require("path");
-const apiKey = API_KEY;
+const apiKey = process.env.WEATHER_API_KEY;
 
 const citiesReq = require('./city-list.json');
 
