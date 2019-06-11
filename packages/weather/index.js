@@ -1,4 +1,9 @@
 'use strict';
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({path: `${__dirname}/../../.env`});
+}
+
 const fs = require('fs');
 const fetch = require('node-fetch');
 const path = require("path");
@@ -37,7 +42,7 @@ function weather(query) {
 	function filtrCities(cities) { // check if there is more than one city with the same name
 		cities.forEach(city => {
 			if (city.name === cityQuery) {
-				let coord = city.coord.lat.toFixed() + city.coord.lon.toFixed(); 
+				let coord = city.coord.lat.toFixed() + city.coord.lon.toFixed();
 				if (!countryList.has(coord)) {
 					countryList.add(coord);
 					citiesList.push(city);

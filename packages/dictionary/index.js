@@ -1,6 +1,6 @@
 'use strict';
 const fetch = require('node-fetch');
-  
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config({path: `${__dirname}/../../.env`});
 }
@@ -10,14 +10,14 @@ async function dictionary(query) {
 		const word = query.replace('define', '').trim();
 		const result = await fetch(`https://owlbot.info/api/v2/dictionary/${word}?format=json`, { method: 'GET' })
 			.then(res => res.json())
-		
+
 		if (result.length) {
 			let definitions = [];
 			result.map((item) => {
 				if (definitions[item.type]) definitions[item.type].push(item);
 				else definitions[item.type] = [item];
 			});
-			
+
 			return `
 				<div class="mainCol dictMainCol">
 					<h2 class="dictWord">${word}</h2>

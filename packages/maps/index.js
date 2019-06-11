@@ -1,8 +1,12 @@
 'use strict';
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config({path: `${__dirname}/../../.env`});
+}
+
 const cityList = require('./city-list.json'); // World city list with coords
 const fetch = require('node-fetch')
-const API_KEY = API_KEY
+const API_KEY = process.env.API_KEY
 
 function maps(query) {
 	query = query.toLowerCase();
@@ -19,10 +23,10 @@ function maps(query) {
 				if(!duplicates.has(r.properties.label)){
 					duplicates.add(r.properties.label)
 					return r
-				} 
+				}
 			})
 
-			
+
 			// create html and js for each city (result)
 			for(let i = 0; i < r.length; ++i){
 				variables += `let marker${i} = L.marker([${r[i].geometry.coordinates[1]}, ${r[i].geometry.coordinates[0]}]);`
@@ -35,7 +39,7 @@ function maps(query) {
 			}
 
 			return r
-			
+
 		})
 		.then(r => {
 			description += '</ul></div>'
@@ -76,7 +80,7 @@ function maps(query) {
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
 				crossorigin="" />
 				<style>
-					#map { 
+					#map {
 						height: 300px;
 						width: 600px;
 						position: absolute;
@@ -146,7 +150,7 @@ function maps(query) {
 						padding: 6px 16px;
 						cursor: pointer;
 					}
-					
+
 				</style>
 				<div id="main">
 					<div id="map"></div>
@@ -164,8 +168,8 @@ function maps(query) {
 						maxZoom: 18
 					});
 					tileLayer.addTo(mymap);
-					tileLayer.on("load",function() { 
-						document.getElementById('loading').style="display:none;" 
+					tileLayer.on("load",function() {
+						document.getElementById('loading').style="display:none;"
 					});
 					function listClick(lat, lon, name, label, region) {
 						mymap.setView([lat, lon], 13);
@@ -173,7 +177,7 @@ function maps(query) {
 						cityInfo(name, label, region)
 					}
 					${variables}
-					
+
 					const proxyurl = 'https://cors-anywhere.herokuapp.com/';
 					function cityInfo(name, label, region) {
 						const info = [label, region, name,  name + ' city']
@@ -182,7 +186,7 @@ function maps(query) {
 						div.style = 'margin-left: 5%;height: 300px;width: 60%;'
 						info.forEach(i => {
 							let url = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + i +'&limit=1&format=json';
-							fetch(proxyurl + url) 
+							fetch(proxyurl + url)
 							.then(r => r.json())
 							.then(r => {
 								if(r[2].join().length > 50 && !inserted) {
@@ -191,12 +195,12 @@ function maps(query) {
 								}
 							})
 						})
-						
+
 					}
 					${script}
 				</script>
 				`
-				
+
 		})
 		.catch(e => false)
 }
