@@ -23,6 +23,9 @@ async function math(query) {
 // window.math = math("2 + 2");
 
 async function trigger(query) {
+  if(!isNaN(query)) {
+    return false;
+  }
   try {
     mathjs.eval(query);
     return true;
