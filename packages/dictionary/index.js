@@ -94,9 +94,9 @@ async function trigger(query) {
 	// split the query to trigger the package only when "define" is used
 	query = query.split(' ');
 
-	// return false when there's no other word 
-	if (query.length === 1) return false;
-	
+	// return false when there's no other word than define in query
+	if (query.length === 1 || query.includes('')) return false;
+
 	return query.includes('define') ? true : false;
 }
 
