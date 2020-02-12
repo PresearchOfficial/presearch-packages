@@ -18,6 +18,14 @@ async function dictionary(query) {
 				else definitions[item.type] = [item];
 			});
 
+			// Check if there's no definition
+			if(definitions.undefined) {
+				return `
+				<div class="mainCol dictMainCol">
+					<h3 class="dictWord"><span style="font-weight:normal">Sorry, no definition found for</span> ${word}</h3>
+				</div>`
+			}
+
 			return `
 				<div class="mainCol dictMainCol">
 					<h2 class="dictWord">${word}</h2>
@@ -83,6 +91,12 @@ async function dictionary(query) {
 }
 
 async function trigger(query) {
+	// split the query to trigger the package only when "define" is used
+	query = query.split(' ');
+
+	// return false when there's no other word than define in query
+	if (query.length === 1 || query.includes('')) return false;
+
 	return query.includes('define') ? true : false;
 }
 
