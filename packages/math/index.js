@@ -1,5 +1,5 @@
-'use strict';
-const mathjs = require('mathjs');
+"use strict";
+const mathjs = require("mathjs");
 
 async function math(query) {
   const data = mathjs.eval(query);
@@ -7,8 +7,8 @@ async function math(query) {
   return `
     <div class="mainCol mathContain">
       <p>${query}</p>
-      <h1>${typeof data === 'number' ? data : ``}</h1>
-      ${(data && data.value) ? `<h1>${data.value}</h1>` : ``}
+      <h1>${typeof data === "number" ? data : ``}</h1>
+      ${data && data.value ? `<h1>${data.value}</h1>` : ``}
     </div>
     <style>
       .mathContain {
@@ -19,18 +19,16 @@ async function math(query) {
   `;
 }
 
-// This line is for testing package with browserify bundle 
+// This line is for testing package with browserify bundle
 // window.math = math("2 + 2");
 
 async function trigger(query) {
-  if(!isNaN(query)) {
-    return false;
-  }
+  const chars = new RegExp(/([a-zA-Z])+/g);
+  if (!isNaN(query) || chars.test(query)) return false;
   try {
     mathjs.eval(query);
     return true;
-  }
-  catch (error) {
+  } catch (error) {
     return false;
   }
 }
