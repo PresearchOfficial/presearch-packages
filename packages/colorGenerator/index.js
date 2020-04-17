@@ -10,11 +10,10 @@ async function colorGenerator(query) {
 	.sub {
 		height: 300px;
 		width: 200px;
-		display: flex;
-		position: absolute;
+    display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: center;
+		justify-content: space-between;
 		background: #222;
 		text-align: center;
 		font-weight: 600;
@@ -22,7 +21,7 @@ async function colorGenerator(query) {
 		z-index: 1;
 	}
 	.margin1 {
-		margin-top: 30px !important;
+		margin-top: 30px;
 		font-size: 25px;
 		opacity: 0.25;
 		cursor: pointer;
@@ -50,9 +49,15 @@ async function colorGenerator(query) {
 		user-select: none;
 	}
 	.active {
-		opacity: 1 !important;
-	}
+		opacity: 1;
+  }
+  p {
+    margin: 0;
+  }
 	@media only screen and (max-width:800px) {
+    .margin1 {
+      margin-top: 15px;
+    }
 		.margin1 svg {
 			width: 20px;
 			height:48px;
@@ -62,7 +67,8 @@ async function colorGenerator(query) {
 		}
 		p {
 			font-size: 20px !important;
-		}
+    }
+    .main,
 		.sub {
 			height: 200px;
 		}
