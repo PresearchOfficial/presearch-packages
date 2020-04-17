@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 async function colorGenerator(query) {
-	return `<style>
+  return `<style>
 	.main {
 		width: 100%;
 		position: relative;
+		height: 300px;
 	}
 	.sub {
 		height: 300px;
@@ -52,17 +53,24 @@ async function colorGenerator(query) {
 		opacity: 1 !important;
 	}
 	@media only screen and (max-width:800px) {
-		.margin1 > svg {
-			width: 36px;
+		.margin1 svg {
+			width: 20px;
 			height:48px;
 		}
-		p > input[type="text"] {
-			font-size:10px;
+		p input[type="text"] {
+			font-size:7px;
 		}
 		p {
 			font-size: 20px !important;
 		}
+		.sub {
+			height: 200px;
+		}
+		.margin2 {
+			margin: 0;
+		}
 	}
+	
 </style>
 <div class="main noselect">
       <div id="container1" class="sub pos0">
@@ -117,173 +125,268 @@ async function colorGenerator(query) {
       </div>
     </div>
 <script>
-(function() {
+(function () {
+  let PACKAGE_CONTAINER_WIDTH = 1000;
+  let isMobile = false;
+  if (window.innerWidth < 500) {
+    isMobile = true;
+    PACKAGE_CONTAINER_WIDTH = window.innerWidth - 12;
+    document.querySelectorAll(".sub").forEach((item) => {
+      item.style.width = window.innerWidth / 5 - 2 + "px";
+    });
+    document.querySelectorAll(".margin2").forEach((item) => {
+      item.addEventListener("touchstart", () => {
+        allColumns.forEach((item) => {
+          if (item.save) return;
+          let currentColor = randomColor();
+          let r = currentColor[0];
+          let g = currentColor[1];
+          let b = currentColor[2];
+          item.id.style.background = "rgb(" + r + ", " + g + ", " + b + ")";
+          item.hex.value = fullColorHex(r, g, b);
+          item.rgb.value = "rgb(" + r + ", " + g + ", " + b + ")";
+        });
+      });
+      item.innerHTML = "TAP";
+    });
+  }
 
-	const PACKAGE_CONTAINER_WIDTH = 1000;
+  function randomColor() {
+    let r = (Math.random() * (255 - 0 + 1)) << 0;
+    let g = (Math.random() * (255 - 0 + 1)) << 0;
+    let b = (Math.random() * (255 - 0 + 1)) << 0;
 
-	function randomColor() {
-		let r = (Math.random() * (255 - 0 + 1)) << 0;
-		let g = (Math.random() * (255 - 0 + 1)) << 0;
-		let b = (Math.random() * (255 - 0 + 1)) << 0;
-	
-		const color = [r, g, b];
-		return color;
-	}
-	
-	function getId(id) {
-		return document.getElementById(id);
-	}
-	
-	function rgbToHex(rgb) {
-		let hex = Number(rgb).toString(16);
-		if (hex.length < 2) {
-			hex = "0" + hex;
-		}
-		return hex;
-	}
-	
-	function fullColorHex(r, g, b) {
-		let red = rgbToHex(r);
-		let green = rgbToHex(g);
-		let blue = rgbToHex(b);
-		return ("#" + red + green + blue).toUpperCase();
-	}
-	
-	const one = { id: getId("container1"), lock: getId("lock1"), button: getId("button1"), hex: getId("hex1"), rgb: getId("rgb1"), save: false, clicked: false };
-	const two = { id: getId("container2"), lock: getId("lock2"), button: getId("button2"), hex: getId("hex2"), rgb: getId("rgb2"), save: false, clicked: false };
-	const three = { id: getId("container3"), lock: getId("lock3"), button: getId("button3"), hex: getId("hex3"), rgb: getId("rgb3"), save: false, clicked: false };
-	const four = { id: getId("container4"), lock: getId("lock4"), button: getId("button4"), hex: getId("hex4"), rgb: getId("rgb4"), save: false, clicked: false };
-	const five = { id: getId("container5"), lock: getId("lock5"), button: getId("button5"), hex: getId("hex5"), rgb: getId("rgb5"), save: false, clicked: false };
-	
-	const allColumns = [one, two, three, four, five];
-	
-	let elementWidth = PACKAGE_CONTAINER_WIDTH / 5;
-	let columsGrid = [0, elementWidth, elementWidth * 2, elementWidth * 3, elementWidth * 4];
-	
-	let style = document.createElement("style");
-	style.type = "text/css";
-	let generateHtml = () => {
-		elementWidth = PACKAGE_CONTAINER_WIDTH / 5;
-		columsGrid = [0, elementWidth, elementWidth * 2, elementWidth * 3, elementWidth * 4];
-		let html = "";
-		for (i = 0; i < 5; i++) {
-			html += '.pos'+ i + ' { position: absolute; left:' + columsGrid[i].toFixed(1) + 'px }';
-		}
-		return html;
-	};
-	style.innerHTML = generateHtml();
-	document.getElementsByTagName("head")[0].appendChild(style);
-	
-	let columnStyle = document.querySelectorAll("style")[1];
-	
-	window.addEventListener("keydown", e => {
-		if (e.keyCode === 71) {
-			allColumns.forEach(item => {
-				if (item.save) return;
-				let currentColor = randomColor();
-				let r = currentColor[0];
-				let g = currentColor[1];
-				let b = currentColor[2];
-				item.id.style.background = 'rgb('+ r + ', '+ g + ', '+ b + ')';
-				item.hex.value = fullColorHex(r, g, b);
-				item.rgb.value = 'rgb('+ r + ', '+ g + ', '+ b + ')';
-			});
-		}
-	});
-	
-	allColumns.forEach(item => {
-		item.lock.addEventListener("mousedown", () => {
-			if (item.save) {
-				item.save = false;
-				item.lock.classList.remove("active");
-			} else if (!item.save) {
-				item.save = true;
-				item.lock.classList.add("active");
-			}
-		});
-	
-		item.id.addEventListener("mousedown", () => {
-			item.clicked = true;
-			item.id.style.zIndex = 2;
-		});
-	
-		item.id.addEventListener("mousemove", e => {
-			let clientWidth = item.id.clientWidth / 2;
-			let position = e.clientX - clientWidth;
-			let pos = parseInt(item.id.classList[1].substring(3));
-			if (item.clicked) {
-				item.id.style.left = position - 75 + 'px';
-				if (e.clientX < columsGrid[pos - 1] + clientWidth * 2) {
-					let element = document.querySelector('.pos' + (pos - 1));
-					let currentElement = document.querySelector('.pos' + pos);
-					element.classList.remove('pos' + (pos - 1));
-					element.classList.add('pos' + pos);
-					currentElement.classList.add('pos' + (pos - 1));
-					currentElement.classList.remove('pos' + pos);
-				}
-				if (e.clientX > columsGrid[pos + 1]) {
-					let element = document.querySelector('.pos' + (pos + 1));
-					let currentElement = document.querySelector('.pos' + pos);
-					element.classList.remove('pos' + (pos + 1));
-					element.classList.add('pos' + pos);
-					currentElement.classList.add('pos' + (pos + 1));
-					currentElement.classList.remove('pos' + pos);
-				}
-			}
-		});
-	
-		item.id.addEventListener("mouseup", () => {
-			item.clicked = false;
-			item.id.style.zIndex = 1;
-			item.id.style.left = "";
-		});
-	
-		item.rgb.addEventListener("mousedown", () => {
-			item.rgb.className += " copied";
-			let temp = item.rgb.value;
-			item.rgb.focus();
-			item.rgb.select();
-			document.execCommand("copy");
-			item.rgb.value = "Copied!";
-			setTimeout(() => {
-				item.rgb.className = "colors";
-				item.rgb.value = temp;
-			}, 500);
-		});
-	
-		item.hex.addEventListener("mousedown", () => {
-			item.hex.className += " copied";
-			let temp = item.hex.value;
-			item.hex.focus();
-			item.hex.select();
-			document.execCommand("copy");
-			item.hex.value = "Copied!";
-			setTimeout(() => {
-				item.hex.className = "colors";
-				item.hex.value = temp;
-			}, 500);
-		});
-	});
-	
-		allColumns.forEach(item => {
-			if (item.save) return;
-			let currentColor = randomColor();
-			let r = currentColor[0];
-			let g = currentColor[1];
-			let b = currentColor[2];
-			item.id.style.background = 'rgb(' + r + ',' + g + ',' + b + ')';
-			item.hex.value = fullColorHex(r, g, b);
-			item.rgb.value = 'rgb(' + r + ',' + g + ',' + b + ')';
-		});
+    const color = [r, g, b];
+    return color;
+  }
+
+  function getId(id) {
+    return document.getElementById(id);
+  }
+
+  function rgbToHex(rgb) {
+    let hex = Number(rgb).toString(16);
+    if (hex.length < 2) {
+      hex = "0" + hex;
+    }
+    return hex;
+  }
+
+  function fullColorHex(r, g, b) {
+    let red = rgbToHex(r);
+    let green = rgbToHex(g);
+    let blue = rgbToHex(b);
+    return ("#" + red + green + blue).toUpperCase();
+  }
+
+  const one = {
+    id: getId("container1"),
+    lock: getId("lock1"),
+    button: getId("button1"),
+    hex: getId("hex1"),
+    rgb: getId("rgb1"),
+    save: false,
+    clicked: false,
+  };
+  const two = {
+    id: getId("container2"),
+    lock: getId("lock2"),
+    button: getId("button2"),
+    hex: getId("hex2"),
+    rgb: getId("rgb2"),
+    save: false,
+    clicked: false,
+  };
+  const three = {
+    id: getId("container3"),
+    lock: getId("lock3"),
+    button: getId("button3"),
+    hex: getId("hex3"),
+    rgb: getId("rgb3"),
+    save: false,
+    clicked: false,
+  };
+  const four = {
+    id: getId("container4"),
+    lock: getId("lock4"),
+    button: getId("button4"),
+    hex: getId("hex4"),
+    rgb: getId("rgb4"),
+    save: false,
+    clicked: false,
+  };
+  const five = {
+    id: getId("container5"),
+    lock: getId("lock5"),
+    button: getId("button5"),
+    hex: getId("hex5"),
+    rgb: getId("rgb5"),
+    save: false,
+    clicked: false,
+  };
+
+  const allColumns = [one, two, three, four, five];
+
+  let elementWidth = PACKAGE_CONTAINER_WIDTH / 5;
+  let columsGrid = [
+    0,
+    elementWidth,
+    elementWidth * 2,
+    elementWidth * 3,
+    elementWidth * 4,
+  ];
+
+  let style = document.createElement("style");
+  style.type = "text/css";
+  let generateHtml = () => {
+    elementWidth = PACKAGE_CONTAINER_WIDTH / 5;
+    columsGrid = [
+      0,
+      elementWidth,
+      elementWidth * 2,
+      elementWidth * 3,
+      elementWidth * 4,
+    ];
+    let html = "";
+    for (i = 0; i < 5; i++) {
+      html +=
+        ".pos" +
+        i +
+        " { position: absolute; left:" +
+        columsGrid[i].toFixed(1) +
+        "px }";
+    }
+    return html;
+  };
+  style.innerHTML = generateHtml();
+  document.getElementsByTagName("head")[0].appendChild(style);
+
+  let columnStyle = document.querySelectorAll("style")[1];
+
+  let isInputFocused = false;
+  document.querySelector("input").addEventListener("focus", () => {
+    isInputFocused = true;
+  });
+  document.querySelector("input").addEventListener("blur", () => {
+    isInputFocused = false;
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (e.keyCode === 71 && !isInputFocused) {
+      allColumns.forEach((item) => {
+        if (item.save) return;
+        let currentColor = randomColor();
+        let r = currentColor[0];
+        let g = currentColor[1];
+        let b = currentColor[2];
+        item.id.style.background = "rgb(" + r + ", " + g + ", " + b + ")";
+        item.hex.value = fullColorHex(r, g, b);
+        item.rgb.value = "rgb(" + r + ", " + g + ", " + b + ")";
+      });
+    }
+  });
+
+  allColumns.forEach((item) => {
+    item.lock.addEventListener(isMobile ? "touchstart" : "mousedown", () => {
+      if (item.save) {
+        item.save = false;
+        item.lock.classList.remove("active");
+      } else if (!item.save) {
+        item.save = true;
+        item.lock.classList.add("active");
+      }
+    });
+
+    if (!isMobile) {
+      item.id.addEventListener("mousedown", () => {
+        item.clicked = true;
+        item.id.style.zIndex = 2;
+      });
+
+      item.id.addEventListener("mousemove", (e) => {
+        let clientWidth = item.id.clientWidth / 2;
+        let position = e.clientX - clientWidth;
+        let pos = parseInt(item.id.classList[1].substring(3));
+        if (item.clicked) {
+          item.id.style.left = position - 75 + "px";
+          if (e.clientX < columsGrid[pos - 1] + clientWidth * 2) {
+            let element = document.querySelector(".pos" + (pos - 1));
+            let currentElement = document.querySelector(".pos" + pos);
+            element.classList.remove("pos" + (pos - 1));
+            element.classList.add("pos" + pos);
+            currentElement.classList.add("pos" + (pos - 1));
+            currentElement.classList.remove("pos" + pos);
+          }
+          if (e.clientX > columsGrid[pos + 1]) {
+            let element = document.querySelector(".pos" + (pos + 1));
+            let currentElement = document.querySelector(".pos" + pos);
+            element.classList.remove("pos" + (pos + 1));
+            element.classList.add("pos" + pos);
+            currentElement.classList.add("pos" + (pos + 1));
+            currentElement.classList.remove("pos" + pos);
+          }
+        }
+      });
+
+      item.id.addEventListener("mouseup", () => {
+        item.clicked = false;
+        item.id.style.zIndex = 1;
+        item.id.style.left = "";
+      });
+    }
+
+    item.rgb.addEventListener(isMobile ? "touchstart" : "mousedown", () => {
+      item.rgb.className += " copied";
+      let temp = item.rgb.value;
+      item.rgb.focus();
+      item.rgb.select();
+      document.execCommand("copy");
+      item.rgb.value = "Copied!";
+      setTimeout(() => {
+        item.rgb.className = "colors";
+        item.rgb.value = temp;
+      }, 500);
+    });
+
+    item.hex.addEventListener(isMobile ? "touchstart" : "mousedown", () => {
+      item.hex.className += " copied";
+      let temp = item.hex.value;
+      item.hex.focus();
+      item.hex.select();
+      document.execCommand("copy");
+      item.hex.value = "Copied!";
+      setTimeout(() => {
+        item.hex.className = "colors";
+        item.hex.value = temp;
+      }, 500);
+    });
+  });
+
+  allColumns.forEach((item) => {
+    if (item.save) return;
+    let currentColor = randomColor();
+    let r = currentColor[0];
+    let g = currentColor[1];
+    let b = currentColor[2];
+    item.id.style.background = "rgb(" + r + "," + g + "," + b + ")";
+    item.hex.value = fullColorHex(r, g, b);
+    item.rgb.value = "rgb(" + r + "," + g + "," + b + ")";
+  });
 })();
 </script>
 `;
 }
 
 async function trigger(query) {
-	query = query.toLowerCase();
-    return query === 'color generator' || query === 'random color' || query === 'random color generator' || query === 'colorgenerator';
+  query = query.toLowerCase();
+  return (
+    query === "color generator" ||
+    query === "random color" ||
+    query === "random color generator" ||
+    query === "colorgenerator"
+  );
 }
 
 module.exports = { colorGenerator, trigger };
+
 
