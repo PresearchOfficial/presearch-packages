@@ -389,7 +389,8 @@ async function trigger(query) {
     query === "color generator" ||
     query === "random color" ||
     query === "random color generator" ||
-    query === "colorgenerator"
+    query === "colorgenerator" ||
+    query === "color palette"
   );
 }
 
