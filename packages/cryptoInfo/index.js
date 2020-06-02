@@ -441,7 +441,7 @@ async function trigger(query) {
   for (let coin of coin_list) {
     if (
       coin.id === query ||
-      coin.name.toLocaleLowerCase() === query ||
+      coin.name.toLowerCase() === query ||
       coin.symbol === query
     )
       return true;
