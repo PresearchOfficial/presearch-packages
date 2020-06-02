@@ -27,14 +27,19 @@ async function cryptoInfo(query) {
     });
 
     const coin = await request.json();
-    if (!coin.market_data) return 'Error! Unable to connect to CoinGecko. Please try again later';
+    if (!coin.market_data)
+      return "Error! Unable to connect to CoinGecko. Please try again later";
 
     const { name, symbol, market_cap_rank } = coin;
-    const { total_supply, circulating_supply, last_updated } = coin.market_data;
     const logo = coin.image.small;
     const price = coin.market_data.current_price.usd;
     const tag = coin.asset_platform_id ? "Token" : "Coin";
     const {
+      total_supply,
+      circulating_supply,
+      last_updated,
+      market_cap,
+      total_volume,
       price_change_percentage_24h,
       price_change_percentage_7d,
     } = coin.market_data;
@@ -48,7 +53,6 @@ async function cryptoInfo(query) {
       repos_url,
       announcement_url,
     } = coin.links;
-    const { market_cap, total_volume } = coin.market_data;
 
     const formatNumber = (num) => {
       var parts = num.toString().split(".");
