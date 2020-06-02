@@ -27,6 +27,7 @@ async function cryptoInfo(query) {
     });
 
     const coin = await request.json();
+    if (!coin.market_data) return 'Error! Unable to connect to CoinGecko. Please try again later';
 
     const { name, symbol, market_cap_rank } = coin;
     const { total_supply, circulating_supply, last_updated } = coin.market_data;
@@ -128,7 +129,7 @@ async function cryptoInfo(query) {
                 <a href="https://www.coingecko.com/en/coins/${
                   coin.id
                 }" class="linkItem">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="295" height="295" viewBox="0 0 295 295"><g id="coingecko" transform="translate(9.499 10.501)"><path id="Path_34" data-name="Path 34" d="M310,183A138,138,0,1,1,171.4,45.61,138,138,0,0,1,310,183Z" transform="translate(-34 -46.61)" fill="none" stroke="#000" stroke-width="19"/><path id="Path_36" data-name="Path 36" d="M174.35,64.27a70.18,70.18,0,0,1,24.53,0,74.66,74.66,0,0,1,23.43,7.85c7.28,4,13.57,9.43,19.83,14.52s12.49,10.3,18.42,16a93.381,93.381,0,0,1,15.71,19,108.069,108.069,0,0,1,11,22.17c5.33,15.66,7.18,32.53,4.52,48.62H291c-2.67-15.95-6.29-31.15-12-45.61a178.006,178.006,0,0,0-9.44-21.25,208.8,208.8,0,0,0-12.42-19.93,72.3,72.3,0,0,0-16.64-16.8c-6.48-4.62-13.93-7.61-21.14-10.45S205,72.61,197.48,70.45s-15.16-3.78-23.14-5.35Z" transform="translate(-34 -45.61)" fill="none"/><path id="Path_37" data-name="Path 37" d="M236.74,138c-9.26-2.68-18.86-6.48-28.58-10.32-.56-2.44-2.72-5.48-7.09-9.19-6.35-5.51-18.28-5.37-28.59-2.93-11.38-2.68-22.62-3.63-33.41-1-88.25,24.31-38.21,83.62-70.61,143.24,4.61,9.78,54.3,66.84,126.2,51.53,0,0-24.59-59.09,30.9-87.45C270.57,198.79,303.09,156.07,236.74,138Z" transform="translate(-34 -45.61)" fill="#000"/><path id="Path_38" data-name="Path 38" d="M247.64,176.81a5.35,5.35,0,1,1-5.38-5.32,5.35,5.35,0,0,1,5.38,5.32Z" transform="translate(-34 -45.61)" fill="#fff"/><path id="Path_39" data-name="Path 39" d="M172.48,115.52c6.43.46,29.68,8,35.68,12.12-5-14.5-21.83-16.43-35.68-12.12Z" transform="translate(-34 -45.61)" fill="#000"/><path id="Path_40" data-name="Path 40" d="M178.6,152.19a24.68,24.68,0,1,1-24.677-24.67A24.68,24.68,0,0,1,178.6,152.19Z" transform="translate(-34 -45.61)" fill="#fff"/><path id="Path_41" data-name="Path 41" d="M171.28,152.41a17.36,17.36,0,1,1-17.36-17.36A17.36,17.36,0,0,1,171.28,152.41Z" transform="translate(-34 -45.61)" fill="#000"/><path id="Path_42" data-name="Path 42" d="M267.63,187.69c-20,14.09-42.74,24.78-75,24.78-15.1,0-18.16-16-28.14-8.18-5.15,4.06-23.31,13.14-37.72,12.45S89,207.6,82.49,176.84c-2.58,30.76-3.9,53.42-15.45,79.39,23,36.83,77.84,65.24,127.62,53-5.35-37.35,27.29-73.93,45.68-92.65,7-7.09,20.3-18.66,27.29-28.91Z" transform="translate(-34 -45.61)" fill="#000"/><path id="Path_43" data-name="Path 43" d="M266.85,188.61c-6.21,5.66-13.6,9.85-21.12,13.55a134.24,134.24,0,0,1-23.7,8.63c-8.16,2.11-16.67,3.7-25.29,2.92S179.31,210,173.6,203.54l.27-.31c7,4.54,15.08,6.14,23.12,6.37a108.569,108.569,0,0,0,24.3-2,132.339,132.339,0,0,0,23.61-7.3c7.63-3.15,15.18-6.8,21.68-12Z" transform="translate(-34 -45.61)" fill="#fff"/></g></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="295" height="295" viewBox="0 0 295 295"><g id="coingecko" transform="translate(9.499 10.501)"><path id="Path_34" data-name="Path 34" d="M310,183A138,138,0,1,1,171.4,45.61,138,138,0,0,1,310,183Z" transform="translate(-34 -46.61)" fill="none" stroke="#4e616c" stroke-width="19"/><path id="Path_36" data-name="Path 36" d="M174.35,64.27a70.18,70.18,0,0,1,24.53,0,74.66,74.66,0,0,1,23.43,7.85c7.28,4,13.57,9.43,19.83,14.52s12.49,10.3,18.42,16a93.381,93.381,0,0,1,15.71,19,108.069,108.069,0,0,1,11,22.17c5.33,15.66,7.18,32.53,4.52,48.62H291c-2.67-15.95-6.29-31.15-12-45.61a178.006,178.006,0,0,0-9.44-21.25,208.8,208.8,0,0,0-12.42-19.93,72.3,72.3,0,0,0-16.64-16.8c-6.48-4.62-13.93-7.61-21.14-10.45S205,72.61,197.48,70.45s-15.16-3.78-23.14-5.35Z" transform="translate(-34 -45.61)" fill="none"/><path id="Path_37" data-name="Path 37" d="M236.74,138c-9.26-2.68-18.86-6.48-28.58-10.32-.56-2.44-2.72-5.48-7.09-9.19-6.35-5.51-18.28-5.37-28.59-2.93-11.38-2.68-22.62-3.63-33.41-1-88.25,24.31-38.21,83.62-70.61,143.24,4.61,9.78,54.3,66.84,126.2,51.53,0,0-24.59-59.09,30.9-87.45C270.57,198.79,303.09,156.07,236.74,138Z" transform="translate(-34 -45.61)" fill="#4e616c"/><path id="Path_38" data-name="Path 38" d="M247.64,176.81a5.35,5.35,0,1,1-5.38-5.32,5.35,5.35,0,0,1,5.38,5.32Z" transform="translate(-34 -45.61)" fill="#fff"/><path id="Path_39" data-name="Path 39" d="M172.48,115.52c6.43.46,29.68,8,35.68,12.12-5-14.5-21.83-16.43-35.68-12.12Z" transform="translate(-34 -45.61)" fill="#4e616c"/><path id="Path_40" data-name="Path 40" d="M178.6,152.19a24.68,24.68,0,1,1-24.677-24.67A24.68,24.68,0,0,1,178.6,152.19Z" transform="translate(-34 -45.61)" fill="#fff"/><path id="Path_41" data-name="Path 41" d="M171.28,152.41a17.36,17.36,0,1,1-17.36-17.36A17.36,17.36,0,0,1,171.28,152.41Z" transform="translate(-34 -45.61)" fill="#4e616c"/><path id="Path_42" data-name="Path 42" d="M267.63,187.69c-20,14.09-42.74,24.78-75,24.78-15.1,0-18.16-16-28.14-8.18-5.15,4.06-23.31,13.14-37.72,12.45S89,207.6,82.49,176.84c-2.58,30.76-3.9,53.42-15.45,79.39,23,36.83,77.84,65.24,127.62,53-5.35-37.35,27.29-73.93,45.68-92.65,7-7.09,20.3-18.66,27.29-28.91Z" transform="translate(-34 -45.61)" fill="#4e616c"/><path id="Path_43" data-name="Path 43" d="M266.85,188.61c-6.21,5.66-13.6,9.85-21.12,13.55a134.24,134.24,0,0,1-23.7,8.63c-8.16,2.11-16.67,3.7-25.29,2.92S179.31,210,173.6,203.54l.27-.31c7,4.54,15.08,6.14,23.12,6.37a108.569,108.569,0,0,0,24.3-2,132.339,132.339,0,0,0,23.61-7.3c7.63-3.15,15.18-6.8,21.68-12Z" transform="translate(-34 -45.61)" fill="#fff"/></g></svg>
                     <span>View on CoinGecko</span>
                 </a>
               ${
@@ -187,22 +188,24 @@ async function cryptoInfo(query) {
               }
               ${
                 blockchain_site
-                  ? blockchain_site.forEach((item) => {
-                      return `<div class="explorerOuter">
+                  ? blockchain_site
+                      .map((item) => {
+                        return `<div class="explorerOuter">
                           <a href="${item}" class="explorerLink">
                             <span>${item}</span>
                           </a>
                         </div>`;
-                    })
+                      })
+                      .join("")
                   : ""
               }
               ${blockchain_site ? `</div>` : ""}
               </div>
             ${
               last_updated
-                ? `<p class="priceLabel">Last updated on ${last_updated.toLocaleString(
-                    "en-US"
-                  )}</p>`
+                ? `<p class="priceLabel">Last updated on ${new Date(
+                    last_updated
+                  ).toLocaleString("en-US")}</p>`
                 : ``
             }
           </div>
@@ -255,6 +258,9 @@ async function cryptoInfo(query) {
         </div>
       </div>
       <style>
+        .answerRow {
+          display:flex;
+        }
         .cryptoAnswerCol {
           flex: 1;
         }
@@ -262,14 +268,16 @@ async function cryptoInfo(query) {
           flex: 1;
           display: flex;
           flex-flow: row nowrap;
-          margin: 15px;
+          width: calc(95% - 70px);
+          margin: 15px auto 15px 70px;
+          max-width: 1200px;
         }
         .cryptoMainCol {
           padding: 15px;
           box-sizing: border-box;
         }
         .mainCol {
-          width: 100% !important;
+          width: 50%;
           display: flex;
         }
         .cryptoSideContain {
@@ -398,13 +406,23 @@ async function cryptoInfo(query) {
           .answerInner {
             flex-direction: column;
             margin: 0;
+            width: 100%;
+          }
+          .answerRow {
+            flex-direction: column;
           }
           .sideContain {
             padding: 0 15px;
           }
+          .sideCol {
+            padding-left: 20px;
+          }
           .priceRow {
             flex-direction: column;
             align-items: flex-start;
+          }
+          .mainCol {
+            width: 100%;
           }
         }
       </style>
