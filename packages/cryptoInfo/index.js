@@ -191,7 +191,7 @@ async function cryptoInfo(query) {
                   : ""
               }
               ${
-                blockchain_site
+                blockchain_site && blockchain_site[0].length > 0 
                   ? blockchain_site
                       .map((item) =>
                         item.length > 0
