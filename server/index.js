@@ -20,17 +20,22 @@ app.get('/', async (req, res) => {
   if (packageKey in packageObject && trigger) {
     const result = await packageObject[packageKey][packageKey](query);
     res.send(`
-      <div class="answerInner">${result}</div>
-      <style type="text/css">
-        ${commonCss}
-        body {
-          margin: 0;
-          padding: 10px 0;
-          background-color: #f2f2f2;
-          font-family: Lato,Helvetica,sans-serif;
-          letter-spacing: .1px;
-        }
-      </style>
+      <head>
+        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+      </head>
+      <body>
+        <div class="answerInner">${result}</div>
+        <style type="text/css">
+          ${commonCss}
+          body {
+            margin: 0;
+            padding: 10px 0;
+            background-color: #f2f2f2;
+            font-family: Lato,Helvetica,sans-serif;
+            letter-spacing: .1px;
+          }
+        </style>
+      </body>
     `);
   }
   else {

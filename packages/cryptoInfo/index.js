@@ -185,25 +185,27 @@ async function cryptoInfo(query) {
                   : ""
               }
               ${
-                blockchain_site
+                blockchain_site && blockchain_site[0]
                   ? `<div class="explorer">
-              <div class="explorerTitle"><i class="fa fa-compass"></i> <span>Explore more</span></div>`
+                      <div class="explorerTitle"><?xml version="1.0" encoding="UTF-8"?><svg width="15px" class="feather feather-search" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg><span>Explore more</span></div>`
                   : ""
               }
               ${
-                blockchain_site
+                blockchain_site && blockchain_site[0]
                   ? blockchain_site
-                      .map((item) => {
-                        return `<div class="explorerOuter">
+                      .map((item) =>
+                        item
+                          ? `<div class="explorerOuter">
                           <a href="${item}" class="explorerLink">
                             <span>${item}</span>
                           </a>
-                        </div>`;
-                      })
+                        </div>`
+                          : ""
+                      )
                       .join("")
                   : ""
               }
-              ${blockchain_site ? `</div>` : ""}
+              ${blockchain_site && blockchain_site[0] ? `</div>` : ""}
               </div>
             ${
               last_updated
@@ -365,6 +367,7 @@ async function cryptoInfo(query) {
         }
         .explorer {
           padding: 20px 0 15px;
+          word-wrap: anywhere;
         }
         .explorerTitle {
           font-size: 14px;
@@ -375,7 +378,7 @@ async function cryptoInfo(query) {
           padding-bottom: 10px;
         }
         .explorerTitle span {
-          margin-left: 10px;
+          margin-left: 4px;
         }
         .explorerOuter {
           padding: 4px 0;
@@ -427,6 +430,12 @@ async function cryptoInfo(query) {
           }
           .mainCol {
             width: 100%;
+          }
+          .mainCol1 {
+            width: calc(100vw - 2rem) !important;
+          }
+          .rank {
+            padding-top: 10px;
           }
         }
       </style>
