@@ -10,9 +10,10 @@ async function cryptoInfo(query) {
     let coin_id;
     for (let coin of coin_list) {
       if (
-        coin.id === query ||
-        coin.name.toLowerCase() === query ||
-        coin.symbol === query
+        (coin.id === query ||
+          coin.name.toLowerCase() === query ||
+          coin.symbol === query) &&
+        !coin.symbol.toLowerCase().includes(".cx")
       ) {
         coin_id = coin.id;
         break;
