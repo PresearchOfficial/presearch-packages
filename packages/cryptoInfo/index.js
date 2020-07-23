@@ -55,6 +55,7 @@ async function cryptoInfo(query) {
       announcement_url,
     } = coin.links;
 
+    if(!circulating_supply) return null;
     const formatNumber = (num) => {
       var parts = num.toString().split(".");
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
