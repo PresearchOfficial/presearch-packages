@@ -158,7 +158,7 @@ function exchangeRates(query) {
     summary = parseFloat(summary).toLocaleString('en');
 
     return `
-        <div class="mainCol" style="background: #eff2f5;">
+        <div class="mainCol">
         <p class="exchangeRates">
             <span style="font-size:20px; color:#333;">${amount[0].toLocaleString('en')} ${first} =</span>
             <br />
