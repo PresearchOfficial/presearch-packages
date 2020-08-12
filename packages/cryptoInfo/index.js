@@ -29,7 +29,7 @@ async function cryptoInfo(query) {
 
     const coin = await request.json();
     if (!coin.market_data)
-      return "Error! Unable to connect to CoinGecko. Please try again later";
+      return null;
 
     const { name, symbol, market_cap_rank } = coin;
     const logo = coin.image.small;
@@ -305,6 +305,7 @@ async function cryptoInfo(query) {
         .name {
           margin: 0;
           font-size: 24px;
+          font-weight: bold;
         }
         .tag {
           display: flex;
@@ -340,7 +341,6 @@ async function cryptoInfo(query) {
           font-size: 20px;
           font-weight: normal;
           color: #444;
-          margin: 5px 0;
         }
         .price span {
           font-size: 14px;
@@ -349,7 +349,8 @@ async function cryptoInfo(query) {
         .linkItem {
           display: inline-flex;
           flex-direction: row;
-          padding: 8px 10px;
+          align-items: center;
+          padding: 5px 7px;
           background-color: #ddd;
           margin: 5px 5px 5px 0;
           border-radius: 5px;
@@ -380,13 +381,11 @@ async function cryptoInfo(query) {
           display: flex;
           flex-direction: row;
           align-items: center;
-          padding-bottom: 10px;
         }
         .explorerTitle span {
           margin-left: 4px;
         }
         .explorerOuter {
-          padding: 4px 0;
           overflow: hidden;
         }
         .explorerLink {
@@ -396,13 +395,12 @@ async function cryptoInfo(query) {
           opacity: 0.6;
         }
         .explorerLink span {
-          color: #1a0dab;
-        }
-        .explorerLink:visited {
-          color: #609;
+          color: #3083e5;
+          font-size: 14px;
         }
         .rank {
           margin: 0;
+          font-weight: bold;
         }
         .rank span {
           background-color: #0c9;

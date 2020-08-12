@@ -31,14 +31,15 @@ async function colorGenerator(query) {
 	.margin2 {
 		font-size: 22px;
 	}
-	input[type="text"] {
+	.main input[type="text"] {
 		background: transparent;
 		border: none;
 		color: #fff;
 		text-align: center;
 		font-size: 14px;
 		font-weight: 600;
-		cursor: pointer;
+    cursor: pointer;
+    padding-bottom: 5px;
 	}
 	.noselect {
 		-webkit-touch-callout: none;
@@ -51,8 +52,9 @@ async function colorGenerator(query) {
 	.active {
 		opacity: 1;
   }
-  p {
-    margin: 0;
+  .main p {
+    display: flex;
+    justify-content: center;
   }
 	@media only screen and (max-width:800px) {
     .margin1 {
