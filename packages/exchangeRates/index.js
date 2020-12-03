@@ -1,43 +1,26 @@
 'use strict';
+const fetch = require('node-fetch');
 
-var https = require('https');
 var currentPrice;
 var usd;
 var cad;
 var eur;
 var gbp;
 
-var options = {
-    host: 'api.nbp.pl',
-    path: '/api/exchangerates/tables/a/?format=json',
-    headers: {'User-Agent': 'request'}
-};
+const API = "https://api2.nbp.pl/api/exchangerates/tables/a/?format=json"
 
-https.get(options, function (res) {
-    var json = '';
-    res.on('data', function (chunk) {
-        json += chunk;
-    });
-    res.on('end', function () {
-        if (res.statusCode === 200) {
-            try {
-                var data = JSON.parse(json);
-                usd = data[0].rates[1].mid;
-                cad = data[0].rates[4].mid;
-                eur = data[0].rates[7].mid;
-                gbp = data[0].rates[10].mid;
-            } catch (e) {
-                console.log('Error parsing JSON!');
-            }
-        } else {
-            console.log('Status:', res.statusCode);
-        }
-    });
-}).on('error', function (err) {
-        console.log('Error:', err);
-});
-
-function exchangeRates(query) {
+const apiRequest = async () => {
+  return fetch(API).then(res =>res.json()).then(res => {
+    usd = res[0].rates[1].mid;
+    cad = res[0].rates[4].mid;
+    eur = res[0].rates[7].mid;
+    gbp = res[0].rates[10].mid;
+    return true;
+  }).catch(() => false)
+}
+async function exchangeRates(query) {
+    const data = await apiRequest();
+    if (!data) return "";
     query = query.toLowerCase();
     var amount = query.split(' ').join('');
     amount = amount.split(',').join('');
@@ -146,14 +129,14 @@ function exchangeRates(query) {
         second = "PLN";
         currentPrice = gbp;
     }
-    
+
 
     if(second === "PLN"){
         var summary = amount[0] * currentPrice;
     } else {
         var summary = amount[0] / currentPrice;
     }
-    
+
     summary = summary.toFixed(2);
     summary = parseFloat(summary).toLocaleString('en');
 
@@ -166,7 +149,7 @@ function exchangeRates(query) {
         </p>
         <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator.<br />The prices are given for information only.</p>
         </div>
-        
+
         <style>
         .exchangeRates {
             margin-left: 15px;
@@ -189,8 +172,8 @@ function exchangeRates(query) {
 function trigger(query) {
     query = query.toLowerCase();
 
-    if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") || 
-    query.includes("usd to pln") || query.includes("usd to eur") || query.includes("usd to gbp") || query.includes("usd to cad") || 
+    if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") ||
+    query.includes("usd to pln") || query.includes("usd to eur") || query.includes("usd to gbp") || query.includes("usd to cad") ||
     query.includes("eur to usd") || query.includes("eur to pln") || query.includes("eur to gbp") ||query.includes("eur to cad") ||
     query.includes("cad to usd") || query.includes("cad to pln") || query.includes("cad to gbp") || query.includes("cad to eur") ||
     query.includes("gbp to usd") || query.includes("gbp to pln") || query.includes("gbp to cad") || query.includes("gbp to eur")) {
@@ -198,5 +181,5 @@ function trigger(query) {
     }
     return query === iWantToExchange;
 }
-  
-  module.exports = { exchangeRates, trigger };
+
+module.exports = { exchangeRates, trigger }
