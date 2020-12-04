@@ -1,6 +1,6 @@
 {
   "name": "presearch-packages",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "description": "Instant information packages for the Presearch engine",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "create-react-app": "^4.0.1",
-    "fetch": "^1.1.0",
+    "dotenv": "^8.2.0",
     "mathjs": "^8.0.1",
     "mathsteps": "^0.2.0",
     "node-fetch": "^2.6.1",
@@ -25,7 +25,6 @@
     "wikijs": "^6.0.1"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
     "pre-commit": "^1.2.2"
   }
 }
