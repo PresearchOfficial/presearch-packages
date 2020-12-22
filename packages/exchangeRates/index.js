@@ -7,7 +7,7 @@ var cad;
 var eur;
 var gbp;
 
-const API = "https://api2.nbp.pl/api/exchangerates/tables/a/?format=json"
+const API = "https://api.nbp.pl/api/exchangerates/tables/a/?format=json"
 
 const apiRequest = async () => {
   return fetch(API).then(res =>res.json()).then(res => {
