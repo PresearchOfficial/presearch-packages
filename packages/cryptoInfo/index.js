@@ -450,7 +450,7 @@ async function cryptoInfo(query) {
       </style>
     `;
   } catch (error) {
-    console.error(error);
+    return null
   }
 }
 
