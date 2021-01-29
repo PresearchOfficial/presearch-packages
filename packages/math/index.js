@@ -2,7 +2,7 @@
 const mathjs = require("mathjs");
 
 async function math(query) {
-  const data = mathjs.evaluate(query);
+  const data = mathjs.eval(query);
 
   return `
     <div class="mainCol mathContain">
@@ -26,7 +26,7 @@ async function trigger(query) {
   const chars = new RegExp(/([a-zA-Z])+/g);
   if (!isNaN(query) || chars.test(query)) return false;
   try {
-    mathjs.evaluate(query);
+    mathjs.eval(query);
     return true;
   } catch (error) {
     return false;
