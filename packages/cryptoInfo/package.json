@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^6.1.0",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.6.1"
   }
 }
