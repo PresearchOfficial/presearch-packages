@@ -1,4 +1,8 @@
 # Change Log
+## 0.1.31
+    - Added dark mode support
+    - Removed dictionary and mathSteps packages
+
 ## 0.1.30
     - Fixed math package
     - Updated offline coin list for cryptoInfo package
