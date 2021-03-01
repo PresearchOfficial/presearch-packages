@@ -245,10 +245,10 @@ async function cryptoInfo(query) {
         </div>
       </div>
       <style>
-        .answerRow h1.price-red {
+        .answerRow .price-red {
           color: #ff5050;
         }
-        .answerRow h1.price-green {
+        .answerRow .price-green {
           color: #00b386;
         }
         .answerRow {
@@ -411,10 +411,10 @@ async function cryptoInfo(query) {
         .dark .answerCol .priceLabel {
           color: #D1D5DB;
         }
-        .dark .price-green {
+        .dark .answerRow .price-green {
           color:#6EE7B7
         }
-        .dark .price-red {
+        .dark .answerRow .price-red {
           color:#F87171
         }
         .dark .linkItem {
@@ -452,20 +452,28 @@ async function cryptoInfo(query) {
             padding: 0 15px;
           }
           .sideCol {
-            padding-left: 20px;
+            padding: 0;
           }
           .priceRow {
             flex-direction: column;
             align-items: flex-start;
+            padding: 16px 0 6px;
           }
           .mainCol {
             width: 100%;
+            padding: 0;
+          }
+          .answerRow h1 {
+            line-height: 1.5;
           }
           .mainCol1 {
             width: calc(100vw - 2rem) !important;
           }
           .rank {
             padding-top: 10px;
+          }
+          .supplyContain {
+            padding: 10px 0;
           }
         }
       </style>
