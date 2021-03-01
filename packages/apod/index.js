@@ -25,7 +25,7 @@ async function apod() {
           ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
           ${data.date ? `<p class="apodDate">${data.date}</p>` : ``}
           ${data.explanation ? `<p class="apodDesc">${data.explanation}</p>` : ``}
-          <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
+          <a href="https://apod.nasa.gov" class="apodLink hover:opacity-60 dark:text-blue-300">apod.nasa.gov</a>
         </div>
       </div>
     </div>
@@ -62,6 +62,17 @@ async function apod() {
       .apodLink {
         color: #1a0dab;
         text-decoration: none;
+        transition: .2s;
+      }
+      .apodLink:hover {
+        opacity: .6;
+      }
+      .dark .apodLink {
+        color: #69b9fd;
+        text-decoration: none;
+      }
+      .dark .answerCol {
+        color: #d1d5db;
       }
 
       @media screen and (min-width: 840px) {

@@ -391,7 +391,7 @@ function colorPicker(query) {
 
   function trigger(query) {
     query = query.toLowerCase();
-    return query === 'color picker' || query === 'html color picker' || query === 'rgb palette' || query === 'rgb color' || query === 'rgb color code'
+    return query === 'color picker' || query === 'colorpicker' || query === 'html color picker' || query === 'rgb palette' || query === 'rgb color' || query === 'rgb color code'
     || query === 'rgb code' || query === 'rgb picker' || query === 'hex color' || query === 'hex color code' || query === 'hex to rgb' || query === 'rgb to hex';
   }
 

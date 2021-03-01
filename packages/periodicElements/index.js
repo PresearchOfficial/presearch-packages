@@ -32,6 +32,12 @@ async function periodicElements(query) {
           padding: 0 15px;
           box-sizing: border-box;
         }
+        .dark .elementContain {
+          color: #d1d5db;
+        }
+        .dark strong {
+          font-weight: 500;
+        }
       </style>
     `;
   }

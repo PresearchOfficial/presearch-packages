@@ -143,14 +143,30 @@ async function exchangeRates(query) {
     return `
         <div class="mainCol">
         <p class="exchangeRates">
-            <span style="font-size:20px; color:#333;">${amount[0].toLocaleString('en')} ${first} =</span>
+            <span class="firstDigt">${amount[0].toLocaleString('en')} ${first} =</span>
             <br />
-            <span style="font-size:30px; color:#111;">${summary} ${second}</span>
+            <span class="secondDigt">${summary} ${second}</span>
         </p>
-        <p class ="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator.<br />The prices are given for information only.</p>
+        <p class="smallText">Presearch does not guarantee the accuracy of exchange rates used in the calculator.<br />The prices are given for information only.</p>
         </div>
 
         <style>
+        .exchangeRates .firstDigt {
+            font-size:20px; 
+            color:#333;
+        }
+        .exchangeRates .secondDigt {
+            font-size:30px; 
+            color:#111;
+        }
+        .dark .exchangeRates .firstDigt {
+            font-size:20px; 
+            color:#a1a6ad;
+        }
+        .dark .exchangeRates .secondDigt {
+            font-size:30px; 
+            color:#d1d5db;
+        }
         .exchangeRates {
             margin-left: 15px;
             line-height: normal;
@@ -164,7 +180,10 @@ async function exchangeRates(query) {
             font-family: 'Open Sans', sans-serif;
             letter-spacing: normal;
             color: #777;
-            }
+        }
+        .dark .smallText {
+            color:#d1d5db;
+        }
         </style>
     `;
 }

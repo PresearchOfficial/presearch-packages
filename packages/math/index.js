@@ -6,11 +6,14 @@ async function math(query) {
 
   return `
     <div class="mainCol mathContain">
-      <p>${query}</p>
+      <p class="firstDigts">${query}</p>
       <h1>${typeof data === "number" ? data : ``}</h1>
       ${data && data.value ? `<h1>${data.value}</h1>` : ``}
     </div>
     <style>
+      .dark .mathContain {
+        color:#d1d5db;
+      }
       .mathContain {
         padding: 0 15px;
         box-sizing: border-box;
