@@ -25,7 +25,7 @@ async function apod() {
           ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
           ${data.date ? `<p class="apodDate">${data.date}</p>` : ``}
           ${data.explanation ? `<p class="apodDesc">${data.explanation}</p>` : ``}
-          <a href="https://apod.nasa.gov" class="apodLink hover:opacity-60 dark:text-blue-300">apod.nasa.gov</a>
+          <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
         </div>
       </div>
     </div>
