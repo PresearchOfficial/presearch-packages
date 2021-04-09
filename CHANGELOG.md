@@ -1,4 +1,7 @@
 # Change Log
+## 0.1.32
+    - Added Polkamarkets to cryptoInfo package
+    
 ## 0.1.31
     - Added dark mode support
     - Removed dictionary and mathSteps packages
