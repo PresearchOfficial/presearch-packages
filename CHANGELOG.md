@@ -1,4 +1,7 @@
 # Change Log
+## 0.1.33
+    - Updated cryptoInfo coin list
+
 ## 0.1.32
     - Added Polkamarkets to cryptoInfo package
     
