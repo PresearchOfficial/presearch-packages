@@ -1,6 +1,6 @@
 'use strict';
 
-function colorPicker(query) {
+function colorPicker(_query: string): string {
 
     return `
     <style>
@@ -389,7 +389,8 @@ function colorPicker(query) {
     `
   }
 
-  function trigger(query) {
+  // @ts-ignore
+  function trigger(query: string): boolean {
     query = query.toLowerCase();
     return query === 'color picker' || query === 'colorpicker' || query === 'html color picker' || query === 'rgb palette' || query === 'rgb color' || query === 'rgb color code'
     || query === 'rgb code' || query === 'rgb picker' || query === 'hex color' || query === 'hex color code' || query === 'hex to rgb' || query === 'rgb to hex';

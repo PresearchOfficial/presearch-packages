@@ -1,30 +1,43 @@
-'use strict';
-const fetch = require('node-fetch');
+import { IApod } from "./types";
 
-const APOD_API_KEY = 'bLhnNpy0ntfp1QzvG61uXC6m52fbcFKmtyJCYvbA';
+// @ts-ignore
+const fetch = require("node-fetch");
 
-async function apod() {
-  const res = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${APOD_API_KEY}`);
+const APOD_API_KEY = "bLhnNpy0ntfp1QzvG61uXC6m52fbcFKmtyJCYvbA";
+
+async function apod(): Promise<string> {
+  const res: Response = await fetch(
+    `https://api.nasa.gov/planetary/apod?api_key=${APOD_API_KEY}`
+  );
   const json = await res.text();
-  const data = JSON.parse(json);
+  const data: IApod = JSON.parse(json);
 
   return `
     <div class="answerCol">
       <h3 class="apodLabel">Astronomy Picture of the Day</h3>
       <div class="answerRow">
         <div class="mainCol">
-          ${data.url
-            ? data.media_type === 'video'
-              ? `<iframe src="${data.url}" title="${data.title}" class="apodIframe" type="text/html" frameBorder="0"></iframe>`
-              : `<img src="${data.url}" class="apodImage" alt="${data.title}" />`
-            : ``
+          ${
+            data.url
+              ? data.media_type === "video"
+                ? `<iframe src="${data.url}" title="${data.title}" class="apodIframe" type="text/html" frameBorder="0"></iframe>`
+                : `<img src="${data.url}" class="apodImage" alt="${data.title}" />`
+              : ``
           }
         </div>
         <div class="sideCol apodSideContain">
           ${data.title ? `<h2 class="apodName">${data.title}</h2>` : ``}
-          ${data.copyright ? `<p class="apodAuthor">By ${data.copyright}</p>` : ``}
+          ${
+            data.copyright
+              ? `<p class="apodAuthor">By ${data.copyright}</p>`
+              : ``
+          }
           ${data.date ? `<p class="apodDate">${data.date}</p>` : ``}
-          ${data.explanation ? `<p class="apodDesc">${data.explanation}</p>` : ``}
+          ${
+            data.explanation
+              ? `<p class="apodDesc">${data.explanation}</p>`
+              : ``
+          }
           <a href="https://apod.nasa.gov" class="apodLink">apod.nasa.gov</a>
         </div>
       </div>
@@ -90,9 +103,7 @@ async function apod() {
 
 // This line is for testing package with browserify bundle
 // window.apod = apod();
-
-async function trigger(query) {
-  return query.toLowerCase() === 'apod';
-}
+// @ts-ignore
+const trigger = (query: string): boolean => query.toLowerCase() === "apod";
 
 module.exports = { apod, trigger };

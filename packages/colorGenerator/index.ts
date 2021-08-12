@@ -1,6 +1,5 @@
-"use strict";
 
-async function colorGenerator(query) {
+function colorGenerator(_query: string): string {
   return `<style>
 	.main {
 		width: 100%;
@@ -78,7 +77,7 @@ async function colorGenerator(query) {
 			margin: 0;
 		}
 	}
-	
+
 </style>
 <div class="main noselect">
       <div id="container1" class="sub pos0">
@@ -385,7 +384,8 @@ async function colorGenerator(query) {
 `;
 }
 
-async function trigger(query) {
+// @ts-ignore
+function trigger(query: string): boolean {
   query = query.toLowerCase();
   return (
     query === "color generator" ||
