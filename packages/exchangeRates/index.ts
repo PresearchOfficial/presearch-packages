@@ -1,11 +1,11 @@
-'use strict';
+// @ts-ignore
 const fetch = require('node-fetch');
 
-var currentPrice;
-var usd;
-var cad;
-var eur;
-var gbp;
+let currentPrice: number;
+let usd: number;
+let cad: number;
+let eur: number;
+let gbp: number;
 
 const API = "https://api.nbp.pl/api/exchangerates/tables/a/?format=json"
 
@@ -18,15 +18,15 @@ const apiRequest = async () => {
     return true;
   }).catch(() => false)
 }
-async function exchangeRates(query) {
+async function exchangeRates(query: string): Promise<string> {
     const data = await apiRequest();
     if (!data) return "";
     query = query.toLowerCase();
-    var amount = query.split(' ').join('');
+    var amount: string | number[] = query.split(' ').join('');
     amount = amount.split(',').join('');
-    amount = amount.match(/\d+/g).map(Number);
-    var first;
-    var second;
+    amount = amount.match(/\d+/g) && amount.match(/\d+/g).map(Number);
+    var first: string;
+    var second: string;
     if(query.includes("usd to pln")){
         first ="USD";
         second = "PLN";
@@ -132,9 +132,9 @@ async function exchangeRates(query) {
 
 
     if(second === "PLN"){
-        var summary = amount[0] * currentPrice;
+        var summary: number | string = amount[0] * currentPrice;
     } else {
-        var summary = amount[0] / currentPrice;
+        var summary: number | string = amount[0] / currentPrice;
     }
 
     summary = summary.toFixed(2);
@@ -152,19 +152,19 @@ async function exchangeRates(query) {
 
         <style>
         .exchangeRates .firstDigt {
-            font-size:20px; 
+            font-size:20px;
             color:#333;
         }
         .exchangeRates .secondDigt {
-            font-size:30px; 
+            font-size:30px;
             color:#111;
         }
         .dark .exchangeRates .firstDigt {
-            font-size:20px; 
+            font-size:20px;
             color:#a1a6ad;
         }
         .dark .exchangeRates .secondDigt {
-            font-size:30px; 
+            font-size:30px;
             color:#d1d5db;
         }
         .exchangeRates {
@@ -188,7 +188,7 @@ async function exchangeRates(query) {
     `;
 }
 
-function trigger(query) {
+function trigger(query: string): boolean {
     query = query.toLowerCase();
 
     if(query.includes("pln to usd") || query.includes("pln to eur") || query.includes("pln to cad") || query.includes("pln to gbp") ||

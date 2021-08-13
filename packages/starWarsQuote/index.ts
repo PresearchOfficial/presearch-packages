@@ -1,7 +1,7 @@
-const quotes = require('./quotes')
+const quotes: string[] = require("./quotes");
 
-function starWarsQuote(query) {
-  const quote = quotes[Math.floor(Math.random() * quotes.length)];
+function starWarsQuote(): string {
+  const quote: string = quotes[Math.floor(Math.random() * quotes.length)];
 
   return `
     <div class="mainCol">
@@ -20,8 +20,8 @@ function starWarsQuote(query) {
   `;
 }
 
-function trigger(query) {
-  return query === 'starwars quote' || query === 'star wars quote';
+function trigger(query: string): boolean {
+  return query === "starwars quote" || query === "star wars quote";
 }
 
 module.exports = { starWarsQuote, trigger };
