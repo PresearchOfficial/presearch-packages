@@ -508,19 +508,16 @@ async function cryptoInfo(query: string): Promise<string> {
 }
 
 // @ts-ignore
-async function trigger(query) {
-  query = query.toLowerCase();
-  for (let coin of coin_list) {
-    if (
-      (coin.id === query ||
-        coin.name.toLowerCase() === query ||
-        coin.symbol === query) &&
-      !coin.symbol.toLowerCase().includes(".cx")
-    )
-      return true;
-  }
+async function trigger(query: string | string[]) {
+  query = (query as string).toLowerCase().split(" ");
+  const filteredCoins = coin_list.filter(
+    (item) =>
+      (query as string[]).every((el: string) => item.id.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).every((el: string) => item.name.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).every((el: string) => item.symbol.toLowerCase().indexOf(el) > -1)
+  );
 
-  return false;
+  return !!filteredCoins.length;
 }
 
 module.exports = { cryptoInfo, trigger };
