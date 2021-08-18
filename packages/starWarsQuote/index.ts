@@ -19,7 +19,7 @@ function starWarsQuote(): string {
     </style>
   `;
 }
-
+// @ts-ignore
 function trigger(query: string): boolean {
   return query === "starwars quote" || query === "star wars quote";
 }

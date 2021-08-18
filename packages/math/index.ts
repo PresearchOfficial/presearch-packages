@@ -24,7 +24,7 @@ async function math(query: string) {
 
 // This line is for testing package with browserify bundle
 // window.math = math("2 + 2");
-
+// @ts-ignore
 function trigger(query: string): boolean {
   const chars = new RegExp(/([a-zA-Z])+/g);
 

@@ -49,6 +49,7 @@ async function periodicElements(query) {
 // This line is for testing package with browserify bundle
 // window.periodic = periodicElements("H");
 
+// @ts-ignore
 function trigger(query: string): boolean {
   return !!query.match(/^\w{1,2}$/);
 }

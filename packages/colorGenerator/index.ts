@@ -1,4 +1,3 @@
-
 function colorGenerator(_query: string): string {
   return `<style>
 	.main {
@@ -385,17 +384,21 @@ function colorGenerator(_query: string): string {
 }
 
 // @ts-ignore
-function trigger(query: string): boolean {
-  query = query.toLowerCase();
-  return (
-    query === "color generator" ||
-    query === "random color" ||
-    query === "random color generator" ||
-    query === "colorgenerator" ||
-    query === "color palette"
+function trigger(query: string | string[]): boolean {
+  query = (query as string).toLowerCase().split(" ");
+  const queryList = [
+    "color generator",
+    "random color",
+    "random color generator",
+    "colorgenerator",
+    "color palette",
+  ];
+  const filteredList = queryList.filter((item) =>
+    (query as string[]).every(
+      (el: string) => item.toLowerCase().indexOf(el) > -1
+    )
   );
+  return !!filteredList.length;
 }
 
 module.exports = { colorGenerator, trigger };
-
-
