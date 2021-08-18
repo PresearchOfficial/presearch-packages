@@ -512,9 +512,9 @@ async function trigger(query: string | string[]) {
   query = (query as string).toLowerCase().split(" ");
   const filteredCoins = coin_list.filter(
     (item) =>
-      (query as string[]).every((el: string) => item.id.toLowerCase().indexOf(el) > -1) ||
-      (query as string[]).every((el: string) => item.name.toLowerCase().indexOf(el) > -1) ||
-      (query as string[]).every((el: string) => item.symbol.toLowerCase().indexOf(el) > -1)
+      (query as string[]).some((el: string) => item.id.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).some((el: string) => item.name.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).some((el: string) => item.symbol.toLowerCase().indexOf(el) > -1)
   );
 
   return !!filteredCoins.length;

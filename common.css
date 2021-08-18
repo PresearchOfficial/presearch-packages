@@ -1,3 +1,11 @@
+:root {
+  --cultured: #f3f4f6;
+  --white: #ffffff;
+  --light-white: #fbfbfb;
+  --gray-web: #7C7C7C;
+  --bluetiful: #0066FF;
+}
+
 .answerContain {
   flex: 1;
   padding: 10px 0;
@@ -19,6 +27,28 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+/* Utility styles */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-start { justify-content: flex-start; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.w-full { width: 100%; }
+.w-screen { width: 100vw; }
+.h-full { height: 100%; }
+.h-screen { height: 100vh; }
+.min-vh-screen { height: 100vh; }
+.border { border: 1px solid var(--cultured); }
+.bg-cultured { background: var(--cultured); }
+.bg-white { background: var(--white); }
+.bg-light-white { background: var(--light-white); }
+.text-grey-web { color: var(--gray-web); }
+.text-bluetiful { color: var(--bluetiful); }
+
 
 @media screen and (min-width: 1200px) {
   .answerInner {
