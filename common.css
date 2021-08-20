@@ -31,6 +31,7 @@ a {
 }
 
 /* Utility styles */
+.cursor-pointer { cursor: pointer; }
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
