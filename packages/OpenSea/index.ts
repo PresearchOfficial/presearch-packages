@@ -57,7 +57,7 @@ async function OpenSea(query: string): Promise<string> {
             }" width="40px" />
           </span>
           Owned by &nbsp; <a class="text-bluetiful" href="${
-            searchedAsset && searchedAsset.owner ? searchedAsset.owner.profile_img_url : ''
+            searchedAsset ? searchedAsset.external_link : ''
           }">${
     searchedAsset && searchedAsset.owner && searchedAsset.owner.user ? searchedAsset.owner.user.username : 'N/A'
   }</a>
