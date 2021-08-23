@@ -15,10 +15,10 @@ const loadAssets = async (query: string): Promise<Array<IAsset>> => {
 };
 
 async function OpenSea(query: string): Promise<string> {
+  const q = query.toLowerCase().split(' ');
   const assets = await loadAssets(query);
 
-  const firstAsset = assets[0];
-  assets.splice(0, 1);
+  const firstAsset = assets.find((asset) => q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1));
 
   console.log(firstAsset);
 
