@@ -119,7 +119,7 @@ async function OpenSea(query: string): Promise<string> {
                   <div class="border bg-white p-2 d-flex flex-col">
                     <img src="${asset.image_thumbnail_url}" width="100%" class="border" />
                     <small class="text-grey-web mt-2">${asset.collection.name}</small>
-                    <span class="mb-3 mt-1 fw-bolder">${asset.name}</span>
+                    <a href="${asset.external_link}" class="mb-3 mt-1 fw-bolder cursor-pointer">${asset.name}</a>
                   </div>
                 </div>
                 `
