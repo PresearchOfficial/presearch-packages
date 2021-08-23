@@ -5,9 +5,9 @@ import { IAsset } from './types';
 // @ts-ignore
 const fetch = require('node-fetch');
 
-const loadAssets = async (): Promise<Array<IAsset>> => {
+const loadAssets = async (query: string): Promise<Array<IAsset>> => {
   const response = await fetch(
-    'https://api.opensea.io/api/v1/assets?order_by=num_sales&order_direction=desc&offset=0&limit=50'
+    `https://api.opensea.io/api/v1/assets?search=${query}&order_by=num_sales&order_direction=desc&offset=0&limit=50`
   );
   const data = await response.text();
   const { assets } = JSON.parse(data);
@@ -15,51 +15,34 @@ const loadAssets = async (): Promise<Array<IAsset>> => {
 };
 
 async function OpenSea(query: string): Promise<string> {
-  const q = query.toLowerCase().split(' ');
-  const assets = await loadAssets();
-  // full text Search through asset name/description,
-  // collection name/description and asset contract name
-  let searchedAssets =
-    (assets &&
-      assets.filter(
-        (asset) =>
-          asset &&
-          (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
-      )) ||
-    ([] as IAsset[]);
+  const assets = await loadAssets(query);
 
-  const searchedAsset = searchedAssets[0];
-  searchedAssets.splice(0, 1);
+  const firstAsset = assets[0];
+  assets.splice(0, 1);
 
-  console.log(searchedAsset);
+  console.log(firstAsset);
 
   return `<div class="w-full flex flex-col items-start bg-cultured">
     <div style="max-width: 1100px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
       <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-center bg-white">
-        <img width="400px" height="380px" src="${searchedAsset ? searchedAsset.image_url : ''}" alt="${
-    searchedAsset ? searchedAsset.name : ''
+        <img width="400px" height="380px" src="${firstAsset ? firstAsset.image_url : ''}" alt="${
+    firstAsset ? firstAsset.name : ''
   }" />
       </div>
       <div class="flex flex-col items-start" style="width: 55%; padding: 1rem; flex: 1;">
-        <h3 class="fw-bold">${searchedAsset ? searchedAsset.name : ''}</h3>
+        <h3 class="fw-bold">${firstAsset ? firstAsset.name : ''}</h3>
         <a style="margin-bottom: 1rem;" href="${
-          searchedAsset ? searchedAsset.external_link || searchedAsset.permalink : ''
+          firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
         }" class="text-grey-web">View on OpenSea</a>
-        <span class="text-grey-web--dark">${searchedAsset ? searchedAsset.description : ''}</span>
+        <span class="text-grey-web--dark">${firstAsset ? firstAsset.description : ''}</span>
         <span class="flex items-center text-grey-web" style="margin-top: 1rem;">
           <span style="height: 25px; width: 25px; overflow: hidden; border-radius: 50%; margin-right: 0.5rem;" class="flex justify-center items-center">
             <img src="${
-              searchedAsset && searchedAsset.owner ? searchedAsset.owner.profile_img_url : ''
+              firstAsset && firstAsset.owner ? firstAsset.owner.profile_img_url : ''
             }" width="40px" />
           </span>
-          Owned by &nbsp; <a class="text-bluetiful" href="${
-            searchedAsset ? searchedAsset.external_link : ''
-          }">${
-    searchedAsset && searchedAsset.owner && searchedAsset.owner.user ? searchedAsset.owner.user.username : 'N/A'
+          Owned by &nbsp; <a class="text-bluetiful" href="${firstAsset ? firstAsset.external_link : ''}">${
+    firstAsset && firstAsset.owner && firstAsset.owner.user ? firstAsset.owner.user.username : 'N/A'
   }</a>
         </span>
         <div style="margin-top: 0.6rem;" class="border h-full w-full">
@@ -79,7 +62,7 @@ async function OpenSea(query: string): Promise<string> {
               0.003
               </h1>
             </span>
-            <a href="${searchedAsset ? searchedAsset.permalink : ''}">
+            <a href="${firstAsset ? firstAsset.permalink : ''}">
               <button class="btn--primary cursor-pointer flex items-center rounded" style="border: 0; padding: 0.8rem 2.5rem; margin-bottom: 1rem;">
                 BUY THIS ITEM
                 <span style="margin-left: 0.5rem;" class="material-icons">
@@ -103,8 +86,8 @@ async function OpenSea(query: string): Promise<string> {
     <div style="width: 100%;" class="p-4 my-5 border rounded flex container-fluid w-100 bg-cultured">
       <div class="row w-100">
         ${
-          searchedAssets
-            ? searchedAssets
+          assets
+            ? assets
                 .map(
                   (asset) => `
                 <div class="p-2 col-md-3">
@@ -125,18 +108,8 @@ async function OpenSea(query: string): Promise<string> {
 }
 
 async function trigger(query: string): Promise<boolean> {
-  const assets = await loadAssets();
-  const q = query.toLowerCase().split(' ');
-  let filteredAssets = assets.filter(
-    (asset) =>
-      asset &&
-      (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
-        q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
-        q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
-        q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
-        q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
-  );
-  if (filteredAssets.length) {
+  const assets = await loadAssets(query);
+  if (assets.length) {
     return true;
   }
   return true;
