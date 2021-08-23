@@ -17,31 +17,25 @@ const loadAssets = async (): Promise<Array<IAsset>> => {
 async function OpenSea(query: string): Promise<string> {
   const q = query.toLowerCase().split(' ');
   const assets = await loadAssets();
-  // Search by asset name
+  // full text Search through asset name/description,
+  // collection name/description and asset contract name
   let searchedAssets =
     (assets &&
-      assets.filter((asset) => {
-        if (asset.name && q.every((el) => asset.name.toLowerCase().indexOf(el) > -1)) {
-          return true;
-        } else if (asset.traits.some((trait) => trait.trait_type)) {
-        }
-      })) ||
-    ([] as IAsset[]);
-
-  // Search asset by asset_contract name
-  if (!searchedAssets) {
-    searchedAssets =
       assets.filter(
         (asset) =>
-          asset.asset_contract.name &&
-          q.every((el) => asset.asset_contract.name.toLowerCase().indexOf(el) > -1)
-      ) || ([] as IAsset[]);
-  }
+          asset &&
+          (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
+      )) ||
+    ([] as IAsset[]);
 
   const searchedAsset = searchedAssets[0];
   searchedAssets.splice(0, 1);
 
-  console.log(searchedAssets.length);
+  console.log(searchedAsset);
 
   return `<div class="w-full flex flex-col items-start bg-cultured">
     <div style="max-width: 1100px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
@@ -65,9 +59,7 @@ async function OpenSea(query: string): Promise<string> {
           Owned by &nbsp; <a class="text-bluetiful" href="${
             searchedAsset && searchedAsset.owner ? searchedAsset.owner.profile_img_url : ''
           }">${
-    searchedAsset && searchedAsset.owner && searchedAsset.owner.user
-      ? searchedAsset.owner.user.username
-      : 'N/A'
+    searchedAsset && searchedAsset.owner && searchedAsset.owner.user ? searchedAsset.owner.user.username : 'N/A'
   }</a>
         </span>
         <div style="margin-top: 0.6rem;" class="border h-full w-full">
@@ -108,7 +100,7 @@ async function OpenSea(query: string): Promise<string> {
       </div>
     </div>
 
-    <div style="width: 100%;" class="p-4 my-5 border rounded flex container w-100 bg-cultured">
+    <div style="width: 100%;" class="p-4 my-5 border rounded flex container-fluid w-100 bg-cultured">
       <div class="row w-100">
         ${
           searchedAssets
@@ -135,21 +127,14 @@ async function OpenSea(query: string): Promise<string> {
 async function trigger(query: string): Promise<boolean> {
   const assets = await loadAssets();
   const q = query.toLowerCase().split(' ');
-  if (
-    assets.some((asset) => asset.name && q.some((el: string) => asset.name.toLowerCase().indexOf(el) > -1))
-  ) {
-    return true;
-  }
   let filteredAssets = assets.filter(
     (asset) =>
-      asset.asset_contract.name &&
-      q.every((el: string) => asset.asset_contract.name.toLowerCase().indexOf(el) > -1)
-  );
-  if (filteredAssets.length) {
-    return true;
-  }
-  filteredAssets = assets.filter((asset) =>
-    asset.traits.some((trait) => q.some((el: string) => trait.trait_type.toLowerCase().indexOf(el) > -1))
+      asset &&
+      (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
+        q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
+        q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
+        q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
+        q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
   );
   if (filteredAssets.length) {
     return true;
