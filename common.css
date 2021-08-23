@@ -3,6 +3,7 @@
   --white: #ffffff;
   --light-white: #fbfbfb;
   --gray-web: #7C7C7C;
+  --gray-web-dark: #555555;
   --primary: #359ed8;
   --bluetiful: #0066FF;
   --border: 1px solid #e5e5e5;
@@ -52,8 +53,9 @@ a {
 .bg-white { background: var(--white); }
 .bg-light-white { background: var(--light-white); }
 .text-grey-web { color: var(--gray-web); }
+.text-grey-web--dark { color: var(--gray-web-dark); }
 .text-bluetiful { color: var(--bluetiful); }
-.btn-primary { background: var(--primary); color: var(--white); }
+.btn--primary { background: var(--primary); color: var(--white); }
 .rounded { border-radius: 3px; }
 
 
