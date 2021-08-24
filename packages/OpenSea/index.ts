@@ -31,29 +31,33 @@ async function OpenSea(query: string): Promise<string> {
         );
       })) ||
     assets[0] ||
-    {} as IAsset;
+    ({} as IAsset);
 
   console.log(firstAsset);
 
   return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
-    <div style="max-width: 700px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between items-start">
-      <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-start bg-white">
+    <div style="max-width: 900px; min-height: 450px; padding: 2rem 1rem;" class="flex bg-light-white justify-between items-start me-3">
+      <div style="width: 40%; padding: 1rem 0; overflow: hidden;" class="border flex justify-center items-start bg-white">
         <img width="400px" height="380px" src="${
           firstAsset ? firstAsset.image_url || firstAsset.image_thumbnail_url || firstAsset.image_preview_url : ''
         }" alt="${firstAsset ? firstAsset.name || 'N/A' : ''}" />
       </div>
-      <div class="flex flex-col items-start" style="width: 55%; padding: 1rem; flex: 1;">
-        <h3 class="fw-bold">${firstAsset ? firstAsset.name || 'NA' : ''}</h3>
+      <div class="flex flex-col items-start ps-3 py-3 pr-0" style="width: 55%; flex: 1;">
+        <strong class="fw-bold">${firstAsset ? firstAsset.name || 'NA' : ''}</strong>
         <a style="margin-bottom: 1rem;" href="${
           firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
         }" class="text-grey-web">View on OpenSea</a>
-        <span class="text-grey-web--dark">${firstAsset ? firstAsset.description : ''}</span>
+        <span class="text-grey-web--dark">${
+          firstAsset ? firstAsset.description || firstAsset.name || firstAsset.collection.description : ''
+        }</span>
         <span class="flex items-center text-grey-web" style="margin-top: 1rem;">
           <span style="height: 25px; width: 25px; overflow: hidden; border-radius: 50%; margin-right: 0.5rem;" class="flex justify-center items-center">
             <img src="${firstAsset && firstAsset.owner ? firstAsset.owner.profile_img_url : ''}" width="40px" />
           </span>
-          Owned by &nbsp; <a class="text-bluetiful" href="${firstAsset ? firstAsset.external_link : ''}">${
-    firstAsset && firstAsset.owner && firstAsset.owner.user ? firstAsset.owner.user.username : 'N/A'
+          Owned by &nbsp; <a class="text-bluetiful" href="${
+            firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
+          }">${
+    firstAsset && firstAsset.owner && firstAsset.owner.user ? firstAsset.owner.user.username.replace('Null', '') : 'N/A'
   }</a>
         </span>
         <div style="margin-top: 0.6rem;" class="border h-full w-full">
@@ -94,19 +98,20 @@ async function OpenSea(query: string): Promise<string> {
       </div>
     </div>
 
-    <div style="max-width: 700px;" class="p-2 ml-2 rounded flex container-fluid bg-cultured">
+    <div style="max-width: 500px;" class="p-2 ml-2 rounded flex flex-column container-fluid bg-cultured">
       <div class="row w-100">
         ${
           assets
             ? assets
-                .sort((a, b) => (a.name < b.name ? -1 : 1))
+                .filter((asset) => firstAsset.id !== asset.id)
+                .filter((_asset, i) => i < 4)
                 .map(
                   (asset) => `
                 <div class="p-2 col-md-6">
                   <div class="border bg-white p-2 d-flex flex-col">
                     <img src="${
                       asset.image_thumbnail_url || asset.image_preview_url || asset.image_url
-                    }" width="100%" height="200px" class="border" />
+                    }" width="100%" height="170px" class="border" />
                     <small class="text-grey-web mt-2">${asset.collection.name}</small>
                     <a href="${asset.external_link || asset.permalink}" class="mb-3 mt-1 fw-bolder cursor-pointer">${
                     asset.name || asset.collection.name || 'NA'
