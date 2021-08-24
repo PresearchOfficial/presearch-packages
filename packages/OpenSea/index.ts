@@ -43,7 +43,7 @@ async function OpenSea(query: string): Promise<string> {
         }" alt="${firstAsset ? firstAsset.name || 'N/A' : ''}" />
       </div>
       <div class="flex flex-col items-start ps-3 py-3 pr-0" style="width: 55%; flex: 1;">
-        <strong class="fw-bold">${firstAsset ? firstAsset.name || 'NA' : ''}</strong>
+        <strong class="fw-bold fs-5">${firstAsset ? firstAsset.name || 'NA' : ''}</strong>
         <a style="margin-bottom: 1rem;" href="${
           firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
         }" class="text-grey-web">View on OpenSea</a>
