@@ -5,10 +5,8 @@ import { IAsset } from './types';
 // @ts-ignore
 const fetch = require('node-fetch');
 
-const loadAssets = async (query: string): Promise<Array<IAsset>> => {
-  const response = await fetch(
-    `https://api.opensea.io/api/v1/assets?search=${query}&order_by=num_sales&order_direction=desc&offset=0&limit=50`
-  );
+const loadAssets = async (): Promise<Array<IAsset>> => {
+  const response = await fetch(`https://api.opensea.io/api/v1/assets?order_direction=desc&offset=0&limit=50`);
   const data = await response.text();
   const { assets } = JSON.parse(data);
   return assets;
@@ -16,24 +14,30 @@ const loadAssets = async (query: string): Promise<Array<IAsset>> => {
 
 async function OpenSea(query: string): Promise<string> {
   const q = query.toLowerCase().split(' ');
-  const assets = await loadAssets(query);
+  const assets = await loadAssets();
+
+  console.log(assets);
 
   const firstAsset =
-    (assets &&
-      assets.find((asset) => {
-        return (
-          asset &&
-          (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
-            q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
-        );
-      })) ||
-    assets[0] ||
-    ({} as IAsset);
+    assets &&
+    assets.find((asset) => {
+      return (
+        asset &&
+        (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
+          q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
+          q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
+          q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
+          q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
+      );
+    });
 
-  console.log(firstAsset);
+  // console.log(firstAsset);
+
+  if (!firstAsset) {
+    return `<div className="d-flex justify-center items-center">
+      <span>Sorry, no NFT’s found for "${query}"</span>
+    </div>`;
+  }
 
   return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
     <div style="max-width: 900px; min-height: 450px; padding: 2rem 1rem;" class="flex bg-light-white justify-between items-start me-3">
@@ -48,7 +52,9 @@ async function OpenSea(query: string): Promise<string> {
           firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
         }" class="text-grey-web">View on OpenSea</a>
         <span class="text-grey-web--dark">${
-          firstAsset ? firstAsset.description || firstAsset.name || firstAsset.collection.description : ''
+          firstAsset
+            ? firstAsset.description || firstAsset.name || (firstAsset.collection && firstAsset.collection.description)
+            : ''
         }</span>
         <span class="flex items-center text-grey-web" style="margin-top: 1rem;">
           <span style="height: 25px; width: 25px; overflow: hidden; border-radius: 50%; margin-right: 0.5rem;" class="flex justify-center items-center">
@@ -79,7 +85,7 @@ async function OpenSea(query: string): Promise<string> {
             </span>
             <a href="${firstAsset ? firstAsset.permalink || firstAsset.external_link : ''}">
               <button class="btn--primary cursor-pointer flex items-center rounded" style="border: 0; padding: 0.8rem 2.5rem; margin-bottom: 1rem;">
-                BUY THIS ITEM
+                VIEW THIS ITEM
                 <span style="margin-left: 0.5rem;" class="material-icons">
                   keyboard_arrow_right
                 </span>
@@ -108,7 +114,7 @@ async function OpenSea(query: string): Promise<string> {
                 .map(
                   (asset) => `
                 <div class="p-2 col-md-6">
-                  <div class="border bg-white p-2 d-flex flex-col">
+                  <div class="border rounded bg-white p-2 d-flex flex-col">
                     <img src="${
                       asset.image_thumbnail_url || asset.image_preview_url || asset.image_url
                     }" width="100%" height="170px" class="border" />
@@ -129,11 +135,15 @@ async function OpenSea(query: string): Promise<string> {
 }
 
 async function trigger(query: string): Promise<boolean> {
-  const assets = await loadAssets(query);
-  if (assets.length) {
+  const assets = await loadAssets();
+  const q = query.toLowerCase().split(' ');
+  if (assets && assets.length) {
     return true;
   }
-  return true;
+  if (q.every((el) => 'NFT'.toLowerCase().indexOf(el) > -1)) {
+    return true;
+  }
+  return false;
 }
 
 module.exports = { OpenSea, trigger };

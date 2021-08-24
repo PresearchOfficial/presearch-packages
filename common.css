@@ -56,7 +56,6 @@ a {
 .text-grey-web--dark { color: var(--gray-web-dark); }
 .text-bluetiful { color: var(--bluetiful); }
 .btn--primary { background: var(--primary); color: var(--white); }
-.rounded { border-radius: 3px; }
 
 @media screen and (min-width: 1200px) {
   .answerInner {
