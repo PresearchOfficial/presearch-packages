@@ -18,23 +18,24 @@ async function OpenSea(query: string): Promise<string> {
   const q = query.toLowerCase().split(' ');
   const assets = await loadAssets(query);
 
-  console.log('=====>>', q);
-
-  const firstAsset = (assets &&
-      assets.find(
-        (asset) =>
+  const firstAsset =
+    (assets &&
+      assets.find((asset) => {
+        return (
           asset &&
           (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
             q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
             q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
             q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
             q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
-      )) ||
-    ({} as IAsset);
+        );
+      })) ||
+    assets[0] ||
+    {} as IAsset;
 
   console.log(firstAsset);
 
-  return `<div class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
+  return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
     <div style="max-width: 700px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
       <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-center bg-white">
         <img width="400px" height="380px" src="${
@@ -42,7 +43,7 @@ async function OpenSea(query: string): Promise<string> {
         }" alt="${firstAsset ? firstAsset.name || 'N/A' : ''}" />
       </div>
       <div class="flex flex-col items-start" style="width: 55%; padding: 1rem; flex: 1;">
-        <h3 class="fw-bold">${firstAsset ? firstAsset.name : ''}</h3>
+        <h3 class="fw-bold">${firstAsset ? firstAsset.name || 'NA' : ''}</h3>
         <a style="margin-bottom: 1rem;" href="${
           firstAsset ? firstAsset.external_link || firstAsset.permalink : ''
         }" class="text-grey-web">View on OpenSea</a>
