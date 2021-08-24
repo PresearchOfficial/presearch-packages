@@ -93,7 +93,7 @@ async function OpenSea(query: string): Promise<string> {
       </div>
     </div>
 
-    <div style="max-width: 700px;" class="p-2 border rounded flex container-fluid bg-cultured">
+    <div style="max-width: 700px;" class="p-2 ml-2 border rounded flex container-fluid bg-cultured">
       <div class="row w-100">
         ${
           assets
