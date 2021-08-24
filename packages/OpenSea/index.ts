@@ -36,8 +36,8 @@ async function OpenSea(query: string): Promise<string> {
   console.log(firstAsset);
 
   return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
-    <div style="max-width: 700px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
-      <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-center bg-white">
+    <div style="max-width: 700px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between items-start">
+      <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-start bg-white">
         <img width="400px" height="380px" src="${
           firstAsset ? firstAsset.image_url || firstAsset.image_thumbnail_url || firstAsset.image_preview_url : ''
         }" alt="${firstAsset ? firstAsset.name || 'N/A' : ''}" />
