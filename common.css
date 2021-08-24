@@ -58,7 +58,6 @@ a {
 .btn--primary { background: var(--primary); color: var(--white); }
 .rounded { border-radius: 3px; }
 
-
 @media screen and (min-width: 1200px) {
   .answerInner {
     width: calc(95% - 70px);

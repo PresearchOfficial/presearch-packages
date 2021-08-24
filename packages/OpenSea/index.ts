@@ -18,16 +18,28 @@ async function OpenSea(query: string): Promise<string> {
   const q = query.toLowerCase().split(' ');
   const assets = await loadAssets(query);
 
-  const firstAsset = assets.find((asset) => q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1));
+  console.log('=====>>', q);
+
+  const firstAsset = (assets &&
+      assets.find(
+        (asset) =>
+          asset &&
+          (q.every((el) => (asset.name || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => (asset.description || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.collection && (asset.collection.name || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.collection && (asset.collection.description || '').toLowerCase().indexOf(el) > -1) ||
+            q.every((el) => asset.asset_contract && (asset.asset_contract.name || '').toLowerCase().indexOf(el) > -1))
+      )) ||
+    ({} as IAsset);
 
   console.log(firstAsset);
 
-  return `<div class="w-full flex flex-col items-start bg-cultured">
-    <div style="max-width: 1100px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
+  return `<div class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
+    <div style="max-width: 700px; min-height: 450px; padding: 2rem;" class="flex bg-light-white justify-between">
       <div style="width: 40%; padding: 1rem; overflow: hidden;" class="border flex justify-center items-center bg-white">
-        <img width="400px" height="380px" src="${firstAsset ? firstAsset.image_url : ''}" alt="${
-    firstAsset ? firstAsset.name : ''
-  }" />
+        <img width="400px" height="380px" src="${
+          firstAsset ? firstAsset.image_url || firstAsset.image_thumbnail_url || firstAsset.image_preview_url : ''
+        }" alt="${firstAsset ? firstAsset.name || 'N/A' : ''}" />
       </div>
       <div class="flex flex-col items-start" style="width: 55%; padding: 1rem; flex: 1;">
         <h3 class="fw-bold">${firstAsset ? firstAsset.name : ''}</h3>
@@ -37,9 +49,7 @@ async function OpenSea(query: string): Promise<string> {
         <span class="text-grey-web--dark">${firstAsset ? firstAsset.description : ''}</span>
         <span class="flex items-center text-grey-web" style="margin-top: 1rem;">
           <span style="height: 25px; width: 25px; overflow: hidden; border-radius: 50%; margin-right: 0.5rem;" class="flex justify-center items-center">
-            <img src="${
-              firstAsset && firstAsset.owner ? firstAsset.owner.profile_img_url : ''
-            }" width="40px" />
+            <img src="${firstAsset && firstAsset.owner ? firstAsset.owner.profile_img_url : ''}" width="40px" />
           </span>
           Owned by &nbsp; <a class="text-bluetiful" href="${firstAsset ? firstAsset.external_link : ''}">${
     firstAsset && firstAsset.owner && firstAsset.owner.user ? firstAsset.owner.user.username : 'N/A'
@@ -62,7 +72,7 @@ async function OpenSea(query: string): Promise<string> {
               0.003
               </h1>
             </span>
-            <a href="${firstAsset ? firstAsset.permalink : ''}">
+            <a href="${firstAsset ? firstAsset.permalink || firstAsset.external_link : ''}">
               <button class="btn--primary cursor-pointer flex items-center rounded" style="border: 0; padding: 0.8rem 2.5rem; margin-bottom: 1rem;">
                 BUY THIS ITEM
                 <span style="margin-left: 0.5rem;" class="material-icons">
@@ -83,18 +93,23 @@ async function OpenSea(query: string): Promise<string> {
       </div>
     </div>
 
-    <div style="width: 100%;" class="p-4 my-5 border rounded flex container-fluid w-100 bg-cultured">
+    <div style="max-width: 700px;" class="p-2 border rounded flex container-fluid bg-cultured">
       <div class="row w-100">
         ${
           assets
             ? assets
+                .sort((a, b) => (a.name < b.name ? -1 : 1))
                 .map(
                   (asset) => `
-                <div class="p-2 col-md-3">
+                <div class="p-2 col-md-6">
                   <div class="border bg-white p-2 d-flex flex-col">
-                    <img src="${asset.image_thumbnail_url}" width="100%" class="border" />
+                    <img src="${
+                      asset.image_thumbnail_url || asset.image_preview_url || asset.image_url
+                    }" width="100%" height="200px" class="border" />
                     <small class="text-grey-web mt-2">${asset.collection.name}</small>
-                    <a href="${asset.external_link}" class="mb-3 mt-1 fw-bolder cursor-pointer">${asset.name}</a>
+                    <a href="${asset.external_link || asset.permalink}" class="mb-3 mt-1 fw-bolder cursor-pointer">${
+                    asset.name || asset.collection.name || 'NA'
+                  }</a>
                   </div>
                 </div>
                 `
