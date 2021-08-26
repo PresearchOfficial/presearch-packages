@@ -39,6 +39,12 @@ async function OpenSea(query: string): Promise<string> {
     </div>`;
   }
 
+  if (!assets || !assets.length || !q.every((el) => 'NFT'.toLowerCase().indexOf(el) > -1)) {
+    return `<div className="d-flex justify-center items-center">
+      <span>Sorry, no NFT’s found for "${query}"</span>
+    </div>`;
+  }
+
   return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
     <div style="max-width: 900px; min-height: 450px; padding: 2rem 1rem;" class="flex bg-light-white justify-between items-start me-3">
       <div style="width: 40%; padding: 1rem 0; overflow: hidden;" class="border flex justify-center items-start bg-white">
@@ -66,23 +72,8 @@ async function OpenSea(query: string): Promise<string> {
     firstAsset && firstAsset.owner && firstAsset.owner.user ? firstAsset.owner.user.username.replace('Null', '') : 'N/A'
   }</a>
         </span>
-        <div style="margin-top: 0.6rem;" class="border h-full w-full">
-          <div style="padding: 1rem;" class="border-bottom w-full flex items-center">
-          <span style="font-size: 16px; margin-right: 0.5rem;" class="material-icons text-grey-web">
-            schedule
-          </span>
-            <strong class="text-grey-web">Ends in </strong>
-          </div>
-          <div style="padding: 1rem; flex: 1;" class="flex flex-col justify-start items-start">
-            <span class="text-grey-web">Listed for</span>
-            <span>
-              <h1 style="font-size: 2.2rem;">
-              <span class="material-icons">
-                filter_list
-              </span>
-              0.003
-              </h1>
-            </span>
+        <div style="margin-top: 0.6rem;" class="h-full w-full">
+          <div style="padding: 1rem 0; flex: 1;" class="flex flex-col justify-start items-start">
             <a href="${firstAsset ? firstAsset.permalink || firstAsset.external_link : ''}">
               <button class="btn--primary cursor-pointer flex items-center rounded" style="border: 0; padding: 0.8rem 2.5rem; margin-bottom: 1rem;">
                 VIEW THIS ITEM
@@ -91,14 +82,6 @@ async function OpenSea(query: string): Promise<string> {
                 </span>
               </button>
             </a>
-          </div>
-          <div style="padding: 1rem;" class="border-top w-full flex items-center">
-            <strong class="flex items-center">
-            Earn&nbsp;<span style="font-size: 17px;" class="material-icons">
-            filter_list
-          </span>&nbsp;0.00003
-            </strong>
-            <span class="text-grey-web">&nbsp;by referring this asset</span>
           </div>
         </div>
       </div>
@@ -137,10 +120,7 @@ async function OpenSea(query: string): Promise<string> {
 async function trigger(query: string): Promise<boolean> {
   const assets = await loadAssets();
   const q = query.toLowerCase().split(' ');
-  if (assets && assets.length) {
-    return true;
-  }
-  if (q.every((el) => 'NFT'.toLowerCase().indexOf(el) > -1)) {
+  if (assets && assets.length && q.every((el) => 'NFT'.toLowerCase().indexOf(el) > -1)) {
     return true;
   }
   return false;
