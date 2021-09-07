@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const { promisify } = require('util');
-const fs = require('fs');
+const { promisify } = require("util");
+const fs = require("fs");
 
-const express = require('express');
+const express = require("express");
 
 const packageObject = require(`${__dirname}/../index`);
 
@@ -12,16 +12,20 @@ const readFileAsync = promisify(fs.readFile);
 const app = express();
 const PORT = 4000;
 
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
   const commonCss = await readFileAsync(`${__dirname}/../common.css`);
   const packageKey = req.query.packageKey;
   const query = req.query.query;
+  console.log(packageObject);
   const trigger = await packageObject[packageKey].trigger(query);
   if (packageKey in packageObject && trigger) {
     const result = await packageObject[packageKey][packageKey](query);
     res.send(`
       <head>
         <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons"
+      rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
       </head>
       <body>
         <div class="answerInner">${result}</div>
@@ -37,10 +41,11 @@ app.get('/', async (req, res) => {
         </style>
       </body>
     `);
-  }
-  else {
-    res.status('400');
-    res.send('Bad request, package key does not exist or package was not triggered for specified query');
+  } else {
+    res.status("400");
+    res.send(
+      "Bad request, package key does not exist or package was not triggered for specified query"
+    );
   }
 });
 
