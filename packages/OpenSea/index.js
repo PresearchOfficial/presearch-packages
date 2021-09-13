@@ -3,8 +3,6 @@
 // @ts-ignore
 const fetch = require("node-fetch");
 
-// const OPENSEAR_API_KEY = '1ac5acbf077b4c18bd39f470a8ffd114';
-
 const loadAssets = async (query) => {
   const response1 = await fetch(
     `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=10`
@@ -99,9 +97,7 @@ async function OpenSea(query) {
             }">
               <button class="btn--primary cursor-pointer flex items-center rounded" style="border: 0; padding: 0.8rem 2.5rem; margin-bottom: 1rem;">
                 VIEW THIS ITEM
-                <span style="margin-left: 0.5rem;" class="material-icons">
-                  keyboard_arrow_right
-                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#fff"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
               </button>
             </a>
           </div>
