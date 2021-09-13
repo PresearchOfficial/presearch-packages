@@ -3,22 +3,41 @@
 // @ts-ignore
 const fetch = require("node-fetch");
 
+const truncate = (fullStr, strLen, separator = "...") => {
+  if (fullStr.length <= strLen) return fullStr;
+
+  const sepLen = separator.length;
+  const charsToShow = strLen - sepLen;
+  const frontChars = Math.ceil(charsToShow / 2);
+  const backChars = Math.floor(charsToShow / 2);
+
+  return `${fullStr.substr(0, frontChars)}${separator}${fullStr.substr(
+    fullStr.length - backChars
+  )}`;
+};
+
 const loadAssets = async (query) => {
-  const response1 = await fetch(
-    `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=10`
-  );
-  const data1 = await response1.json();
-  if (data1.assets && data1.assets.length) {
+  const [response1, response2] = await Promise.all([
+    fetch(
+      `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=5`
+    ),
+    fetch(
+      `https://api.opensea.io/api/v1/assets?format=json&owner=${query}&order_direction=desc&offset=0&limit=5`
+    ),
+  ]);
+
+  const [data1, data2] = await Promise.all([
+    response1.json(),
+    response2.json(),
+  ]);
+
+  if (data1.assets.length) {
     return data1.assets;
   }
-  const response2 = await fetch(
-    `https://api.opensea.io/api/v1/assets?format=json&owner=${query}&order_direction=desc&offset=0&limit=10`
-  );
-  const data2 = await response2.json();
   return data2.assets;
 };
 
-async function OpenSea(query) {
+async function openSea(query) {
   const assets = await loadAssets(query);
 
   const firstAsset =
@@ -27,27 +46,12 @@ async function OpenSea(query) {
       return (
         asset &&
         ((asset.owner && asset.owner.address === query) ||
-          (asset.asset_contract && asset.asset_contract.address === query) ||
-          (asset.collection && asset.collection.payout_address === query) ||
-          (asset.creator && asset.creator.address === query))
+          (asset.asset_contract && asset.asset_contract.address === query))
       );
     });
 
-  console.log(firstAsset);
-
-  if (!firstAsset) {
-    return `<div className="d-flex justify-center items-center">
-      <span>Sorry, no NFT’s found for "${query}"</span>
-    </div>`;
-  }
-
-  if (!assets || !assets.length) {
-    return `<div className="d-flex justify-center items-center">
-      <span>Sorry, no NFT’s found for "${query}"</span>
-    </div>`;
-  }
-
-  return `<div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
+  return `
+  <div style="min-width: 90vw;" class="w-full flex flex-column flex-md-row flex-md-nowrap items-start bg-cultured">
     <div style="max-width: 900px; min-height: 450px; padding: 2rem 1rem;" class="flex bg-light-white justify-between items-start me-3">
       <div style="width: 40%; padding: 0 0; overflow: hidden;" class="border rounded flex justify-center items-start bg-white">
         <img width="400px" height="380px" src="${
@@ -64,7 +68,7 @@ async function OpenSea(query) {
         }</strong>
         <a style="margin-bottom: 1rem;" href="${
           firstAsset ? firstAsset.external_link || firstAsset.permalink : ""
-        }" class="text-grey-web">View on OpenSea</a>
+        }" class="text-grey-web">View on openSea</a>
         <span class="text-grey-web--dark">${
           firstAsset
             ? firstAsset.description ||
@@ -81,11 +85,11 @@ async function OpenSea(query) {
             }" width="40px" />
           </span>
           Owned by &nbsp; <a class="text-bluetiful" href="${
-            firstAsset ? firstAsset.external_link || firstAsset.permalink : ""
+            firstAsset ? firstAsset.profile_img_url | "#" : ""
           }">${
     firstAsset && firstAsset.owner && firstAsset.owner.user
-      ? firstAsset.owner.user.username
-        ? firstAsset.owner.user.username.replace("Null", "")
+      ? firstAsset.owner
+        ? truncate(firstAsset.owner.address, 12)
         : ""
       : "N/A"
   }</a>
@@ -142,23 +146,7 @@ async function OpenSea(query) {
 }
 
 async function trigger(query) {
-  const assets = await loadAssets(query);
-  if (
-    assets &&
-    assets.length &&
-    assets.some((asset) => {
-      return (
-        asset &&
-        ((asset.owner && asset.owner.address === query) ||
-          (asset.asset_contract && asset.asset_contract.address === query) ||
-          (asset.collection && asset.collection.payout_address === query) ||
-          (asset.creator && asset.creator.address === query))
-      );
-    })
-  ) {
-    return true;
-  }
-  return false;
+  return query.indexOf("0x") >= 0;
 }
 
-module.exports = { OpenSea, trigger };
+module.exports = { openSea, trigger };

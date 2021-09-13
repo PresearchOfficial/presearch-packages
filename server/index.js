@@ -16,7 +16,6 @@ app.get("/", async (req, res) => {
   const commonCss = await readFileAsync(`${__dirname}/../common.css`);
   const packageKey = req.query.packageKey;
   const query = req.query.query;
-  console.log(packageObject);
   const trigger = await packageObject[packageKey].trigger(query);
   if (packageKey in packageObject && trigger) {
     const result = await packageObject[packageKey][packageKey](query);
