@@ -1,10 +1,13 @@
-"use strict";
+import { ICoin } from "./types";
+
+// @ts-ignore
 const fetch = require("node-fetch");
-const coin_list = require("./coin_list.json");
+
+const coin_list: Array<ICoin> = require("./coin_list.json");
 
 const COINGECKO_API = "https://api.coingecko.com/api/v3/coins/";
 
-async function cryptoInfo(query) {
+async function cryptoInfo(query: string): Promise<string> {
   try {
     query = query.toLowerCase();
     let coin_id;
@@ -27,14 +30,15 @@ async function cryptoInfo(query) {
       },
     });
 
-    const coin = await request.json();
-    if (!coin.market_data)
-      return null;
+    const coin: ICoin = await request.json();
+
+    if (!coin.market_data) return null;
 
     const { name, symbol, market_cap_rank } = coin;
     const logo = coin.image.small;
     const price = coin.market_data.current_price.usd;
     const tag = coin.asset_platform_id ? "Token" : "Coin";
+
     const {
       total_supply,
       circulating_supply,
@@ -44,10 +48,11 @@ async function cryptoInfo(query) {
       price_change_percentage_24h,
       price_change_percentage_7d,
     } = coin.market_data;
+
     const {
       homepage,
       blockchain_site,
-      official_forum_url,
+      // official_forum_url,
       chat_url,
       twitter_screen_name,
       subreddit_url,
@@ -55,8 +60,9 @@ async function cryptoInfo(query) {
       announcement_url,
     } = coin.links;
 
-    if(!circulating_supply) return null;
-    const formatNumber = (num) => {
+    if (!circulating_supply) return null;
+
+    const formatNumber = (num: number | string) => {
       var parts = num.toString().split(".");
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       return parts.join(".");
@@ -83,8 +89,14 @@ async function cryptoInfo(query) {
                 price
                   ? `<div class="priceItem">
                     <p class="priceLabel">Price</p>
-                    <h1 class="price ${price_change_percentage_24h > 0 ? `price-green`: `price-red `}"> 
-                      ${formatNumber(price.toFixed(4))}<span class="textGray400"> USD</span>
+                    <h1 class="price ${
+                      price_change_percentage_24h > 0
+                        ? `price-green`
+                        : `price-red `
+                    }">
+                      ${formatNumber(
+                        price.toFixed(4)
+                      )}<span class="textGray400"> USD</span>
                     </h1>
                   </div>`
                   : ``
@@ -93,7 +105,11 @@ async function cryptoInfo(query) {
                 price_change_percentage_24h
                   ? `<div class="priceItem">
                     <p class="priceLabel">Daily</p>
-                    <h1 class="price ${price_change_percentage_24h > 0 ? `price-green`: `price-red `}">
+                    <h1 class="price ${
+                      price_change_percentage_24h > 0
+                        ? `price-green`
+                        : `price-red `
+                    }">
                       ${price_change_percentage_24h.toFixed(4)}%
                     </h1>
                   </div>`
@@ -103,7 +119,11 @@ async function cryptoInfo(query) {
                 price_change_percentage_7d
                   ? `<div class="priceItem">
                     <p class="priceLabel">Weekly</p>
-                    <h1 class="price ${price_change_percentage_7d > 0 ? `price-green`: `price-red `}">
+                    <h1 class="price ${
+                      price_change_percentage_7d > 0
+                        ? `price-green`
+                        : `price-red `
+                    }">
                       ${price_change_percentage_7d.toFixed(4)}%
                     </h1>
                   </div>`
@@ -228,7 +248,9 @@ async function cryptoInfo(query) {
                 circulating_supply
                   ? `<div class="priceItem">
                     <p class="priceLabel textGray">Circulating Supply</p>
-                    <h1 class="price textGray">${formatNumber(circulating_supply)}</h1>
+                    <h1 class="price textGray">${formatNumber(
+                      circulating_supply
+                    )}</h1>
                   </div>`
                   : ``
               }
@@ -236,7 +258,9 @@ async function cryptoInfo(query) {
                 total_supply
                   ? `<div class="priceItem">
                     <p class="priceLabel textGray">Total Supply</p>
-                    <h1 class="price textGray">${formatNumber(total_supply)}</h1>
+                    <h1 class="price textGray">${formatNumber(
+                      total_supply
+                    )}</h1>
                   </div>`
                   : ``
               }
@@ -479,23 +503,21 @@ async function cryptoInfo(query) {
       </style>
     `;
   } catch (error) {
-    return null
+    return null;
   }
 }
 
-async function trigger(query) {
-  query = query.toLowerCase();
-  for (let coin of coin_list) {
-    if (
-      (coin.id === query ||
-        coin.name.toLowerCase() === query ||
-        coin.symbol === query) &&
-      !coin.symbol.toLowerCase().includes(".cx")
-    )
-      return true;
-  }
+// @ts-ignore
+async function trigger(query: string | string[]) {
+  query = (query as string).toLowerCase().split(" ");
+  const filteredCoins = coin_list.filter(
+    (item) =>
+      (query as string[]).every((el: string) => item.id.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).every((el: string) => item.name.toLowerCase().indexOf(el) > -1) ||
+      (query as string[]).every((el: string) => item.symbol.toLowerCase().indexOf(el) > -1)
+  );
 
-  return false;
+  return !!filteredCoins.length;
 }
 
 module.exports = { cryptoInfo, trigger };

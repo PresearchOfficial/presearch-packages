@@ -2,9 +2,9 @@
   "name": "presearch-packages-test-server",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "./node_modules/nodemon/bin/nodemon.js --watch ../ index.js"
+    "start": "./node_modules/nodemon/bin/nodemon.js --watch ../index.js --exec 'ts-node ./index.js'"
   },
   "dependencies": {
     "dotenv": "^6.1.0",

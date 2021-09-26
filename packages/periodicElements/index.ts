@@ -1,21 +1,21 @@
 'use strict';
 const pt = require('periodic-table');
 
-function capitalize(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-function unCamelCase(string) {
-  return string
+function unCamelCase(str: string) {
+  return str
     .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, function(string){ return string.toUpperCase(); })
+    .replace(/^./, function(str: string){ return str.toUpperCase(); })
 }
 
 const fieldNames = ['atomicNumber','symbol','atomicMass','electronicConfiguration','standardState','groupBlock','yearDiscovered']
 
 async function periodicElements(query) {
-  let data = false;
-  let filteredData;
+  let data: { name: string };
+  let filteredData: string[];
   const possibleElement = capitalize(query);
   if (possibleElement in pt.symbols) data = pt.symbols[possibleElement];
   if (data) {
@@ -46,11 +46,12 @@ async function periodicElements(query) {
   }
 }
 
-// This line is for testing package with browserify bundle 
+// This line is for testing package with browserify bundle
 // window.periodic = periodicElements("H");
 
-async function trigger(query) {
-  return query.match(/^\w{1,2}$/);
+// @ts-ignore
+function trigger(query: string): boolean {
+  return !!query.match(/^\w{1,2}$/);
 }
 
 module.exports = { periodicElements, trigger };

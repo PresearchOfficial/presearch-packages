@@ -1,7 +1,7 @@
 "use strict";
 const mathjs = require("mathjs");
 
-async function math(query) {
+async function math(query: string) {
   const data = mathjs.evaluate(query);
 
   return `
@@ -24,10 +24,11 @@ async function math(query) {
 
 // This line is for testing package with browserify bundle
 // window.math = math("2 + 2");
-
-async function trigger(query) {
+// @ts-ignore
+function trigger(query: string): boolean {
   const chars = new RegExp(/([a-zA-Z])+/g);
-  if (!isNaN(query) || chars.test(query)) return false;
+
+  if (chars.test(query)) return false; // Used to be: if (!isNaN(query) || chars.test(query)) return false;
   try {
     mathjs.evaluate(query);
     return true;

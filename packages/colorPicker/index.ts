@@ -1,8 +1,7 @@
-'use strict';
+"use strict";
 
-function colorPicker(query) {
-
-    return `
+function colorPicker(_query: string): string {
+  return `
     <style>
     #layer1 {
         border-radius: 10px;
@@ -386,13 +385,32 @@ function colorPicker(query) {
     });
     })();
   </script>
-    `
-  }
+    `;
+}
 
-  function trigger(query) {
-    query = query.toLowerCase();
-    return query === 'color picker' || query === 'colorpicker' || query === 'html color picker' || query === 'rgb palette' || query === 'rgb color' || query === 'rgb color code'
-    || query === 'rgb code' || query === 'rgb picker' || query === 'hex color' || query === 'hex color code' || query === 'hex to rgb' || query === 'rgb to hex';
-  }
+// @ts-ignore
+function trigger(query: string | string[]): boolean {
+  query = (query as string).toLowerCase().split(" ");
+  const queryList = [
+    "color picker",
+    "colorpicker",
+    "html color picker",
+    "rgb palette",
+    "rgb color",
+    "rgb color code",
+    "rgb code",
+    "rgb picker",
+    "hex color",
+    "hex color code",
+    "hex to rgb",
+    "rgb to hex",
+  ];
+  const filteredList = queryList.filter((item) =>
+    (query as string[]).every(
+      (el: string) => item.toLowerCase().indexOf(el) > -1
+    )
+  );
+  return !!filteredList.length;
+}
 
-  module.exports = { colorPicker, trigger };
+module.exports = { colorPicker, trigger };

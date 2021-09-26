@@ -1,6 +1,4 @@
-"use strict";
-
-async function colorGenerator(query) {
+function colorGenerator(_query: string): string {
   return `<style>
 	.main {
 		width: 100%;
@@ -78,7 +76,7 @@ async function colorGenerator(query) {
 			margin: 0;
 		}
 	}
-	
+
 </style>
 <div class="main noselect">
       <div id="container1" class="sub pos0">
@@ -385,17 +383,22 @@ async function colorGenerator(query) {
 `;
 }
 
-async function trigger(query) {
-  query = query.toLowerCase();
-  return (
-    query === "color generator" ||
-    query === "random color" ||
-    query === "random color generator" ||
-    query === "colorgenerator" ||
-    query === "color palette"
+// @ts-ignore
+function trigger(query: string | string[]): boolean {
+  query = (query as string).toLowerCase().split(" ");
+  const queryList = [
+    "color generator",
+    "random color",
+    "random color generator",
+    "colorgenerator",
+    "color palette",
+  ];
+  const filteredList = queryList.filter((item) =>
+    (query as string[]).every(
+      (el: string) => item.toLowerCase().indexOf(el) > -1
+    )
   );
+  return !!filteredList.length;
 }
 
 module.exports = { colorGenerator, trigger };
-
-
