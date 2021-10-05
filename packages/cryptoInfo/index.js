@@ -129,7 +129,7 @@ async function cryptoInfo(query, API_KEY) {
               <div class="buttons">
                 <a href="https://coinmarketcap.com/currencies/${slug}" class="linkItem">
                 <svg style="width: 18px; height: 18px;" fill="currentColor" class="textGray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 358.5 361.9"><path class="prefix__st0" d="M180.1 19C90.7 19 18 91.5 18 181.1c0 89.5 72.7 162 162.1 162 44.3 0 84.6-17.8 113.7-46.6 2.2-7.2 3.9-19-5.4-21.6-6-1.6-11.3-.7-15.6 1.1-24 23.2-56.8 37.6-92.7 37.6-39 0-74.3-16.8-98.7-43.5l69.7-109.5v55.6s2 24.8 20.1 29.1S202 224 202 224l41.6-64.4v36.3s2 49.1 48.5 49.2c1.6 0 3.3 0 4.7-.3 0 0 0 .1-.1.1.8-.1 1.8-.3 2.7-.4 5.2-.7 9.6-2.3 13.7-4.3 15.5-7.5 23-21.1 26.3-29.4.1-.8.3-1.6.4-2.4 1.2-7.6 2-15.2 2.2-23v-4.2C342.3 91.5 269.6 19 180.1 19zm111.3 197c-16 .3-18.3-15.6-18.3-15.6s1.8-40-.3-51.9c-2-11.9-4.7-23.7-20.1-27.5-15.3-3.8-28.2 13.6-28.2 13.6l-43.8 68.9s1.8-57.6-.5-74.3c-2.4-16.7-10.7-20.3-19.9-21.7-9.2-1.4-18.3 12.2-18.3 12.2L62.7 243.5c-10.2-18.8-16-40.5-16-63.4 0-73.7 59.8-133.5 133.5-133.5S313.8 106.3 313.8 180c0 6.9-.5 13.7-1.5 20.3-4.6 7.1-11.8 15.5-20.9 15.7z"/></svg>
-                    <span class="textGray">View on Coinmarketcap</span>
+                    <span class="textGray">View on CoinMarketCap</span>
                 </a>
               ${
                   website[0]
@@ -199,7 +199,7 @@ async function cryptoInfo(query, API_KEY) {
           </div>
           </div>
           <div class="sideCol cryptoSideContain">
-            ${cmc_rank ? `<h3 class="rank">Ranked <span class="ranking">${cmc_rank}</span> by Coinmarketcap</h3>` : ``}
+            ${cmc_rank ? `<h3 class="rank"><a href="https://coinmarketcap.com/currencies/${slug}">Ranked <span class="ranking">${cmc_rank}</span> by CoinMarketCap</a></h3>` : ``}
             <div class="supplyContain">
               ${
                   market_cap
