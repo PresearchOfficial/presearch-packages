@@ -68,6 +68,18 @@ async function cryptoInfo(query, API_KEY) {
           parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           return parts.join(".");
         };
+        let displayPrice;
+        if (price < 0.0001) {
+          for (let i = 1; i <= 4; i++) {
+            let check = Math.pow(10, i)
+            if (price * 10000 * check >=1) {
+              displayPrice = price.toFixed(4 + i);
+              break;
+            }
+          }
+        } else {
+          displayPrice = price.toFixed(4);
+        }
 
         return `
       <div class="answerCol cryptoAnswerCol">
@@ -87,7 +99,7 @@ async function cryptoInfo(query, API_KEY) {
                       ? `<div class="priceItem">
                     <p class="priceLabel">Price</p>
                     <h1 class="price ${percent_change_24h > 0 ? `price-green` : `price-red `}"> 
-                      ${formatNumber(price.toFixed(4))}<span class="textGray400"> USD</span>
+                      ${displayPrice ? formatNumber(displayPrice) : "<0.00000001"}<span class="textGray400"> USD</span>
                     </h1>
                   </div>`
                       : ``
@@ -124,6 +136,46 @@ async function cryptoInfo(query, API_KEY) {
                 <div id="infoBox" class="boxItem" style="display:none; border:0; font-family: Sans-Serif; position: absolute; font-size:14px; z-index: 2; top:0px; left:0px; border-radius:2px; padding: 4px;"></div>
                 <div id="infoBoxLeft" class="boxItem" style="display:none; border:0; font-family: Sans-Serif; position: absolute; font-size:11px; z-index: 4; top:0px; left:0px; border-radius:2px; padding: 4px;"></div>
                 <div id="infoBoxBottom" class="boxItem" style="display:none; border:0; font-family: Sans-Serif; position: absolute; font-size:11px; z-index: 4; top:0px; left:0px; border-radius:2px; padding: 4px;"></div>
+            </div>
+            
+            ${last_updated ? `<p class="priceLabel textGray">Last updated on ${new Date(last_updated).toLocaleString("en-US")}</p>` : ``}
+          
+          </div>
+          <div class="sideCol cryptoSideContain">
+            ${cmc_rank ? `<h3 class="rank"><a href="https://coinmarketcap.com/currencies/${slug}">Ranked <span class="ranking">${cmc_rank}</span> by CoinMarketCap</a></h3>` : ``}
+            <div class="supplyContain">
+              ${
+                  market_cap
+                      ? `<div class="priceItem">
+                    <p class="priceLabel textGray">Market Cap</p>
+                    <h1 class="price textGray">${formatNumber(market_cap.toFixed(0))} <span class="textGray400">USD</span></h1>
+                  </div>`
+                      : ``
+              }
+              ${
+                  volume_24h
+                      ? `<div class="priceItem">
+                    <p class="priceLabel textGray">Volume 24h</p>
+                    <h1 class="price textGray">${formatNumber(volume_24h.toFixed(0))} <span class="textGray400">USD</span></h1>
+                  </div>`
+                      : ``
+              }
+              ${
+                  circulating_supply
+                      ? `<div class="priceItem">
+                    <p class="priceLabel textGray">Circulating Supply</p>
+                    <h1 class="price textGray">${formatNumber(circulating_supply.toFixed(0))}</h1>
+                  </div>`
+                      : ``
+              }
+              ${
+                  total_supply
+                      ? `<div class="priceItem">
+                    <p class="priceLabel textGray">Total Supply</p>
+                    <h1 class="price textGray">${formatNumber(total_supply.toFixed(0))}</h1>
+                  </div>`
+                      : ``
+              }
             </div>
             <div class="linkContain">
               <div class="buttons">
@@ -195,45 +247,7 @@ async function cryptoInfo(query, API_KEY) {
               }
               ${explorer && explorer[0] ? `</div></div>` : ""}
               </div>
-            ${last_updated ? `<p class="priceLabel textGray">Last updated on ${new Date(last_updated).toLocaleString("en-US")}</p>` : ``}
-          </div>
-          </div>
-          <div class="sideCol cryptoSideContain">
-            ${cmc_rank ? `<h3 class="rank"><a href="https://coinmarketcap.com/currencies/${slug}">Ranked <span class="ranking">${cmc_rank}</span> by CoinMarketCap</a></h3>` : ``}
-            <div class="supplyContain">
-              ${
-                  market_cap
-                      ? `<div class="priceItem">
-                    <p class="priceLabel textGray">Market Cap</p>
-                    <h1 class="price textGray">${formatNumber(market_cap.toFixed(0))} <span class="textGray400">USD</span></h1>
-                  </div>`
-                      : ``
-              }
-              ${
-                  volume_24h
-                      ? `<div class="priceItem">
-                    <p class="priceLabel textGray">Volume 24h</p>
-                    <h1 class="price textGray">${formatNumber(volume_24h.toFixed(0))} <span class="textGray400">USD</span></h1>
-                  </div>`
-                      : ``
-              }
-              ${
-                  circulating_supply
-                      ? `<div class="priceItem">
-                    <p class="priceLabel textGray">Circulating Supply</p>
-                    <h1 class="price textGray">${formatNumber(circulating_supply.toFixed(2))}</h1>
-                  </div>`
-                      : ``
-              }
-              ${
-                  total_supply
-                      ? `<div class="priceItem">
-                    <p class="priceLabel textGray">Total Supply</p>
-                    <h1 class="price textGray">${formatNumber(total_supply.toFixed(2))}</h1>
-                  </div>`
-                      : ``
-              }
-            </div>
+              </div>
           </div>
         </div>
       </div>
@@ -288,7 +302,6 @@ async function cryptoInfo(query, API_KEY) {
           box-sizing: border-box;
         }
         .mainCol {
-          width: 50%;
           display: flex;
         }
         .buttons {
@@ -379,7 +392,7 @@ async function cryptoInfo(query, API_KEY) {
             color: #4e616c;
         }
         .explorer {
-          padding: 20px 0 15px;
+          padding: 10px 0 15px;
           word-wrap: anywhere;
         }
         .explorerContainer {
@@ -468,6 +481,9 @@ async function cryptoInfo(query, API_KEY) {
           background-color: #ddd;
           border-radius: 5px;
         }
+        .mainCol1 {
+          flex: 0.55;
+        }
         @media screen and (max-width: 980px) {
           .priceRow .price, .priceItem h1, .rank {
             font-size: 17px;
@@ -504,12 +520,13 @@ async function cryptoInfo(query, API_KEY) {
           .mainCol {
             width: 100%;
             padding: 0;
+            flex-direction:column
           }
           .answerRow h1 {
             line-height: 1.5;
           }
           .mainCol1 {
-            width: calc(100vw - 2rem) !important;
+            width: 100%;
           }
           .rank {
             padding-top: 10px;
@@ -840,7 +857,21 @@ async function cryptoInfo(query, API_KEY) {
           ctxGraph.lineJoin = "round";
           ctxGraph.lineCap = "round";
           ctxGraph.strokeStyle = priceArray[0] < priceArray[priceArray.length - 1] ? COLOR_GREEN : COLOR_RED;
-          ctxGraph.stroke();
+
+          ctxGraph.save()
+          ctxGraph.stroke()
+      
+          ctxGraph.restore();
+          ctxGraph.lineTo(positions[positions.length-1].x, graphMap.bottom)
+          ctxGraph.lineTo(graphMap.start, graphMap.bottom )
+          // add linear gradient
+          const gradient = ctxGraph.createLinearGradient(0, 0, 0, graphMap.bottom);
+          let topColor = priceArray[0] < priceArray[priceArray.length - 1] ? COLOR_GREEN : COLOR_RED
+          gradient.addColorStop(0, DARK_MODE ? topColor + "50" : topColor + "90"); 
+          gradient.addColorStop(1, '#ffffff00');
+          ctxGraph.fillStyle = gradient;
+          //ctxGraph.stroke();
+          ctxGraph.fill()
           ctxGraph.closePath();
       
           // draw dates
