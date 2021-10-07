@@ -6,7 +6,7 @@ async function math(query) {
 
   return `
 <div class="mainCol mathContain">
-  <form name="">
+  <form name="calculator">
    <table>
       <tr>
          <td colspan="4">
