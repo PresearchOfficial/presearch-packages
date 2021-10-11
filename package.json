@@ -16,6 +16,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.22.0",
     "create-react-app": "^4.0.1",
     "dotenv": "^8.2.0",
     "mathjs": "^8.0.1",
