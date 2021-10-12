@@ -18,9 +18,11 @@ html(lang="en" class="dark h-full")
             } catch(err) {
                 window.packageData = "";
             }
+        script.
             try {
-                window.packageInfo = JSON.parse(`!{packageInfo}`);
+                window.packageInfo = JSON.parse('!{packageInfo}');
             } catch(err) {
+                console.log(err)
                 window.packageInfo = {};
             }
            
