@@ -1,0 +1,27 @@
+template(x-if="state.results && state.results.standardResults && state.results.standardResults.length")
+    div(class="text-gray-300")
+        include ./ad
+        template(x-for="(result, index) in state.results.standardResults")
+            div
+                div(class="mx-2 md:mx-0 md:mr-0 md:max-w-xl lg:max-w-2xl pr-4 p-4 bg-white dark:bg-background-dark200 shadow rounded mb-3")
+                    div
+                        div
+                            div(class="inline-block md:items-center")
+                                a(x-bind:target="$store.linksInNewTab && $store.linksInNewTab.status ? '_blank' : '_self'" class="cursor-pointer font-normal text-base text-primary-600 transition duration-150 hover:underline hover:opacity-70 dark:hover:opacity-60 dark:text-presearch-dark inline-block" :class="$store.largeText && $store.largeText.status ? 'text-lg' : ''")
+                                    template(x-if="result.favicon")
+                                        img(class="w-4 h-4 mr-1 mb-1 inline-block hidden" alt="" x-cloak)
+                                    span(x-html="result.title")
+                            div
+                                a(x-bind:target="$store.linksInNewTab && $store.linksInNewTab.status ? '_blank' : '_self'" class="cursor-pointer text-results-link mt-1 font-normal underline text-xs dark:text-gray-300" :class="$store.largeText && $store.largeText.status ? 'text-sm' : ''")
+                                    div(x-html="generateLink(result.link)" class="break-all")
+                        div(class="text-gray-800 dark:text-white mt-2 text-sm" :class="`${$store.largeText && $store.largeText.status ? 'text-base' : ''}`" x-html="result.description ? adjustLongWordDescription(result.description) : ''")
+                    template(x-if="result.extraDescription")
+                        div(class="mt-2 md:flex md:mt-0 flex-row flex-wrap text-sm link-tilt text-gray-800 dark:text-white")
+                            template(x-for="extra in result.extraDescription")
+                                div(x-html="extra" class="mt-1 md:flex-2 text-xs mt-2" :class="$store.largeText && $store.largeText.status ? 'text-xs' : ''")
+                    template(x-if="result.similarSearches")
+                        div
+                            hr(class="min-w-full mt-3.5 dark:border-gray-600")
+                            div(class="md:flex mt-1.5 flex-row flex-wrap text-sm" :class="$store.largeText && $store.largeText.status ? 'text-base' : ''")
+                                template(x-for="similar in result.similarSearches")
+                                    div(x-html="similar" class="mr-4 mt-1 font-semibold text-xs text-gray-800 transition duration-150 hover:opacity-70 dark:hover:opacity-60 dark:text-white")

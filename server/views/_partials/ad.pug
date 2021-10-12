@@ -1,0 +1,18 @@
+template(x-if="state.ads")
+    template(x-for="ad in state.ads")
+        div(class="mx-2 md:mx-0 md:mr-0 md:mb-6 md:mt-0 my-4 md:max-w-xl lg:max-w-2xl p-4 bg-white dark:bg-background-dark200 dark:text-presearch-dark rounded shadow")
+            div
+                div(class="flex justify-between")
+                    a(class="cursor-pointer font-normal" target="_blank" rel="noopener noreferrer" class="text-presearch-alternative transition duration-150 hover:opacity-60 dark:text-presearch-dark inline-block")
+                        span(x-html="ad.headline" :class="$store.largeText && $store.largeText.status ? 'text-lg align-middle' : 'align-middle'")
+                div(class="flex items-center text-results-link text-xs dark:text-gray-300" :class="$store.largeText && $store.largeText.status ? 'text-sm' : ''")
+                    span(class="rounded border px-0.5 mr-1 no-underline leading-none") Ad
+                    a(class="cursor-pointer underline" target="_blank" rel="noopener noreferrer")
+                        div #[span(x-html="generateLink(ad.link)")] 
+                    a(href=`${settings.PRESEARCH_DOMAIN}/report/` :href="`${$el.href}${ad.code}`" title="Report Ad" target="_blank" rel="noopener noreferrer")
+                        div(class="ml-1.5 group cursor-pointer")
+                            div(class="hidden group-hover:block")
+                                i(class="fa fa-flag")
+                            div(class="block group-hover:hidden")
+                                i(class="fa fa-flag-o")
+            div(x-html="ad.description" class="text-gray-800 dark:text-white mt-2 text-sm" :class="$store.largeText && $store.largeText.status ? 'text-base' : ''")

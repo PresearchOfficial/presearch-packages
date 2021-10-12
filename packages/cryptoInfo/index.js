@@ -19,13 +19,16 @@ async function cryptoInfo(query, API_KEY) {
 
         const headers = { Accept: "application/json", "X-CMC_PRO_API_KEY": API_KEY };
 
+        const [priceInfo, historical] = await Promise.all([
+          axios.get(CMC_API_URL + `quotes/latest?id=${coinId}`, { headers }).catch(error => ({error})),
+          axios.get(CMC_API_URL + `quotes/historical?id=${coinId}&count=3000&interval=15m`, { headers }).catch(error => ({error}))
+        ]);
+
         // get data about price, supply etc.
-        const priceInfo = await axios.get(CMC_API_URL + `quotes/latest?id=${coinId}`, { headers }).catch((error) => ({ error }));
         if (!priceInfo || !priceInfo.data || priceInfo.error) return null;
         const priceData = priceInfo.data.data[coinId];
 
         // get historical data for price graph
-        const historical = await axios.get(CMC_API_URL + `quotes/historical?id=${coinId}&count=3000&interval=15m`, { headers }).catch((error) => ({ error }));
         if (!historical || !historical.data || historical.error) return null;
         const historicalData = historical.data.data;
         let { quotes } = historicalData;
@@ -479,6 +482,7 @@ async function cryptoInfo(query, API_KEY) {
         }
         .boxItem {
           background-color: #ddd;
+          color: #4e616c;
           border-radius: 5px;
         }
         .mainCol1 {
