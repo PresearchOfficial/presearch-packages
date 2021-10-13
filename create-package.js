@@ -12,23 +12,23 @@ const isWindows = process.platform === "win32";
 const packageName = process.argv[2];
 if (!packageName) {
     console.log("Error: Please enter package name".red, "\nnpm run create-package {package-name}\n".yellow);
-    return process.exit(1);
+    return process.exit(0);
 }
 try {
     let packageDir = fs.readdirSync(`./packages/${packageName}`);
     if (packageDir) {
         console.log(`Error: Package ${packageName} already exist.\n`.red);
-        return process.exit(1);
+        return process.exit(0);
     }
 } catch (err) {}
 
 function execCallback(error) {
     if (error) {
         console.log(`\nError: package has not been created... ${error}`.red);
-        return process.exit(1);
+        return process.exit(0);
     }
     const cmd = isWindows ? "cmd" : "npm";
-    const args = isWindows ? ["/c", "npm init -y &>/dev/null"] : ["init -y &>/dev/null"];
+    const args = isWindows ? ["/c", "npm init -y --quiet > NUL"] : ["init -y &>/dev/null"];
 
     const npmInitComman = spawn(cmd, args, {
         shell: true,
