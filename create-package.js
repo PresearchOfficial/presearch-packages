@@ -52,7 +52,7 @@ function execCallback(error) {
             packageInfo = packageInfo.split(",").join(",\n ").split("{").join("{\n ").split("}").join("\n}");
             fs.writeFileSync(`./packages/${packageName}/package.json`, packageInfo);
             console.log(`\nSuccess! ${packageName} package has been created!\n`.green);
-            console.log(`You can now open`.cyan + ` presearch-packages/packages/${packageName} `.yellow + `directory in your fav code editor.\n`.cyan);
+            console.log(`You can now open`.cyan + ` packages/${packageName} `.yellow + `directory in your fav code editor.\n`.cyan);
             console.log(
                 `If you want to test your package, run a test server `.cyan +
                     ` cd server && npm run start `.yellow +
