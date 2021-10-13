@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/nodemon/bin/nodemon.js --watch ../ index.js"
+    "start": "nodemon --watch ../ index.js"
   },
   "dependencies": {
     "dotenv": "^6.1.0",

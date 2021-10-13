@@ -8,7 +8,8 @@
     "add-package-json": "git add package.json",
     "create-package": "node create-package.js",
     "create-package-linux": "./bin/create-package.sh",
-    "create-package-windows": ".\\bin\\create-package.sh"
+    "create-package-windows": ".\\bin\\create-package.sh",
+    "postinstall": "cd server && npm install && cd .."
   },
   "pre-commit": [
     "merge-dependencies",

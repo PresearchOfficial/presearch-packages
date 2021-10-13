@@ -30,7 +30,7 @@ function execCallback(error) {
     npmInitComman.on('close', () => {
         console.log(`\nSuccess! ${packageName} package has been created!\n`.green);
         console.log(`You can now open`.cyan + ` presearch-packages/packages/${packageName} `.yellow + `directory in your fav code editor.\n`.cyan);
-        console.log(`If you want to test your package, open`.cyan + ` http://localhost:4000/${packageName} `.yellow + `in your web browser.\n`.cyan);
+        console.log(`If you want to test your package, run a test server ` + ` cd server && npm run start `.yellow + `and open`.cyan + ` http://localhost:4000/${packageName} `.yellow + `in your web browser.\n`.cyan);
     })
 }
 
