@@ -1,0 +1,6 @@
+div(class="font-light flex mr-3 md:pb-0 md:mr-0" x-cloak)
+    div(class="flex items-center")
+        div(x-on:mouseover="blockShowSettings(true)" class="px-3 flex items-center")
+            span(class="w-px h-5 bg-gray-400 dark:bg-gray-200")
+        a(x-on:mouseover="showSettings(false, false, true)" x-on:mouseleave="blockShowSettings(true)" @click="showSettingsOnClick()" class="transition hover:opacity-60 cursor-pointer text-gray-700 p-1 dark:text-white")
+            include ./icons/header/menu
