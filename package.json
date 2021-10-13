@@ -4,7 +4,7 @@
   "description": "Instant information packages for the Presearch engine",
   "main": "index.js",
   "scripts": {
-    "merge-dependencies": "./bin/merge-dependencies",
+    "merge-dependencies": "node ./bin/merge-dependencies.js",
     "add-package-json": "git add package.json",
     "create-package": "node create-package.js",
     "create-package-linux": "./bin/create-package.sh",
@@ -18,15 +18,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "axios": "^0.22.0",
+    "axios": "^0.23.0",
     "colors": "^1.4.0",
-    "create-react-app": "^4.0.1",
-    "dotenv": "^8.2.0",
-    "mathjs": "^8.0.1",
+    "dotenv": "^10.0.0",
+    "mathjs": "^9.5.1",
     "mathsteps": "^0.2.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.5",
     "periodic-table": "^0.0.8",
-    "wikijs": "^6.0.1"
+    "wikijs": "^6.3.2"
   },
   "devDependencies": {
     "pre-commit": "^1.2.2"

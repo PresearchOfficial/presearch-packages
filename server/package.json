@@ -7,7 +7,7 @@
     "start": "nodemon --watch ../ index.js"
   },
   "dependencies": {
-    "dotenv": "^6.1.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "nodemon": "^2.0.13",
     "pug": "^3.0.2"

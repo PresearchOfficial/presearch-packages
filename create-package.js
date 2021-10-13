@@ -43,7 +43,6 @@ function execCallback(error) {
         });
 
         rl.on("close", function () {
-            console.log("yo" + userName);
             let packageInfo = fs.readFileSync(`./packages/${packageName}/package.json`);
             packageInfo = JSON.parse(packageInfo);
             packageInfo.author = userName;
@@ -54,7 +53,7 @@ function execCallback(error) {
             console.log(`\nSuccess! ${packageName} package has been created!\n`.green);
             console.log(`You can now open`.cyan + ` packages/${packageName} `.yellow + `directory in your fav code editor.\n`.cyan);
             console.log(
-                `If you want to test your package, run a test server `.cyan +
+                `If you want to test your package, run a test server`.cyan +
                     ` cd server && npm run start `.yellow +
                     `and open`.cyan +
                     ` http://localhost:4000/${packageName} `.yellow +
