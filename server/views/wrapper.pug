@@ -1,0 +1,12 @@
+mixin wrapper
+    div(class="relative flex bg-background-light200 dark:bg-background-dark500 h-full md:min-h-screen")
+        div(x-show="$store.showSettings && $store.showSettings.show" x-on:mouseover="hideSettings(true, false, true)" class="fixed w-screen h-screen z-20 top-0 left-0")
+        div(class="flex flex-col flex-auto w-full h-full md:min-h-screen")
+            div
+                include _partials/header
+                include _partials/settings
+            div(class="flex results-div")
+                include _partials/sidebar
+                div(class="w-full flex-auto flex flex-col bg-background-light200 border-gray-200 dark:bg-background-dark500 dark:border-gray-900")
+                    block
+            include _partials/footer

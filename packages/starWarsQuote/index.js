@@ -13,6 +13,9 @@ function starWarsQuote(query) {
         font-weight: 600;
         font-style: italic;
       }
+      .dark .starWarsQuote {
+        color: #D1D5DB;
+      }
     </style>
   `;
 }

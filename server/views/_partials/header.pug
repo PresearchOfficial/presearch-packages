@@ -1,0 +1,47 @@
+dic(class="md:h-30 flex z-10 relative shadow dark:border-b dark:border-background-dark300" :class="$store.showProviders && $store.showProviders.show ? 'h-36' : 'h-28'")
+    div(class="pt-3 md:pt-6 bg-gray-100 dark:bg-background-dark500 dark:border-gray-900 hidden md:block" )
+        div(class="pl-2 pr-1 md:pl-6 md:w-48 lg:w-56")
+            a(class="flex items-center" x-bind:href="window.homepageLink().state.link")
+                include ./icons/header/logo-p_
+                include ./icons/header/logo-presearch
+    div(class="flex flex-col w-full pr-2 bg-background-light100 dark:bg-background-dark500 sm:pr-0")
+        div(class="flex items-center md:max-w-xl lg:max-w-2xl ml-1 relative")
+            a(class="flex items-center mt-3 mr-2 md:hidden" x-bind:href="window.homepageLink().state.link")
+                include ./icons/header/logo-p_ 
+            include ./search-form
+        include ./providers-mobile
+        template(x-if="translated.all")
+            div(class="flex h-full md:w-screen md:ml-0 md:pl-0 md:w-auto md:max-w-xl lg:max-w-2xl left-0 md:static")
+                div(class="flex h-full items-end overflow-auto flex-1 ml-2")
+                    -
+                        const classes = {
+                            common: "block flex mx-1 px-1.5 md:px-2 pb-2.5 md:pb-3.5 text-gray-700 border-transparent text-sm border-b-2",
+                            active: "text-primary-500 border-blue-500 dark:text-presearch-dark dark:border-presearch-dark",
+                            inactive: "text-gray-700 dark:text-white border-transparent",
+                            link:"flex hover:opacity-60 transition cursor-pointer items-center"
+                        }
+                    div(class=`${classes["common"]} ${classes["active"]}`)
+                        a(class=classes["link"])
+                            include ./icons/header/all
+                            span(x-html="translated.all")
+                    div(class=`${classes["common"]} ${path === "/images" ? classes["active"] : classes["inactive"]}`)
+                        a(class=classes["link"])
+                            include ./icons/header/images
+                            span(x-html="translated.images")
+                    div(class=`${classes["common"]} ${path === "/videos" ? classes["active"] : classes["inactive"]}`)
+                        a(class=classes["link"])
+                            include ./icons/header/videos
+                            span(x-html="translated.videos")
+                    div(class=`${classes["common"]} ${path === "/news" ? classes["active"] : classes["inactive"]}`)
+                        a(class=classes["link"])
+                            include ./icons/header/news
+                            span(x-html="translated.news")
+                    div(class="flex items-center justify-end flex-1 md:ml-2 text-xs text-center whitespace-no-wrap border-transparent sm:text-sm border-b-2 sm:pr-4 mb-1 md:mb-2 2lg:hidden")
+                        include ./user-info-mobile
+                div(class="md:flex h-full hidden items-end justify-end overflow-auto mr-2 text-gray-700")
+                    div 
+                        div(class="cursor-pointer dark:text-white flex items-center px-2 mx-1 pb-3.5 text-sm border-b-2 border-transparent hover:opacity-60 transition") 
+                            include ./icons/header/share
+                            div(x-html="translated.share")
+                div(class="absolute top-0 right-0 hidden mt-8 mr-8 2lg:block")
+                    include ./user-info

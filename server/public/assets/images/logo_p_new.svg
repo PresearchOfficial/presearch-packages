@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Layer_1"
+   data-name="Layer 1"
+   viewBox="0 0 80.000002 79.999996"
+   version="1.1"
+   width="80"
+   height="80"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs17">
+    <style
+       id="style9">.cls-1{fill:url(#linear-gradient)}.cls-2{fill:url(#linear-gradient-2)}.cls-3{fill:#fff}.cls-4{fill:#fff}</style>
+    <linearGradient
+       id="linear-gradient"
+       x1="226.42999"
+       y1="280.07999"
+       x2="226.42999"
+       y2="331.79001"
+       gradientTransform="matrix(1,0,0,-1,0,612)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#fff"
+         id="stop11" />
+      <stop
+         offset="1"
+         stop-color="#fff"
+         id="stop13" />
+    </linearGradient>
+    <linearGradient
+       id="linear-gradient-2"
+       x1="233.21001"
+       y1="264.42001"
+       x2="233.21001"
+       y2="347.57999"
+       xlink:href="#linear-gradient" />
+    <linearGradient
+       xlink:href="#linear-gradient"
+       id="linearGradient4668"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,0,612)"
+       x1="226.42999"
+       y1="280.07999"
+       x2="226.42999"
+       y2="331.79001" />
+    <linearGradient
+       xlink:href="#linear-gradient"
+       id="linearGradient4670"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,-1,0,612)"
+       x1="226.42999"
+       y1="280.07999"
+       x2="226.42999"
+       y2="331.79001" />
+  </defs>
+  <title
+     id="title19">presearch_logo</title>
+  <g
+     id="g4666">
+    <rect
+       style="fill:#2d8eff;fill-opacity:1"
+       id="rect4301"
+       width="76.895065"
+       height="66.493217"
+       x="-3.8146973e-06"
+       y="4.592" />
+    <g
+       id="g4659">
+      <path
+         class="cls-1"
+         d="m 35.34,62 h 9.73 a 18.81,18.81 0 0 0 8.06,-1.8 20.56,20.56 0 0 0 6.25,-4.81 22.32,22.32 0 0 0 4,-7 22.82,22.82 0 0 0 1.44,-8.06 19.77,19.77 0 0 0 -1.56,-7.81 23.78,23.78 0 0 0 -4.26,-6.8 21.2,21.2 0 0 0 -6.37,-4.93 17.26,17.26 0 0 0 -8,-1.92 H 19 V 81 h 16.34 z m 0,-28.13 h 8.29 a 4.48,4.48 0 0 1 3,1.45 c 1,1 1.57,2.64 1.57,5.28 0,2.64 -0.6,4.21 -1.45,5.05 A 3.73,3.73 0 0 1 44,47.12 h -8.66 z"
+         id="path21"
+         transform="scale(0.8)"
+         style="fill:url(#linearGradient4668)" />
+      <path
+         class="cls-1"
+         d="M 0,5.74 V 94.26 A 5.74,5.74 0 0 0 5.74,100 H 94.26 A 5.74,5.74 0 0 0 100,94.26 V 5.74 A 5.74,5.74 0 0 0 94.26,0 H 5.74 A 5.74,5.74 0 0 0 0,5.74 Z M 82.48,88.22 H 17.4 A 5.74,5.74 0 0 1 11.66,82.48 V 17.4 a 5.74,5.74 0 0 1 5.74,-5.74 h 65.08 a 5.74,5.74 0 0 1 5.74,5.74 v 65.08 a 5.74,5.74 0 0 1 -5.74,5.74 z"
+         id="path23"
+         style="fill:#2d8eff;fill-opacity:1"
+         transform="scale(0.8)" />
+      <rect
+         class="cls-1"
+         x="34.139999"
+         y="55.400002"
+         width="30.67"
+         height="9.3999996"
+         id="rect25"
+         style="fill:url(#linearGradient4670)" />
+    </g>
+  </g>
+</svg>

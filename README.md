@@ -2,9 +2,6 @@
 
 *Open source instant information packages for the Presearch engine*
 
-## Video Walkthrough
-
-[![Presearch Packages Open Source Contribution Process](https://img.youtube.com/vi/xLNFI12Vdas/0.jpg)](https://www.youtube.com/watch?v=xLNFI12Vdas)
 
 ## Install
 
@@ -18,31 +15,11 @@ $ cd presearch-packages && npm install
 ## Development
 
 ```
-$ cd server && npm install && npm start
+$ cd server && npm start
 ```
 
-Packages available at: `http://localhost:4000/?query=<sampleQuery>&packageKey=<packageKey>`
+Development server will be available at: `http://localhost:4000/`
 
-Change the query and packageKey parameters accordingly
-
-Place API keys in a `.env` file at the root of the project for development:
-```
-MY_API_KEY=fooandotherstuff
-```
-
-Include API keys from `.env`:
-```
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({path: `${__dirname}/../../.env`});
-}
-```
-
-Access API keys from package:
-```
-const API_KEY = process.env.MY_API_KEY;
-```
-
-The `.env` file is included in the .gitignore
 
 *Do not push your API keys to the presearch-packages repository*
 
@@ -52,7 +29,7 @@ Developing a new package for the Presearch engine:
 
 - Fork `presearch-packages` and clone locally if you have not already done so
 - Create an upstream remote and sync your local copy before you branch
-- Create a new branch `<username>/<packageKey>`
+- Create a new branch `<username>/<packageName>`
 - Always create a new branch for separate packages
 - Switch to your new branch
 - Run `npm run create-package <packageName>`
@@ -93,7 +70,7 @@ You're going to need to look over these files for any malicious code
 Testing Step:
 
 - Switch to the appropriate branch and update your local repo (git pull)
-- Navigate to `http://localhost:4000/?query=<sampleQuery>&packageKey=<packageKey>` and insert the appropriate query and packageKey parameters
+- Navigate to `http://localhost:4000/{PACKAGE_NAME}` and insert the appropriate query
 - Make sure everything loads and works as expected
   - If something behaves differently than described by the creator then take note of that
 - Check the console in your browsers developers menu for errors or warnings

@@ -1,6 +1,6 @@
 {
   "name": "cryptoInfo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Cryptocurrency Information Package",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^6.1.0",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.6.1"
   }
 }
