@@ -28,11 +28,16 @@ const loadAssets = async (query) => {
   const [response1, response2] = await Promise.all([
     fetch(
       `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=5`
-    ),
+    ).catch(error => ({error})),
     fetch(
       `https://api.opensea.io/api/v1/assets?format=json&owner=${query}&order_direction=desc&offset=0&limit=5`
-    ),
+    ).catch(error => ({error})),
   ]);
+
+  // eturn null when there's no response from OpenSea API;
+  if (!response1 || response1.error || !response2 || response2.error) {
+    return null;
+  }
 
   const [data1, data2] = await Promise.all([
     response1.json(),
@@ -42,11 +47,21 @@ const loadAssets = async (query) => {
   if (data1.assets.length) {
     return data1.assets;
   }
+  // return null when there's no response from OpenSea API;
+  if (!data2 || typeof data2 === "string") {
+     return null;
+  }
+
   return data2.assets;
 };
 
 async function openSea(query) {
   const assets = await loadAssets(query);
+
+  // return null when there's no response from OpenSea API;
+  if (!assets) {
+    return null;
+  }
 
   const mainAsset = assets &&
     assets.find((asset) =>
@@ -56,7 +71,7 @@ async function openSea(query) {
 
   return `
   <style>
-    :root {
+    .Package-wrapper {
       --cultured: #f3f4f6;
       --white: #ffffff;
       --light-white: #fbfbfb;
@@ -67,16 +82,15 @@ async function openSea(query) {
       --border: 1px solid #e5e5e5;
     }
 
-    .text-grey-web { color: var(--gray-web); }
-    .text-grey-web--dark { color: var(--gray-web-dark); }
-    .text-bluetiful { color: var(--bluetiful); }
+    .Package-wrapper .text-grey-web { color: var(--gray-web); }
+    .Package-wrapper .text-grey-web--dark { color: var(--gray-web-dark); }
+    .Package-wrapper .text-bluetiful { color: var(--bluetiful); }
 
     .Package-wrapper {
       width: 100%;
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      background: var(--cultured);
     }
 
     .Package-wrapper .MainAsset {
@@ -90,7 +104,7 @@ async function openSea(query) {
       background: var(--white);
     }
 
-    .MainAsset .MainAsset--imgWrapper {
+    .Package-wrapper .MainAsset .MainAsset--imgWrapper {
       width: 40%;
       padding: 0 0;
       display: flex;
@@ -102,7 +116,7 @@ async function openSea(query) {
       background: var(--white);
     }
 
-    .MainAsset .MainAsset--content {
+    .Package-wrapper .MainAsset .MainAsset--content {
       display: flex;
       align-items: start;
       flex-direction: column;
@@ -112,23 +126,23 @@ async function openSea(query) {
       flex: 1;
     }
 
-    .MainAsset .MainAsset--name {
+    .Package-wrapper .MainAsset .MainAsset--name {
       font-weight: bold;
       font-size: 1.2rem;
     }
 
-    .MainAsset .MainAsset--viewOnOpensea {
+    .Package-wrapper .MainAsset .MainAsset--viewOnOpensea {
       margin-bottom: 1rem;
       margin-top: 0.3rem;
     }
 
-    .MainAsset .MainAsset--ownerInfo {
+    .Package-wrapper .MainAsset .MainAsset--ownerInfo {
       display: flex;
       align-items: center;
       margin-top: 1rem;
     }
 
-    .MainAsset .MainAsset--ownerInfo--profile {
+    .Package-wrapper .MainAsset .MainAsset--ownerInfo--profile {
       height: 25px;
       width: 25px;
       overflow: hidden;
@@ -139,12 +153,12 @@ async function openSea(query) {
       justify-content: center;
     }
 
-    .MainAsset .MainAsset--buttonWrapper {
+    .Package-wrapper .MainAsset .MainAsset--buttonWrapper {
       padding: 1rem 0;
       flex: 1;
     }
 
-    .MainAsset .MainAsset--buttonWrapper .MainAsset--button {
+    .Package-wrapper .MainAsset .MainAsset--buttonWrapper .MainAsset--button {
       background: var(--primary);
       color: var(--white);
       display: flex;
@@ -156,23 +170,22 @@ async function openSea(query) {
       border-radius: .25rem!important;
     }
 
-    .OtherAssets {
+    .Package-wrapper .OtherAssets {
       max-width: 500px;
       border-radius: .25rem!important;
-      background: var(--cultured);
       margin: 0;
       display: flex;
       justify-content: space-between;
       flex-flow: row wrap;
     }
 
-    .OtherAssets .OtherAssets-cardWrapper {
+    .Package-wrapper .OtherAssets .OtherAssets-cardWrapper {
       padding: 0.4rem;
       width: 47%;
       min-width: 200px;
     }
 
-    .OtherAssets .OtherAssets--card {
+    .Package-wrapper .OtherAssets .OtherAssets--card {
        border: var(--border);
        background: var(--white);
        padding: 0.5rem;
@@ -181,15 +194,15 @@ async function openSea(query) {
        border-radius: .25rem!important;
     }
 
-    .OtherAssets .OtherAssets--card img {
+    .Package-wrapper .OtherAssets .OtherAssets--card img {
        border: var(--border);
     }
 
-    .OtherAssets .OtherAssets--assetCaption {
+    .Package-wrapper .OtherAssets .OtherAssets--assetCaption {
       margin-top: 0.5rem;
     }
 
-    .OtherAssets .OtherAssets--assetName {
+    .Package-wrapper .OtherAssets .OtherAssets--assetName {
       margin-top: 0.2rem;
       font-weight: 600;
       cursor: pointer;
