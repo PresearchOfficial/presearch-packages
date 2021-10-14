@@ -44,7 +44,7 @@ async function exchangeRates(query) {
     }
     if(query.includes("usd to gbp")){
         first ="USD";
-        second = "BGP";
+        second = "GBP";
         currentPrice = gbp / usd;
     }
     if(query.includes("pln to usd")){
