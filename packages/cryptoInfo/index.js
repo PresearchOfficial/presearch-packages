@@ -872,7 +872,7 @@ async function cryptoInfo(query, API_KEY) {
           const gradient = ctxGraph.createLinearGradient(0, 0, 0, graphMap.bottom);
           let topColor = priceArray[0] < priceArray[priceArray.length - 1] ? COLOR_GREEN : COLOR_RED
           gradient.addColorStop(0, DARK_MODE ? topColor + "50" : topColor + "90"); 
-          gradient.addColorStop(1, '#ffffff00');
+          gradient.addColorStop(1, topColor + "10");
           ctxGraph.fillStyle = gradient;
           //ctxGraph.stroke();
           ctxGraph.fill()
