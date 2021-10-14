@@ -11,12 +11,11 @@ async function emoji(query, API_KEY) {
 
   <div class="left-column">
 	  <div class="left-column-title">
-		  <h1>${emoji_details.emoji} ${emoji_details.name}</h1>	 
+		  <h1 class="left-column-title-text">${emoji_details.emoji} ${emoji_details.name}</h1>	 
 	  </div>
 	  <div class="unicode-container">
 		  <h3 class="unicode-text">Unicode: ${emoji_details.unicode}</h3>		 
 	  </div>
-	  
 	  <div class="images-container">
           <div class="image-container">
             <img class="emoji-image" src=${emoji_details.images[4].url} alt=${emoji_details.name}  width="50" height="60">
@@ -47,27 +46,16 @@ async function emoji(query, API_KEY) {
 
       <div class="right-column">
         <div class="right-column-title">
-            <h2>Description</h2>
+            <h2 class="right-column-title-text">Description</h2>
             <hr/>
             <br/>
-            <p>${emoji_details.description}</p>
+            <p class="description-text">${emoji_details.description}</p>
         </div>
       </div>
 
   </div>
 </div>
 <style>
-
-		/* .dark #presearchPackage .mycolor {
-			color: yellow;
-		}
-		#presearchPackage .mycolor {
-			color: green;
-		
-		}
-			#presearchPackage .imageContainer {
-			 display: flex;
-		} */
 	#presearchPackage	.container {
   display: flex;
   flex-wrap: wrap;
@@ -102,13 +90,25 @@ async function emoji(query, API_KEY) {
 #presearchPackage .unicode-container{
   padding:10px;
 }
-
-
+ .dark #presearchPackage .left-column-title-text {
+			color: #D1D5DB;
+		}
+.dark #presearchPackage .img-caption {
+  color: #D1D5DB;
+}
+.dark #presearchPackage .unicode-text{
+  color: #D1D5DB;
+}
+.dark #presearchPackage .right-column-title-text{
+  color: #D1D5DB;
+}
+.dark #presearchPackage .description-text{
+  color: #D1D5DB;
+}
 @media (max-width: 800px) {
  #presearchPackage .right-column, .left-column {
     flex: 100%;
   }
-
   @media screen and (max-width: 800px) {
   #presearchPackage .image-container {
     width: 50%;
