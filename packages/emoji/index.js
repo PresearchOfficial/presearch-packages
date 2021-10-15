@@ -4,10 +4,14 @@ const emoji_data = new EmojiAPI();
 const emojiRegex = require('emoji-regex');
 
 async function emoji(query, API_KEY) {
-  /* sample query  = 🥺 */
-  const emoji_details = await emoji_data.get(query);
+  const regex = emojiRegex();
+  // get only emoji from the query
+  const emoji = query.match(regex)[0];
 
-  if (!emoji_details) {
+  /* sample query  = 🥺 */
+  const emoji_details = await emoji_data.get(emoji).catch(error => ({error}));
+
+  if (!emoji_details || emoji_details.error) {
     return null;
   }
 
@@ -22,6 +26,8 @@ async function emoji(query, API_KEY) {
   ) {
     return null;
   }
+
+  const vendorList = ["Apple", "Microsoft", "Google", "Twitter", "Facebook", "Messenger"];
 
   let images_list = emoji_details.images.filter((data) => {
     if (data.url && data.vendor) return data;
@@ -48,7 +54,7 @@ async function emoji(query, API_KEY) {
           images_list &&
           `<div class="images-container">${images_list
             .map((image, index) =>
-              image.url && image.vendor
+              image.url && image.vendor && vendorList.includes(image.vendor)
                 ? `<div key="${index}" class="image-container">
                         <img class="emoji-image" src=${image.url} alt=${image.vendor}  width="30" height="40">
                       <figcaption class="img-caption">${image.vendor}</figcaption>
