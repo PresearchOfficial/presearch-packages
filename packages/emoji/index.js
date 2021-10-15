@@ -4,58 +4,76 @@ const emoji_data = new EmojiAPI();
 
 async function emoji(query, API_KEY) {
   /* sample query  = 🥺 */
-  let emoji_details = await emoji_data.get(query);
+  const emoji_details = await emoji_data.get(query);
+
+  if (!emoji_details) {
+    return null;
+  }
+
+  if (
+    !(
+      emoji_details.emoji &&
+      emoji_details.name &&
+      emoji_details.unicode &&
+      emoji_details.description &&
+      emoji_details.images
+    )
+  ) {
+    return null;
+  }
+
+  let images_list = emoji_details.images.filter((data) => {
+    if (data.url && data.vendor) return data;
+  });
 
   return `
 <div id="presearchPackage">
   <div class="container">
 
-  <div class="left-column">
-	  <div class="left-column-title">
-		  <h1 class="left-column-title-text">${emoji_details.emoji} ${emoji_details.name}</h1>	 
-	  </div>
-	  <div class="unicode-container">
-		  <h3 class="unicode-text">Unicode: ${emoji_details.unicode}</h3>		 
-	  </div>
-	  <div class="images-container">
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[4].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[4].vendor}</figcaption>
-          </div>
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[6].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[6].vendor}</figcaption>
-          </div>
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[5].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[5].vendor}</figcaption>
-          </div>
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[0].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[0].vendor}</figcaption>
-          </div>
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[2].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[2].vendor}</figcaption>
-          </div>
-          <div class="image-container">
-            <img class="emoji-image" src=${emoji_details.images[3].url} alt=${emoji_details.name}  width="50" height="60">
-            <figcaption class="img-caption">${emoji_details.images[3].vendor}</figcaption>
-          </div>
-      </div>
-  </div>
-
-      <div class="right-column">
-        <div class="right-column-title">
+    <div class="left-column">
+        ${
+          emoji_details.emoji && emoji_details.name
+            ? ` <div class="left-column-title">
+            <h1 class="left-column-title-text">${emoji_details.emoji} ${emoji_details.name}</h1>	 
+            </div>`
+            : ``
+        }
+        <div class="unicode-container">
+          <h3 class="unicode-text">${
+            emoji_details.unicode ? `Unicode: ${emoji_details.unicode}` : ``
+          }</h3>		 
+        </div>
+        ${
+          images_list &&
+          `<div class="images-container">${images_list
+            .map((image, index) =>
+              image.url && image.vendor
+                ? `<div key="${index}" class="image-container">
+                        <img class="emoji-image" src=${image.url} alt=${image.vendor}  width="50" height="60">
+                      <figcaption class="img-caption">${image.vendor}</figcaption>
+                </div>`
+                : ``
+            )
+            .join("")}
+          </div>`
+        }
+    </div>        
+ 
+    <div class="right-column">
+        ${
+          emoji_details.description &&
+          `<div class="right-column-title">
             <h2 class="right-column-title-text">Description</h2>
             <hr/>
             <br/>
             <p class="description-text">${emoji_details.description}</p>
-        </div>
-      </div>
+        </div>`
+        }
+     </div>
 
   </div>
 </div>
+
 <style>
 	#presearchPackage	.container {
   display: flex;
