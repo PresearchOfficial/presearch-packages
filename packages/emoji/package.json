@@ -10,6 +10,7 @@
   "author": "ishan27596",
   "license": "MIT",
   "dependencies": {
-    "emoji-api": "^2.0.1"
+    "emoji-api": "^2.0.1",
+    "emoji-regex": "^10.0.0"
   }
 }

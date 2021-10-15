@@ -1,6 +1,7 @@
 "use strict";
 const { EmojiAPI } = require("emoji-api");
 const emoji_data = new EmojiAPI();
+const emojiRegex = require('emoji-regex');
 
 async function emoji(query, API_KEY) {
   /* sample query  = 🥺 */
@@ -143,12 +144,11 @@ async function emoji(query, API_KEY) {
 
 async function trigger(query) {
   /* sample query  = 🥺 */
-  try {
-    const data = await emoji_data.get(query);
-    if (data.emoji === query) return true;
-  } catch (error) {
-    return false;
+  const regex = emojiRegex();
+  if (query.match(regex)) {
+    return true;
   }
+  return false;
 }
 
 module.exports = { emoji, trigger };
