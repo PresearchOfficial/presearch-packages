@@ -34,14 +34,14 @@ async function emoji(query, API_KEY) {
         ${
           emoji_details.emoji && emoji_details.name
             ? ` <div class="left-column-title">
-            <h1 class="left-column-title-text">${emoji_details.emoji} ${emoji_details.name}</h1>	 
+            <h2 class="left-column-title-text">${emoji_details.emoji} ${emoji_details.name}</h2>	 
             </div>`
             : ``
         }
         <div class="unicode-container">
-          <h3 class="unicode-text">${
+          <h4 class="unicode-text">${
             emoji_details.unicode ? `Unicode: ${emoji_details.unicode}` : ``
-          }</h3>		 
+          }</h4>		 
         </div>
         ${
           images_list &&
@@ -49,7 +49,7 @@ async function emoji(query, API_KEY) {
             .map((image, index) =>
               image.url && image.vendor
                 ? `<div key="${index}" class="image-container">
-                        <img class="emoji-image" src=${image.url} alt=${image.vendor}  width="50" height="60">
+                        <img class="emoji-image" src=${image.url} alt=${image.vendor}  width="30" height="40">
                       <figcaption class="img-caption">${image.vendor}</figcaption>
                 </div>`
                 : ``
@@ -63,7 +63,7 @@ async function emoji(query, API_KEY) {
         ${
           emoji_details.description &&
           `<div class="right-column-title">
-            <h2 class="right-column-title-text">Description</h2>
+            <h3 class="right-column-title-text">Description</h3>
             <hr/>
             <br/>
             <p class="description-text">${emoji_details.description}</p>
@@ -80,7 +80,7 @@ async function emoji(query, API_KEY) {
   flex-wrap: wrap;
 }
 #presearchPackage .left-column {
-  padding: 10px;
+  padding: 10px 100px 50px 10px;
   flex: 50%;
 }
 #presearchPackage .right-column {
@@ -127,6 +127,10 @@ async function emoji(query, API_KEY) {
 @media (max-width: 800px) {
  #presearchPackage .right-column, .left-column {
     flex: 100%;
+  }
+  @media (max-width: 800px) {
+ #presearchPackage .left-column {
+   padding:10px;
   }
   @media screen and (max-width: 800px) {
   #presearchPackage .image-container {
