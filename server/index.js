@@ -5,9 +5,6 @@ const { promisify } = require("util");
 const fs = require("fs");
 
 const express = require("express");
-
-const fs = require("fs");
-const express = require("express");
 const packageObject = require(`${__dirname}/../index`);
 const app = express();
 const PORT = 4000;
