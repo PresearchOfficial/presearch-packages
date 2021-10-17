@@ -7,5 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Awa Dieudonne",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "ethereum-address": "^0.0.4"
+  }
 }

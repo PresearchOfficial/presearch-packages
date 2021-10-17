@@ -2,6 +2,7 @@
 
 // @ts-ignore
 const fetch = require("node-fetch");
+const ethereum_address = require('ethereum-address');
 
 const defaultImg = `
 <svg width="80" height="75" viewBox="0 0 80 75" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -69,8 +70,8 @@ async function openSea(query) {
   if (!assets) {
     return null;
   }
-  
-  const mainAsset =
+
+  let mainAsset =
     assets &&
     assets.find(
       (asset) =>
@@ -81,6 +82,10 @@ async function openSea(query) {
     if (!mainAsset) {
       return null;
     }
+
+  // prevent package from crashing, when title or description includes "`";
+  mainAsset.description = mainAsset.description ? mainAsset.description.split("`").join("'") : "";
+  mainAsset.title = mainAsset.title ? mainAsset.title.split("`").join("'") : "";
 
   return `
   <style>
@@ -103,23 +108,17 @@ async function openSea(query) {
       --onyx: #3D3D3D;
     }
 
-    * {
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-    }
+    .Package-wrapper .text-black { color: var(--black); }
+    .Package-wrapper .text-grey-web { color: var(--gray-web); }
+    .Package-wrapper .text-grey-web--dark { color: var(--gray-web-dark); }
+    .Package-wrapper .text-bluetiful { color: var(--bluetiful); }
 
-    .text-black { color: var(--black); }
-    .text-grey-web { color: var(--gray-web); }
-    .text-grey-web--dark { color: var(--gray-web-dark); }
-    .text-bluetiful { color: var(--bluetiful); }
-
-    .dark .text-grey-web, .dark .text-grey-web--dark, .dark .text-black { color: var(--light-gray); }
+    .dark .Package-wrapper .text-grey-web, .dark .Package-wrapper .text-grey-web--dark, .dark .Package-wrapper .text-black { color: var(--light-gray); }
 
     .Package-wrapper {
       width: 100%;
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: flex-start;
       background: var(--white);
     }
@@ -129,12 +128,9 @@ async function openSea(query) {
     }
 
     .Package-wrapper .MainAsset {
-      max-width: 750px;
-      min-height: 450px;
       padding: 2rem 1rem;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
+      flex:1;
       background: var(--white);
     }
 
@@ -142,9 +138,9 @@ async function openSea(query) {
       background: var(--jet);
     }
 
-    .MainAsset .MainAsset--imgWrapper {
+    .Package-wrapper .MainAsset .MainAsset--imgWrapper {
       width: 40%;
-      height: 350px;
+      max-height: 350px;
       padding: 0 0;
       display: flex;
       align-items: start;
@@ -154,16 +150,16 @@ async function openSea(query) {
       background: var(--white);
     }
 
-    .dark .MainAsset .MainAsset--imgWrapper {
+    .dark .Package-wrapper .MainAsset .MainAsset--imgWrapper {
       background: var(--jet);
     }
 
-    .MainAsset .MainAsset--imgWrapper img {
+    .Package-wrapper .MainAsset .MainAsset--imgWrapper img {
       height: auto;
       width: 100%;
     }
 
-    .MainAsset .MainAsset--content {
+    .Package-wrapper .MainAsset .MainAsset--content {
       display: flex;
       align-items: start;
       flex-direction: column;
@@ -200,10 +196,14 @@ async function openSea(query) {
       justify-content: center;
     }
 
-    .MainAsset .MainAsset--buttonWrapper {
+    .Package-wrapper .MainAsset .MainAsset--buttonWrapper {
       padding: 0;
       padding-top: 1rem;
       flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items:center;
+      width:100%;
     }
 
     .Package-wrapper .MainAsset .MainAsset--buttonWrapper .MainAsset--button {
@@ -219,12 +219,11 @@ async function openSea(query) {
     }
 
     .Package-wrapper .OtherAssets {
-      max-width: 500px;
       border-radius: .25rem!important;
-      margin: 0;
       display: flex;
       justify-content: space-between;
-      flex-flow: row wrap;
+      flex-direction: row;
+      width:100%;
     }
 
     .Package-wrapper .OtherAssets .OtherAssets-cardWrapper {
@@ -234,7 +233,11 @@ async function openSea(query) {
       flex: 1;
     }
 
-    .OtherAssets .OtherAssets--card {
+    .Package-wrapper .OtherAssets a {
+      font-size: 14px;
+    }
+
+    .Package-wrapper .OtherAssets .OtherAssets--card {
        border: 1px solid #e5e5e5;
        background: var(--white);
        padding: 0.5rem;
@@ -243,7 +246,7 @@ async function openSea(query) {
        border-radius: .25rem!important;
     }
 
-    .OtherAssets .OtherAssets--card .OtherAssets--card--imgWrapper {
+    .Package-wrapper .OtherAssets .OtherAssets--card .OtherAssets--card--imgWrapper {
       max-height: 300px;
       overflow: hidden;
       display: flex;
@@ -251,17 +254,17 @@ async function openSea(query) {
       justify-content: center;
     }
 
-    .dark .OtherAssets .OtherAssets--card {
+    .dark .Package-wrapper .OtherAssets .OtherAssets--card {
        border-color: var(--onyx);
        background: var(--jet);
     }
 
-    .OtherAssets .OtherAssets--card img {
+    .Package-wrapper .OtherAssets .OtherAssets--card img {
        border: 1px solid #e5e5e5;
        height: auto;
     }
 
-    .dark .OtherAssets .OtherAssets--card img {
+    .dark .Package-wrapper .OtherAssets .OtherAssets--card img {
        border-color: var(--jet);
     }
 
@@ -301,7 +304,7 @@ async function openSea(query) {
         width: 100%;
       }
 
-      .OtherAssets .OtherAssets--card img {
+      .Package-wrapper .OtherAssets .OtherAssets--card img {
         height: auto;
      }
     }
@@ -313,26 +316,29 @@ async function openSea(query) {
         padding: 0;
       }
 
-      .MainAsset .MainAsset--imgWrapper {
+      .Package-wrapper .MainAsset .MainAsset--imgWrapper {
         width: 100%;
         height: auto;
       }
 
-      .MainAsset .MainAsset--imgWrapper img {
+      .Package-wrapper .MainAsset .MainAsset--imgWrapper img {
         height: 100%;
         width: auto;
       }
 
-      .MainAsset .MainAsset--content {
+      .Package-wrapper .MainAsset .MainAsset--content {
         width: 100%;
         padding: 0;
         padding-top: 1rem;
       }
 
-      .OtherAssets .OtherAssets-cardWrapper {
+      .Package-wrapper .OtherAssets .OtherAssets-cardWrapper {
         width: 100% !important;
-        margin: 0;
+        margin: 0 10px 0 0;
         padding: 0.5rem 0;
+      }
+      .Package-wrapper .OtherAssets {
+        overflow-x: auto;
       }
     }
   </style>
@@ -392,7 +398,6 @@ async function openSea(query) {
           Owned by &nbsp;
           <a
             class="text-bluetiful"
-            href="${mainAsset ? mainAsset.profile_img_url | "#" : ""}"
           >
             ${
               getNestedObject(mainAsset, ["owner", "user"])
@@ -460,7 +465,7 @@ async function openSea(query) {
 }
 
 async function trigger(query) {
-  return query.indexOf("0x") >= 0;
+  return ethereum_address.isAddress(query);
 }
 
 module.exports = { openSea, trigger };
