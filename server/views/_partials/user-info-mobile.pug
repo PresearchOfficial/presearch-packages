@@ -1,0 +1,5 @@
+div(class="font-light flex mr-3 md:pb-0 md:mr-0" x-cloak)
+    div(class="flex items-center")
+        span(class="w-px h-5 bg-gray-400 dark:bg-gray-200 ml-3 mr-1 md:ml-4 md:mr-2")
+        a(x-on:mouseover="showSettings(true, true)" x-on:mouseleave="blockShowSettings(true)" @click="showSettingsOnClick()" class="transition hover:opacity-60 p-2 cursor-pointer text-gray-700 dark:text-white")
+            include ./icons/header/menu

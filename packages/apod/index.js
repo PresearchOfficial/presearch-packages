@@ -62,6 +62,17 @@ async function apod() {
       .apodLink {
         color: #1a0dab;
         text-decoration: none;
+        transition: .2s;
+      }
+      .apodLink:hover {
+        opacity: .6;
+      }
+      .dark .apodLink {
+        color: #69b9fd;
+        text-decoration: none;
+      }
+      .dark .answerCol {
+        color: #d1d5db;
       }
 
       @media screen and (min-width: 840px) {

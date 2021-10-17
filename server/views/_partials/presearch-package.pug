@@ -1,0 +1,13 @@
+template(x-if="state.presearchPackage && state.presearchPackage.html" x-effect="injectJs($el)")
+    div(class="bg-white shadow dark:bg-dark-700 p-5 mt-4 mx-2 md:mt-9 md:mx-0 max-w-package rounded") 
+        div(x-html="state.presearchPackage.html")
+        div(class="flex mt-2 space-x-1 text-xs text-gray-600 dark:text-white") 
+            p Created by 
+                span(x-html="state.presearchPackage.info.author" class="font-bold")
+            p Version 
+                span(x-html="state.presearchPackage.info.version" class="font-bold")
+            a(href="https://github.com/PresearchOfficial/presearch-packages/issues/new/choose") Feedback
+template(x-if="state.presearchPackage && state.presearchPackage.html")
+    div(class="mt-6 md:mt-4")
+template(x-if="!state.presearchPackage || !state.presearchPackage.html")
+    div(class="mt-0 md:mt-9")
