@@ -20,6 +20,12 @@ $ cd server && npm start
 
 Development server will be available at: `http://localhost:4000/`
 
+### API keys
+
+Use `.env` file, inside `presearch-packages/server` directory to store your API keys. 
+When you will set up your API key correctly, it will be accesible inside your package main function as `API_KEY`.
+
+You can copy example file `.env-example` and change the file name to `.env`
 
 *Do not push your API keys to the presearch-packages repository*
 
