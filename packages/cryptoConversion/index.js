@@ -4,16 +4,19 @@ const axios = require("axios");
 const bs = require("binary-search");
 
 //todo async load files?
-const names = require("./crypto_names.json");
-const slugs = require("./crypto_slugs.json");
-const symbols = require("./crypto_symbols.json");
+const cryptoNames = require("./crypto_names.json");
+const cryptoSlugs = require("./crypto_slugs.json");
+const cryptoSymbols = require("./crypto_symbols.json");
+const fiatNames = require("./fiat_names.json");
+const fiatSymbols = require("./fiat_symbols.json");
 
 const CMC_API_URL = "https://pro-api.coinmarketcap.com/v1/tools/price-conversion";
 
-//during the trigger, we remember the cryptos we find (for performance)
-let leftCrypto = {};
+//during the trigger, we remember the currencies we find (for performance)
+//each object needs to have .id and .display
+let leftCurrency = {};
 let leftQty = 1;
-let rightCrypto = {};
+let rightCurrency = {};
 
 async function cryptoConversion(query, API_KEY) {
 	try {
@@ -24,16 +27,17 @@ async function cryptoConversion(query, API_KEY) {
 		//todo retry with exponential backoff?
 		const headers = { Accept: "application/json", "Accept-Encoding": "gzip", "X-CMC_PRO_API_KEY": API_KEY };
 
-        const response = await axios.get(CMC_API_URL + `?amount=${leftQty}&id=${leftCrypto.id}&convert_id=${rightCrypto.id}`,
+        const response = await axios.get(CMC_API_URL + `?amount=${leftQty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`,
 		  { headers });
 
-		const price = response.data.data.quote[rightCrypto.id].price;
+		//todo format price
+		const price = response.data.data.quote[rightCurrency.id].price;
 
 		// here you need to return HTML code for your package. You can use <style> and <script> tags
 		// you need to keep <div id="presearchPackage"> here, you can remove everything else
 		return `
 		<div id="presearchPackage">
-			<span class="mycolor">${leftQty} ${leftCrypto.display} = ${price} ${rightCrypto.display}</span>
+			<span class="mycolor">${leftQty} ${leftCurrency.display} = ${price} ${rightCurrency.display}</span>
 		</div>
 		<style>
 			.dark #presearchPackage .mycolor {
@@ -53,7 +57,7 @@ async function cryptoConversion(query, API_KEY) {
 	}
 }
 
-const rankCompare = (field) => {
+const fieldCompare = (field) => {
     return (element, search) => {
         return element[field] < search ? -1 : (
             element[field] > search ? 1 : 0
@@ -67,7 +71,7 @@ const searchFile = (file, search, field) => {
 		item: {}
 	};
 
-	let i = bs(file, search, rankCompare(field));
+	let i = bs(file, search, fieldCompare(field));
 	if(i >= 0) {
 		result.found = true;
 		result.item = file[i];
@@ -76,16 +80,22 @@ const searchFile = (file, search, field) => {
 	return result;
 };
 
-const findCrypto = (search) => {
+const findCurrency = (search) => {
 	//todo test overlaps
 	//prioritize symbols first
-	let result = searchFile(symbols, search, "symbol");
+	let result = searchFile(cryptoSymbols, search, "symbol");
 	if(result.found === true) return result;
 
-	result = searchFile(names, search, "name");
+	result = searchFile(cryptoNames, search, "name");
 	if(result.found === true) return result;
 
-	result = searchFile(slugs, search, "slug");
+	result = searchFile(cryptoSlugs, search, "slug");
+	if(result.found === true) return result;
+
+	result = searchFile(fiatSymbols, search, "symbol");
+	if(result.found === true) return result;
+
+	result = searchFile(fiatNames, search, "name");
 	return result;
 };
 
@@ -94,19 +104,19 @@ async function trigger(query) {
 		query = query.toLowerCase();
 		const words = query.split(" to ");
 		//todo allow user to specify quantity
-		//todo include fiat and metals
+		//todo handle punctuation
 		if(!words || words.length != 2) return false;
 
 		let left = words[0];
 		let right = words[1];
 
-		let result = findCrypto(left);
+		let result = findCurrency(left);
 		if(result.found === false) return false;
-		leftCrypto = result.item;
+		leftCurrency = result.item;
 
-		result = findCrypto(right);
+		result = findCurrency(right);
 		if(result.found === false) return false;
-		rightCrypto = result.item;
+		rightCurrency = result.item;
 
 		return true;
 	} catch(error) {
