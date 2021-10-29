@@ -50,8 +50,8 @@ const createFile = (data, fileName, primaryField) => {
 };
 
 //aux is empty so it does not return unwanted data
-axios.get(CMC_API_URL + `?aux=`, { headers }).then(result => {
-    const data = result.data.data;
+axios.get(CMC_API_URL + `?aux=`, { headers }).then(response => {
+    const data = response.data.data;
 
     data.forEach(v => {
         //do some work ahead of time to help performance in the crypto conversion package
