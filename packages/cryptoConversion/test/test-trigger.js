@@ -7,3 +7,4 @@ test.todo('sort');
 
 test('Trigger: test 1', async t => t.true(await trigger('btc to ltc')));
 test('Trigger: test 2', async t => t.true(await trigger('5 btc to ltc')));
+test('Trigger: test 3', async t => t.false(await trigger('pre')));

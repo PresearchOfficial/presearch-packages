@@ -1,19 +1,14 @@
 'use strict';
 //todo if duplicates, the result is arbitary but this is not what we want
 const bs = require('binary-search');
-
-//todo async load files
-const cryptoNames = require('./crypto_names.json');
-const cryptoSlugs = require('./crypto_slugs.json');
-const cryptoSymbols = require('./crypto_symbols.json');
-const fiatNames = require('./fiat_names.json');
-const fiatSymbols = require('./fiat_symbols.json');
+const fs = require('fs').promises;
 
 //we are limited by the API and also javascript native precision
 //unless we use a big number module
 const MAX = 1000000000;
 const MIN = 0.00000001;
-const DECIMAL_PRECISION = 8;
+const DECIMAL_PLACES = 8;
+const files = {};
 
 //todo allow different number formats
 /* Note:
@@ -29,7 +24,7 @@ const getQty = string => {
 	if(num > 0 && firstWord.search(/[^0-9.e+-]/) === -1) {
         if(num > MAX) return MAX;
         if(num < MIN) return MIN;
-        return Number(num.toFixed(DECIMAL_PRECISION));
+        return Number(num.toFixed(DECIMAL_PLACES));
 	}
 
 	return 1;
@@ -44,12 +39,12 @@ const fieldCompare = field => {
 };
 
 const searchFile = async (file, search, field) => {
-	let result = {
+	const result = {
 		found: false,
 		item: {}
 	};
 
-	let i = bs(file, search, fieldCompare(field));
+	const i = bs(file, search, fieldCompare(field));
 	if(i >= 0) {
 		result.found = true;
 		result.item = file[i];
@@ -59,12 +54,12 @@ const searchFile = async (file, search, field) => {
 };
 
 const findCurrency = async search => {
-	let [cryptoSymbol, cryptoName, cryptoSlug, fiatSymbol, fiatName] = await Promise.all([
-		searchFile(cryptoSymbols, search, 'symbol'),
-		searchFile(cryptoNames, search, 'name'),
-		searchFile(cryptoSlugs, search, 'slug'),
-		searchFile(fiatSymbols, search, 'symbol'),
-		searchFile(fiatNames, search, 'name')
+	const [cryptoSymbol, cryptoName, cryptoSlug, fiatSymbol, fiatName] = await Promise.all([
+		searchFile(files.cryptoSymbols, search, 'symbol'),
+		searchFile(files.cryptoNames, search, 'name'),
+		searchFile(files.cryptoSlugs, search, 'slug'),
+		searchFile(files.fiatSymbols, search, 'symbol'),
+		searchFile(files.fiatNames, search, 'name')
 	]);
 
 	//todo test overlaps
@@ -76,4 +71,25 @@ const findCurrency = async search => {
 	return cryptoSlug; //found could be true or false
 };
 
-module.exports = { getQty, fieldCompare, searchFile, findCurrency, MAX, MIN };
+async function parseFile(file) {
+	return JSON.parse(file);
+};
+
+async function loadAndParse(name) {
+	return await parseFile(await fs.readFile(`${__dirname}/${name}.json`, 'utf8'));
+};
+
+/* Note:
+* (1) Must be called (with await) before you use findCurrency
+*/
+async function loadFiles() {
+	[files.cryptoNames, files.cryptoSlugs, files.cryptoSymbols, files.fiatNames, files.fiatSymbols] = await Promise.all([
+		loadAndParse('crypto_names'),
+		loadAndParse('crypto_slugs'),
+		loadAndParse('crypto_symbols'),
+		loadAndParse('fiat_names'),
+		loadAndParse('fiat_symbols')
+	]);
+};
+
+module.exports = {getQty, fieldCompare, searchFile, findCurrency, loadFiles, MAX, MIN};

@@ -1,48 +1,27 @@
 'use strict';
 const axios = require('axios');
-const {getQty, findCurrency} = require('./search-help.js');
+const {getQty, findCurrency, loadFiles} = require('./search-help.js');
+const {createHTML} = require ('./display-help.js');
 
 const CMC_API_URL = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion';
 
 //During the trigger, we remember the currencies we find (for performance).
-//Each object needs to have .id and .display
-let leftQty = 1;
+//In the files, each object needs to have .id and .display
 let leftCurrency = {};
 let rightCurrency = {};
 
 async function cryptoConversion(query, API_KEY) {
 	try {
-		if(!API_KEY) return;
+		if(!API_KEY || !leftCurrency.qty || !leftCurrency.id || !rightCurrency.id) return;
 
 		//todo implement data caching to minimize number of api calls
 		//todo retry with exponential backoff?
 		const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
-
-        const response = await axios.get(CMC_API_URL + `?amount=${leftQty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`,
-		  { headers });
-
+        const response = await axios.get(CMC_API_URL + `?amount=${leftCurrency.qty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`, {headers});
 		//todo format price
-		const price = response.data.data.quote[rightCurrency.id].price;
+		rightCurrency.price = response.data.data.quote[rightCurrency.id].price;
 
-		// here you need to return HTML code for your package. You can use <style> and <script> tags
-		// you need to keep <div id='presearchPackage'> here, you can remove everything else
-		return `
-		<div id='presearchPackage'>
-			<span class='mycolor'>${leftQty} ${leftCurrency.display} = ${price} ${rightCurrency.display}</span>
-		</div>
-		<style>
-			.dark #presearchPackage .mycolor {
-				color: yellow;
-			}
-			#presearchPackage .mycolor {
-				color: green;
-				cursor: pointer;
-			}
-		</style>
-		<script>
-			document.querySelector('.mycolor').addEventListener('click', () => alert('clicked!'));
-		</script>
-		`;
+		return createHTML(leftCurrency, rightCurrency);
 	} catch(error) {
 		return;
 	}
@@ -50,8 +29,7 @@ async function cryptoConversion(query, API_KEY) {
 
 async function trigger(query) {
 	try {
-		//initialize
-		leftQty = 1;
+		//todo disable fiat to fiat? it is handled by another package
 		leftCurrency = {};
 		rightCurrency = {};
 
@@ -60,31 +38,42 @@ async function trigger(query) {
 		//todo handle punctuation?
 		if(!words || words.length != 2) return false;
 
-		let left = words[0];
-		let right = words[1];
+		const leftSearch = words[0];
+		const rightSearch = words[1];
+		//todo this should let us know if the qty was found or if it is using default as 1,
+		//that way it can be more accurate
+		const leftQty = getQty(leftSearch);
 
-		leftQty = getQty(left);
+		//wait until we have a valid query before loading files
+		await loadFiles();
+		let [rightResult, leftResult] = await Promise.all([
+			findCurrency(rightSearch),
+			//check for a match with qty first because some coins have
+			//all numbers for their symbol (like 42 coin)
+			findCurrency(leftSearch)
+		]);
 
-		//check for a match with qty first because some coins have
-		//all numbers for their symbol (like 42 coin)
-		let result = await findCurrency(left);
-		if(!result.found) {
-			let nonQtyWords = left.split(' ');
+		if(!rightResult.found) return false;
+		rightCurrency = rightResult.item;
+
+		if(leftResult.found) {
+			leftCurrency = leftResult.item;
+			leftCurrency.qty = 1;
+		} else {
+			//try again without the qty as part of the search string
+			let nonQtyWords = leftSearch.split(' ');
 			nonQtyWords.shift();
-			result = await findCurrency(nonQtyWords.join(' '));
-			if(!result.found) return false;
+			leftResult = await findCurrency(nonQtyWords.join(' '));
+			if(leftResult.found) {
+				leftCurrency = leftResult.item;
+				leftCurrency.qty = leftQty;
+			}
 		}
 
-		leftCurrency = result.item;
-
-		result = await findCurrency(right);
-		if(!result.found) return false;
-
-		rightCurrency = result.item;
-		return true;
+		return leftResult.found;
 	} catch(error) {
 		return false;
 	}
 }
 
-module.exports = { cryptoConversion, trigger };
+module.exports = {cryptoConversion, trigger};
