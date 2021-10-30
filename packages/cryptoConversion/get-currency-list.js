@@ -7,30 +7,29 @@
 // 4) Fiat and metal names (United States Dollar)
 // 5) Fiat and metal symbols (USD)
 'use strict';
-require("dotenv").config();
-const axios = require("axios");
-const fs = require("fs");
+require('dotenv').config();
+const axios = require('axios');
+const fs = require('fs');
 
 //todo short names like dollar/dollars instead of united states dollar
-//todo specify decimals?
-const CRYPTO_NAME_FILE = "crypto_names.json";
-const CRYPTO_SYMBOL_FILE = "crypto_symbols.json";
-const CRYPTO_SLUG_FILE = "crypto_slugs.json";
-const FIAT_NAME_FILE = "fiat_names.json";
-const FIAT_SYMBOL_FILE = "fiat_symbols.json";
+const CRYPTO_NAME_FILE = 'crypto_names.json';
+const CRYPTO_SYMBOL_FILE = 'crypto_symbols.json';
+const CRYPTO_SLUG_FILE = 'crypto_slugs.json';
+const FIAT_NAME_FILE = 'fiat_names.json';
+const FIAT_SYMBOL_FILE = 'fiat_symbols.json';
 
-const CRYPTO_API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/map";
-const FIAT_API_URL = "https://pro-api.coinmarketcap.com/v1/fiat/map";
+const CRYPTO_API_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/map';
+const FIAT_API_URL = 'https://pro-api.coinmarketcap.com/v1/fiat/map';
 
 const API_KEY = process.env.CMC_API_KEY;
 if(!API_KEY) {
-    console.log("Error: Please setup API key in .env with parameter CMC_API_KEY");
+    console.log('Error: Please setup API key in .env with parameter CMC_API_KEY');
     return process.exit(0);
 }
 
-const headers = { Accept: "application/json", "Accept-Encoding": "gzip", "X-CMC_PRO_API_KEY": API_KEY };
+const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
 
-const createCryptoIndex = (primaryField) => {
+const createCryptoIndex = primaryField => {
     return v => {
         return {
             [primaryField]: v[primaryField],
@@ -41,7 +40,7 @@ const createCryptoIndex = (primaryField) => {
     };
 };
 
-const createFiatIndex = (primaryField) => {
+const createFiatIndex = primaryField => {
     return v => {
         return {
             [primaryField]: v[primaryField],
@@ -51,7 +50,7 @@ const createFiatIndex = (primaryField) => {
     };
 };
 
-const rankCompare = (primaryField) => {
+const rankCompare = primaryField => {
     return (a,b) => {
         return a[primaryField] < b[primaryField] ? -1 : (
             a[primaryField] > b[primaryField] ? 1 : a.rank - b.rank
@@ -59,7 +58,7 @@ const rankCompare = (primaryField) => {
     };
 };
 
-const fieldCompare = (field) => {
+const fieldCompare = field => {
     return (a,b) => {
         return a[field] < b[field] ? -1 : (
             a[field] > b[field] ? 1 : 0
@@ -84,7 +83,7 @@ const createFiatFile = (data, fileName, primaryField) => {
 };
 
 //aux is empty so it does not return unwanted data
-axios.get(CRYPTO_API_URL + `?aux=`, { headers }).then(response => {
+axios.get(CRYPTO_API_URL + `?aux=`, {headers}).then(response => {
     const data = response.data.data;
 
     data.forEach(v => {
@@ -96,14 +95,14 @@ axios.get(CRYPTO_API_URL + `?aux=`, { headers }).then(response => {
         v.slug = v.slug.toLowerCase();
     });
 
-    createCryptoFile(data, CRYPTO_NAME_FILE, "name");
-    createCryptoFile(data, CRYPTO_SYMBOL_FILE, "symbol");
-    createCryptoFile(data, CRYPTO_SLUG_FILE, "slug");
+    createCryptoFile(data, CRYPTO_NAME_FILE, 'name');
+    createCryptoFile(data, CRYPTO_SYMBOL_FILE, 'symbol');
+    createCryptoFile(data, CRYPTO_SLUG_FILE, 'slug');
 }, error => {
     console.log(error);
 });
 
-axios.get(FIAT_API_URL + `?include_metals=true`, { headers }).then(response => {
+axios.get(FIAT_API_URL + `?include_metals=true`, {headers}).then(response => {
     const data = response.data.data;
 
     data.forEach(v => {
@@ -112,8 +111,8 @@ axios.get(FIAT_API_URL + `?include_metals=true`, { headers }).then(response => {
         v.symbol = v.symbol.toLowerCase();
     });
 
-    createFiatFile(data, FIAT_NAME_FILE, "name");
-    createFiatFile(data, FIAT_SYMBOL_FILE, "symbol");
+    createFiatFile(data, FIAT_NAME_FILE, 'name');
+    createFiatFile(data, FIAT_SYMBOL_FILE, 'symbol');
 }, error => {
     console.log(error);
 });
