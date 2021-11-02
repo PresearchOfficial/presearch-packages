@@ -1,15 +1,16 @@
 'use strict';
 const { temperatureConverter } = require('./temperatureConverter');
+const { lengthConverter } = require("./lengthConverter")
 
 async function converters(query, API_KEY) {
 
-	return temperatureConverter();
+	return lengthConverter();
 }
 
 
 async function trigger(query) {
 	if (query) {
-		if (query === "temperature converter") return true;
+		if (query === "length converter") return true;
 	}
 	return false;
 }
