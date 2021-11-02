@@ -4,19 +4,67 @@ function temperatureConverter(query) {
 	return `
 	
 	<div id="presearchPackage">
-		<div>
-			<label>Fahrenheit</label>
-			<input id="Fahrenheit" type="number" placeholder="Fahrenheit" oninput="fahrenheitConverter(this.value)" onchange="fahrenheitConverter(this.value)">
+	<div class="row">
+		<div class="column">
+			<label class="label">Fahrenheit</label>
+			<input class="input" id="Fahrenheit" type="number" placeholder="Fahrenheit" oninput="fahrenheitConverter(this.value)" onchange="fahrenheitConverter(this.value)">
   		</div>
-		<div>
-		  	<label>Celsius</label>
-		  	<input id="Celsius" type="number" placeholder="Celsius" oninput="celsiusConverter(this.value)" onchange="celsiusConverter(this.value)">
+		<div class="column">
+		  	<label class="label">Celsius</label>
+		  	<input class="input" id="Celsius" type="number" placeholder="Celsius" oninput="celsiusConverter(this.value)" onchange="celsiusConverter(this.value)">
 		</div>
-		<div>
-			<label>Kelvin</label>
-			<input id="Kelvin" type="number" placeholder="Kelvin" oninput="kelvinConverter(this.value)" onchange="kelvinConverter(this.value)">
+		<div class="column">
+			<label class="label">Kelvin</label>
+			<input class="input" id="Kelvin" type="number" placeholder="Kelvin" oninput="kelvinConverter(this.value)" onchange="kelvinConverter(this.value)">
 	  	</div>
 	</div>
+	</div>
+
+	<style>
+		#presearchPackage .row{
+			border-radius: 5px;
+			background-color: #f2f2f2;
+			padding: 10px;
+		}
+		#presearchPackage .row:after{
+			content: "";
+			display: table;
+			clear: both;
+		}
+		#presearchPackage .label{
+			color:#374151;
+		}
+		#presearchPackage .input{
+			width: 100%;
+			padding: 4px 4px;
+			margin: 1px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		#presearchPackage .column{
+			float: left;
+			width: 50%;
+			padding: 5px;
+		}
+		.dark #presearchPackage .input{
+			background-color: rgba(56,56,56,var(--tw-bg-opacity));
+			border: 1px solid rgba(56,56,56,var(--tw-bg-opacity));
+			color:#ffffff;
+		}
+		.dark #presearchPackage .row{
+			background-color: rgba(25,25,25,var(--tw-bg-opacity));
+		}
+		.dark #presearchPackage .label{
+			color:#ffffff;
+		}
+		@media (max-width: 800px) {
+		#presearchPackage .column {
+			width: 100%;
+		}
+		
+	</style>
 
   
   	<script>

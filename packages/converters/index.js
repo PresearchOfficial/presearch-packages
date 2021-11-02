@@ -4,7 +4,7 @@ const { lengthConverter } = require("./lengthConverter")
 
 async function converters(query, API_KEY) {
 
-	return lengthConverter();
+	return temperatureConverter();
 }
 
 

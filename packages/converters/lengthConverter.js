@@ -1,38 +1,86 @@
 'use strict';
 
 function lengthConverter(query) {
-    return `
+	return `
 	
 	<div id="presearchPackage">
-		<div>
-			<label>Feet</label>
-			<input id="Feet" type="number" placeholder="Feet" oninput="feetConverter(this.value)" onchange="feetConverter(this.value)">
+	<div class="row">
+		<div class="column">
+			<label class="label">Feet</label>
+			<input class="input" id="Feet" type="number" placeholder="Feet" oninput="feetConverter(this.value)" onchange="feetConverter(this.value)">
   		</div>
-		<div>
-		  	<label>Meters</label>
-		  	<input id="Meters" type="number" placeholder="Meters" oninput="metersConverter(this.value)" onchange="metersConverter(this.value)">
+		<div class="column">
+		  	<label class="label">Meters</label>
+		  	<input class="input" id="Meters" type="number" placeholder="Meters" oninput="metersConverter(this.value)" onchange="metersConverter(this.value)">
 		</div>
-		<div>
-			<label>Inches</label>
-			<input id="Inches" type="number" placeholder="Inches" oninput="inchesConverter(this.value)" onchange="inchesConverter(this.value)">
+		<div class="column">
+			<label class="label">Inches</label>
+			<input class="input" id="Inches" type="number" placeholder="Inches" oninput="inchesConverter(this.value)" onchange="inchesConverter(this.value)">
 	  	</div>
-        <div>
-            <label>Cm</label>
-            <input id="Cm" type="number" placeholder="cm" oninput="cmConverter(this.value)" onchange="cmConverter(this.value)">
+        <div class="column">
+            <label class="label">Cm</label>
+            <input class="input" id="Cm" type="number" placeholder="cm" oninput="cmConverter(this.value)" onchange="cmConverter(this.value)">
         </div>
-        <div>
-            <label>Yards</label>
-            <input id="Yards" type="number" placeholder="Yards" oninput="yardsConverter(this.value)" onchange="yardsConverter(this.value)">
+        <div class="column">
+            <label class="label">Yards</label>
+            <input class="input" id="Yards" type="number" placeholder="Yards" oninput="yardsConverter(this.value)" onchange="yardsConverter(this.value)">
         </div>
-        <div>
-            <label>Kilometers</label>
-            <input id="Kilometers" type="number" placeholder="Kilometers" oninput="kilometersConverter(this.value)" onchange="kilometersConverter(this.value)">
+        <div class="column">
+            <label class="label">Kilometers</label>
+            <input class="input" id="Kilometers" type="number" placeholder="Kilometers" oninput="kilometersConverter(this.value)" onchange="kilometersConverter(this.value)">
         </div>
-        <div>
-            <label>Miles</label>
-            <input id="Miles" type="number" placeholder="Miles" oninput="milesConverter(this.value)" onchange="milesConverter(this.value)">
+        <div class="column">
+            <label class="label">Miles</label>
+            <input class="input" id="Miles" type="number" placeholder="Miles" oninput="milesConverter(this.value)" onchange="milesConverter(this.value)">
         </div>
 	</div>
+	</div>
+
+	<style>
+		#presearchPackage .row{
+			border-radius: 5px;
+			background-color: #f2f2f2;
+			padding: 10px;
+		}
+		#presearchPackage .row:after{
+			content: "";
+			display: table;
+			clear: both;
+		}
+		#presearchPackage .label{
+			color:#374151;
+		}
+		#presearchPackage .input{
+			width: 100%;
+			padding: 4px 4px;
+			margin: 1px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+		#presearchPackage .column{
+			float: left;
+			width: 50%;
+			padding: 5px;
+		}
+		.dark #presearchPackage .input{
+			background-color: rgba(56,56,56,var(--tw-bg-opacity));
+			border: 1px solid rgba(56,56,56,var(--tw-bg-opacity));
+			color:#ffffff;
+		}
+		.dark #presearchPackage .row{
+			background-color: rgba(25,25,25,var(--tw-bg-opacity));
+		}
+		.dark #presearchPackage .label{
+			color:#ffffff;
+		}
+		@media (max-width: 800px) {
+		#presearchPackage .column {
+			width: 100%;
+		}
+		
+	</style>
 
   
   	<script>
