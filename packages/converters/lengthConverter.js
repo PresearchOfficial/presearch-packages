@@ -88,31 +88,31 @@ function lengthConverter(queryUnitValue, queryUnit) {
   	<script>
 		if(${queryUnit}==="feet"){
 			document.getElementById("Feet").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			feetConverter(${queryUnitValue});
 		} 
 		if(${queryUnit}==="meters"){
 			document.getElementById("Meters").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			metersConverter(${queryUnitValue});
 		}
 		if(${queryUnit}==="inches"){
 			document.getElementById("Inches").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			inchesConverter(${queryUnitValue});
 		}
 		if(${queryUnit}==="cm") {
 			document.getElementById("Cm").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			cmConverter(${queryUnitValue});
 		}
 		if(${queryUnit}==="yards"){
 			document.getElementById("Yards").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			yardsConverter(${queryUnitValue});
 		}
 		if(${queryUnit}==="kilometers"){
 			document.getElementById("Kilometers").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			kilometersConverter(${queryUnitValue});
 		} 
 		if(${queryUnit}==="miles"){
 			document.getElementById("Miles").value=${queryUnitValue};
-			fahrenheitConverter(${queryUnitValue});
+			milesConverter(${queryUnitValue});
 		}
 
   		function feetConverter(valNum) {
