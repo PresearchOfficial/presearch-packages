@@ -1,6 +1,8 @@
 'use strict';
 
-function lengthConverter(query) {
+function lengthConverter(queryUnitValue, queryUnit) {
+	if (queryUnit !== "feet" && queryUnit !== "meters" && queryUnit !== "inches" && queryUnit !== "cm" && queryUnit !== "yards" && queryUnit !== "kilometers" && queryUnit !== "miles") return null;
+	if (isNaN(queryUnitValue)) return null;
 	return `
 	
 	<div id="presearchPackage">
@@ -84,6 +86,35 @@ function lengthConverter(query) {
 
   
   	<script>
+		if(${queryUnit}==="feet"){
+			document.getElementById("Feet").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		} 
+		if(${queryUnit}==="meters"){
+			document.getElementById("Meters").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		}
+		if(${queryUnit}==="inches"){
+			document.getElementById("Inches").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		}
+		if(${queryUnit}==="cm") {
+			document.getElementById("Cm").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		}
+		if(${queryUnit}==="yards"){
+			document.getElementById("Yards").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		}
+		if(${queryUnit}==="kilometers"){
+			document.getElementById("Kilometers").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		} 
+		if(${queryUnit}==="miles"){
+			document.getElementById("Miles").value=${queryUnitValue};
+			fahrenheitConverter(${queryUnitValue});
+		}
+
   		function feetConverter(valNum) {
 			document.getElementById("Meters").value=valNum/3.2808;
             document.getElementById("Inches").value=valNum*12;
