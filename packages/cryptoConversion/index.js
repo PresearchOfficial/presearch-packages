@@ -1,6 +1,6 @@
 'use strict';
 const axios = require('axios');
-const {getQty, findCurrency, loadFiles} = require('./search-help.js');
+const {getQty, findCurrency} = require('./search-help.js');
 const {createHTML} = require ('./display-help.js');
 
 const CMC_API_URL = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion';
@@ -32,20 +32,17 @@ async function trigger(query) {
 		//todo disable fiat to fiat? it is handled by another package
 		leftCurrency = {};
 		rightCurrency = {};
-
 		query = query.toLowerCase().trim();
-		const words = query.split(' to ');
-		//todo handle punctuation?
-		if(!words || words.length != 2) return false;
+		const words = query.split(' to '); //todo in, into, '='? ignore the word the, a, an?
+		//todo handle punctuation? condense extra spaces
+		//todo converting to itself?
+		if(!words || words.length !== 2) return false;
 
 		const leftSearch = words[0];
 		const rightSearch = words[1];
 		//todo this should let us know if the qty was found or if it is using default as 1,
 		//that way it can be more accurate
 		const leftQty = getQty(leftSearch);
-
-		//wait until we have a valid query before loading files
-		await loadFiles();
 		let [rightResult, leftResult] = await Promise.all([
 			findCurrency(rightSearch),
 			//check for a match with qty first because some coins have
@@ -60,7 +57,7 @@ async function trigger(query) {
 			leftCurrency = leftResult.item;
 			leftCurrency.qty = 1;
 		} else {
-			//try again without the qty as part of the search string
+			//try again with the qty separate from the search string
 			let nonQtyWords = leftSearch.split(' ');
 			nonQtyWords.shift();
 			leftResult = await findCurrency(nonQtyWords.join(' '));

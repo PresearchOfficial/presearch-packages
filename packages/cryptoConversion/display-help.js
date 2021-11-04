@@ -1,9 +1,9 @@
 'use strict';
 
 const createHTML = (left, right) => {
-    //todo default display if .display is empty?
+	if(checkBadInput(left, right)) return;
 
-	// here you need to return HTML code for your package. You can use <style> and <script> tags
+    // here you need to return HTML code for your package. You can use <style> and <script> tags
 	// you need to keep <div id='presearchPackage'> here, you can remove everything else
 	return `
 	<div id='presearchPackage'>
@@ -23,5 +23,10 @@ const createHTML = (left, right) => {
 	</script>
 	`;
 };
+
+function checkBadInput(left, right) {
+	return typeof left.qty !== "number" || left.qty < 0 || typeof left.display !== "string" || left.display.length === 0 ||
+		typeof right.price !== "number" || typeof right.display !== "string" || right.display.length === 0;
+}
 
 module.exports = {createHTML};
