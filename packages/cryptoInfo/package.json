@@ -10,7 +10,7 @@
   "author": "PresearchOfficial",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^6.1.0",
+    "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1"
   }
 }
