@@ -2,9 +2,9 @@
 * and precious metals. To enable binary search, it returns sorted arrays.
 *
 * These files are created:
-* (1 and 2) Crypto name file and fiat name file
-* (3 and 4) Crypto symbol file and fiat symbol file
-* (5) Metadata file with both
+* (1 and 2) Crypto names and fiat names
+* (3 and 4) Crypto symbols and fiat symbols
+* (5) Metadata file for both types
 *
 * Name files are lower case for case insensitive search and may include:
 *  - names (Binance Coin)
@@ -66,50 +66,56 @@ const CurrencyData = {
 
     transform: function() {
         this.files = {metadata: [], cryptoSymbols: [], cryptoNames: [], fiatSymbols: [], fiatNames: []};
+        const {cryptoSymbols, cryptoNames, fiatSymbols, fiatNames, metadata} = this.files;
+
+        //process crypto
         this.raw.crypto.data.data.forEach(o => {
-            this.files.cryptoSymbols.push({id: o.id, symbol: cleanString(o.symbol), rank: o.rank});
-            this.files.cryptoNames.push({id: o.id, name: cleanString(o.name), rank: o.rank});
-            this.files.cryptoNames.push({id: o.id, name: cleanString(o.slug), rank: o.rank});
-            this.files.metadata.push(createMetadata(o));
+            cryptoSymbols.push({id: o.id, symbol: cleanString(o.symbol), rank: o.rank});
+            cryptoNames.push({id: o.id, name: cleanString(o.name), rank: o.rank});
+            cryptoNames.push({id: o.id, name: cleanString(o.slug), rank: o.rank});
+            metadata.push(createMetadata(o));
         });
 
+        //process fiat
         this.raw.fiat.data.data.forEach(o => {
-            this.files.fiatSymbols.push({id: o.id,
+            fiatSymbols.push({id: o.id,
                 //CMC metals use .code instead of fiat's .symbol
                 symbol: o.symbol ? cleanString(o.symbol) : cleanString(o.code)
             });
-            this.files.fiatNames.push({id: o.id, name: cleanString(o.name)});
-            this.files.metadata.push(createMetadata(o));
+            fiatNames.push({id: o.id, name: cleanString(o.name)});
+            metadata.push(createMetadata(o));
         });
-        this.files.fiatSymbols.sort(fieldSort('symbol'));
+        fiatSymbols.sort(fieldSort('symbol'));
 
         const manualFiat = JSON.parse(this.raw.manualFiat);
         manualFiat.shift(); //remove documentation at start of file
         const globalNames = (manualFiat.shift().names || []).map(v => cleanString(v));
+
+        //process manual
         manualFiat.forEach(fiat => {
             const symbol = cleanString(fiat.symbol);
             if(symbol.length === 0) return;
-            //skip symbols that are not used, CMC may not offer conversion for all fiat currencies
-            const i = bs(this.files.fiatSymbols, symbol, fieldSearch('symbol'));
+
+            const i = bs(fiatSymbols, symbol, fieldSearch('symbol'));
             if(i < 0) {
-                return;
+                return; //skip symbols that are not used, CMC may not offer conversion for all fiat currencies
             }
-            const id = this.files.fiatSymbols[i].id;
+            const id = fiatSymbols[i].id;
 
             const nicknames = (fiat.nicknames || []).map(v => cleanString(v));
-            nicknames.forEach(nickname => { this.files.fiatNames.push({id: id, name: nickname}); });
+            nicknames.forEach(nickname => { fiatNames.push({id: id, name: nickname}); });
 
             const names = (fiat.names || []).map(v => cleanString(v));
             names.push(...globalNames);
             const adjectives = (fiat.adjectives || []).map(v => cleanString(v));
+
+            //prepend symbols and adjectives
             names.forEach(name => {
                 if(name.length === 0) return;
-                //prepend symbol
-                this.files.fiatNames.push({id: id, name: `${symbol} ${name}`});
+                fiatNames.push({id: id, name: `${symbol} ${name}`});
                 adjectives.forEach(adjective => {
                     if(adjective.length === 0) return;
-                    //prepend adjective
-                    this.files.fiatNames.push({id: id, name: `${adjective} ${name}`});
+                    fiatNames.push({id: id, name: `${adjective} ${name}`});
                 });
             });
         });

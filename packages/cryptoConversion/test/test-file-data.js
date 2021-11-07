@@ -10,8 +10,8 @@ files.fiatNames = loadFile('fiat_names');
 files.fiatSymbols = loadFile('fiat_symbols');
 files.metadata = loadFile('currency_metadata');
 
-const fieldCompare = field => (a,b) => a[field] < b[field] ? true : false;
-const rankCompare = field => (a,b) => ( a[field] < b[field] || (a[field] === b[field] && a.rank < b.rank) ) ? true : false;
+const fieldCompare = field => (a,b) => a[field] < b[field];
+const rankCompare = field => (a,b) => a[field] < b[field] || (a[field] === b[field] && a.rank < b.rank);
 
 const testSort = (file, field, useRank) => {
     const length = file.length;

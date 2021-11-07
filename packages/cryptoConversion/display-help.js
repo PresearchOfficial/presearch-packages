@@ -1,32 +1,24 @@
 'use strict';
 
 const createHTML = (left, right) => {
-	if(checkBadInput(left, right)) return;
-
-    // here you need to return HTML code for your package. You can use <style> and <script> tags
-	// you need to keep <div id='presearchPackage'> here, you can remove everything else
+	//keep <div id='presearchPackage'>
 	return `
 	<div id='presearchPackage'>
-		<span class='mycolor'>${left.qty} ${left.display} = ${right.price} ${right.display}</span>
+		<div><span class='result'>${left.qty} ${left.display} = ${right.price} ${right.display}</span></div>
 	</div>
 	<style>
-		.dark #presearchPackage .mycolor {
-			color: yellow;
+		#presearchPackage {
+			display: flex;
+			flex-direction: column;
 		}
-		#presearchPackage .mycolor {
-			color: green;
-			cursor: pointer;
+		.dark #presearchPackage .result {
+			color: lime;
+		}
+		#presearchPackage .result {
+			color: #ff6103;
 		}
 	</style>
-	<script>
-		document.querySelector('.mycolor').addEventListener('click', () => alert('clicked!'));
-	</script>
 	`;
 };
-
-function checkBadInput(left, right) {
-	return typeof left.qty !== "number" || left.qty < 0 || typeof left.display !== "string" || left.display.length === 0 ||
-		typeof right.price !== "number" || typeof right.display !== "string" || right.display.length === 0;
-}
 
 module.exports = {createHTML};

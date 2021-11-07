@@ -12,13 +12,10 @@ let rightCurrency = {};
 
 async function cryptoConversion(query, API_KEY) {
 	try {
-		if(!API_KEY || !leftCurrency.qty || !leftCurrency.id || !rightCurrency.id) return;
+		if(!API_KEY) return;
 
-		//todo implement data caching to minimize number of api calls
-		//todo retry with exponential backoff?
 		const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
         const response = await axios.get(CMC_API_URL + `?amount=${leftCurrency.qty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`, {headers});
-		//todo format price
 		rightCurrency.price = response.data.data.quote[rightCurrency.id].price;
 
 		return createHTML(leftCurrency, rightCurrency);
@@ -29,24 +26,18 @@ async function cryptoConversion(query, API_KEY) {
 
 async function trigger(query) {
 	try {
-		//todo disable fiat to fiat? it is handled by another package
-		leftCurrency = {};
-		rightCurrency = {};
 		query = query.toLowerCase().trim();
-		const words = query.split(' to '); //todo in, into, '='? ignore the word the, a, an?
-		//todo handle punctuation? condense extra spaces
-		//todo converting to itself?
-		if(!words || words.length !== 2) return false;
+		const words = query.split(' to ');
+		if(words.length !== 2) return false;
 
 		const leftSearch = words[0];
 		const rightSearch = words[1];
-		//todo this should let us know if the qty was found or if it is using default as 1,
-		//that way it can be more accurate
+
+		//any qty is still part of the search string
 		const leftQty = getQty(leftSearch);
 		let [rightResult, leftResult] = await Promise.all([
 			findCurrency(rightSearch),
-			//check for a match with qty first because some coins have
-			//all numbers for their symbol (like 42 coin)
+			//check for coins that have all numbers for their symbol (like 42 coin)
 			findCurrency(leftSearch)
 		]);
 
@@ -57,7 +48,7 @@ async function trigger(query) {
 			leftCurrency = leftResult.item;
 			leftCurrency.qty = 1;
 		} else {
-			//try again with the qty separate from the search string
+			//try again with the qty removed from the search string
 			let nonQtyWords = leftSearch.split(' ');
 			nonQtyWords.shift();
 			leftResult = await findCurrency(nonQtyWords.join(' '));

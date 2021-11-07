@@ -1,5 +1,4 @@
 'use strict';
-//todo if duplicates, the result is arbitary but this is not what we want
 const bs = require('binary-search');
 const fs = require('fs').promises;
 const {waitUntil} = require('async-wait-until');
@@ -8,10 +7,10 @@ const {waitUntil} = require('async-wait-until');
 const MAX = 1000000000;
 const MIN = 0.00000001;
 const DECIMAL_PLACES = 8;
-const files = { loaded: false };
+let loaded = false;
+const files = {};
 const DATA_DIR = 'data';
 
-//todo allow different number formats
 /* Note:
 * (1) returns 1 if a qty is not found
 * (2) 42 is the symbol of a crypto, so if a number is the only value, then don't consider it a qty
@@ -36,7 +35,8 @@ const searchFile = async (file, search, field) => {
 		found: false,
 		item: {}
 	};
-	if(!Array.isArray(file) || file.length === 0) return result;
+	if(file.length === 0) return result;
+
 	const i = bs(file, search, fieldCompare(field));
 	if(i >= 0) {
 		result.found = true;
@@ -46,7 +46,7 @@ const searchFile = async (file, search, field) => {
 };
 
 const findCurrency = async search => {
-	await waitUntil(() => files.loaded);
+	await waitUntil(() => loaded);
 	const [cryptoSymbol, cryptoName, fiatSymbol, fiatName] = await Promise.all([
 		searchFile(files.cryptoSymbols, search, 'symbol'),
 		searchFile(files.cryptoNames, search, 'name'),
@@ -61,9 +61,10 @@ const findCurrency = async search => {
 
 	if(result.found) {
 		const metadata = await searchFile(files.metadata, result.item.id, 'id');
+		result.found = metadata.found;
 		result.item.display = metadata.item.display;
 	}
-	return result; 
+	return result;
 };
 
 const parseFile = async file => JSON.parse(file);
@@ -79,12 +80,12 @@ async function loadFiles() {
 			loadAndParse('currency_metadata')
 		]);
 	} catch(error) {
-		//time for an empty array
+		//it will fail later
 	}
-	files.loaded = true;
+	loaded = true;
 };
 
 module.exports = (function(){
-	loadFiles();
+	loadFiles(); //async
 	return {getQty, findCurrency, fieldCompare, MAX, MIN};
 })();
