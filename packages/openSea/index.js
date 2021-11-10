@@ -5,10 +5,10 @@ const fetch = require("node-fetch");
 const ethereum_address = require('ethereum-address');
 
 const defaultImg = `
-<svg width="80" height="75" viewBox="0 0 80 75" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M71.1111 8.33333H8.8889C7.71016 8.33333 6.5797 8.77231 5.74621 9.55372C4.91271 10.3351 4.44446 11.3949 4.44446 12.5V62.5C4.44446 63.6051 4.91271 64.6649 5.74621 65.4463C6.5797 66.2277 7.71016 66.6667 8.8889 66.6667H71.1111C72.2899 66.6667 73.4203 66.2277 74.2538 65.4463C75.0873 64.6649 75.5556 63.6051 75.5556 62.5V12.5C75.5556 11.3949 75.0873 10.3351 74.2538 9.55372C73.4203 8.77231 72.2899 8.33333 71.1111 8.33333V8.33333ZM8.8889 62.5V12.5H71.1111V62.5H8.8889Z" fill="black"/>
-<path d="M19.8222 29.1667C21.1408 29.1667 22.4297 28.8001 23.526 28.1134C24.6224 27.4266 25.4769 26.4505 25.9814 25.3084C26.486 24.1664 26.6181 22.9097 26.3608 21.6974C26.1036 20.485 25.4686 19.3713 24.5363 18.4973C23.6039 17.6232 22.4161 17.0279 21.1228 16.7868C19.8296 16.5456 18.4892 16.6694 17.271 17.1424C16.0528 17.6155 15.0117 18.4166 14.2791 19.4444C13.5466 20.4722 13.1556 21.6805 13.1556 22.9167C13.1556 24.5743 13.858 26.164 15.1082 27.3361C16.3584 28.5082 18.0541 29.1667 19.8222 29.1667V29.1667ZM19.8222 19.5833C20.5264 19.5792 21.216 19.7712 21.8036 20.135C22.3913 20.4987 22.8504 21.0179 23.123 21.6266C23.3955 22.2353 23.4691 22.9061 23.3344 23.5541C23.1997 24.2021 22.8629 24.798 22.3665 25.2662C21.8701 25.7345 21.2366 26.054 20.5463 26.1844C19.856 26.3147 19.14 26.2499 18.489 25.9982C17.838 25.7465 17.2814 25.3193 16.8897 24.7707C16.498 24.2221 16.2889 23.5768 16.2889 22.9167C16.2947 22.0398 16.6689 21.2005 17.3302 20.5804C17.9916 19.9604 18.8869 19.6096 19.8222 19.6042V19.5833Z" fill="black"/>
-<path d="M50.6222 32.0208L38.6222 43.2708L29.7334 34.9375C29.317 34.5495 28.7538 34.3317 28.1667 34.3317C27.5796 34.3317 27.0164 34.5495 26.6 34.9375L13.1556 47.7083V53.6042L28.2445 39.4583L35.5556 46.2083L27.2222 54.0208H33.3334L52.1111 36.4167L66.6667 50V44.125L53.7556 32.0208C53.3392 31.6328 52.776 31.415 52.1889 31.415C51.6018 31.415 51.0386 31.6328 50.6222 32.0208V32.0208Z" fill="black"/>
+<svg width="100%" height="100%" viewBox="0 0 80 75" fill="currentColor" class="text-black dark:text-white" xmlns="http://www.w3.org/2000/svg">
+<path d="M71.1111 8.33333H8.8889C7.71016 8.33333 6.5797 8.77231 5.74621 9.55372C4.91271 10.3351 4.44446 11.3949 4.44446 12.5V62.5C4.44446 63.6051 4.91271 64.6649 5.74621 65.4463C6.5797 66.2277 7.71016 66.6667 8.8889 66.6667H71.1111C72.2899 66.6667 73.4203 66.2277 74.2538 65.4463C75.0873 64.6649 75.5556 63.6051 75.5556 62.5V12.5C75.5556 11.3949 75.0873 10.3351 74.2538 9.55372C73.4203 8.77231 72.2899 8.33333 71.1111 8.33333V8.33333ZM8.8889 62.5V12.5H71.1111V62.5H8.8889Z" fill="currentColor"/>
+<path d="M19.8222 29.1667C21.1408 29.1667 22.4297 28.8001 23.526 28.1134C24.6224 27.4266 25.4769 26.4505 25.9814 25.3084C26.486 24.1664 26.6181 22.9097 26.3608 21.6974C26.1036 20.485 25.4686 19.3713 24.5363 18.4973C23.6039 17.6232 22.4161 17.0279 21.1228 16.7868C19.8296 16.5456 18.4892 16.6694 17.271 17.1424C16.0528 17.6155 15.0117 18.4166 14.2791 19.4444C13.5466 20.4722 13.1556 21.6805 13.1556 22.9167C13.1556 24.5743 13.858 26.164 15.1082 27.3361C16.3584 28.5082 18.0541 29.1667 19.8222 29.1667V29.1667ZM19.8222 19.5833C20.5264 19.5792 21.216 19.7712 21.8036 20.135C22.3913 20.4987 22.8504 21.0179 23.123 21.6266C23.3955 22.2353 23.4691 22.9061 23.3344 23.5541C23.1997 24.2021 22.8629 24.798 22.3665 25.2662C21.8701 25.7345 21.2366 26.054 20.5463 26.1844C19.856 26.3147 19.14 26.2499 18.489 25.9982C17.838 25.7465 17.2814 25.3193 16.8897 24.7707C16.498 24.2221 16.2889 23.5768 16.2889 22.9167C16.2947 22.0398 16.6689 21.2005 17.3302 20.5804C17.9916 19.9604 18.8869 19.6096 19.8222 19.6042V19.5833Z" fill="currentColor"/>
+<path d="M50.6222 32.0208L38.6222 43.2708L29.7334 34.9375C29.317 34.5495 28.7538 34.3317 28.1667 34.3317C27.5796 34.3317 27.0164 34.5495 26.6 34.9375L13.1556 47.7083V53.6042L28.2445 39.4583L35.5556 46.2083L27.2222 54.0208H33.3334L52.1111 36.4167L66.6667 50V44.125L53.7556 32.0208C53.3392 31.6328 52.776 31.415 52.1889 31.415C51.6018 31.415 51.0386 31.6328 50.6222 32.0208V32.0208Z" fill="currentColor"/>
 </svg>
 `;
 
@@ -230,6 +230,7 @@ async function openSea(query) {
       padding: 0.4rem;
       width: 30%;
       min-width: 150px;
+      max-width: 250px;
       flex: 1;
     }
 
@@ -346,23 +347,34 @@ async function openSea(query) {
   <div class="Package-wrapper">
     <div class="MainAsset">
       <div class="MainAsset--imgWrapper">
-        <img
-          width="auto"
-          height="100%"
-          src="${
-            mainAsset
-              ? mainAsset.image_url ||
-                mainAsset.image_thumbnail_url ||
-                mainAsset.image_preview_url
-              : ""
-          }"
-          alt="${mainAsset ? mainAsset.name || "N/A" : ""}"
-        />
+      ${mainAsset ? (function(){
+        if (mainAsset.image_url || mainAsset.image_thumbnail_url || mainAsset.image_preview_url) {
+          return (
+            `<img
+              width="auto"
+              height="100%"
+              src="${
+                mainAsset
+                  ? mainAsset.image_url ||
+                    mainAsset.image_thumbnail_url ||
+                    mainAsset.image_preview_url
+                  : ""
+                }"
+                alt="${mainAsset ? mainAsset.name || "N/A" : ""}"
+              />`
+          );
+        }
+        if (mainAsset.collection && mainAsset.collection.image_url) {
+          return `<img width="auto" height="100%" src="${mainAsset.collection.image_url}" alt="collection image" />`
+        }
+        return defaultImg;
+      })() : ''}
+        
       </div>
 
       <div class="MainAsset--content">
         <strong class="MainAsset--name text-black">${
-          mainAsset ? mainAsset.name || "NA" : ""
+          mainAsset ? mainAsset.name || (mainAsset.collection ? mainAsset.collection.name : false) : ""
         }</strong>
 
         <a
@@ -425,11 +437,11 @@ async function openSea(query) {
       ${
         assets
           ? assets
-              .filter((asset) => mainAsset.id !== asset.id)
+              .filter((asset) => (mainAsset.id !== asset.id && (asset.external_link || asset.permalink)))
               .filter((_asset, i) => i < 4)
               .map(
                 (asset) => {
-                  const imageUrl = asset.image_thumbnail_url || asset.image_preview_url || asset.image_url
+                  const imageUrl = asset.image_thumbnail_url || asset.image_preview_url || asset.image_url || (asset.collection ? asset.collection.image_url : false);
                   const image = `
                     <img
                       src="${imageUrl}"
@@ -441,7 +453,7 @@ async function openSea(query) {
                     <div class="OtherAssets-cardWrapper">
                       <div class="OtherAssets--card">
                         <div class="OtherAssets--card--imgWrapper">
-                          ${imageUrl ? image : defaultImg}
+                        <a style="width:100%" href="${asset.external_link || asset.permalink}">${imageUrl ? image : defaultImg}</a>
                         </div>
                         <small class="OtherAssets--assetCaption text-grey-web">${
                           asset.collection.name
