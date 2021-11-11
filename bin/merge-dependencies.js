@@ -19,5 +19,5 @@ for (let pack of packages) {
 
 const mainPackage = JSON.parse(fs.readFileSync(MAIN_PACKAGE, 'utf-8'));
 mainPackage.dependencies = Object.assign({}, mainPackage.dependencies, dependencies);
-const newPackageJson = JSON.stringify(mainPackage, null, 2);
+const newPackageJson = JSON.stringify(mainPackage, null, 4);
 fs.writeFileSync(MAIN_PACKAGE, newPackageJson, 'utf-8');
