@@ -1,4 +1,4 @@
-/*This script is used to update the list of cryptocurrencies, fiat currencies,
+/* This script is used to update the list of cryptocurrencies, fiat currencies,
 * and precious metals. To enable binary search, it returns sorted arrays.
 *
 * These files are created:
@@ -21,14 +21,17 @@
 *  - id: CMC unique id
 *  - display: display name that will be shown to the user
 */
+
 'use strict';
+
+const fs = require('fs').promises;
 const path = require('path');
+
 const configPath = path.resolve(__dirname, '../../server/.env');
 require('dotenv').config({ path: configPath });
 const axios = require('axios');
-const fs = require('fs').promises;
-const packageJSON = require('./package.json');
 const bs = require('binary-search');
+const packageJSON = require('./package.json');
 
 const DATA_DIR = 'data';
 const CRYPTO_NAME_FILE = `${DATA_DIR}/crypto_names.json`;
@@ -42,87 +45,91 @@ const CRYPTO_API_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/map'
 const FIAT_API_URL = 'https://pro-api.coinmarketcap.com/v1/fiat/map';
 
 const API_KEY = process.env[`API.${packageJSON.name.toUpperCase()}`];
-if(!API_KEY) {
+if (!API_KEY) {
     console.log(`Error: Please setup API key in ${configPath}`);
-    return process.exit(0);
+    process.exit(9);
 }
 
-const fieldSearch = field => (object, search) => object[field] < search ? -1 : (object[field] > search ? 1 : 0);
-const rankSort = field => (a,b) => a[field] < b[field] ? -1 : (a[field] > b[field] ? 1 : a.rank - b.rank);
-const fieldSort = field => (a,b) => a[field] < b[field] ? -1 : (a[field] > b[field] ? 1 : 0);
+const fieldSearch = (field) => (object, search) => (object[field] < search ? -1 : (object[field] > search ? 1 : 0));
+const rankSort = (field) => (a, b) => (a[field] < b[field] ? -1 : (a[field] > b[field] ? 1 : a.rank - b.rank));
+const fieldSort = (field) => (a, b) => (a[field] < b[field] ? -1 : (a[field] > b[field] ? 1 : 0));
 
 const CurrencyData = {
     raw: {},
-    files: {},
+    files: {
+        metadata: [], cryptoSymbols: [], cryptoNames: [], fiatSymbols: [], fiatNames: []
+    },
 
-    getRawData: async function() {
+    async getRawData() {
         const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
         [this.raw.crypto, this.raw.fiat, this.raw.manualFiat] = await Promise.all([
-            axios.get(CRYPTO_API_URL + `?aux=`, {headers}),
-            axios.get(FIAT_API_URL + `?include_metals=true`, {headers}),
+            axios.get(`${CRYPTO_API_URL}?aux=`, { headers }),
+            axios.get(`${FIAT_API_URL}?include_metals=true`, { headers }),
             fs.readFile(MANUAL_FILE, 'utf8')
         ]);
     },
 
-    transform: function() {
-        this.files = {metadata: [], cryptoSymbols: [], cryptoNames: [], fiatSymbols: [], fiatNames: []};
-        const {cryptoSymbols, cryptoNames, fiatSymbols, fiatNames, metadata} = this.files;
+    transform() {
+        const {
+            cryptoSymbols, cryptoNames, fiatSymbols, fiatNames, metadata
+        } = this.files;
 
-        //process crypto
-        this.raw.crypto.data.data.forEach(o => {
-            cryptoSymbols.push({id: o.id, symbol: cleanString(o.symbol), rank: o.rank});
-            cryptoNames.push({id: o.id, name: cleanString(o.name), rank: o.rank});
-            cryptoNames.push({id: o.id, name: cleanString(o.slug), rank: o.rank});
+        // process crypto
+        this.raw.crypto.data.data.forEach((o) => {
+            cryptoSymbols.push({ id: o.id, symbol: cleanString(o.symbol), rank: o.rank });
+            cryptoNames.push({ id: o.id, name: cleanString(o.name), rank: o.rank });
+            cryptoNames.push({ id: o.id, name: cleanString(o.slug), rank: o.rank });
             metadata.push(createMetadata(o));
         });
 
-        //process fiat
-        this.raw.fiat.data.data.forEach(o => {
-            fiatSymbols.push({id: o.id,
-                //CMC metals use .code instead of fiat's .symbol
+        // process fiat
+        this.raw.fiat.data.data.forEach((o) => {
+            fiatSymbols.push({
+                id: o.id,
+                // CMC metals use .code instead of fiat's .symbol
                 symbol: o.symbol ? cleanString(o.symbol) : cleanString(o.code)
             });
-            fiatNames.push({id: o.id, name: cleanString(o.name)});
+            fiatNames.push({ id: o.id, name: cleanString(o.name) });
             metadata.push(createMetadata(o));
         });
         fiatSymbols.sort(fieldSort('symbol'));
 
         const manualFiat = JSON.parse(this.raw.manualFiat);
-        manualFiat.shift(); //remove documentation at start of file
-        const globalNames = (manualFiat.shift().names || []).map(v => cleanString(v));
+        manualFiat.shift(); // remove documentation at start of file
+        const globalNames = (manualFiat.shift().names || []).map((v) => cleanString(v));
 
-        //process manual
-        manualFiat.forEach(fiat => {
+        // process manual
+        manualFiat.forEach((fiat) => {
             const symbol = cleanString(fiat.symbol);
-            if(symbol.length === 0) return;
+            if (symbol.length === 0) return;
 
             const i = bs(fiatSymbols, symbol, fieldSearch('symbol'));
-            if(i < 0) {
-                return; //skip symbols that are not used, CMC may not offer conversion for all fiat currencies
+            if (i < 0) {
+                return; // CMC may not offer conversion for all fiat currencies
             }
-            const id = fiatSymbols[i].id;
+            const { id } = fiatSymbols[i];
 
-            const nicknames = (fiat.nicknames || []).map(v => cleanString(v));
-            nicknames.forEach(nickname => { fiatNames.push({id: id, name: nickname}); });
+            const nicknames = (fiat.nicknames || []).map((v) => cleanString(v));
+            nicknames.forEach((nickname) => { fiatNames.push({ id, name: nickname }); });
 
-            const names = (fiat.names || []).map(v => cleanString(v));
+            const names = (fiat.names || []).map((v) => cleanString(v));
             names.push(...globalNames);
-            const adjectives = (fiat.adjectives || []).map(v => cleanString(v));
+            const adjectives = (fiat.adjectives || []).map((v) => cleanString(v));
 
-            //prepend symbols and adjectives
-            names.forEach(name => {
-                if(name.length === 0) return;
-                fiatNames.push({id: id, name: `${symbol} ${name}`});
-                adjectives.forEach(adjective => {
-                    if(adjective.length === 0) return;
-                    fiatNames.push({id: id, name: `${adjective} ${name}`});
+            // prepend symbols and adjectives
+            names.forEach((name) => {
+                if (name.length === 0) return;
+                fiatNames.push({ id, name: `${symbol} ${name}` });
+                adjectives.forEach((adjective) => {
+                    if (adjective.length === 0) return;
+                    fiatNames.push({ id, name: `${adjective} ${name}` });
                 });
             });
         });
         this.raw = null;
     },
 
-    curate: function() {
+    curate() {
         deleteBadData(this.files.metadata, checkBadData('display'));
         deleteBadData(this.files.cryptoSymbols, checkBadRankData('symbol'));
         deleteBadData(this.files.cryptoNames, checkBadRankData('name'));
@@ -130,7 +137,7 @@ const CurrencyData = {
         deleteBadData(this.files.fiatNames, checkBadData('name'));
     },
 
-    sort: function() {
+    sort() {
         this.files.metadata.sort(fieldSort('id'));
         this.files.cryptoSymbols.sort(rankSort('symbol'));
         this.files.cryptoNames.sort(rankSort('name'));
@@ -138,29 +145,30 @@ const CurrencyData = {
         this.files.fiatNames.sort(fieldSort('name'));
     },
 
-    deleteDuplicates: function() {
-        //should only need to check for duplicate names because we can assume mostly good data from CMC
+    deleteDuplicates() {
+        // should only need to check for duplicate names because we can assume mostly good data from CMC
         deleteDuplicateData(this.files.cryptoNames, checkDuplicate('name'));
         deleteDuplicateData(this.files.fiatNames, checkDuplicate('name'));
     },
 
-    createFiles: async function() {
+    async createFiles() {
+        const { files } = this;
         await Promise.all([
-            fs.writeFile(CRYPTO_NAME_FILE, JSON.stringify(this.files.cryptoNames)),
-            fs.writeFile(CRYPTO_SYMBOL_FILE, JSON.stringify(this.files.cryptoSymbols)),
-            fs.writeFile(FIAT_NAME_FILE, JSON.stringify(this.files.fiatNames)),
-            fs.writeFile(FIAT_SYMBOL_FILE, JSON.stringify(this.files.fiatSymbols)),
-            fs.writeFile(META_FILE, JSON.stringify(this.files.metadata))
+            fs.writeFile(CRYPTO_NAME_FILE, JSON.stringify(files.cryptoNames)),
+            fs.writeFile(CRYPTO_SYMBOL_FILE, JSON.stringify(files.cryptoSymbols)),
+            fs.writeFile(FIAT_NAME_FILE, JSON.stringify(files.fiatNames)),
+            fs.writeFile(FIAT_SYMBOL_FILE, JSON.stringify(files.fiatSymbols)),
+            fs.writeFile(META_FILE, JSON.stringify(files.metadata))
         ]);
 
-        if(this.files.metadata.length !== this.files.cryptoSymbols.length + this.files.fiatSymbols.length) {
+        if (files.metadata.length !== files.cryptoSymbols.length + files.fiatSymbols.length) {
             console.log('Error: The metadata file does not match the count of unique currencies');
         }
     }
 };
 
-(async function(){
-    try{
+(async function main() {
+    try {
         await CurrencyData.getRawData();
         CurrencyData.transform();
         CurrencyData.curate();
@@ -173,50 +181,50 @@ const CurrencyData = {
         console.log(`Crypto names: ${CurrencyData.files.cryptoNames.length}`);
         console.log(`Fiat symbols: ${CurrencyData.files.fiatSymbols.length}`);
         console.log(`Fiat names: ${CurrencyData.files.fiatNames.length}`);
-    } catch(error) {
+    } catch (error) {
         console.log(error);
     }
-})();
+}());
 
 function cleanString(input, keepCase) {
     let output = input;
-    if(typeof output !== "string") output = "";
-    return keepCase ? output.trim() : output.trim().toLowerCase();
+    if (typeof output !== 'string') output = '';
+    return keepCase ? output.trim() : output.replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 function createMetadata(o) {
     const name = cleanString(o.name, true);
     const symbol = o.symbol ? cleanString(o.symbol, true) : cleanString(o.code);
     let display = `${name} (${symbol})`;
-    if(name.length === 0 || symbol.length === 0) display = ""; //will delete later
-    return {id: o.id, display: display};
+    if (name.length === 0 || symbol.length === 0) display = ''; // gets deleted later
+    return { id: o.id, display };
 }
 
 function deleteBadData(data, checkBad) {
-    for(let i = 0; i < data.length; i++) {
-        if(checkBad(data[i])) {
+    for (let i = 0; i < data.length; i += 1) {
+        if (checkBad(data[i])) {
             data.splice(i, 1);
-            i--;
+            i -= 1;
         }
     }
 }
 
 function checkBadData(field) {
-    return o => typeof o.id !== "number" || o.id <= 0 || typeof o[field] !== "string" || o[field].length === 0;
+    return (o) => typeof o.id !== 'number' || o.id <= 0 || typeof o[field] !== 'string' || o[field].length === 0;
 }
 
 function checkBadRankData(field) {
-    return o => { return typeof o.id !== "number" || o.id <= 0 || typeof o[field] !== "string" || o[field].length === 0 ||
-        typeof o.rank !== "number" || o.rank <= 0; };
+    return (o) => typeof o.id !== 'number' || o.id <= 0 || typeof o[field] !== 'string' || o[field].length === 0
+        || typeof o.rank !== 'number' || o.rank <= 0;
 }
 
-//data needs to be sorted first
-function deleteDuplicateData(data, checkDuplicate) {
-    for(let oldObj = {}, newObj = {}, i = 0; i < data.length; i++) {
+// data needs to be sorted first
+function deleteDuplicateData(data, check) {
+    for (let oldObj = {}, newObj = {}, i = 0; i < data.length; i += 1) {
         newObj = data[i];
-        if(checkDuplicate(newObj, oldObj)) {
+        if (check(newObj, oldObj)) {
             data.splice(i, 1);
-            i--;
+            i -= 1;
         }
         oldObj = newObj;
     }

@@ -1,9 +1,10 @@
 'use strict';
+
 const bs = require('binary-search');
 const fs = require('fs').promises;
-const {waitUntil} = require('async-wait-until');
+const { waitUntil } = require('async-wait-until');
 
-//we are limited by the API and also javascript native precision unless we use a big number module
+// we are limited by the API and also javascript native precision unless we use a big number module
 const MAX = 1000000000;
 const MIN = 0.00000001;
 const DECIMAL_PLACES = 8;
@@ -17,75 +18,77 @@ const DATA_DIR = 'data';
 * (3) string needs to be trimmed first
 * (4) zero/negative numbers do not count as a valid qty
 */
-const getQty = string => {
-	const firstWord = string.substr(0, string.indexOf(' '));
+const getQty = (string) => {
+    const firstWord = string.substr(0, string.indexOf(' '));
     const num = Number(firstWord);
-	if(num > 0 && firstWord.search(/[^0-9.e+-]/) === -1) {
-        if(num > MAX) return MAX;
-        if(num < MIN) return MIN;
+    if (num > 0 && firstWord.search(/[^0-9.e+-]/) === -1) {
+        if (num > MAX) return MAX;
+        if (num < MIN) return MIN;
         return Number(num.toFixed(DECIMAL_PLACES));
-	}
-	return 1;
+    }
+    return 1;
 };
 
-const fieldCompare = field => (object, search) => object[field] < search ? -1 : (object[field] > search ? 1 : 0);
+const fieldCompare = (field) => (object, search) => (object[field] < search ? -1 : (object[field] > search ? 1 : 0));
 
 const searchFile = async (file, search, field) => {
-	const result = {
-		found: false,
-		item: {}
-	};
-	if(file.length === 0) return result;
+    const result = {
+        found: false,
+        item: {}
+    };
+    if (file.length === 0) return result;
 
-	const i = bs(file, search, fieldCompare(field));
-	if(i >= 0) {
-		result.found = true;
-		result.item = file[i];
-	}
-	return result;
+    const i = bs(file, search, fieldCompare(field));
+    if (i >= 0) {
+        result.found = true;
+        result.item = file[i];
+    }
+    return result;
 };
 
-const findCurrency = async search => {
-	await waitUntil(() => loaded);
-	const [cryptoSymbol, cryptoName, fiatSymbol, fiatName] = await Promise.all([
-		searchFile(files.cryptoSymbols, search, 'symbol'),
-		searchFile(files.cryptoNames, search, 'name'),
-		searchFile(files.fiatSymbols, search, 'symbol'),
-		searchFile(files.fiatNames, search, 'name')
-	]);
+const findCurrency = async (search) => {
+    await waitUntil(() => loaded);
+    const [cryptoSymbol, cryptoName, fiatSymbol, fiatName] = await Promise.all([
+        searchFile(files.cryptoSymbols, search, 'symbol'),
+        searchFile(files.cryptoNames, search, 'name'),
+        searchFile(files.fiatSymbols, search, 'symbol'),
+        searchFile(files.fiatNames, search, 'name')
+    ]);
 
-	//prioritize symbols first
-	const result = fiatSymbol.found ? fiatSymbol :
-		cryptoSymbol.found ? cryptoSymbol :
-		fiatName.found ? fiatName : cryptoName; //found could be true or false
+    // prioritize symbols first
+    const result = fiatSymbol.found ? fiatSymbol
+        : cryptoSymbol.found ? cryptoSymbol
+            : fiatName.found ? fiatName : cryptoName; // found could be true or false
 
-	if(result.found) {
-		const metadata = await searchFile(files.metadata, result.item.id, 'id');
-		result.found = metadata.found;
-		result.item.display = metadata.item.display;
-	}
-	return result;
+    if (result.found) {
+        const metadata = await searchFile(files.metadata, result.item.id, 'id');
+        result.found = metadata.found;
+        result.item.display = metadata.item.display;
+    }
+    return result;
 };
 
-const parseFile = async file => JSON.parse(file);
-const loadAndParse = async name => await parseFile(await fs.readFile(`${__dirname}/${DATA_DIR}/${name}.json`, 'utf8'));
+const parseFile = async (file) => JSON.parse(file);
+const loadAndParse = async (name) => parseFile(await fs.readFile(`${__dirname}/${DATA_DIR}/${name}.json`, 'utf8'));
 
 async function loadFiles() {
-	try{
-		[files.cryptoNames, files.cryptoSymbols, files.fiatNames, files.fiatSymbols, files.metadata] = await Promise.all([
-			loadAndParse('crypto_names'),
-			loadAndParse('crypto_symbols'),
-			loadAndParse('fiat_names'),
-			loadAndParse('fiat_symbols'),
-			loadAndParse('currency_metadata')
-		]);
-	} catch(error) {
-		//it will fail later
-	}
-	loaded = true;
-};
+    try {
+        [files.cryptoNames, files.cryptoSymbols, files.fiatNames, files.fiatSymbols, files.metadata] = await Promise.all([
+            loadAndParse('crypto_names'),
+            loadAndParse('crypto_symbols'),
+            loadAndParse('fiat_names'),
+            loadAndParse('fiat_symbols'),
+            loadAndParse('currency_metadata')
+        ]);
+    } catch (error) {
+        // it will fail later
+    }
+    loaded = true;
+}
 
-module.exports = (function(){
-	loadFiles(); //async
-	return {getQty, findCurrency, fieldCompare, MAX, MIN};
-})();
+module.exports = (function initSearchHelp() {
+    loadFiles(); // async
+    return {
+        getQty, findCurrency, fieldCompare, MAX, MIN
+    };
+}());
