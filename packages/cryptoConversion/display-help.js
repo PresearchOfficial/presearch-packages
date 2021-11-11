@@ -9,7 +9,7 @@ const createHTML = (left, right) => {
 	<div id='presearchPackage'>
 		<div class='result'>${left.qty} ${left.display} = ${right.price} ${right.display}</div>
 		<div>
-			<span class='datasource'>Data provided by Coinbase.</span>
+			<span class='datasource'>Data provided by CoinMarketCap.</span>
 			<span class='disclaimer'>Conversion rates may be delayed or inaccurate.</span>
 		</div>
 	</div>
