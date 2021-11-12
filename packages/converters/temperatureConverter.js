@@ -2,10 +2,10 @@
 
 function temperatureConverter(queryUnitValue, queryUnit) {
 	if (isNaN(queryUnitValue)) return null;
-	//1="fahrenheit"
-	//2="celsius"
-	//3="kelvin"
-	if (queryUnit !== 1 && queryUnit !== 2 && queryUnit !== 3) return null;
+	//0="fahrenheit"
+	//1="celsius"
+	//2="kelvin"
+	if (queryUnit !== 0 && queryUnit !== 1 && queryUnit !== 2) return null;
 	return `
 	
 	<div id="presearchPackage">
