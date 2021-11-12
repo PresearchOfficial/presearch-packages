@@ -30,6 +30,22 @@ const getQty = (string) => {
 };
 
 const fieldCompare = (field) => (object, search) => (object[field] < search ? -1 : (object[field] > search ? 1 : 0));
+const fieldEquate = (field) => (a, b) => a[field] === b[field];
+
+const firstOccurrence = (a, v, compare, equate) => {
+    let found = bs(a, v, compare);
+    // i'm assuming a small amount of duplicates
+    let i = found - 1;
+    while (i >= 0) {
+        if (equate(a[found], a[i])) {
+            found = i;
+            i -= 1;
+        } else {
+            break;
+        }
+    }
+    return found;
+};
 
 const searchFile = async (file, search, field) => {
     const result = {
@@ -38,7 +54,7 @@ const searchFile = async (file, search, field) => {
     };
     if (file.length === 0) return result;
 
-    const i = bs(file, search, fieldCompare(field));
+    const i = firstOccurrence(file, search, fieldCompare(field), fieldEquate(field));
     if (i >= 0) {
         result.found = true;
         result.item = file[i];
@@ -47,7 +63,7 @@ const searchFile = async (file, search, field) => {
 };
 
 const findCurrency = async (search) => {
-    await waitUntil(() => loaded);
+    await waitUntil(() => loaded, { timeout: 1000 });
     const [cryptoSymbol, cryptoName, fiatSymbol, fiatName] = await Promise.all([
         searchFile(files.cryptoSymbols, search, 'symbol'),
         searchFile(files.cryptoNames, search, 'name'),
@@ -89,6 +105,6 @@ async function loadFiles() {
 module.exports = (function initSearchHelp() {
     loadFiles(); // async
     return {
-        getQty, findCurrency, fieldCompare, MAX, MIN
+        getQty, findCurrency, firstOccurrence, fieldCompare, MAX, MIN
     };
 }());

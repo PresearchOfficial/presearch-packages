@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* This script is used to update the list of cryptocurrencies, fiat currencies,
 * and precious metals. To enable binary search, it returns sorted arrays.
 *
@@ -24,10 +25,15 @@
 
 'use strict';
 
+const { performance } = require('perf_hooks');
+
+performance.mark('start');
+
 const fs = require('fs').promises;
 const path = require('path');
 
 const configPath = path.resolve(__dirname, '../../server/.env');
+
 require('dotenv').config({ path: configPath });
 const axios = require('axios');
 const bs = require('binary-search');
@@ -44,9 +50,15 @@ const MANUAL_FILE = `${DATA_DIR}/manual_fiat.json`;
 const CRYPTO_API_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/map';
 const FIAT_API_URL = 'https://pro-api.coinmarketcap.com/v1/fiat/map';
 
+let verbose = false;
+const args = process.argv.slice(2);
+if (args[0] === '-verbose') {
+    verbose = true;
+}
+
 const API_KEY = process.env[`API.${packageJSON.name.toUpperCase()}`];
 if (!API_KEY) {
-    console.log(`Error: Please setup API key in ${configPath}`);
+    if (verbose) console.log(`Error: Please setup API key in ${configPath}`);
     process.exit(9);
 }
 
@@ -62,9 +74,10 @@ const CurrencyData = {
 
     async getRawData() {
         const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
+        const instance = axios.create({ timeout: 10000, headers });
         [this.raw.crypto, this.raw.fiat, this.raw.manualFiat] = await Promise.all([
-            axios.get(`${CRYPTO_API_URL}?aux=`, { headers }),
-            axios.get(`${FIAT_API_URL}?include_metals=true`, { headers }),
+            instance.get(`${CRYPTO_API_URL}?aux=`),
+            instance.get(`${FIAT_API_URL}?include_metals=true`),
             fs.readFile(MANUAL_FILE, 'utf8')
         ]);
     },
@@ -103,6 +116,7 @@ const CurrencyData = {
             const symbol = cleanString(fiat.symbol);
             if (symbol.length === 0) return;
 
+            // fiat symbols should be unique based on ISO codes
             const i = bs(fiatSymbols, symbol, fieldSearch('symbol'));
             if (i < 0) {
                 return; // CMC may not offer conversion for all fiat currencies
@@ -162,7 +176,7 @@ const CurrencyData = {
         ]);
 
         if (files.metadata.length !== files.cryptoSymbols.length + files.fiatSymbols.length) {
-            console.log('Error: The metadata file does not match the count of unique currencies');
+            if (verbose) console.log('Error: The metadata file does not match the count of unique currencies');
         }
     }
 };
@@ -176,20 +190,24 @@ const CurrencyData = {
         CurrencyData.deleteDuplicates();
         await CurrencyData.createFiles();
 
-        console.log(`Metadata: ${CurrencyData.files.metadata.length}`);
-        console.log(`Crypto symbols: ${CurrencyData.files.cryptoSymbols.length}`);
-        console.log(`Crypto names: ${CurrencyData.files.cryptoNames.length}`);
-        console.log(`Fiat symbols: ${CurrencyData.files.fiatSymbols.length}`);
-        console.log(`Fiat names: ${CurrencyData.files.fiatNames.length}`);
+        if (verbose) console.log(`Metadata: ${CurrencyData.files.metadata.length}`);
+        if (verbose) console.log(`Crypto symbols: ${CurrencyData.files.cryptoSymbols.length}`);
+        if (verbose) console.log(`Crypto names: ${CurrencyData.files.cryptoNames.length}`);
+        if (verbose) console.log(`Fiat symbols: ${CurrencyData.files.fiatSymbols.length}`);
+        if (verbose) console.log(`Fiat names: ${CurrencyData.files.fiatNames.length}`);
+
+        performance.mark('end');
+        performance.measure('complete', 'start', 'end');
+        if (verbose) console.log(`Took ${performance.getEntriesByName('complete')[0].duration.toFixed(2)} ms`);
     } catch (error) {
-        console.log(error);
+        if (verbose) console.log(error);
     }
 }());
 
 function cleanString(input, keepCase) {
     let output = input;
     if (typeof output !== 'string') output = '';
-    return keepCase ? output.trim() : output.replace(/\s+/g, ' ').trim().toLowerCase();
+    return keepCase ? output.replace(/\s+/g, ' ').trim() : output.replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 function createMetadata(o) {

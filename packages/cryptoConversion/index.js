@@ -16,9 +16,9 @@ async function cryptoConversion(query, API_KEY) {
         if (!API_KEY) return '';
 
         const headers = { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-CMC_PRO_API_KEY': API_KEY };
-        const response = await axios.get(
-            `${CMC_API_URL}?amount=${leftCurrency.qty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`,
-            { headers }
+        const instance = axios.create({ timeout: 1000, headers });
+        const response = await instance.get(
+            `${CMC_API_URL}?amount=${leftCurrency.qty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`
         );
         rightCurrency.price = response.data.data.quote[rightCurrency.id].price;
 

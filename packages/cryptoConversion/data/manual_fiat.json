@@ -553,9 +553,9 @@
     },
     {
         "symbol":"NZD",
-        "names":["dollar", "dollars", "cent", "cents"],
-        "adjectives":["new zealand", "new zealander", "kiwi"],
-        "nicknames":["kiwi"]
+        "names":["dollar", "dollars", "cent", "cents", "kiwi", "kiwis"],
+        "adjectives":["new zealand", "new zealander", "nz"],
+        "nicknames":["kiwi", "kiwis"]
     },
     {
         "symbol":"OMR",
