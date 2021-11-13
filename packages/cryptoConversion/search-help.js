@@ -13,12 +13,12 @@ const files = {};
 const DATA_DIR = 'data';
 
 /* Note:
-* (1) returns 1 if a qty is not found
+* (1) returns false if a valid qty is not found
 * (2) 42 is the symbol of a crypto, so if a number is the only value, then don't consider it a qty
 * (3) string needs to be trimmed first
 * (4) zero/negative numbers do not count as a valid qty
 */
-const getQty = (string) => {
+const parseQty = (string) => {
     const firstWord = string.substr(0, string.indexOf(' '));
     const num = Number(firstWord);
     if (num > 0 && firstWord.search(/[^0-9.e+-]/) === -1) {
@@ -26,7 +26,15 @@ const getQty = (string) => {
         if (num < MIN) return MIN;
         return Number(num.toFixed(DECIMAL_PLACES));
     }
-    return 1;
+    return false;
+};
+
+const getQty = (string) => {
+    const result = parseQty(string);
+    if (result === false) {
+        return { qty: 1, found: false };
+    }
+    return { qty: result, found: true };
 };
 
 const fieldCompare = (field) => (object, search) => (object[field] < search ? -1 : (object[field] > search ? 1 : 0));
@@ -63,7 +71,7 @@ const searchFile = async (file, search, field) => {
 };
 
 const findCurrency = async (search) => {
-    await waitUntil(() => loaded, { timeout: 1000 });
+    await waitUntil(() => loaded, { timeout: 1000, intervalBetweenAttempts: 25 });
     const [cryptoSymbol, cryptoName, fiatSymbol, fiatName] = await Promise.all([
         searchFile(files.cryptoSymbols, search, 'symbol'),
         searchFile(files.cryptoNames, search, 'name'),

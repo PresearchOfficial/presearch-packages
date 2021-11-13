@@ -27,9 +27,7 @@ test('Trigger: test 14', async (t) => t.true(await trigger('presearch to bitcoin
 test('Trigger: test 15', async (t) => t.true(await trigger('presearch to bitcoin')));
 test('Trigger: test 16', async (t) => t.true(await trigger('presearch to usd')));
 test('Trigger: test 17', async (t) => t.true(await trigger('presearch to loonies')));
-
-test.todo("test('Trigger: test ??', async (t) => t.false(await trigger('-5 btc to ltc')))");
-
+test('Trigger: test 18', async (t) => t.false(await trigger('-5 btc to ltc')));
 test('Find currency: test 1', async (t) => {
     const currency = await findCurrency('btc');
     t.true(currency.found === true && currency.item.id === 1);
@@ -54,7 +52,7 @@ test('Find currency: test 3', async (t) => {
     const currency = await findCurrency('not a real currency');
     t.true(currency.found === false);
 });
-test('Performance: test 1', async (t) => {
+test.serial('Performance: test 1', async (t) => {
     performance.mark('start');
     await trigger('btc to ltc');
     performance.mark('end');
@@ -63,7 +61,7 @@ test('Performance: test 1', async (t) => {
     console.log(`Find crypto symbol: ${duration} ms`);
     t.true(duration < 100);
 });
-test('Performance: test 2', async (t) => {
+test.serial('Performance: test 2', async (t) => {
     performance.mark('start2');
     await trigger('presearch to bee');
     performance.mark('end2');
@@ -72,7 +70,7 @@ test('Performance: test 2', async (t) => {
     console.log(`Find crypto name: ${duration} ms`);
     t.true(duration < 100);
 });
-test('Performance: test 3', async (t) => {
+test.serial('Performance: test 3', async (t) => {
     performance.mark('start3');
     await trigger('btc to cad');
     performance.mark('end3');
@@ -81,7 +79,7 @@ test('Performance: test 3', async (t) => {
     console.log(`Find fiat symbol: ${duration} ms`);
     t.true(duration < 100);
 });
-test('Performance: test 4', async (t) => {
+test.serial('Performance: test 4', async (t) => {
     performance.mark('start4');
     await trigger('btc to kiwi');
     performance.mark('end4');
