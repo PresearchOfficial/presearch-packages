@@ -36,14 +36,12 @@ test('Get qty: test 29', (t) => t.is(getQty('123.00 btc').qty, 123));
 test('Get qty: test 30', (t) => t.is(getQty('123.123456789 btc').qty, 123.12345679));
 test('Get qty: test 31', (t) => t.is(getQty('123.123456785 btc').qty, 123.12345679));
 test('Get qty: test 32', (t) => t.is(getQty('123.1234567849 btc').qty, 123.12345678));
-
-test.todo('commas');
-// test('Get qty: test 33', t => t.is(getQty('1,000.12 btc'), 1000.12));
-
-test('Get qty: test 34', (t) => t.is(getQty('1,000.12,1 btc').qty, 1));
+test('Get qty: test 33', (t) => t.is(getQty('1,000.12 btc').qty, 1000.12));
+test('Get qty: test 34', (t) => t.is(getQty('1,000.12+1 btc').qty, 1));
 test('Get qty: test 35', (t) => t.is(getQty('123e+6 btc').qty, 123e+6));
 test('Get qty: test 36', (t) => t.is(getQty('123456e2 btc').qty, 123456e2));
 test('Get qty: test 37', (t) => t.is(getQty('+12 btc').qty, 12));
 test('Get qty: test 38', (t) => t.true(getQty('5 btc').found));
 test('Get qty: test 39', (t) => t.false(getQty('-5 btc').found));
 test('Get qty: test 40', (t) => t.false(getQty('42').found));
+test('Get qty: test 41', (t) => t.is(getQty('1,000,201.12 btc').qty, 1000201.12));

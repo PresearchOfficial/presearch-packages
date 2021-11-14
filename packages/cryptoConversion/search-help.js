@@ -19,7 +19,8 @@ const DATA_DIR = 'data';
 * (4) zero/negative numbers do not count as a valid qty
 */
 const parseQty = (string) => {
-    const firstWord = string.substr(0, string.indexOf(' '));
+    // I would like to parse the number based on a user's locale, for now just remove commas
+    const firstWord = string.substr(0, string.indexOf(' ')).replace(/,/g, '');
     const num = Number(firstWord);
     if (num > 0 && firstWord.search(/[^0-9.e+-]/) === -1) {
         if (num > MAX) return MAX;
@@ -113,6 +114,8 @@ async function loadFiles() {
 module.exports = (function initSearchHelp() {
     loadFiles(); // async
     return {
-        getQty, findCurrency, firstOccurrence, fieldCompare, MAX, MIN
+        // for real use - getQty, findCurrency
+        // for unit tests only - firstOccurrence, fieldCompare, MAX, MIN, files
+        getQty, findCurrency, firstOccurrence, fieldCompare, MAX, MIN, files
     };
 }());

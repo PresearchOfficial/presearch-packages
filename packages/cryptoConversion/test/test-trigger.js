@@ -5,10 +5,13 @@
 const { performance } = require('perf_hooks');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const test = require('ava');
+const { waitUntil } = require('async-wait-until');
 const { trigger } = require('../index');
-const { findCurrency } = require('../search-help');
+const {
+    findCurrency, firstOccurrence, fieldCompare, files
+} = require('../search-help');
 
-test.todo('when it finds a currency but it is missing metadata');
+const equate = (a, b) => a === b;
 
 test('Trigger: test 1', async (t) => t.true(await trigger('btc to ltc')));
 test('Trigger: test 2', async (t) => t.true(await trigger('5 btc to ltc')));
@@ -24,10 +27,13 @@ test('Trigger: test 11', async (t) => t.true(await trigger('1.5 btc to pre')));
 test('Trigger: test 12', async (t) => t.true(await trigger('1.5 BTC to PRE')));
 test('Trigger: test 13', async (t) => t.true(await trigger('1.5 BTC  TO  PRE')));
 test('Trigger: test 14', async (t) => t.true(await trigger('presearch to bitcoin')));
-test('Trigger: test 15', async (t) => t.true(await trigger('presearch to bitcoin')));
+test('Trigger: test 15', async (t) => t.true(await trigger('presearch = bitcoin')));
 test('Trigger: test 16', async (t) => t.true(await trigger('presearch to usd')));
 test('Trigger: test 17', async (t) => t.true(await trigger('presearch to loonies')));
 test('Trigger: test 18', async (t) => t.false(await trigger('-5 btc to ltc')));
+test('Trigger: test 19', async (t) => t.true(await trigger('btc in ltc')));
+test('Trigger: test 20', async (t) => t.true(await trigger('btc INTO ltc')));
+test('Trigger: test 21', async (t) => t.false(await trigger('btc to = ltc')));
 test('Find currency: test 1', async (t) => {
     const currency = await findCurrency('btc');
     t.true(currency.found === true && currency.item.id === 1);
@@ -50,6 +56,15 @@ test('Find currency: test priority of fiat symbols over crypto symbols', async (
 });
 test('Find currency: test 3', async (t) => {
     const currency = await findCurrency('not a real currency');
+    t.true(currency.found === false);
+});
+test('Find currency: missing metadata', async (t) => {
+    await waitUntil(() => files.metadata !== undefined);
+    // prep test by deleting XRP metadata
+    const i = firstOccurrence(files.metadata, 52, fieldCompare('id'), equate);
+    files.metadata.splice(i, 1);
+    // it should find XRP symbol but still return not found because metadata is now missing
+    const currency = await findCurrency('xrp');
     t.true(currency.found === false);
 });
 test.serial('Performance: test 1', async (t) => {

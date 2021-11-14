@@ -140,6 +140,22 @@ const CurrencyData = {
                 });
             });
         });
+
+        // warn developer if they missed manual data for a fiat
+        if (verbose) {
+            const manualTest = manualFiat.map((o) => ({ symbol: cleanString(o.symbol) })).sort(fieldSort('symbol'));
+            fiatSymbols.forEach((symbol) => {
+                // skip metals
+                if (symbol.symbol === 'xau' || symbol.symbol === 'xag'
+                    || symbol.symbol === 'xpt' || symbol.symbol === 'xpd') return;
+
+                const i = bs(manualTest, symbol.symbol, fieldSearch('symbol'));
+                if (i < 0) {
+                    console.log(`Warning: Need manual data for ${symbol.symbol}`);
+                }
+            });
+        }
+
         this.raw = null;
     },
 
@@ -159,7 +175,7 @@ const CurrencyData = {
         this.files.fiatNames.sort(fieldSort('name'));
     },
 
-    deleteDuplicates() {
+    finalCleanup() {
         // should only need to check for duplicate names because we can assume mostly good data from CMC
         deleteDuplicateData(this.files.cryptoNames, checkDuplicate('name'));
         deleteDuplicateData(this.files.fiatNames, checkDuplicate('name'));
@@ -187,7 +203,7 @@ const CurrencyData = {
         CurrencyData.transform();
         CurrencyData.curate();
         CurrencyData.sort();
-        CurrencyData.deleteDuplicates();
+        CurrencyData.finalCleanup();
         await CurrencyData.createFiles();
 
         if (verbose) console.log(`Metadata: ${CurrencyData.files.metadata.length}`);

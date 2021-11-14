@@ -13,14 +13,13 @@ files.fiatNames = loadFile('fiat_names');
 files.fiatSymbols = loadFile('fiat_symbols');
 files.metadata = loadFile('currency_metadata');
 
-const fieldTest = (field) => (a, b) => a[field] < b[field];
-const rankTest = (field) => (a, b) => a[field] < b[field] || (a[field] === b[field] && a.rank < b.rank);
+const fieldTest = (field) => (a, b) => a[field] <= b[field];
+const rankTest = (field) => (a, b) => a[field] < b[field] || (a[field] === b[field] && a.rank <= b.rank);
 const numSearch = (num, search) => (num < search ? -1 : num > search ? 1 : 0);
 const equate = (a, b) => a === b;
 
-const testSort = (file, field, useRank) => {
+const testSort = (file, compare) => {
     const { length } = file;
-    const compare = useRank ? rankTest(field) : fieldTest(field);
     for (let oldObj = {}, newObj = {}, i = 0; i < length; i += 1) {
         newObj = file[i];
         if (i !== 0 && compare(newObj, oldObj)) {
@@ -32,11 +31,11 @@ const testSort = (file, field, useRank) => {
 };
 
 test('File: test 1', (t) => { Object.values(files).forEach((o) => { t.true(o.length > 0); }); });
-test('File: test 2', (t) => t.true(testSort(files.fiatNames, 'name')));
-test('File: test 3', (t) => t.true(testSort(files.fiatSymbols, 'symbol')));
-test('File: test 4', (t) => t.true(testSort(files.cryptoNames, 'name', true)));
-test('File: test 5', (t) => t.true(testSort(files.cryptoSymbols, 'symbol', true)));
-test('File: test 6', (t) => t.true(testSort(files.metadata, 'id')));
+test('File: test 2', (t) => t.true(testSort(files.fiatNames, fieldTest('name'))));
+test('File: test 3', (t) => t.true(testSort(files.fiatSymbols, fieldTest('symbol'))));
+test('File: test 4', (t) => t.true(testSort(files.cryptoNames, rankTest('name'))));
+test('File: test 5', (t) => t.true(testSort(files.cryptoSymbols, rankTest('symbol'))));
+test('File: test 6', (t) => t.true(testSort(files.metadata, fieldTest('id'))));
 test('File: test 7', (t) => {
     files.fiatNames.forEach((o) => {
         t.false(!o.id || !o.name);

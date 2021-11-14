@@ -61,7 +61,6 @@ async function cryptoConversion(query, API_KEY) {
             `${CMC_API_URL}?amount=${leftCurrency.qty}&id=${leftCurrency.id}&convert_id=${rightCurrency.id}`
         );
         rightCurrency.price = response.data.data.quote[rightCurrency.id].price;
-
         return createHTML(leftCurrency, rightCurrency);
     } catch (error) {
         return '';
