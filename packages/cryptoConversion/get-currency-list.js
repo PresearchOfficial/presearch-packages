@@ -191,8 +191,10 @@ const CurrencyData = {
             fs.writeFile(META_FILE, JSON.stringify(files.metadata))
         ]);
 
-        if (files.metadata.length !== files.cryptoSymbols.length + files.fiatSymbols.length) {
-            if (verbose) console.log('Error: The metadata file does not match the count of unique currencies');
+        if (verbose) {
+            if (files.metadata.length !== files.cryptoSymbols.length + files.fiatSymbols.length) {
+                console.log('Error: The metadata file does not match the count of unique currencies');
+            }
         }
     }
 };
@@ -206,15 +208,17 @@ const CurrencyData = {
         CurrencyData.finalCleanup();
         await CurrencyData.createFiles();
 
-        if (verbose) console.log(`Metadata: ${CurrencyData.files.metadata.length}`);
-        if (verbose) console.log(`Crypto symbols: ${CurrencyData.files.cryptoSymbols.length}`);
-        if (verbose) console.log(`Crypto names: ${CurrencyData.files.cryptoNames.length}`);
-        if (verbose) console.log(`Fiat symbols: ${CurrencyData.files.fiatSymbols.length}`);
-        if (verbose) console.log(`Fiat names: ${CurrencyData.files.fiatNames.length}`);
+        if (verbose) {
+            console.log(`Metadata: ${CurrencyData.files.metadata.length}`);
+            console.log(`Crypto symbols: ${CurrencyData.files.cryptoSymbols.length}`);
+            console.log(`Crypto names: ${CurrencyData.files.cryptoNames.length}`);
+            console.log(`Fiat symbols: ${CurrencyData.files.fiatSymbols.length}`);
+            console.log(`Fiat names: ${CurrencyData.files.fiatNames.length}`);
 
-        performance.mark('end');
-        performance.measure('complete', 'start', 'end');
-        if (verbose) console.log(`Took ${performance.getEntriesByName('complete')[0].duration.toFixed(2)} ms`);
+            performance.mark('end');
+            performance.measure('complete', 'start', 'end');
+            console.log(`Took ${performance.getEntriesByName('complete')[0].duration.toFixed(2)} ms`);
+        }
     } catch (error) {
         if (verbose) console.log(error);
     }

@@ -28,15 +28,17 @@ const createHTML = (left, right) => {
 			<noscript>${qty} ${left.display} = ${price} ${right.display}</noscript>
 			<span id='result'></span>
 		</div>
-		<div>
-			<span class='datasource'><a href='https://coinmarketcap.com/converter/'>Data provided by CoinMarketCap.</a></span>
-			<span class='disclaimer'>Conversion rates may be delayed or inaccurate.</span>
+		<div id='fineprint'>
+			<div class='datasource'><a href='https://coinmarketcap.com/converter/'>Data provided by CoinMarketCap.</a></div>
+			<div class='disclaimer'>Conversion rates may be delayed or inaccurate.</div>
 		</div>
 	</div>
 	<style>
-		#presearchPackage {
+		#presearchPackage #fineprint {
 			display: flex;
-			flex-direction: column;
+			flex-flow: row wrap;
+			align-items: flex-end;
+			margin-top: 10px;
 		}
 		#presearchPackage .result {
 			color: mediumseagreen;
@@ -47,6 +49,7 @@ const createHTML = (left, right) => {
         #presearchPackage .datasource {
             font-size: 12px;
 			color: #444;
+			margin-right: 5px;
         }
         .dark #presearchPackage .datasource {
 			color: #ddd;

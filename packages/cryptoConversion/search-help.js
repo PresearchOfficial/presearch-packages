@@ -41,6 +41,7 @@ const getQty = (string) => {
 const fieldCompare = (field) => (object, search) => (object[field] < search ? -1 : (object[field] > search ? 1 : 0));
 const fieldEquate = (field) => (a, b) => a[field] === b[field];
 
+// this is needed in case cryptos have duplicate names, we want to prioritize based on rank (market cap)
 const firstOccurrence = (a, v, compare, equate) => {
     let found = bs(a, v, compare);
     // i'm assuming a small amount of duplicates

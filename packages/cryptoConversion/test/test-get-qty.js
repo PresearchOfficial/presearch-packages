@@ -45,3 +45,4 @@ test('Get qty: test 38', (t) => t.true(getQty('5 btc').found));
 test('Get qty: test 39', (t) => t.false(getQty('-5 btc').found));
 test('Get qty: test 40', (t) => t.false(getQty('42').found));
 test('Get qty: test 41', (t) => t.is(getQty('1,000,201.12 btc').qty, 1000201.12));
+test('Get qty: test 42', (t) => t.is(getQty('true btc').found, false));
