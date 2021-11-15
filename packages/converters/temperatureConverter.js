@@ -2,10 +2,8 @@
 
 function temperatureConverter(queryUnitValue, queryUnit) {
 	if (isNaN(queryUnitValue)) return null;
-	//1="fahrenheit"
-	//2="celsius"
-	//3="kelvin"
-	if (queryUnit !== 1 && queryUnit !== 2 && queryUnit !== 3) return null;
+
+	if (queryUnit !== "fahrenheit" && queryUnit !== "celsius" && queryUnit !== "kelvin") return null;
 	return `
 	
 	<div id="presearchPackage">
@@ -74,15 +72,15 @@ function temperatureConverter(queryUnitValue, queryUnit) {
   
   	<script>
 		
-		if(${queryUnit}===1){
+		if('${queryUnit}'==="fahrenheit"){
 			document.getElementById("Fahrenheit").value=${queryUnitValue};
 			fahrenheitConverter(${queryUnitValue})
 		} 
-		if(${queryUnit}===2){
+		if('${queryUnit}'==="celsius"){
 			document.getElementById("Celsius").value=${queryUnitValue};
 			celsiusConverter(${queryUnitValue})
 		} 
-		if(${queryUnit}===3){
+		if('${queryUnit}'==="kelvin"){
 			document.getElementById("Kelvin").value=${queryUnitValue};
 			kelvinConverter(${queryUnitValue})
 		} 

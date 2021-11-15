@@ -2,14 +2,21 @@
 const { temperatureConverter } = require('./temperatureConverter');
 const { lengthConverter } = require("./lengthConverter")
 
-async function converters(query, API_KEY) {
+async function converters(query) {
 	//need to take number and unit from query (not done yet)
-	const queryUnitValue = 20;
-	// const queryUnit = "feet";
-	const queryUnit = 1;
+	let queryUnit;
+	let queryUnitValue;
+
+	if (query === "temperature converter")
+		queryUnit = "fahrenheit";
+	if (query == "length converter")
+		queryUnit = "feet";
+
+	queryUnitValue = 20;
+
 
 	if (query === "temperature converter") return temperatureConverter(queryUnitValue, queryUnit);
-	if (query === "length converter") return lengthConverter(queryUnitValue, "feet");
+	if (query === "length converter") return lengthConverter(queryUnitValue, queryUnit);
 	else return null;
 }
 
