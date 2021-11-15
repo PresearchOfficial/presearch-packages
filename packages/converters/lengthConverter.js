@@ -1,14 +1,7 @@
 'use strict';
 
 function lengthConverter(queryUnitValue, queryUnit) {
-	//0="feet"
-	//1="meters"
-	//2="inches"
-	//3="cm"
-	//4="yards"
-	//5="kilometers"
-	//6="miles"
-	if (queryUnit !== 0 && queryUnit !== 1 && queryUnit !== 2 && queryUnit !== 3 && queryUnit !== 4 && queryUnit !== 5 && queryUnit !== 6) return null;
+	if (queryUnit !== "feet" && queryUnit !== "meters" && queryUnit !== "inches" && queryUnit !== "cm" && queryUnit !== "yards" && queryUnit !== "kilometers" && queryUnit !== "miles") return null;
 	if (isNaN(queryUnitValue)) return null;
 	return `
 	
@@ -93,31 +86,31 @@ function lengthConverter(queryUnitValue, queryUnit) {
 
   
   	<script>
-		if(${queryUnit}===0){
+		if(${queryUnit}==="feet"){
 			document.getElementById("Feet").value=${queryUnitValue};
 			feetConverter(${queryUnitValue});
 		} 
-		if(${queryUnit}===1){
+		if(${queryUnit}==="meters"){
 			document.getElementById("Meters").value=${queryUnitValue};
 			metersConverter(${queryUnitValue});
 		}
-		if(${queryUnit}===2){
+		if(${queryUnit}==="inches"){
 			document.getElementById("Inches").value=${queryUnitValue};
 			inchesConverter(${queryUnitValue});
 		}
-		if(${queryUnit}===3) {
+		if(${queryUnit}==="cm") {
 			document.getElementById("Cm").value=${queryUnitValue};
 			cmConverter(${queryUnitValue});
 		}
-		if(${queryUnit}===4){
+		if(${queryUnit}==="yards"){
 			document.getElementById("Yards").value=${queryUnitValue};
 			yardsConverter(${queryUnitValue});
 		}
-		if(${queryUnit}===5){
+		if(${queryUnit}==="kilometers"){
 			document.getElementById("Kilometers").value=${queryUnitValue};
 			kilometersConverter(${queryUnitValue});
 		} 
-		if(${queryUnit}===6){
+		if(${queryUnit}==="miles"){
 			document.getElementById("Miles").value=${queryUnitValue};
 			milesConverter(${queryUnitValue});
 		}
