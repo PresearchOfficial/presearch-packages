@@ -831,5 +831,29 @@
         "symbol":"ZMW",
         "names":["kwacha", "kwachas", "ngwee"],
         "adjectives":["zambia", "zambian"]
+    },
+    {
+        "symbol":"XAU",
+        "names": ["troy", "ounce", "ounces", "troy ounce", "troy ounces", "troy oz", "ozt", "bullion", "bar", "bars", "metal"],
+        "adjectives": ["gold"],
+        "nicknames": ["gold"]
+    },
+    {
+        "symbol":"XAG",
+        "names": ["troy", "ounce", "ounces", "troy ounce", "troy ounces", "troy oz", "ozt", "bullion", "bar", "bars", "metal"],
+        "adjectives": ["silver"],
+        "nicknames": ["silver"]
+    },
+    {
+        "symbol":"XPT",
+        "names": ["troy", "ounce", "ounces", "troy ounce", "troy ounces", "troy oz", "ozt", "bullion", "bar", "bars", "metal"],
+        "adjectives": ["platinum"],
+        "nicknames": ["platinum"]
+    },
+    {
+        "symbol":"XPD",
+        "names": ["troy", "ounce", "ounces", "troy ounce", "troy ounces", "troy oz", "ozt", "bullion", "bar", "bars", "metal"],
+        "adjectives": ["palladium"],
+        "nicknames": ["palladium"]
     }
 ]

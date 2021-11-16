@@ -145,10 +145,6 @@ const CurrencyData = {
         if (verbose) {
             const manualTest = manualFiat.map((o) => ({ symbol: cleanString(o.symbol) })).sort(fieldSort('symbol'));
             fiatSymbols.forEach((symbol) => {
-                // skip metals
-                if (symbol.symbol === 'xau' || symbol.symbol === 'xag'
-                    || symbol.symbol === 'xpt' || symbol.symbol === 'xpd') return;
-
                 const i = bs(manualTest, symbol.symbol, fieldSearch('symbol'));
                 if (i < 0) {
                     console.log(`Warning: Need manual data for ${symbol.symbol}`);
@@ -232,7 +228,7 @@ function cleanString(input, keepCase) {
 
 function createMetadata(o) {
     const name = cleanString(o.name, true);
-    const symbol = o.symbol ? cleanString(o.symbol, true) : cleanString(o.code);
+    const symbol = o.symbol ? cleanString(o.symbol, true) : cleanString(o.code, true);
     let display = `${name} (${symbol})`;
     if (name.length === 0 || symbol.length === 0) display = ''; // gets deleted later
     return { id: o.id, display };

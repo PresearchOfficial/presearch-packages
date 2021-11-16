@@ -34,6 +34,10 @@ test('Trigger: test 18', async (t) => t.false(await trigger('-5 btc to ltc')));
 test('Trigger: test 19', async (t) => t.true(await trigger('btc in ltc')));
 test('Trigger: test 20', async (t) => t.true(await trigger('btc INTO ltc')));
 test('Trigger: test 21', async (t) => t.false(await trigger('btc to = ltc')));
+test('Trigger: test 22', async (t) => t.true(await trigger('1,000 eth to xau')));
+test('Trigger: test 23', async (t) => t.true(await trigger('1,000 eth to silver metal')));
+test('Trigger: test 24', async (t) => t.true(await trigger('1,000 eth to platinum')));
+test('Trigger: test 25', async (t) => t.true(await trigger('palladium troy ounce to eth')));
 test('Find currency: test 1', async (t) => {
     const currency = await findCurrency('btc');
     t.true(currency.found === true && currency.item.id === 1);
