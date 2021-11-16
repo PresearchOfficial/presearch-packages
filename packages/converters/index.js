@@ -2,31 +2,65 @@
 const { temperatureConverter } = require('./temperatureConverter');
 const { lengthConverter } = require("./lengthConverter")
 
+const lengthMeasurements = ["feet", "meters", "inches", "cm", "yards", "kilometers", "miles"]
+const temperatureMeasurements = ["fahrenheit", "celsius", "kelvin"]
+
 async function converters(query) {
-	//need to take number and unit from query (not done yet)
+
 	let queryUnit;
 	let queryUnitValue;
+	let converter;
 
-	if (query === "temperature converter")
-		queryUnit = "fahrenheit";
-	if (query == "length converter")
-		queryUnit = "feet";
+	let queryWords = query.split(" ")
 
-	queryUnitValue = 20;
+	queryWords.forEach(element => {
+		if (element - element === 0)
+			queryUnitValue = element
+
+		if (lengthMeasurements.includes(element)) {
+			converter = "length converter"
+			queryUnit = element
+		}
+		if (temperatureMeasurements.includes(element)) {
+			converter = "temperature converter"
+			queryUnit = element
+		}
+		if (queryUnit && queryUnitValue && converter)
+			return;
+	});
 
 
-	if (query === "temperature converter") return temperatureConverter(queryUnitValue, queryUnit);
-	if (query === "length converter") return lengthConverter(queryUnitValue, queryUnit);
+	if (!(queryUnit && queryUnitValue && converter)) return null
+	if (converter === "temperature converter") return temperatureConverter(queryUnitValue, queryUnit);
+	if (converter === "length converter") return lengthConverter(queryUnitValue, queryUnit);
 	else return null;
 }
 
 
 async function trigger(query) {
-	if (query) {
-		//need to match number and unit from query (not done yet)
-		if (query === "temperature converter" || query === "length converter") return true;
-	}
-	return false;
+	let queryUnit;
+	let queryUnitValue;
+	let converter;
+
+	let queryWords = query.split(" ")
+
+	queryWords.forEach(element => {
+		if (element - element === 0)
+			queryUnitValue = element
+
+		if (lengthMeasurements.includes(element)) {
+			converter = "length converter"
+			queryUnit = element
+		}
+		if (temperatureMeasurements.includes(element)) {
+			converter = "temperature converter"
+			queryUnit = element
+		}
+		if (queryUnit && queryUnitValue && converter)
+			return;
+	});
+	if (queryUnit && queryUnitValue && converter) return true
+	return false
 }
 
 module.exports = { converters, trigger };
