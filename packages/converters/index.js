@@ -13,13 +13,15 @@ async function converters(query) {
 
 	let queryWords = query.split(" ")
 
-	queryWords.forEach(element => {
+	queryWords.map((element) => {
 		if (element - element === 0)
-			queryUnitValue = element
-
+			if (!queryUnit)
+				queryUnitValue = element
 		if (lengthMeasurements.includes(element)) {
-			converter = "length converter"
-			queryUnit = element
+			if (!(converter && queryUnit)) {
+				converter = "length converter"
+				queryUnit = element
+			}
 		}
 		if (temperatureMeasurements.includes(element)) {
 			converter = "temperature converter"
@@ -27,9 +29,10 @@ async function converters(query) {
 		}
 		if (queryUnit && queryUnitValue && converter)
 			return;
-	});
 
+	})
 
+	if (queryWords.length < 2) return null
 	if (!(queryUnit && queryUnitValue && converter)) return null
 	if (converter === "temperature converter") return temperatureConverter(queryUnitValue, queryUnit);
 	if (converter === "length converter") return lengthConverter(queryUnitValue, queryUnit);
@@ -44,13 +47,15 @@ async function trigger(query) {
 
 	let queryWords = query.split(" ")
 
-	queryWords.forEach(element => {
+	queryWords.map((element) => {
 		if (element - element === 0)
-			queryUnitValue = element
-
+			if (!queryUnit)
+				queryUnitValue = element
 		if (lengthMeasurements.includes(element)) {
-			converter = "length converter"
-			queryUnit = element
+			if (!(converter && queryUnit)) {
+				converter = "length converter"
+				queryUnit = element
+			}
 		}
 		if (temperatureMeasurements.includes(element)) {
 			converter = "temperature converter"
@@ -58,9 +63,13 @@ async function trigger(query) {
 		}
 		if (queryUnit && queryUnitValue && converter)
 			return;
-	});
+
+	})
+
 	if (queryUnit && queryUnitValue && converter) return true
 	return false
 }
+
+
 
 module.exports = { converters, trigger };
