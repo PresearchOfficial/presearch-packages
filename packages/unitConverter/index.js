@@ -15,7 +15,7 @@ async function unitConverter(query, API_KEY) {
   `
 
   for (let [unityFamily] of Object.entries(converter.units)) {
-    html += `<option>${unityFamily}</option>`
+    html += `<option ${unityFamily === family ? 'selected' : ''}>${unityFamily}</option>`
   }
 
   html += `</select>`
