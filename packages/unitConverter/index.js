@@ -24,7 +24,7 @@ async function unitConverter(query, API_KEY) {
   html += `<div class="unitConverterFromTo">
         <input type="number" id="unitConverterTo"/>
     </div>`
-  html += `<div>
+  html += `<div class="unitConverter">
         <div class="unitConverterFromTo">
             <select id="unitConverterFromSelect">`
 
@@ -55,6 +55,9 @@ async function unitConverter(query, API_KEY) {
 			padding: 0.5rem;
 		}
 		#presearchPackage #unitConverterUnitFamilySelect {
+			margin-bottom: 1.5rem;
+		}
+		#presearchPackage .unitConverter {
 			margin-bottom: 1rem;
 		}
 		#presearchPackage #unitConverterFrom, #presearchPackage #unitConverterTo {
@@ -73,24 +76,44 @@ async function unitConverter(query, API_KEY) {
 			font-size: 1.5rem;
 		}
 	</style>
-	<!-- example javascript -->
 	<script>
 	  ${converterScript}
+
+	  let familySelect = document.querySelector("#unitConverterUnitFamilySelect")
+	  let toEl = document.querySelector("#unitConverterTo")
+	  let fromEl = document.querySelector("#unitConverterFrom")
+	  let toSelect = document.querySelector("#unitConverterToSelect")
+	  let fromSelect = document.querySelector("#unitConverterFromSelect")
+
 	  if (${qty}) {
-	      let converted = converter.convert(${qty}, '${family}', '${from}', '${to}')
-	      document.querySelector("#unitConverterTo").value = converted
+	      toEl.value = converter.convert(${qty}, '${family}', '${from}', '${to}')
 	  }
-		document.querySelector("#unitConverterUnitFamilySelect").addEventListener("change", () => {
-		    console.log('change')
-		});
-		document.querySelector("#unitConverterTo").addEventListener("change", () => {
-		});
-		document.querySelector("#unitConverterFrom").addEventListener("change", () => {
-		});
-		document.querySelector("#unitConverterFromSelect").addEventListener("change", () => {
-		});
-		document.querySelector("#unitConverterToSelect").addEventListener("change", () => {
-		});
+
+		familySelect.addEventListener("change", ({target}) => {
+		    toSelect.innerHTML = '';
+		    fromSelect.innerHTML = '';
+
+        for (let [unit] of Object.entries(converter.units[target.value].convert)) {
+            toSelect.appendChild(new Option(unit))
+            fromSelect.appendChild(new Option(unit))
+        }
+
+        toEl.value = fromEl.value
+		})
+
+		fromEl.addEventListener("keyup", ({target}) => {
+		    toEl.value = converter.convert(target.value, familySelect.value, fromSelect.value, toSelect.value)
+		})
+		toEl.addEventListener("keyup", ({target}) => {
+		    fromEl.value = converter.convert(target.value, familySelect.value, toSelect.value, fromSelect.value)
+		})
+
+		fromSelect.addEventListener("change", () => {
+		    toEl.value = converter.convert(fromEl.value, familySelect.value, fromSelect.value, toSelect.value)
+		})
+		toSelect.addEventListener("change", () => {
+		    toEl.value = converter.convert(fromEl.value, familySelect.value, fromSelect.value, toSelect.value)
+		})
   </script>
 	`
 

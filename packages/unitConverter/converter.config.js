@@ -1,4 +1,5 @@
 const lengths = {
+    method: 'ratio',
     base: 'meter',
     convert: {
       meter: 1,
@@ -15,8 +16,30 @@ const lengths = {
     }
 }
 
+const temperature = {
+  method: 'formula',
+  convert: {
+    celcius: {
+      celcius: (from) => Number(from),
+      kelvin: (from) => Number(from) + 273.15,
+      fahrenheit: (from) => 9 * Number(from) / 5 + 32,
+    },
+    kelvin: {
+      kelvin: (from) => Number(from),
+      celcius: (from) => Number(from) - 273.15,
+      fahrenheit: (from) => 9 * (Number(from) - 273.15) / 5 + 32,
+    },
+    fahrenheit: {
+      fahrenheit: (from) => Number(from),
+      celcius: (from) => (Number(from) - 32) * 5 / 9,
+      kelvin: (from) => (Number(from) - 32) * 5 / 9 + 273.15,
+    },
+  }
+}
+
 const units = {
-  lengths
+  lengths,
+  temperature,
 }
 
 const pluralize = (word) => {
@@ -81,12 +104,18 @@ const convert = (qty, family, from, to) => {
   if (units[family]['convert'][from] === undefined
     || units[family]['convert'][to] === undefined
   ) {
-    return undefined;
+    return;
   }
 
-  let baseValue = units[family]['convert'][units[family]['base']]
+  if (units[family]['method'] === 'ratio') {
+    let baseValue = units[family]['convert'][units[family]['base']]
 
-  return  qty * baseValue / units[family]['convert'][from] * units[family]['convert'][to]
+    return  qty * baseValue / units[family]['convert'][from] * units[family]['convert'][to]
+  }
+
+  if (units[family]['method'] === 'formula') {
+    return units[family]['convert'][from][to](qty)
+  }
 }
 
 const converter = {
