@@ -28,6 +28,8 @@
         "mathsteps": "^0.2.0",
         "node-fetch": "^2.6.1",
         "periodic-table": "^0.0.8",
+        "spell-checker-js": "^1.2.6",
+        "typo-js": "^1.2.1",
         "wikijs": "^6.3.2"
     },
     "devDependencies": {
