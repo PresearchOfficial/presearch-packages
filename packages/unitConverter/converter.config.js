@@ -1,0 +1,102 @@
+const lengths = {
+    base: 'meter',
+    convert: {
+      meter: 1,
+      kilometer: 0.001,
+      centimeter: 100,
+      millimeter: 1000,
+      micrometer: 1000000,
+      nanometer: 1000000000,
+      mile: 0.0006213689,
+      yard: 1.0936132983,
+      foot: 3.280839895,
+      inch: 39.37007874,
+      'light year': 1.057008707E-16,
+    }
+}
+
+const units = {
+  lengths
+}
+
+const pluralize = (word) => {
+  const plural = (word) => {
+    if (word.slice(-1) === 'h' || word.slice(-1) === 's') {
+      return word + 'es'
+    }
+
+    return word + 's'
+  }
+
+  word = word.split(/\s+/)
+  word = word.map(plural)
+
+  return word.join(' ')
+}
+
+let regexFamilyMatches = {}
+
+for (let [unityFamily, unityFamilyData] of Object.entries(units)) {
+  let unityFamilyMatch = []
+  for (let [unity] of Object.entries(unityFamilyData.convert)) {
+    unityFamilyMatch.push(unity.replace(/\s+/g, '\\s+'))
+    unityFamilyMatch.push(pluralize(unity).replace(/\s+/g, '\\s+'))
+  }
+
+  unityFamilyMatch = unityFamilyMatch.join('|')
+  regexFamilyMatches[unityFamily] = new RegExp('(' + unityFamilyMatch + ')\\s+to\\s+(' + unityFamilyMatch + ')')
+}
+
+const match = (query) => {
+  if (!(typeof query === 'string')) {
+    return false
+  }
+
+  for (let [family, regex] of Object.entries(regexFamilyMatches)) {
+    let matches = query.toLowerCase().match(regex)
+    if (matches) {
+      let from = matches[1]
+      let to = matches[2]
+      for (let [unity] of Object.entries(units[family].convert)) {
+        if (from.match(new RegExp('^' + unity))) {
+          from = unity;
+        }
+        if (to.match(new RegExp('^' + unity))) {
+          to = unity;
+        }
+      }
+
+      return {
+        family,
+        from,
+        to,
+      }
+    }
+  }
+
+  return false;
+}
+
+const convert = (qty, family, from, to) => {
+  if (units[family]['convert'][from] === undefined
+    || units[family]['convert'][to] === undefined
+  ) {
+    return undefined;
+  }
+
+  let baseValue = units[family]['convert'][units[family]['base']]
+
+  return  qty * baseValue / units[family]['convert'][from] * units[family]['convert'][to]
+}
+
+const converter = {
+  units,
+  match,
+  convert
+}
+
+if (typeof window !== 'undefined') {
+  window.converter = converter
+} else {
+  module.exports = converter
+}
