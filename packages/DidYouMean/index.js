@@ -1,11 +1,12 @@
 'use strict';
 var Typo = require("typo-js");
 const spell = require('spell-checker-js');
+const coin_list = require("./coin_list.json");
 
 var dictionary = new Typo("en_US");
 spell.load('en')
 
-async function DidYouMean(query, API_KEY) {
+async function DidYouMean(query) {
 
 	let suggestionListForQuery;
 
@@ -77,10 +78,14 @@ async function DidYouMean(query, API_KEY) {
 async function trigger(query) {
 	if (query && query.split(" ").length === 1) {
 		query = query ? query.toLowerCase() : "";
-
+		//for avoid coin name consider as wrong word name
+		for (let coin of coin_list) {
+			if (coin.name.toLowerCase() === query || coin.symbol.toLowerCase() === query || coin.slug.toLowerCase() === query) return false;
+		}
+		//first check using typo-js
 		if (dictionary.check(query))
 			return false
-
+		//second check using spell-checker-js
 		const check = spell.check(query)
 		if (check[0]) {
 			var arrayOfSuggestions = dictionary.suggest(check[0]);
