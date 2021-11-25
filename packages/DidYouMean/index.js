@@ -1,7 +1,6 @@
 'use strict';
 var Typo = require("typo-js");
 const spell = require('spell-checker-js');
-const { identity } = require("mathjs");
 
 var dictionary = new Typo("en_US");
 spell.load('en')
@@ -32,7 +31,7 @@ async function DidYouMean(query, API_KEY) {
 	<div class="container">
 		<span class="title">Did You Mean: </span>
 		${suggestionListForQuery && suggestionListForQuery.map((word, index) => (
-		`<span key="${index}" class="tag">${word}</span>`
+		`<a href=${`https://testnet-engine.presearch.org/search?q=${word}`} key="${index}" class="tag">${word}</a>`
 	)).join("")
 		}
 	</div>
@@ -78,6 +77,10 @@ async function DidYouMean(query, API_KEY) {
 async function trigger(query) {
 	if (query && query.split(" ").length === 1) {
 		query = query ? query.toLowerCase() : "";
+
+		if (dictionary.check(query))
+			return false
+
 		const check = spell.check(query)
 		if (check[0]) {
 			var arrayOfSuggestions = dictionary.suggest(check[0]);
