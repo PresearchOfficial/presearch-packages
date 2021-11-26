@@ -1,3 +1,4 @@
+// *** Units definition, you can add new units here ***
 const lengths = {
   method: 'ratio',
   base: 'meter',
@@ -55,11 +56,13 @@ const temperature = {
   }
 }
 
+// Don't forget to add the new unity in units object
 const units = {
   lengths,
   area,
   temperature,
 }
+// *** End of units definitions ***
 
 const pluralize = (word) => {
   const plural = (word) => {
