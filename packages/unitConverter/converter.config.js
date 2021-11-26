@@ -1,19 +1,37 @@
 const lengths = {
-    method: 'ratio',
-    base: 'meter',
-    convert: {
-      meter: 1,
-      kilometer: 0.001,
-      centimeter: 100,
-      millimeter: 1000,
-      micrometer: 1000000,
-      nanometer: 1000000000,
-      mile: 0.0006213689,
-      yard: 1.0936132983,
-      foot: 3.280839895,
-      inch: 39.37007874,
-      'light year': 1.057008707E-16,
-    }
+  method: 'ratio',
+  base: 'meter',
+  convert: {
+    meter: 1,
+    kilometer: 0.001,
+    centimeter: 100,
+    millimeter: 1000,
+    micrometer: 1000000,
+    nanometer: 1000000000,
+    mile: 0.0006213689,
+    yard: 1.0936132983,
+    foot: 3.280839895,
+    inch: 39.37007874,
+    'light year': 1.057008707E-16,
+  }
+}
+
+const area = {
+  method: 'ratio',
+  base: 'square meter',
+  convert: {
+    'square meter': 1,
+    'square kilometer': 0.001,
+    'square centimeter': 10000,
+    'square millimeter': 1000000,
+    'square micrometer': 1000000000000,
+    'hectare': 0.0001,
+    'square mile': 3.861018768E-7,
+    'square yard': 1.1959900463,
+    'square foot': 10.763910417,
+    'square inch': 1550.0031,
+    'acre': 0.0002471054,
+  }
 }
 
 const temperature = {
@@ -39,6 +57,7 @@ const temperature = {
 
 const units = {
   lengths,
+  area,
   temperature,
 }
 

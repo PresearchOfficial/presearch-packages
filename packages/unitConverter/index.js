@@ -101,19 +101,21 @@ async function unitConverter(query, API_KEY) {
         toEl.value = fromEl.value
 		})
 
-		fromEl.addEventListener("keyup", ({target}) => {
-		    toEl.value = converter.convert(target.value, familySelect.value, fromSelect.value, toSelect.value)
-		})
-		toEl.addEventListener("keyup", ({target}) => {
-		    fromEl.value = converter.convert(target.value, familySelect.value, toSelect.value, fromSelect.value)
-		})
+		const convertFromTo = () => {
+	      toEl.value = converter.convert(fromEl.value, familySelect.value, fromSelect.value, toSelect.value)
+		}
 
-		fromSelect.addEventListener("change", () => {
-		    toEl.value = converter.convert(fromEl.value, familySelect.value, fromSelect.value, toSelect.value)
-		})
-		toSelect.addEventListener("change", () => {
-		    toEl.value = converter.convert(fromEl.value, familySelect.value, fromSelect.value, toSelect.value)
-		})
+		const convertToFrom = () => {
+		    fromEl.value = converter.convert(toEl.value, familySelect.value, toSelect.value, fromSelect.value)
+		}
+
+		fromEl.addEventListener("keyup", convertFromTo)
+		fromEl.addEventListener("change", convertFromTo)
+		toEl.addEventListener("keyup", convertToFrom)
+		toEl.addEventListener("change", convertToFrom)
+
+		fromSelect.addEventListener("change", convertFromTo)
+		toSelect.addEventListener("change", convertFromTo)
   </script>
 	`
 
