@@ -468,10 +468,6 @@
         "suggestion": "beautiful"
     },
     {
-        "mistake": "blase",
-        "suggestion": "blas\u00c8"
-    },
-    {
         "mistake": "boxs",
         "suggestion": "boxes"
     },
@@ -486,10 +482,6 @@
     {
         "mistake": "bve",
         "suggestion": "be"
-    },
-    {
-        "mistake": "cafe",
-        "suggestion": "caf\u00c8"
     },
     {
         "mistake": "caharcter",
@@ -606,10 +598,6 @@
     {
         "mistake": "cliant",
         "suggestion": "client"
-    },
-    {
-        "mistake": "cliche",
-        "suggestion": "clich\u00c8"
     },
     {
         "mistake": "cn",
@@ -820,10 +808,6 @@
         "suggestion": "copy"
     },
     {
-        "mistake": "creme",
-        "suggestion": "cr\u00cbme"
-    },
-    {
         "mistake": "ctaegory",
         "suggestion": "category"
     },
@@ -868,10 +852,6 @@
         "suggestion": "decisions"
     },
     {
-        "mistake": "decor",
-        "suggestion": "d\u00c8cor"
-    },
-    {
         "mistake": "defendent",
         "suggestion": "defendant"
     },
@@ -898,10 +878,6 @@
     {
         "mistake": "desisions",
         "suggestion": "decisions"
-    },
-    {
-        "mistake": "detente",
-        "suggestion": "d\u00c8tente"
     },
     {
         "mistake": "develeoprs",
@@ -1124,10 +1100,6 @@
         "suggestion": "drink"
     },
     {
-        "mistake": "eclair",
-        "suggestion": "\u00c8clair"
-    },
-    {
         "mistake": "efel",
         "suggestion": "feel"
     },
@@ -1156,16 +1128,8 @@
         "suggestion": "embarrass"
     },
     {
-        "mistake": "emigre",
-        "suggestion": "\u00c8migr\u00c8"
-    },
-    {
         "mistake": "enought",
         "suggestion": "enough"
-    },
-    {
-        "mistake": "entree",
-        "suggestion": "entr\u00c8e"
     },
     {
         "mistake": "equippment",
@@ -1238,10 +1202,6 @@
     {
         "mistake": "eyt",
         "suggestion": "yet"
-    },
-    {
-        "mistake": "facade",
-        "suggestion": "fa\u00c1ade"
     },
     {
         "mistake": "faeture",
@@ -1940,10 +1900,6 @@
         "suggestion": "my"
     },
     {
-        "mistake": "naive",
-        "suggestion": "na\u00d4ve"
-    },
-    {
         "mistake": "necassarily",
         "suggestion": "necessarily"
     },
@@ -2252,14 +2208,6 @@
         "suggestion": "prominent"
     },
     {
-        "mistake": "protege",
-        "suggestion": "prot\u00c8g\u00c8"
-    },
-    {
-        "mistake": "protoge",
-        "suggestion": "prot\u00c8g\u00c8"
-    },
-    {
         "mistake": "psoition",
         "suggestion": "position"
     },
@@ -2490,10 +2438,6 @@
     {
         "mistake": "sceduled",
         "suggestion": "scheduled"
-    },
-    {
-        "mistake": "seance",
-        "suggestion": "s\u00c8ance"
     },
     {
         "mistake": "secratary",
