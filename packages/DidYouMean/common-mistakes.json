@@ -1,0 +1,3254 @@
+[
+    {
+        "mistake": "abotu",
+        "suggestion": "about"
+    },
+    {
+        "mistake": "abouta",
+        "suggestion": "about a"
+    },
+    {
+        "mistake": "aboutit",
+        "suggestion": "about it"
+    },
+    {
+        "mistake": "aboutthe",
+        "suggestion": "about the"
+    },
+    {
+        "mistake": "abscence",
+        "suggestion": "absence"
+    },
+    {
+        "mistake": "accesories",
+        "suggestion": "accessories"
+    },
+    {
+        "mistake": "accidant",
+        "suggestion": "accident"
+    },
+    {
+        "mistake": "accomodate",
+        "suggestion": "accommodate"
+    },
+    {
+        "mistake": "accordingto",
+        "suggestion": "according to"
+    },
+    {
+        "mistake": "accross",
+        "suggestion": "across"
+    },
+    {
+        "mistake": "acheive",
+        "suggestion": "achieve"
+    },
+    {
+        "mistake": "acheived",
+        "suggestion": "achieved"
+    },
+    {
+        "mistake": "acheiving",
+        "suggestion": "achieving"
+    },
+    {
+        "mistake": "acn",
+        "suggestion": "can"
+    },
+    {
+        "mistake": "acommodate",
+        "suggestion": "accommodate"
+    },
+    {
+        "mistake": "acomodate",
+        "suggestion": "accommodate"
+    },
+    {
+        "mistake": "actualyl",
+        "suggestion": "actually"
+    },
+    {
+        "mistake": "additinal",
+        "suggestion": "additional"
+    },
+    {
+        "mistake": "addtional",
+        "suggestion": "additional"
+    },
+    {
+        "mistake": "adequit",
+        "suggestion": "adequate"
+    },
+    {
+        "mistake": "adequite",
+        "suggestion": "adequate"
+    },
+    {
+        "mistake": "adn",
+        "suggestion": "and"
+    },
+    {
+        "mistake": "advanage",
+        "suggestion": "advantage"
+    },
+    {
+        "mistake": "affraid",
+        "suggestion": "afraid"
+    },
+    {
+        "mistake": "afterthe",
+        "suggestion": "after the"
+    },
+    {
+        "mistake": "aganist",
+        "suggestion": "against"
+    },
+    {
+        "mistake": "aggresive",
+        "suggestion": "aggressive"
+    },
+    {
+        "mistake": "agian",
+        "suggestion": "again"
+    },
+    {
+        "mistake": "agreemeent",
+        "suggestion": "agreement"
+    },
+    {
+        "mistake": "agreemeents",
+        "suggestion": "agreements"
+    },
+    {
+        "mistake": "agreemnet",
+        "suggestion": "agreement"
+    },
+    {
+        "mistake": "agreemnets",
+        "suggestion": "agreements"
+    },
+    {
+        "mistake": "agressive",
+        "suggestion": "aggressive"
+    },
+    {
+        "mistake": "ahppen",
+        "suggestion": "happen"
+    },
+    {
+        "mistake": "ahve",
+        "suggestion": "have"
+    },
+    {
+        "mistake": "allwasy",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "allwyas",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "almots",
+        "suggestion": "almost"
+    },
+    {
+        "mistake": "almsot",
+        "suggestion": "almost"
+    },
+    {
+        "mistake": "alomst",
+        "suggestion": "almost"
+    },
+    {
+        "mistake": "alot",
+        "suggestion": "a lot"
+    },
+    {
+        "mistake": "alraedy",
+        "suggestion": "already"
+    },
+    {
+        "mistake": "alreayd",
+        "suggestion": "already"
+    },
+    {
+        "mistake": "alreday",
+        "suggestion": "already"
+    },
+    {
+        "mistake": "alwasy",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "alwats",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "alway",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "alwyas",
+        "suggestion": "always"
+    },
+    {
+        "mistake": "amde",
+        "suggestion": "made"
+    },
+    {
+        "mistake": "amke",
+        "suggestion": "make"
+    },
+    {
+        "mistake": "amkes",
+        "suggestion": "makes"
+    },
+    {
+        "mistake": "anbd",
+        "suggestion": "and"
+    },
+    {
+        "mistake": "andone",
+        "suggestion": "and one"
+    },
+    {
+        "mistake": "andteh",
+        "suggestion": "and the"
+    },
+    {
+        "mistake": "andthe",
+        "suggestion": "and the"
+    },
+    {
+        "mistake": "anothe",
+        "suggestion": "another"
+    },
+    {
+        "mistake": "anual",
+        "suggestion": "annual"
+    },
+    {
+        "mistake": "apparant",
+        "suggestion": "apparent"
+    },
+    {
+        "mistake": "apparrent",
+        "suggestion": "apparent"
+    },
+    {
+        "mistake": "appearence",
+        "suggestion": "appearance"
+    },
+    {
+        "mistake": "appeares",
+        "suggestion": "appears"
+    },
+    {
+        "mistake": "applicaiton",
+        "suggestion": "application"
+    },
+    {
+        "mistake": "applicaitons",
+        "suggestion": "applications"
+    },
+    {
+        "mistake": "applyed",
+        "suggestion": "applied"
+    },
+    {
+        "mistake": "appointiment",
+        "suggestion": "appointment"
+    },
+    {
+        "mistake": "approrpiate",
+        "suggestion": "appropriate"
+    },
+    {
+        "mistake": "approrpriate",
+        "suggestion": "appropriate"
+    },
+    {
+        "mistake": "aquisition",
+        "suggestion": "acquisition"
+    },
+    {
+        "mistake": "aquisitions",
+        "suggestion": "acquisitions"
+    },
+    {
+        "mistake": "arguement",
+        "suggestion": "argument"
+    },
+    {
+        "mistake": "arguements",
+        "suggestion": "arguments"
+    },
+    {
+        "mistake": "arn't",
+        "suggestion": "aren't"
+    },
+    {
+        "mistake": "arond",
+        "suggestion": "around"
+    },
+    {
+        "mistake": "artical",
+        "suggestion": "article"
+    },
+    {
+        "mistake": "articel",
+        "suggestion": "article"
+    },
+    {
+        "mistake": "asdvertising",
+        "suggestion": "advertising"
+    },
+    {
+        "mistake": "assistent",
+        "suggestion": "assistant"
+    },
+    {
+        "mistake": "asthe",
+        "suggestion": "as the"
+    },
+    {
+        "mistake": "atention",
+        "suggestion": "attention"
+    },
+    {
+        "mistake": "atmospher",
+        "suggestion": "atmosphere"
+    },
+    {
+        "mistake": "attentioin",
+        "suggestion": "attention"
+    },
+    {
+        "mistake": "atthe",
+        "suggestion": "at the"
+    },
+    {
+        "mistake": "audeince",
+        "suggestion": "audience"
+    },
+    {
+        "mistake": "audiance",
+        "suggestion": "audience"
+    },
+    {
+        "mistake": "availalbe",
+        "suggestion": "available"
+    },
+    {
+        "mistake": "awya",
+        "suggestion": "away"
+    },
+    {
+        "mistake": "aywa",
+        "suggestion": "away"
+    },
+    {
+        "mistake": "bakc",
+        "suggestion": "back"
+    },
+    {
+        "mistake": "balence",
+        "suggestion": "balance"
+    },
+    {
+        "mistake": "ballance",
+        "suggestion": "balance"
+    },
+    {
+        "mistake": "baout",
+        "suggestion": "about"
+    },
+    {
+        "mistake": "bcak",
+        "suggestion": "back"
+    },
+    {
+        "mistake": "beacuse",
+        "suggestion": "because"
+    },
+    {
+        "mistake": "becasue",
+        "suggestion": "because"
+    },
+    {
+        "mistake": "becaus",
+        "suggestion": "because"
+    },
+    {
+        "mistake": "becausea",
+        "suggestion": "because a"
+    },
+    {
+        "mistake": "becauseof",
+        "suggestion": "because of"
+    },
+    {
+        "mistake": "becausethe",
+        "suggestion": "because the"
+    },
+    {
+        "mistake": "becauseyou",
+        "suggestion": "because you"
+    },
+    {
+        "mistake": "becomeing",
+        "suggestion": "becoming"
+    },
+    {
+        "mistake": "becomming",
+        "suggestion": "becoming"
+    },
+    {
+        "mistake": "becuase",
+        "suggestion": "because"
+    },
+    {
+        "mistake": "becuse",
+        "suggestion": "because"
+    },
+    {
+        "mistake": "befoer",
+        "suggestion": "before"
+    },
+    {
+        "mistake": "beggining",
+        "suggestion": "beginning"
+    },
+    {
+        "mistake": "begining",
+        "suggestion": "beginning"
+    },
+    {
+        "mistake": "beginining",
+        "suggestion": "beginning"
+    },
+    {
+        "mistake": "beleiev",
+        "suggestion": "believe"
+    },
+    {
+        "mistake": "beleieve",
+        "suggestion": "believe"
+    },
+    {
+        "mistake": "beleif",
+        "suggestion": "belief"
+    },
+    {
+        "mistake": "beleive",
+        "suggestion": "believe"
+    },
+    {
+        "mistake": "beleived",
+        "suggestion": "believed"
+    },
+    {
+        "mistake": "beleives",
+        "suggestion": "believes"
+    },
+    {
+        "mistake": "benifit",
+        "suggestion": "benefit"
+    },
+    {
+        "mistake": "benifits",
+        "suggestion": "benefits"
+    },
+    {
+        "mistake": "betwen",
+        "suggestion": "between"
+    },
+    {
+        "mistake": "beutiful",
+        "suggestion": "beautiful"
+    },
+    {
+        "mistake": "blase",
+        "suggestion": "blas\u00c8"
+    },
+    {
+        "mistake": "boxs",
+        "suggestion": "boxes"
+    },
+    {
+        "mistake": "brodcast",
+        "suggestion": "broadcast"
+    },
+    {
+        "mistake": "butthe",
+        "suggestion": "but the"
+    },
+    {
+        "mistake": "bve",
+        "suggestion": "be"
+    },
+    {
+        "mistake": "cafe",
+        "suggestion": "caf\u00c8"
+    },
+    {
+        "mistake": "caharcter",
+        "suggestion": "character"
+    },
+    {
+        "mistake": "calcullated",
+        "suggestion": "calculated"
+    },
+    {
+        "mistake": "calulated",
+        "suggestion": "calculated"
+    },
+    {
+        "mistake": "candidtae",
+        "suggestion": "candidate"
+    },
+    {
+        "mistake": "candidtaes",
+        "suggestion": "candidates"
+    },
+    {
+        "mistake": "catagory",
+        "suggestion": "category"
+    },
+    {
+        "mistake": "categiory",
+        "suggestion": "category"
+    },
+    {
+        "mistake": "certian",
+        "suggestion": "certain"
+    },
+    {
+        "mistake": "challange",
+        "suggestion": "challenge"
+    },
+    {
+        "mistake": "challanges",
+        "suggestion": "challenges"
+    },
+    {
+        "mistake": "chaneg",
+        "suggestion": "change"
+    },
+    {
+        "mistake": "chanegs",
+        "suggestion": "changes"
+    },
+    {
+        "mistake": "changable",
+        "suggestion": "changeable"
+    },
+    {
+        "mistake": "changeing",
+        "suggestion": "changing"
+    },
+    {
+        "mistake": "changng",
+        "suggestion": "changing"
+    },
+    {
+        "mistake": "charachter",
+        "suggestion": "character"
+    },
+    {
+        "mistake": "charachters",
+        "suggestion": "characters"
+    },
+    {
+        "mistake": "charactor",
+        "suggestion": "character"
+    },
+    {
+        "mistake": "charecter",
+        "suggestion": "character"
+    },
+    {
+        "mistake": "charector",
+        "suggestion": "character"
+    },
+    {
+        "mistake": "cheif",
+        "suggestion": "chief"
+    },
+    {
+        "mistake": "chekc",
+        "suggestion": "check"
+    },
+    {
+        "mistake": "chnage",
+        "suggestion": "change"
+    },
+    {
+        "mistake": "cieling",
+        "suggestion": "ceiling"
+    },
+    {
+        "mistake": "circut",
+        "suggestion": "circuit"
+    },
+    {
+        "mistake": "claer",
+        "suggestion": "clear"
+    },
+    {
+        "mistake": "claered",
+        "suggestion": "cleared"
+    },
+    {
+        "mistake": "claerly",
+        "suggestion": "clearly"
+    },
+    {
+        "mistake": "cliant",
+        "suggestion": "client"
+    },
+    {
+        "mistake": "cliche",
+        "suggestion": "clich\u00c8"
+    },
+    {
+        "mistake": "cn",
+        "suggestion": "can"
+    },
+    {
+        "mistake": "cna",
+        "suggestion": "can"
+    },
+    {
+        "mistake": "colection",
+        "suggestion": "collection"
+    },
+    {
+        "mistake": "comanies",
+        "suggestion": "companies"
+    },
+    {
+        "mistake": "comany",
+        "suggestion": "company"
+    },
+    {
+        "mistake": "comapnies",
+        "suggestion": "companies"
+    },
+    {
+        "mistake": "comapny",
+        "suggestion": "company"
+    },
+    {
+        "mistake": "combintation",
+        "suggestion": "combination"
+    },
+    {
+        "mistake": "comited",
+        "suggestion": "committed"
+    },
+    {
+        "mistake": "comittee",
+        "suggestion": "committee"
+    },
+    {
+        "mistake": "commadn",
+        "suggestion": "command"
+    },
+    {
+        "mistake": "comming",
+        "suggestion": "coming"
+    },
+    {
+        "mistake": "commitee",
+        "suggestion": "committee"
+    },
+    {
+        "mistake": "committe",
+        "suggestion": "committee"
+    },
+    {
+        "mistake": "committment",
+        "suggestion": "commitment"
+    },
+    {
+        "mistake": "committments",
+        "suggestion": "commitments"
+    },
+    {
+        "mistake": "committy",
+        "suggestion": "committee"
+    },
+    {
+        "mistake": "comntain",
+        "suggestion": "contain"
+    },
+    {
+        "mistake": "comntains",
+        "suggestion": "contains"
+    },
+    {
+        "mistake": "compair",
+        "suggestion": "compare"
+    },
+    {
+        "mistake": "compleated",
+        "suggestion": "completed"
+    },
+    {
+        "mistake": "compleatly",
+        "suggestion": "completely"
+    },
+    {
+        "mistake": "compleatness",
+        "suggestion": "completeness"
+    },
+    {
+        "mistake": "completly",
+        "suggestion": "completely"
+    },
+    {
+        "mistake": "completness",
+        "suggestion": "completeness"
+    },
+    {
+        "mistake": "composate",
+        "suggestion": "composite"
+    },
+    {
+        "mistake": "comtain",
+        "suggestion": "contain"
+    },
+    {
+        "mistake": "comtains",
+        "suggestion": "contains"
+    },
+    {
+        "mistake": "comunicate",
+        "suggestion": "communicate"
+    },
+    {
+        "mistake": "comunity",
+        "suggestion": "community"
+    },
+    {
+        "mistake": "condolances",
+        "suggestion": "condolences"
+    },
+    {
+        "mistake": "conected",
+        "suggestion": "connected"
+    },
+    {
+        "mistake": "conferance",
+        "suggestion": "conference"
+    },
+    {
+        "mistake": "confirmmation",
+        "suggestion": "confirmation"
+    },
+    {
+        "mistake": "considerit",
+        "suggestion": "considerate"
+    },
+    {
+        "mistake": "considerite",
+        "suggestion": "considerate"
+    },
+    {
+        "mistake": "consonent",
+        "suggestion": "consonant"
+    },
+    {
+        "mistake": "conspiricy",
+        "suggestion": "conspiracy"
+    },
+    {
+        "mistake": "consultent",
+        "suggestion": "consultant"
+    },
+    {
+        "mistake": "convertable",
+        "suggestion": "convertible"
+    },
+    {
+        "mistake": "cooparate",
+        "suggestion": "cooperate"
+    },
+    {
+        "mistake": "cooporate",
+        "suggestion": "cooperate"
+    },
+    {
+        "mistake": "corproation",
+        "suggestion": "corporation"
+    },
+    {
+        "mistake": "corproations",
+        "suggestion": "corporations"
+    },
+    {
+        "mistake": "corruptable",
+        "suggestion": "corruptible"
+    },
+    {
+        "mistake": "cotten",
+        "suggestion": "cotton"
+    },
+    {
+        "mistake": "coudl",
+        "suggestion": "could"
+    },
+    {
+        "mistake": "coudln't",
+        "suggestion": "couldn't"
+    },
+    {
+        "mistake": "coudn't",
+        "suggestion": "couldn't"
+    },
+    {
+        "mistake": "couldnt",
+        "suggestion": "couldn't"
+    },
+    {
+        "mistake": "couldthe",
+        "suggestion": "could the"
+    },
+    {
+        "mistake": "cpoy",
+        "suggestion": "copy"
+    },
+    {
+        "mistake": "creme",
+        "suggestion": "cr\u00cbme"
+    },
+    {
+        "mistake": "ctaegory",
+        "suggestion": "category"
+    },
+    {
+        "mistake": "cusotmer",
+        "suggestion": "customer"
+    },
+    {
+        "mistake": "cusotmers",
+        "suggestion": "customers"
+    },
+    {
+        "mistake": "cutsomer",
+        "suggestion": "customer"
+    },
+    {
+        "mistake": "cutsomers",
+        "suggestion": "customers"
+    },
+    {
+        "mistake": "cxan",
+        "suggestion": "can"
+    },
+    {
+        "mistake": "danceing",
+        "suggestion": "dancing"
+    },
+    {
+        "mistake": "dcument",
+        "suggestion": "document"
+    },
+    {
+        "mistake": "deatils",
+        "suggestion": "details"
+    },
+    {
+        "mistake": "decison",
+        "suggestion": "decision"
+    },
+    {
+        "mistake": "decisons",
+        "suggestion": "decisions"
+    },
+    {
+        "mistake": "decor",
+        "suggestion": "d\u00c8cor"
+    },
+    {
+        "mistake": "defendent",
+        "suggestion": "defendant"
+    },
+    {
+        "mistake": "definately",
+        "suggestion": "definitely"
+    },
+    {
+        "mistake": "deptartment",
+        "suggestion": "department"
+    },
+    {
+        "mistake": "desicion",
+        "suggestion": "decision"
+    },
+    {
+        "mistake": "desicions",
+        "suggestion": "decisions"
+    },
+    {
+        "mistake": "desision",
+        "suggestion": "decision"
+    },
+    {
+        "mistake": "desisions",
+        "suggestion": "decisions"
+    },
+    {
+        "mistake": "detente",
+        "suggestion": "d\u00c8tente"
+    },
+    {
+        "mistake": "develeoprs",
+        "suggestion": "developers"
+    },
+    {
+        "mistake": "devellop",
+        "suggestion": "develop"
+    },
+    {
+        "mistake": "develloped",
+        "suggestion": "developed"
+    },
+    {
+        "mistake": "develloper",
+        "suggestion": "developer"
+    },
+    {
+        "mistake": "devellopers",
+        "suggestion": "developers"
+    },
+    {
+        "mistake": "develloping",
+        "suggestion": "developing"
+    },
+    {
+        "mistake": "devellopment",
+        "suggestion": "development"
+    },
+    {
+        "mistake": "devellopments",
+        "suggestion": "developments"
+    },
+    {
+        "mistake": "devellops",
+        "suggestion": "develop"
+    },
+    {
+        "mistake": "develope",
+        "suggestion": "develop"
+    },
+    {
+        "mistake": "developement",
+        "suggestion": "development"
+    },
+    {
+        "mistake": "developements",
+        "suggestion": "developments"
+    },
+    {
+        "mistake": "developor",
+        "suggestion": "developer"
+    },
+    {
+        "mistake": "developors",
+        "suggestion": "developers"
+    },
+    {
+        "mistake": "develpment",
+        "suggestion": "development"
+    },
+    {
+        "mistake": "diaplay",
+        "suggestion": "display"
+    },
+    {
+        "mistake": "didint",
+        "suggestion": "didn't"
+    },
+    {
+        "mistake": "didnot",
+        "suggestion": "did not"
+    },
+    {
+        "mistake": "didnt",
+        "suggestion": "didn't"
+    },
+    {
+        "mistake": "difefrent",
+        "suggestion": "different"
+    },
+    {
+        "mistake": "diferences",
+        "suggestion": "differences"
+    },
+    {
+        "mistake": "differance",
+        "suggestion": "difference"
+    },
+    {
+        "mistake": "differances",
+        "suggestion": "differences"
+    },
+    {
+        "mistake": "differant",
+        "suggestion": "different"
+    },
+    {
+        "mistake": "differemt",
+        "suggestion": "different"
+    },
+    {
+        "mistake": "differnt",
+        "suggestion": "different"
+    },
+    {
+        "mistake": "diffrent",
+        "suggestion": "different"
+    },
+    {
+        "mistake": "directer",
+        "suggestion": "director"
+    },
+    {
+        "mistake": "directers",
+        "suggestion": "directors"
+    },
+    {
+        "mistake": "directiosn",
+        "suggestion": "direction"
+    },
+    {
+        "mistake": "disatisfied",
+        "suggestion": "dissatisfied"
+    },
+    {
+        "mistake": "discoverd",
+        "suggestion": "discovered"
+    },
+    {
+        "mistake": "disign",
+        "suggestion": "design"
+    },
+    {
+        "mistake": "dispaly",
+        "suggestion": "display"
+    },
+    {
+        "mistake": "dissonent",
+        "suggestion": "dissonant"
+    },
+    {
+        "mistake": "distribusion",
+        "suggestion": "distribution"
+    },
+    {
+        "mistake": "divsion",
+        "suggestion": "division"
+    },
+    {
+        "mistake": "do'nt",
+        "suggestion": "don't"
+    },
+    {
+        "mistake": "docuement",
+        "suggestion": "documents"
+    },
+    {
+        "mistake": "docuemnt",
+        "suggestion": "document"
+    },
+    {
+        "mistake": "documetn",
+        "suggestion": "document"
+    },
+    {
+        "mistake": "documnet",
+        "suggestion": "document"
+    },
+    {
+        "mistake": "documnets",
+        "suggestion": "documents"
+    },
+    {
+        "mistake": "doens't",
+        "suggestion": "doesn't"
+    },
+    {
+        "mistake": "doese",
+        "suggestion": "does"
+    },
+    {
+        "mistake": "doesnt",
+        "suggestion": "doesn't"
+    },
+    {
+        "mistake": "doign",
+        "suggestion": "doing"
+    },
+    {
+        "mistake": "doimg",
+        "suggestion": "doing"
+    },
+    {
+        "mistake": "doind",
+        "suggestion": "doing"
+    },
+    {
+        "mistake": "dollers",
+        "suggestion": "dollars"
+    },
+    {
+        "mistake": "donig",
+        "suggestion": "doing"
+    },
+    {
+        "mistake": "dont",
+        "suggestion": "don't"
+    },
+    {
+        "mistake": "dosn't",
+        "suggestion": "doesn't"
+    },
+    {
+        "mistake": "driveing",
+        "suggestion": "driving"
+    },
+    {
+        "mistake": "drnik",
+        "suggestion": "drink"
+    },
+    {
+        "mistake": "eclair",
+        "suggestion": "\u00c8clair"
+    },
+    {
+        "mistake": "efel",
+        "suggestion": "feel"
+    },
+    {
+        "mistake": "effecient",
+        "suggestion": "efficient"
+    },
+    {
+        "mistake": "efort",
+        "suggestion": "effort"
+    },
+    {
+        "mistake": "eforts",
+        "suggestion": "efforts"
+    },
+    {
+        "mistake": "ehr",
+        "suggestion": "her"
+    },
+    {
+        "mistake": "eligable",
+        "suggestion": "eligible"
+    },
+    {
+        "mistake": "embarass",
+        "suggestion": "embarrass"
+    },
+    {
+        "mistake": "emigre",
+        "suggestion": "\u00c8migr\u00c8"
+    },
+    {
+        "mistake": "enought",
+        "suggestion": "enough"
+    },
+    {
+        "mistake": "entree",
+        "suggestion": "entr\u00c8e"
+    },
+    {
+        "mistake": "equippment",
+        "suggestion": "equipment"
+    },
+    {
+        "mistake": "equivalant",
+        "suggestion": "equivalent"
+    },
+    {
+        "mistake": "esle",
+        "suggestion": "else"
+    },
+    {
+        "mistake": "especally",
+        "suggestion": "especially"
+    },
+    {
+        "mistake": "especialyl",
+        "suggestion": "especially"
+    },
+    {
+        "mistake": "espesially",
+        "suggestion": "especially"
+    },
+    {
+        "mistake": "excellant",
+        "suggestion": "excellent"
+    },
+    {
+        "mistake": "excercise",
+        "suggestion": "exercise"
+    },
+    {
+        "mistake": "exchagne",
+        "suggestion": "exchange"
+    },
+    {
+        "mistake": "exchagnes",
+        "suggestion": "exchanges"
+    },
+    {
+        "mistake": "excitment",
+        "suggestion": "excitement"
+    },
+    {
+        "mistake": "exhcange",
+        "suggestion": "exchange"
+    },
+    {
+        "mistake": "exhcanges",
+        "suggestion": "exchanges"
+    },
+    {
+        "mistake": "experiance",
+        "suggestion": "experience"
+    },
+    {
+        "mistake": "experienc",
+        "suggestion": "experience"
+    },
+    {
+        "mistake": "exprience",
+        "suggestion": "experience"
+    },
+    {
+        "mistake": "exprienced",
+        "suggestion": "experienced"
+    },
+    {
+        "mistake": "eyt",
+        "suggestion": "yet"
+    },
+    {
+        "mistake": "facade",
+        "suggestion": "fa\u00c1ade"
+    },
+    {
+        "mistake": "faeture",
+        "suggestion": "feature"
+    },
+    {
+        "mistake": "faetures",
+        "suggestion": "features"
+    },
+    {
+        "mistake": "familair",
+        "suggestion": "familiar"
+    },
+    {
+        "mistake": "familar",
+        "suggestion": "familiar"
+    },
+    {
+        "mistake": "familliar",
+        "suggestion": "familiar"
+    },
+    {
+        "mistake": "fammiliar",
+        "suggestion": "familiar"
+    },
+    {
+        "mistake": "feild",
+        "suggestion": "field"
+    },
+    {
+        "mistake": "feilds",
+        "suggestion": "fields"
+    },
+    {
+        "mistake": "fianlly",
+        "suggestion": "finally"
+    },
+    {
+        "mistake": "fidn",
+        "suggestion": "find"
+    },
+    {
+        "mistake": "finalyl",
+        "suggestion": "finally"
+    },
+    {
+        "mistake": "firends",
+        "suggestion": "friends"
+    },
+    {
+        "mistake": "firts",
+        "suggestion": "first"
+    },
+    {
+        "mistake": "follwo",
+        "suggestion": "follow"
+    },
+    {
+        "mistake": "follwoing",
+        "suggestion": "following"
+    },
+    {
+        "mistake": "fora",
+        "suggestion": "for a"
+    },
+    {
+        "mistake": "foriegn",
+        "suggestion": "foreign"
+    },
+    {
+        "mistake": "forthe",
+        "suggestion": "for the"
+    },
+    {
+        "mistake": "forwrd",
+        "suggestion": "forward"
+    },
+    {
+        "mistake": "forwrds",
+        "suggestion": "forwards"
+    },
+    {
+        "mistake": "foudn",
+        "suggestion": "found"
+    },
+    {
+        "mistake": "foward",
+        "suggestion": "forward"
+    },
+    {
+        "mistake": "fowards",
+        "suggestion": "forwards"
+    },
+    {
+        "mistake": "freind",
+        "suggestion": "friend"
+    },
+    {
+        "mistake": "freindly",
+        "suggestion": "friendly"
+    },
+    {
+        "mistake": "freinds",
+        "suggestion": "friends"
+    },
+    {
+        "mistake": "frmo",
+        "suggestion": "from"
+    },
+    {
+        "mistake": "fromthe",
+        "suggestion": "from the"
+    },
+    {
+        "mistake": "furneral",
+        "suggestion": "funeral"
+    },
+    {
+        "mistake": "fwe",
+        "suggestion": "few"
+    },
+    {
+        "mistake": "garantee",
+        "suggestion": "guarantee"
+    },
+    {
+        "mistake": "gaurd",
+        "suggestion": "guard"
+    },
+    {
+        "mistake": "gemeral",
+        "suggestion": "general"
+    },
+    {
+        "mistake": "gerat",
+        "suggestion": "great"
+    },
+    {
+        "mistake": "geting",
+        "suggestion": "getting"
+    },
+    {
+        "mistake": "gettin",
+        "suggestion": "getting"
+    },
+    {
+        "mistake": "gievn",
+        "suggestion": "given"
+    },
+    {
+        "mistake": "giveing",
+        "suggestion": "giving"
+    },
+    {
+        "mistake": "gloabl",
+        "suggestion": "global"
+    },
+    {
+        "mistake": "goign",
+        "suggestion": "going"
+    },
+    {
+        "mistake": "gonig",
+        "suggestion": "going"
+    },
+    {
+        "mistake": "govenment",
+        "suggestion": "government"
+    },
+    {
+        "mistake": "goverment",
+        "suggestion": "government"
+    },
+    {
+        "mistake": "gruop",
+        "suggestion": "group"
+    },
+    {
+        "mistake": "gruops",
+        "suggestion": "groups"
+    },
+    {
+        "mistake": "grwo",
+        "suggestion": "grow"
+    },
+    {
+        "mistake": "guidlines",
+        "suggestion": "guidelines"
+    },
+    {
+        "mistake": "hadbeen",
+        "suggestion": "had been"
+    },
+    {
+        "mistake": "haev",
+        "suggestion": "have"
+    },
+    {
+        "mistake": "hapen",
+        "suggestion": "happen"
+    },
+    {
+        "mistake": "hapened",
+        "suggestion": "happened"
+    },
+    {
+        "mistake": "hapening",
+        "suggestion": "happening"
+    },
+    {
+        "mistake": "hapens",
+        "suggestion": "happens"
+    },
+    {
+        "mistake": "happend",
+        "suggestion": "happened"
+    },
+    {
+        "mistake": "hasbeen",
+        "suggestion": "has been"
+    },
+    {
+        "mistake": "hasnt",
+        "suggestion": "hasn't"
+    },
+    {
+        "mistake": "havebeen",
+        "suggestion": "have been"
+    },
+    {
+        "mistake": "haveing",
+        "suggestion": "having"
+    },
+    {
+        "mistake": "hda",
+        "suggestion": "had"
+    },
+    {
+        "mistake": "hearign",
+        "suggestion": "hearing"
+    },
+    {
+        "mistake": "helpfull",
+        "suggestion": "helpful"
+    },
+    {
+        "mistake": "herat",
+        "suggestion": "heart"
+    },
+    {
+        "mistake": "hesaid",
+        "suggestion": "he said"
+    },
+    {
+        "mistake": "hewas",
+        "suggestion": "he was"
+    },
+    {
+        "mistake": "hge",
+        "suggestion": "he"
+    },
+    {
+        "mistake": "hismelf",
+        "suggestion": "himself"
+    },
+    {
+        "mistake": "hlep",
+        "suggestion": "help"
+    },
+    {
+        "mistake": "hsa",
+        "suggestion": "has"
+    },
+    {
+        "mistake": "hsi",
+        "suggestion": "his"
+    },
+    {
+        "mistake": "hte",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "htere",
+        "suggestion": "there"
+    },
+    {
+        "mistake": "htese",
+        "suggestion": "these"
+    },
+    {
+        "mistake": "htey",
+        "suggestion": "they"
+    },
+    {
+        "mistake": "hting",
+        "suggestion": "thing"
+    },
+    {
+        "mistake": "htink",
+        "suggestion": "think"
+    },
+    {
+        "mistake": "htis",
+        "suggestion": "this"
+    },
+    {
+        "mistake": "hvae",
+        "suggestion": "have"
+    },
+    {
+        "mistake": "hvaing",
+        "suggestion": "having"
+    },
+    {
+        "mistake": "hwich",
+        "suggestion": "which"
+    },
+    {
+        "mistake": "i",
+        "suggestion": "I"
+    },
+    {
+        "mistake": "idae",
+        "suggestion": "idea"
+    },
+    {
+        "mistake": "idaes",
+        "suggestion": "ideas"
+    },
+    {
+        "mistake": "identofy",
+        "suggestion": "identify"
+    },
+    {
+        "mistake": "ihs",
+        "suggestion": "his"
+    },
+    {
+        "mistake": "im",
+        "suggestion": "I'm"
+    },
+    {
+        "mistake": "imediate",
+        "suggestion": "immediate"
+    },
+    {
+        "mistake": "imediatly",
+        "suggestion": "immediately"
+    },
+    {
+        "mistake": "immediatly",
+        "suggestion": "immediately"
+    },
+    {
+        "mistake": "importent",
+        "suggestion": "important"
+    },
+    {
+        "mistake": "importnat",
+        "suggestion": "important"
+    },
+    {
+        "mistake": "impossable",
+        "suggestion": "impossible"
+    },
+    {
+        "mistake": "improvemnt",
+        "suggestion": "improvement"
+    },
+    {
+        "mistake": "improvment",
+        "suggestion": "improvement"
+    },
+    {
+        "mistake": "includ",
+        "suggestion": "include"
+    },
+    {
+        "mistake": "indecate",
+        "suggestion": "indicate"
+    },
+    {
+        "mistake": "indenpendence",
+        "suggestion": "independence"
+    },
+    {
+        "mistake": "indenpendent",
+        "suggestion": "independent"
+    },
+    {
+        "mistake": "indepedent",
+        "suggestion": "independent"
+    },
+    {
+        "mistake": "independance",
+        "suggestion": "independence"
+    },
+    {
+        "mistake": "independant",
+        "suggestion": "independent"
+    },
+    {
+        "mistake": "influance",
+        "suggestion": "influence"
+    },
+    {
+        "mistake": "infomation",
+        "suggestion": "information"
+    },
+    {
+        "mistake": "informatoin",
+        "suggestion": "information"
+    },
+    {
+        "mistake": "inital",
+        "suggestion": "initial"
+    },
+    {
+        "mistake": "instaleld",
+        "suggestion": "installed"
+    },
+    {
+        "mistake": "insted",
+        "suggestion": "instead"
+    },
+    {
+        "mistake": "insurence",
+        "suggestion": "insurance"
+    },
+    {
+        "mistake": "inteh",
+        "suggestion": "in the"
+    },
+    {
+        "mistake": "interum",
+        "suggestion": "interim"
+    },
+    {
+        "mistake": "inthe",
+        "suggestion": "in the"
+    },
+    {
+        "mistake": "inwhich",
+        "suggestion": "in which"
+    },
+    {
+        "mistake": "isthe",
+        "suggestion": "is the"
+    },
+    {
+        "mistake": "itis",
+        "suggestion": "it is"
+    },
+    {
+        "mistake": "ititial",
+        "suggestion": "initial"
+    },
+    {
+        "mistake": "itnerest",
+        "suggestion": "interest"
+    },
+    {
+        "mistake": "itnerested",
+        "suggestion": "interested"
+    },
+    {
+        "mistake": "itneresting",
+        "suggestion": "interesting"
+    },
+    {
+        "mistake": "itnerests",
+        "suggestion": "interests"
+    },
+    {
+        "mistake": "itwas",
+        "suggestion": "it was"
+    },
+    {
+        "mistake": "iwll",
+        "suggestion": "will"
+    },
+    {
+        "mistake": "iwth",
+        "suggestion": "with"
+    },
+    {
+        "mistake": "jsut",
+        "suggestion": "just"
+    },
+    {
+        "mistake": "jugment",
+        "suggestion": "judgment"
+    },
+    {
+        "mistake": "knowldge",
+        "suggestion": "knowledge"
+    },
+    {
+        "mistake": "knowlege",
+        "suggestion": "knowledge"
+    },
+    {
+        "mistake": "knwo",
+        "suggestion": "know"
+    },
+    {
+        "mistake": "knwon",
+        "suggestion": "known"
+    },
+    {
+        "mistake": "knwos",
+        "suggestion": "knows"
+    },
+    {
+        "mistake": "konw",
+        "suggestion": "know"
+    },
+    {
+        "mistake": "konwn",
+        "suggestion": "known"
+    },
+    {
+        "mistake": "konws",
+        "suggestion": "knows"
+    },
+    {
+        "mistake": "labratory",
+        "suggestion": "laboratory"
+    },
+    {
+        "mistake": "lastyear",
+        "suggestion": "last year"
+    },
+    {
+        "mistake": "learnign",
+        "suggestion": "learning"
+    },
+    {
+        "mistake": "lenght",
+        "suggestion": "length"
+    },
+    {
+        "mistake": "let's him",
+        "suggestion": "lets him"
+    },
+    {
+        "mistake": "let's it",
+        "suggestion": "lets it"
+    },
+    {
+        "mistake": "levle",
+        "suggestion": "level"
+    },
+    {
+        "mistake": "libary",
+        "suggestion": "library"
+    },
+    {
+        "mistake": "librarry",
+        "suggestion": "library"
+    },
+    {
+        "mistake": "librery",
+        "suggestion": "library"
+    },
+    {
+        "mistake": "liek",
+        "suggestion": "like"
+    },
+    {
+        "mistake": "liekd",
+        "suggestion": "liked"
+    },
+    {
+        "mistake": "lieutenent",
+        "suggestion": "lieutenant"
+    },
+    {
+        "mistake": "liev",
+        "suggestion": "live"
+    },
+    {
+        "mistake": "likly",
+        "suggestion": "likely"
+    },
+    {
+        "mistake": "lisense",
+        "suggestion": "license"
+    },
+    {
+        "mistake": "littel",
+        "suggestion": "little"
+    },
+    {
+        "mistake": "litttle",
+        "suggestion": "little"
+    },
+    {
+        "mistake": "liuke",
+        "suggestion": "like"
+    },
+    {
+        "mistake": "liveing",
+        "suggestion": "living"
+    },
+    {
+        "mistake": "loev",
+        "suggestion": "love"
+    },
+    {
+        "mistake": "lonly",
+        "suggestion": "lonely"
+    },
+    {
+        "mistake": "lookign",
+        "suggestion": "looking"
+    },
+    {
+        "mistake": "maintenence",
+        "suggestion": "maintenance"
+    },
+    {
+        "mistake": "makeing",
+        "suggestion": "making"
+    },
+    {
+        "mistake": "managment",
+        "suggestion": "management"
+    },
+    {
+        "mistake": "mantain",
+        "suggestion": "maintain"
+    },
+    {
+        "mistake": "marraige",
+        "suggestion": "marriage"
+    },
+    {
+        "mistake": "memeber",
+        "suggestion": "member"
+    },
+    {
+        "mistake": "merchent",
+        "suggestion": "merchant"
+    },
+    {
+        "mistake": "mesage",
+        "suggestion": "message"
+    },
+    {
+        "mistake": "mesages",
+        "suggestion": "messages"
+    },
+    {
+        "mistake": "mispell",
+        "suggestion": "misspell"
+    },
+    {
+        "mistake": "mispelling",
+        "suggestion": "misspelling"
+    },
+    {
+        "mistake": "mispellings",
+        "suggestion": "misspellings"
+    },
+    {
+        "mistake": "mkae",
+        "suggestion": "make"
+    },
+    {
+        "mistake": "mkaes",
+        "suggestion": "makes"
+    },
+    {
+        "mistake": "mkaing",
+        "suggestion": "making"
+    },
+    {
+        "mistake": "moeny",
+        "suggestion": "money"
+    },
+    {
+        "mistake": "morgage",
+        "suggestion": "mortgage"
+    },
+    {
+        "mistake": "mroe",
+        "suggestion": "more"
+    },
+    {
+        "mistake": "mysefl",
+        "suggestion": "myself"
+    },
+    {
+        "mistake": "myu",
+        "suggestion": "my"
+    },
+    {
+        "mistake": "naive",
+        "suggestion": "na\u00d4ve"
+    },
+    {
+        "mistake": "necassarily",
+        "suggestion": "necessarily"
+    },
+    {
+        "mistake": "necassary",
+        "suggestion": "necessary"
+    },
+    {
+        "mistake": "neccessarily",
+        "suggestion": "necessarily"
+    },
+    {
+        "mistake": "neccessary",
+        "suggestion": "necessary"
+    },
+    {
+        "mistake": "necesarily",
+        "suggestion": "necessarily"
+    },
+    {
+        "mistake": "necesary",
+        "suggestion": "necessary"
+    },
+    {
+        "mistake": "negotiaing",
+        "suggestion": "negotiating"
+    },
+    {
+        "mistake": "nkow",
+        "suggestion": "know"
+    },
+    {
+        "mistake": "nothign",
+        "suggestion": "nothing"
+    },
+    {
+        "mistake": "nver",
+        "suggestion": "never"
+    },
+    {
+        "mistake": "nwe",
+        "suggestion": "new"
+    },
+    {
+        "mistake": "nwo",
+        "suggestion": "now"
+    },
+    {
+        "mistake": "obediant",
+        "suggestion": "obedient"
+    },
+    {
+        "mistake": "ocasion",
+        "suggestion": "occasion"
+    },
+    {
+        "mistake": "occassion",
+        "suggestion": "occasion"
+    },
+    {
+        "mistake": "occured",
+        "suggestion": "occurred"
+    },
+    {
+        "mistake": "occurence",
+        "suggestion": "occurrence"
+    },
+    {
+        "mistake": "occurrance",
+        "suggestion": "occurrence"
+    },
+    {
+        "mistake": "ocur",
+        "suggestion": "occur"
+    },
+    {
+        "mistake": "oeprator",
+        "suggestion": "operator"
+    },
+    {
+        "mistake": "ofits",
+        "suggestion": "of its"
+    },
+    {
+        "mistake": "ofthe",
+        "suggestion": "of the"
+    },
+    {
+        "mistake": "oging",
+        "suggestion": "going"
+    },
+    {
+        "mistake": "ohter",
+        "suggestion": "other"
+    },
+    {
+        "mistake": "omre",
+        "suggestion": "more"
+    },
+    {
+        "mistake": "oneof",
+        "suggestion": "one of"
+    },
+    {
+        "mistake": "onepoint",
+        "suggestion": "one point"
+    },
+    {
+        "mistake": "onthe",
+        "suggestion": "on the"
+    },
+    {
+        "mistake": "onyl",
+        "suggestion": "only"
+    },
+    {
+        "mistake": "oppasite",
+        "suggestion": "opposite"
+    },
+    {
+        "mistake": "opperation",
+        "suggestion": "operation"
+    },
+    {
+        "mistake": "oppertunity",
+        "suggestion": "opportunity"
+    },
+    {
+        "mistake": "opposate",
+        "suggestion": "opposite"
+    },
+    {
+        "mistake": "opposible",
+        "suggestion": "opposable"
+    },
+    {
+        "mistake": "opposit",
+        "suggestion": "opposite"
+    },
+    {
+        "mistake": "oppotunities",
+        "suggestion": "opportunities"
+    },
+    {
+        "mistake": "oppotunity",
+        "suggestion": "opportunity"
+    },
+    {
+        "mistake": "orginization",
+        "suggestion": "organization"
+    },
+    {
+        "mistake": "orginized",
+        "suggestion": "organized"
+    },
+    {
+        "mistake": "otehr",
+        "suggestion": "other"
+    },
+    {
+        "mistake": "otu",
+        "suggestion": "out"
+    },
+    {
+        "mistake": "outof",
+        "suggestion": "out of"
+    },
+    {
+        "mistake": "overthe",
+        "suggestion": "over the"
+    },
+    {
+        "mistake": "owrk",
+        "suggestion": "work"
+    },
+    {
+        "mistake": "owuld",
+        "suggestion": "would"
+    },
+    {
+        "mistake": "oxident",
+        "suggestion": "oxidant"
+    },
+    {
+        "mistake": "papaer",
+        "suggestion": "paper"
+    },
+    {
+        "mistake": "parliment",
+        "suggestion": "parliament"
+    },
+    {
+        "mistake": "partof",
+        "suggestion": "part of"
+    },
+    {
+        "mistake": "paymetn",
+        "suggestion": "payment"
+    },
+    {
+        "mistake": "paymetns",
+        "suggestion": "payments"
+    },
+    {
+        "mistake": "pciture",
+        "suggestion": "picture"
+    },
+    {
+        "mistake": "peice",
+        "suggestion": "piece"
+    },
+    {
+        "mistake": "peices",
+        "suggestion": "pieces"
+    },
+    {
+        "mistake": "peolpe",
+        "suggestion": "people"
+    },
+    {
+        "mistake": "peopel",
+        "suggestion": "people"
+    },
+    {
+        "mistake": "percentof",
+        "suggestion": "percent of"
+    },
+    {
+        "mistake": "percentto",
+        "suggestion": "percent to"
+    },
+    {
+        "mistake": "performence",
+        "suggestion": "performance"
+    },
+    {
+        "mistake": "perhasp",
+        "suggestion": "perhaps"
+    },
+    {
+        "mistake": "perhpas",
+        "suggestion": "perhaps"
+    },
+    {
+        "mistake": "permanant",
+        "suggestion": "permanent"
+    },
+    {
+        "mistake": "perminent",
+        "suggestion": "permanent"
+    },
+    {
+        "mistake": "personalyl",
+        "suggestion": "personally"
+    },
+    {
+        "mistake": "pleasent",
+        "suggestion": "pleasant"
+    },
+    {
+        "mistake": "poeple",
+        "suggestion": "people"
+    },
+    {
+        "mistake": "porblem",
+        "suggestion": "problem"
+    },
+    {
+        "mistake": "porblems",
+        "suggestion": "problems"
+    },
+    {
+        "mistake": "porvide",
+        "suggestion": "provide"
+    },
+    {
+        "mistake": "possable",
+        "suggestion": "possible"
+    },
+    {
+        "mistake": "postition",
+        "suggestion": "position"
+    },
+    {
+        "mistake": "potentialy",
+        "suggestion": "potentially"
+    },
+    {
+        "mistake": "pregnent",
+        "suggestion": "pregnant"
+    },
+    {
+        "mistake": "presance",
+        "suggestion": "presence"
+    },
+    {
+        "mistake": "probelm",
+        "suggestion": "problem"
+    },
+    {
+        "mistake": "probelms",
+        "suggestion": "problems"
+    },
+    {
+        "mistake": "prominant",
+        "suggestion": "prominent"
+    },
+    {
+        "mistake": "protege",
+        "suggestion": "prot\u00c8g\u00c8"
+    },
+    {
+        "mistake": "protoge",
+        "suggestion": "prot\u00c8g\u00c8"
+    },
+    {
+        "mistake": "psoition",
+        "suggestion": "position"
+    },
+    {
+        "mistake": "ptogress",
+        "suggestion": "progress"
+    },
+    {
+        "mistake": "puting",
+        "suggestion": "putting"
+    },
+    {
+        "mistake": "pwoer",
+        "suggestion": "power"
+    },
+    {
+        "mistake": "quater",
+        "suggestion": "quarter"
+    },
+    {
+        "mistake": "quaters",
+        "suggestion": "quarters"
+    },
+    {
+        "mistake": "quesion",
+        "suggestion": "question"
+    },
+    {
+        "mistake": "quesions",
+        "suggestion": "questions"
+    },
+    {
+        "mistake": "questioms",
+        "suggestion": "questions"
+    },
+    {
+        "mistake": "questiosn",
+        "suggestion": "questions"
+    },
+    {
+        "mistake": "questoin",
+        "suggestion": "question"
+    },
+    {
+        "mistake": "quetion",
+        "suggestion": "question"
+    },
+    {
+        "mistake": "quetions",
+        "suggestion": "questions"
+    },
+    {
+        "mistake": "realyl",
+        "suggestion": "really"
+    },
+    {
+        "mistake": "reccomend",
+        "suggestion": "recommend"
+    },
+    {
+        "mistake": "reccommend",
+        "suggestion": "recommend"
+    },
+    {
+        "mistake": "receieve",
+        "suggestion": "receive"
+    },
+    {
+        "mistake": "recieve",
+        "suggestion": "receive"
+    },
+    {
+        "mistake": "recieved",
+        "suggestion": "received"
+    },
+    {
+        "mistake": "recieving",
+        "suggestion": "receiving"
+    },
+    {
+        "mistake": "recomend",
+        "suggestion": "recommend"
+    },
+    {
+        "mistake": "recomendation",
+        "suggestion": "recommendation"
+    },
+    {
+        "mistake": "recomendations",
+        "suggestion": "recommendations"
+    },
+    {
+        "mistake": "recomended",
+        "suggestion": "recommended"
+    },
+    {
+        "mistake": "reconize",
+        "suggestion": "recognize"
+    },
+    {
+        "mistake": "recrod",
+        "suggestion": "record"
+    },
+    {
+        "mistake": "religous",
+        "suggestion": "religious"
+    },
+    {
+        "mistake": "reluctent",
+        "suggestion": "reluctant"
+    },
+    {
+        "mistake": "remeber",
+        "suggestion": "remember"
+    },
+    {
+        "mistake": "reommend",
+        "suggestion": "recommend"
+    },
+    {
+        "mistake": "representativs",
+        "suggestion": "representatives"
+    },
+    {
+        "mistake": "representives",
+        "suggestion": "representatives"
+    },
+    {
+        "mistake": "represetned",
+        "suggestion": "represented"
+    },
+    {
+        "mistake": "represnt",
+        "suggestion": "represent"
+    },
+    {
+        "mistake": "reserach",
+        "suggestion": "research"
+    },
+    {
+        "mistake": "resollution",
+        "suggestion": "resolution"
+    },
+    {
+        "mistake": "resorces",
+        "suggestion": "resources"
+    },
+    {
+        "mistake": "respomd",
+        "suggestion": "respond"
+    },
+    {
+        "mistake": "respomse",
+        "suggestion": "response"
+    },
+    {
+        "mistake": "responce",
+        "suggestion": "response"
+    },
+    {
+        "mistake": "responsability",
+        "suggestion": "responsibility"
+    },
+    {
+        "mistake": "responsable",
+        "suggestion": "responsible"
+    },
+    {
+        "mistake": "responsibile",
+        "suggestion": "responsible"
+    },
+    {
+        "mistake": "responsiblity",
+        "suggestion": "responsibility"
+    },
+    {
+        "mistake": "restaraunt",
+        "suggestion": "restaurant"
+    },
+    {
+        "mistake": "restuarant",
+        "suggestion": "restaurant"
+    },
+    {
+        "mistake": "reult",
+        "suggestion": "result"
+    },
+    {
+        "mistake": "reveiw",
+        "suggestion": "review"
+    },
+    {
+        "mistake": "reveiwing",
+        "suggestion": "reviewing"
+    },
+    {
+        "mistake": "rumers",
+        "suggestion": "rumors"
+    },
+    {
+        "mistake": "rwite",
+        "suggestion": "write"
+    },
+    {
+        "mistake": "rythm",
+        "suggestion": "rhythm"
+    },
+    {
+        "mistake": "saidhe",
+        "suggestion": "said he"
+    },
+    {
+        "mistake": "saidit",
+        "suggestion": "said it"
+    },
+    {
+        "mistake": "saidthat",
+        "suggestion": "said that"
+    },
+    {
+        "mistake": "saidthe",
+        "suggestion": "said the"
+    },
+    {
+        "mistake": "scedule",
+        "suggestion": "schedule"
+    },
+    {
+        "mistake": "sceduled",
+        "suggestion": "scheduled"
+    },
+    {
+        "mistake": "seance",
+        "suggestion": "s\u00c8ance"
+    },
+    {
+        "mistake": "secratary",
+        "suggestion": "secretary"
+    },
+    {
+        "mistake": "sectino",
+        "suggestion": "section"
+    },
+    {
+        "mistake": "seh",
+        "suggestion": "she"
+    },
+    {
+        "mistake": "selectoin",
+        "suggestion": "selection"
+    },
+    {
+        "mistake": "sentance",
+        "suggestion": "sentence"
+    },
+    {
+        "mistake": "separeate",
+        "suggestion": "separate"
+    },
+    {
+        "mistake": "seperate",
+        "suggestion": "separate"
+    },
+    {
+        "mistake": "sercumstances",
+        "suggestion": "circumstances"
+    },
+    {
+        "mistake": "shcool",
+        "suggestion": "school"
+    },
+    {
+        "mistake": "shesaid",
+        "suggestion": "she said"
+    },
+    {
+        "mistake": "shineing",
+        "suggestion": "shining"
+    },
+    {
+        "mistake": "shiped",
+        "suggestion": "shipped"
+    },
+    {
+        "mistake": "shoudl",
+        "suggestion": "should"
+    },
+    {
+        "mistake": "shoudln't",
+        "suggestion": "shouldn't"
+    },
+    {
+        "mistake": "should of been",
+        "suggestion": "should have been"
+    },
+    {
+        "mistake": "should of had",
+        "suggestion": "should have had"
+    },
+    {
+        "mistake": "shouldent",
+        "suggestion": "shouldn't"
+    },
+    {
+        "mistake": "shouldnt",
+        "suggestion": "shouldn't"
+    },
+    {
+        "mistake": "showinf",
+        "suggestion": "showing"
+    },
+    {
+        "mistake": "signifacnt",
+        "suggestion": "significant"
+    },
+    {
+        "mistake": "simalar",
+        "suggestion": "similar"
+    },
+    {
+        "mistake": "similiar",
+        "suggestion": "similar"
+    },
+    {
+        "mistake": "simpyl",
+        "suggestion": "simply"
+    },
+    {
+        "mistake": "sincerly",
+        "suggestion": "sincerely"
+    },
+    {
+        "mistake": "sitll",
+        "suggestion": "still"
+    },
+    {
+        "mistake": "smae",
+        "suggestion": "same"
+    },
+    {
+        "mistake": "smoe",
+        "suggestion": "some"
+    },
+    {
+        "mistake": "soem",
+        "suggestion": "some"
+    },
+    {
+        "mistake": "sohw",
+        "suggestion": "show"
+    },
+    {
+        "mistake": "soical",
+        "suggestion": "social"
+    },
+    {
+        "mistake": "somethign",
+        "suggestion": "something"
+    },
+    {
+        "mistake": "someting",
+        "suggestion": "something"
+    },
+    {
+        "mistake": "somewaht",
+        "suggestion": "somewhat"
+    },
+    {
+        "mistake": "somthing",
+        "suggestion": "something"
+    },
+    {
+        "mistake": "somtimes",
+        "suggestion": "sometimes"
+    },
+    {
+        "mistake": "soudn",
+        "suggestion": "sound"
+    },
+    {
+        "mistake": "soudns",
+        "suggestion": "sounds"
+    },
+    {
+        "mistake": "speach",
+        "suggestion": "speech"
+    },
+    {
+        "mistake": "specificaly",
+        "suggestion": "specifically"
+    },
+    {
+        "mistake": "specificalyl",
+        "suggestion": "specifically"
+    },
+    {
+        "mistake": "statment",
+        "suggestion": "statement"
+    },
+    {
+        "mistake": "statments",
+        "suggestion": "statements"
+    },
+    {
+        "mistake": "stnad",
+        "suggestion": "stand"
+    },
+    {
+        "mistake": "stopry",
+        "suggestion": "story"
+    },
+    {
+        "mistake": "stoyr",
+        "suggestion": "story"
+    },
+    {
+        "mistake": "stpo",
+        "suggestion": "stop"
+    },
+    {
+        "mistake": "strentgh",
+        "suggestion": "strength"
+    },
+    {
+        "mistake": "stroy",
+        "suggestion": "story"
+    },
+    {
+        "mistake": "struggel",
+        "suggestion": "struggle"
+    },
+    {
+        "mistake": "strugle",
+        "suggestion": "struggle"
+    },
+    {
+        "mistake": "studnet",
+        "suggestion": "student"
+    },
+    {
+        "mistake": "successfull",
+        "suggestion": "successful"
+    },
+    {
+        "mistake": "successfuly",
+        "suggestion": "successfully"
+    },
+    {
+        "mistake": "successfulyl",
+        "suggestion": "successfully"
+    },
+    {
+        "mistake": "sucess",
+        "suggestion": "success"
+    },
+    {
+        "mistake": "sucessfull",
+        "suggestion": "successful"
+    },
+    {
+        "mistake": "sufficiant",
+        "suggestion": "sufficient"
+    },
+    {
+        "mistake": "suposed",
+        "suggestion": "supposed"
+    },
+    {
+        "mistake": "suppossed",
+        "suggestion": "supposed"
+    },
+    {
+        "mistake": "suprise",
+        "suggestion": "surprise"
+    },
+    {
+        "mistake": "suprised",
+        "suggestion": "surprised"
+    },
+    {
+        "mistake": "swiming",
+        "suggestion": "swimming"
+    },
+    {
+        "mistake": "tahn",
+        "suggestion": "than"
+    },
+    {
+        "mistake": "taht",
+        "suggestion": "that"
+    },
+    {
+        "mistake": "talekd",
+        "suggestion": "talked"
+    },
+    {
+        "mistake": "talkign",
+        "suggestion": "talking"
+    },
+    {
+        "mistake": "tath",
+        "suggestion": "that"
+    },
+    {
+        "mistake": "tecnical",
+        "suggestion": "technical"
+    },
+    {
+        "mistake": "teh",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "tehy",
+        "suggestion": "they"
+    },
+    {
+        "mistake": "termoil",
+        "suggestion": "turmoil"
+    },
+    {
+        "mistake": "tghe",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "tghis",
+        "suggestion": "this"
+    },
+    {
+        "mistake": "thansk",
+        "suggestion": "thanks"
+    },
+    {
+        "mistake": "thats",
+        "suggestion": "that's"
+    },
+    {
+        "mistake": "thatthe",
+        "suggestion": "that the"
+    },
+    {
+        "mistake": "thefirst",
+        "suggestion": "the first"
+    },
+    {
+        "mistake": "themself",
+        "suggestion": "themselves"
+    },
+    {
+        "mistake": "themselfs",
+        "suggestion": "themselves"
+    },
+    {
+        "mistake": "thenew",
+        "suggestion": "the new"
+    },
+    {
+        "mistake": "theri",
+        "suggestion": "their"
+    },
+    {
+        "mistake": "thesame",
+        "suggestion": "the same"
+    },
+    {
+        "mistake": "thetwo",
+        "suggestion": "the two"
+    },
+    {
+        "mistake": "they're are",
+        "suggestion": "there are"
+    },
+    {
+        "mistake": "they're is",
+        "suggestion": "there is"
+    },
+    {
+        "mistake": "theyll",
+        "suggestion": "they'll"
+    },
+    {
+        "mistake": "theyve",
+        "suggestion": "they've"
+    },
+    {
+        "mistake": "thgat",
+        "suggestion": "that"
+    },
+    {
+        "mistake": "thge",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "thier",
+        "suggestion": "their"
+    },
+    {
+        "mistake": "thigsn",
+        "suggestion": "things"
+    },
+    {
+        "mistake": "thna",
+        "suggestion": "than"
+    },
+    {
+        "mistake": "thne",
+        "suggestion": "then"
+    },
+    {
+        "mistake": "thnig",
+        "suggestion": "thing"
+    },
+    {
+        "mistake": "thnigs",
+        "suggestion": "things"
+    },
+    {
+        "mistake": "threatend",
+        "suggestion": "threatened"
+    },
+    {
+        "mistake": "thsi",
+        "suggestion": "this"
+    },
+    {
+        "mistake": "thsoe",
+        "suggestion": "those"
+    },
+    {
+        "mistake": "thta",
+        "suggestion": "that"
+    },
+    {
+        "mistake": "tihs",
+        "suggestion": "this"
+    },
+    {
+        "mistake": "timne",
+        "suggestion": "time"
+    },
+    {
+        "mistake": "tiogether",
+        "suggestion": "together"
+    },
+    {
+        "mistake": "tje",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "tjhe",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "tkae",
+        "suggestion": "take"
+    },
+    {
+        "mistake": "tkaes",
+        "suggestion": "takes"
+    },
+    {
+        "mistake": "tkaing",
+        "suggestion": "taking"
+    },
+    {
+        "mistake": "tlaking",
+        "suggestion": "talking"
+    },
+    {
+        "mistake": "todya",
+        "suggestion": "today"
+    },
+    {
+        "mistake": "togehter",
+        "suggestion": "together"
+    },
+    {
+        "mistake": "tomorow",
+        "suggestion": "tomorrow"
+    },
+    {
+        "mistake": "tongiht",
+        "suggestion": "tonight"
+    },
+    {
+        "mistake": "tonihgt",
+        "suggestion": "tonight"
+    },
+    {
+        "mistake": "totaly",
+        "suggestion": "totally"
+    },
+    {
+        "mistake": "totalyl",
+        "suggestion": "totally"
+    },
+    {
+        "mistake": "tothe",
+        "suggestion": "to the"
+    },
+    {
+        "mistake": "towrad",
+        "suggestion": "toward"
+    },
+    {
+        "mistake": "traditionalyl",
+        "suggestion": "traditionally"
+    },
+    {
+        "mistake": "transfered",
+        "suggestion": "transferred"
+    },
+    {
+        "mistake": "treid",
+        "suggestion": "tried"
+    },
+    {
+        "mistake": "truely",
+        "suggestion": "truly"
+    },
+    {
+        "mistake": "truley",
+        "suggestion": "truly"
+    },
+    {
+        "mistake": "tst",
+        "suggestion": "test"
+    },
+    {
+        "mistake": "tthe",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "tyhat",
+        "suggestion": "that"
+    },
+    {
+        "mistake": "tyhe",
+        "suggestion": "the"
+    },
+    {
+        "mistake": "udnerstand",
+        "suggestion": "understand"
+    },
+    {
+        "mistake": "understnad",
+        "suggestion": "understand"
+    },
+    {
+        "mistake": "unliek",
+        "suggestion": "unlike"
+    },
+    {
+        "mistake": "unpleasently",
+        "suggestion": "unpleasantly"
+    },
+    {
+        "mistake": "untilll",
+        "suggestion": "until"
+    },
+    {
+        "mistake": "useing",
+        "suggestion": "using"
+    },
+    {
+        "mistake": "usualyl",
+        "suggestion": "usually"
+    },
+    {
+        "mistake": "veyr",
+        "suggestion": "very"
+    },
+    {
+        "mistake": "virtualyl",
+        "suggestion": "virtually"
+    },
+    {
+        "mistake": "vrey",
+        "suggestion": "very"
+    },
+    {
+        "mistake": "vulnerible",
+        "suggestion": "vulnerable"
+    },
+    {
+        "mistake": "wa",
+        "suggestion": "was"
+    },
+    {
+        "mistake": "waht",
+        "suggestion": "what"
+    },
+    {
+        "mistake": "warrent",
+        "suggestion": "warrant"
+    },
+    {
+        "mistake": "wasnt",
+        "suggestion": "wasn't"
+    },
+    {
+        "mistake": "watn",
+        "suggestion": "want"
+    },
+    {
+        "mistake": "wehn",
+        "suggestion": "when"
+    },
+    {
+        "mistake": "wern't",
+        "suggestion": "weren't"
+    },
+    {
+        "mistake": "werre",
+        "suggestion": "were"
+    },
+    {
+        "mistake": "whcih",
+        "suggestion": "which"
+    },
+    {
+        "mistake": "wherre",
+        "suggestion": "where"
+    },
+    {
+        "mistake": "whic",
+        "suggestion": "which"
+    },
+    {
+        "mistake": "whihc",
+        "suggestion": "which"
+    },
+    {
+        "mistake": "whta",
+        "suggestion": "what"
+    },
+    {
+        "mistake": "wief",
+        "suggestion": "wife"
+    },
+    {
+        "mistake": "wierd",
+        "suggestion": "weird"
+    },
+    {
+        "mistake": "wihch",
+        "suggestion": "which"
+    },
+    {
+        "mistake": "wiht",
+        "suggestion": "with"
+    },
+    {
+        "mistake": "willbe",
+        "suggestion": "will be"
+    },
+    {
+        "mistake": "windoes",
+        "suggestion": "windows"
+    },
+    {
+        "mistake": "witha",
+        "suggestion": "with a"
+    },
+    {
+        "mistake": "withe",
+        "suggestion": "with"
+    },
+    {
+        "mistake": "withthe",
+        "suggestion": "with the"
+    },
+    {
+        "mistake": "wiull",
+        "suggestion": "will"
+    },
+    {
+        "mistake": "wnat",
+        "suggestion": "want"
+    },
+    {
+        "mistake": "wnated",
+        "suggestion": "wanted"
+    },
+    {
+        "mistake": "wnats",
+        "suggestion": "wants"
+    },
+    {
+        "mistake": "wo'nt",
+        "suggestion": "won't"
+    },
+    {
+        "mistake": "woh",
+        "suggestion": "who"
+    },
+    {
+        "mistake": "wohle",
+        "suggestion": "whole"
+    },
+    {
+        "mistake": "wokr",
+        "suggestion": "work"
+    },
+    {
+        "mistake": "woudl",
+        "suggestion": "would"
+    },
+    {
+        "mistake": "woudln't",
+        "suggestion": "wouldn't"
+    },
+    {
+        "mistake": "wouldbe",
+        "suggestion": "would be"
+    },
+    {
+        "mistake": "wouldnt",
+        "suggestion": "wouldn't"
+    },
+    {
+        "mistake": "wriet",
+        "suggestion": "write"
+    },
+    {
+        "mistake": "writting",
+        "suggestion": "writing"
+    },
+    {
+        "mistake": "wrod",
+        "suggestion": "word"
+    },
+    {
+        "mistake": "wroet",
+        "suggestion": "wrote"
+    },
+    {
+        "mistake": "wroking",
+        "suggestion": "working"
+    },
+    {
+        "mistake": "wtih",
+        "suggestion": "with"
+    },
+    {
+        "mistake": "wuould",
+        "suggestion": "would"
+    },
+    {
+        "mistake": "wya",
+        "suggestion": "way"
+    },
+    {
+        "mistake": "yera",
+        "suggestion": "year"
+    },
+    {
+        "mistake": "yeras",
+        "suggestion": "years"
+    },
+    {
+        "mistake": "yersa",
+        "suggestion": "years"
+    },
+    {
+        "mistake": "yoiu",
+        "suggestion": "you"
+    },
+    {
+        "mistake": "you're own",
+        "suggestion": "your own"
+    },
+    {
+        "mistake": "youare",
+        "suggestion": "you are"
+    },
+    {
+        "mistake": "youve",
+        "suggestion": "you've"
+    },
+    {
+        "mistake": "ytou",
+        "suggestion": "you"
+    },
+    {
+        "mistake": "yuo",
+        "suggestion": "you"
+    },
+    {
+        "mistake": "yuor",
+        "suggestion": "your"
+    }
+]

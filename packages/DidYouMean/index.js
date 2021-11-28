@@ -2,26 +2,38 @@
 var Typo = require("typo-js");
 const spell = require('spell-checker-js');
 const coin_list = require("./coin_list.json");
+const common_mistakes = require("./common-mistakes.json")
 
 var dictionary = new Typo("en_US");
 spell.load('en')
 
 async function DidYouMean(query) {
 
-	let suggestionListForQuery;
+	let suggestionListForQuery = [];
+	query = query ? query.toLowerCase() : "";
 
 	if (query && query.split(" ").length === 1) {
-		query = query ? query.toLowerCase() : "";
-		const check = spell.check(query)
-		if (check[0]) {
-			var arrayOfSuggestions = dictionary.suggest(check[0]);
-			if (arrayOfSuggestions.length > 0) {
-				suggestionListForQuery = arrayOfSuggestions
+		//try to resolve from common mistakes
+		//common mistake check
+		for (let word of common_mistakes) {
+			if (word.mistake.toLowerCase() === query && word.suggestion) {
+				suggestionListForQuery.push(word.suggestion);
+				break;
+			}
+		}
+		//check again and try to get suggestion from external package(typo-js,spell-checker-js)
+		if (suggestionListForQuery.length === 0) {
+			const check = spell.check(query)
+			if (check[0]) {
+				var arrayOfSuggestions = dictionary.suggest(check[0]);
+				if (arrayOfSuggestions.length > 0) {
+					suggestionListForQuery = arrayOfSuggestions
+				} else {
+					return null
+				}
 			} else {
 				return null
 			}
-		} else {
-			return null
 		}
 	} else {
 		return null;
@@ -77,10 +89,15 @@ async function DidYouMean(query) {
 
 async function trigger(query) {
 	if (query && query.split(" ").length === 1) {
+
 		query = query ? query.toLowerCase() : "";
 		//for avoid coin name consider as wrong word name
 		for (let coin of coin_list) {
 			if (coin.name.toLowerCase() === query || coin.symbol.toLowerCase() === query || coin.slug.toLowerCase() === query) return false;
+		}
+		//common mistake check
+		for (let word of common_mistakes) {
+			if (word.mistake.toLowerCase() === query && word.suggestion) return true;
 		}
 		//first check using typo-js
 		if (dictionary.check(query))
