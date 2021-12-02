@@ -1,210 +1,372 @@
 "use strict";
 const mathjs = require("mathjs");
 
+
 async function math(query) {
-  const data = mathjs.evaluate(query);
+
 
   return `
-<div class="mainCol mathContain">
-  <form name="calculator">
-   <table>
-      <tr>
-         <td colspan="4">
-            <input  type="text" name="resultDisplay" value=${typeof data === "number" ? data : ``
-    } id="resultDisplay" disabled>
-         </td>
-      </tr>
-      <tr>
-            <td><input type="button" name="one" value="1" onclick="addValue('1')"></td>
-            <td><input type="button" name="two" value="2" onclick="addValue('2')"></td>
-            <td><input type="button" name="three" value="3" onclick="addValue('3')"></td>
-            <td><input style="margin-right:14px;" type="button" class="operator" name="plus" value="+" onclick="addValue('+')"></td>
-     </tr>
-     <tr>
-            <td><input type="button" name="four" value="4" onclick="addValue('4')"></td>
-            <td><input type="button" name="five" value="5" onclick="addValue('5')"></td>
-            <td><input type="button" name="six" value="6" onclick="addValue('6')"></td>
-            <td><input type="button" class="operator" name="minus" value="-" onclick="addValue('-')"></td>
-     </tr>
-     <tr>
-            <td><input type="button" name="seven" value="7" onclick="addValue('7')"></td>
-            <td><input type="button" name="eight" value="8" onclick="addValue('8')"></td>
-            <td><input type="button" name="nine" value="9" onclick="addValue('9')"></td>
-            <td><input type="button" class="operator" name="times" value="x" onclick="addValue('*')"></td>
-     </tr>
-     <tr>
-            <td><input type="button" id="clear" name="clear" value="C" onclick="calculator.resultDisplay.value = '0'"></td>
-            <td><input type="button" name="zero" value="0" onclick="addValue('0')"></td>
-            <td><input type="button" name="doit" value="=" onclick="calculator.resultDisplay.value = summary(calculator.resultDisplay.value)"></td>
-            <td><input type="button" class="operator" name="div" value="/" onclick="addValue('/')"></td>
-      </tr>
-   </table>
-  </form>
+<style>
+#presearchPackage{
+  
+}
+.output-container{
+  width: 100%;
+  height: 45px;
+  text-align: right;
+  font-weight: bold;
+  font-size: x-large;
+  border-width: 1px;
+  border-style: solid;
+  opacity: 0.5;
+  margin: 100px;
+}
+.output-container:hover{
+  opacity: 1;
+}
+button[type=button]{
+  opacity: 0.8;
+  background-color: #f5f5f5;
+  background-image: linear-gradient(top, #f5f5f5, #f1f1f1);
+  border: 1px solid #dedede;
+  color: #444;
+  height: 40px;
+  width: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: normal;
+}
+button[type=button]:hover{
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
+    opacity: 1;
+    border: 1px solid #c6c6c6;
+    color: #222;
+    cursor: pointer;
+}
+button[name=equal] {
+  background-color: #4d90fe;
+  background-image: linear-gradient(top, #4d90fe, #4787ed);
+  border: 1px solid #3079ed;
+  color: #fefefe;
+}
+button[name=equal]:hover {
+  background-color: #4d90fe;
+  background-image: linear-gradient(top, #4d90fe, #357ae8);
+  border: 1px solid #2f5bb7;
+  color: #fefefe;
+}
+button[name=operator] {
+  border: 1px solid #c6c6c6;
+  background-color: #d6d6d6;
+}
+button[name=ac] {
+  width: 100%;
+}
+button[name=del] {
+  width: 100%;
+}
+</style>
+
+<div id="presearchPackage">
+<table>
+
+  <tr>
+    <td colspan="4" class="output-container">
+      <span data-previous-operand></span>
+      <span data-current-operand></span>
+    </td>
+  </tr>
+
+  <tr>
+    <td colspan="2">
+      <button type="button" name="del" data-delete>DEL</button>
+    </td>
+    <td colspan="2">
+      <button type="button" name="ac" data-all-clear>AC</button>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <button type="button" data-number>7</button>
+    </td>
+    <td>
+      <button type="button" data-number>8</button>
+    </td>
+    <td>
+      <button type="button" data-number>9</button>
+    </td>
+    <td>
+      <button name="operator" type="button" data-operation>/</button>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <button type="button" data-number>4</button>
+    </td>
+    <td>
+      <button type="button" data-number>5</button>
+    </td>
+    <td>
+      <button type="button" data-number>6</button>
+    </td>
+    <td>
+      <button name="operator" type="button" data-operation>*</button>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <button type="button" data-number>1</button>
+    </td>
+    <td>
+      <button type="button" data-number>2</button>
+    </td>
+    <td>
+      <button type="button" data-number>3</button>
+    </td>
+    <td>
+      <button name="operator" type="button" data-operation>-</button>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <button type="button" data-number>0</button>
+    </td>
+    <td>
+      <button type="button" data-number>.</button>
+    </td>
+    <td>
+      <button name="equal" type="button" data-equals>=</button>
+    </td>
+    <td>
+      <button name="operator" type="button" data-operation>+</button>
+    </td>
+  </tr>
+
+</table>
 </div>
 
 <script>
-const addValue = (addedValue) => {
-  const getValue = (value) => {
-    //* check if the value is an operator or a number
-    const isOperator = (value = "") => {
-      if (!value.match(/[0-9]/)) return true;
-      return false;
-    }
-    let currentValue = calculator.resultDisplay.value;
-    const previousValue = currentValue && currentValue.length ? currentValue[currentValue.length-1] : "";
-    const newValue = currentValue + addedValue;
-    //* check if we have two operators one by one, but allow (*- and /-)
-    const twoOperators = (isOperator(value) && isOperator(previousValue)) && ((!newValue.includes("*-") && !newValue.includes("/-")) || newValue.includes("--"));
-    //* reset calculator when we will start with 0 value
-    if (currentValue === "0") currentValue = "";
-    if (value && value.length) {
-      //* do nothing if the previous value vas an operator, or if the first value is an operator (except '-')
-      if (twoOperators || (currentValue.length === 1 && currentValue[0] !== "-" && isOperator(currentValue[0]))) {
-        return currentValue;
+class Calculator {
+  constructor(previousOperandTextElement, currentOperandTextElement) {
+      this.previousOperandTextElement = previousOperandTextElement
+      this.currentOperandTextElement = currentOperandTextElement
+      this.clear()
+  }
+
+  clear() {
+      this.currentOperand =''
+      this.previousOperand =''
+      this.operation = undefined
+  }
+
+  delete() {
+      this.currentOperand = this.currentOperand.toString().slice(0, -1)
+  }
+
+  appendNumber(number) {
+      if (number === '.' && this.currentOperand.includes('.')) return
+      this.currentOperand = this.currentOperand.toString() + number.toString()
+  }
+
+  chooseOperation(operation) {
+      if (this.currentOperand ==='') return
+      if (this.previousOperand !=='') {
+          this.compute()
       }
-      return newValue;
-    }
-    return currentValue;
+      this.operation = operation
+      this.previousOperand = this.currentOperand
+      this.currentOperand =''
   }
 
-  calculator.resultDisplay.value = getValue(addedValue);
-};
-const summary = (value) => {
-  //* fix the case where we have operator on the last place, ie eval("50*")
-  try {
-    eval(value)
-  } catch(err) {
-    return value;
+  compute() {
+      let computation
+      const prev = parseFloat(this.previousOperand)
+      const current = parseFloat(this.currentOperand)
+      if (isNaN(prev) || isNaN(current)) return
+      switch (this.operation) {
+          case '+':
+              computation = prev + current
+              break
+          case '-':
+              computation = prev - current
+              break
+          case '*':
+              computation = prev * current
+              break
+          case '/':
+              computation = prev / current
+              break
+          default:
+              return
+      }
+      this.currentOperand = computation
+      this.operation = undefined
+      this.previousOperand =''
   }
-  //* check if number has more than 12 digts after decimal place
-  const test = eval(value) * Math.pow(10, 12)
-  if (test % 10 !== 0) {
-    return eval(value).toFixed(12);
+
+  getDisplayNumber(number) {
+      const stringNumber = number.toString()
+      const integerDigits = parseFloat(stringNumber.split('.')[0])
+      const decimalDigits = stringNumber.split('.')[1]
+      let integerDisplay
+      if (isNaN(integerDigits)) {
+          integerDisplay =''
+      } else {
+          integerDisplay = integerDigits.toLocaleString('en', { maximumFractionDigits: 0 })
+      }
+      if (decimalDigits != null) {
+          return integerDisplay+"."+decimalDigits 
+      } else {
+          return integerDisplay
+      }
   }
-  return eval(value);
+
+  updateDisplay() {
+      this.currentOperandTextElement.innerText =
+          this.getDisplayNumber(this.currentOperand)
+      if (this.operation != null) {
+          this.previousOperandTextElement.innerText =this.getDisplayNumber(this.previousOperand)+this.operation 
+      } else {
+          this.previousOperandTextElement.innerText =''
+      }
+  }
 }
+
+
+const numberButtons = document.querySelectorAll('[data-number]')
+const operationButtons = document.querySelectorAll('[data-operation]')
+const equalsButton = document.querySelector('[data-equals]')
+const deleteButton = document.querySelector('[data-delete]')
+const allClearButton = document.querySelector('[data-all-clear]')
+const previousOperandTextElement = document.querySelector('[data-previous-operand]')
+const currentOperandTextElement = document.querySelector('[data-current-operand]')
+
+const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
+
+numberButtons.forEach(button => {
+  button.addEventListener('click', () => {
+      calculator.appendNumber(button.innerText)
+      calculator.updateDisplay()
+  })
+})
+
+operationButtons.forEach(button => {
+  button.addEventListener('click', () => {
+      calculator.chooseOperation(button.innerText)
+      calculator.updateDisplay()
+  })
+})
+
+equalsButton.addEventListener('click', () => {
+  calculator.compute()
+  calculator.updateDisplay()
+})
+
+allClearButton.addEventListener('click', () => {
+  calculator.clear()
+  calculator.updateDisplay()
+})
+
+deleteButton.addEventListener('click', () => {
+  calculator.delete()
+  calculator.updateDisplay()
+})
+
+document.getElementById("presearchPackage").addEventListener('keydown', function (event) {
+  event.preventDefault();
+  switch (event.key) {
+    case '+':
+        calculator.chooseOperation(event.key)
+        calculator.updateDisplay()
+        break
+    case '-':
+        calculator.chooseOperation(event.key)
+        calculator.updateDisplay()
+        break
+    case '*':
+        calculator.chooseOperation(event.key)
+        calculator.updateDisplay()
+        break
+    case '/':
+        calculator.chooseOperation(event.key)
+        calculator.updateDisplay()
+        break
+    case '1':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '2':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '3':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '4':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '5':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '6':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '7':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '8':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '9':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '0':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case '.':
+        calculator.appendNumber(event.key)
+        calculator.updateDisplay()
+        break
+    case 'Enter':
+        calculator.compute()
+        calculator.updateDisplay()
+        break;
+    case '=':
+        calculator.compute()
+        calculator.updateDisplay()
+        break;
+    case 'Backspace':
+        calculator.delete()
+        calculator.updateDisplay()
+        break;
+    case 'Delete':
+        calculator.clear()
+        calculator.updateDisplay()
+        break;
+    default:
+        return
+}
+});
 </script>
- 
 
-<style>
-.dark .mathContain {
-  color:#d1d5db;
-}
-.mathContain {
-  padding: 0 15px;
-  box-sizing: border-box;
-}
-      
-.mainCol table {
-  background-color: #1e1e1e;
-  width: 295px;
-  max-width: 295px;
-  height: 325px;
-  text-align: center;
-  border-radius: 8px;
-  padding-right: 10px;
-  margin-bottom: 20px;
-}
 
-.mainCol input {
-  outline: 0;
-  position: relative;
-  left: 5px;
-  top: 5px;
-  border: 0;
-  color: #495069;
-  background-color:#d1d5db;
-  border-radius: 4px;
-  width: 60px;
-  height: 50px;
-  float: left;
-  margin: 5px;
-  font-size: 20px;
-  box-shadow: 0 4px rgba(0,0,0,0.2);
-  margin-bottom: 15px;
-}
-
-.mainCol input:hover {
-    color: #495069;
-  background-color: #fff;
-  border-radius: 4px;
-  width: 60px;
-  height: 50px;
-  float: left;
-  font-size: 20px;
-  }
-
-.mainCol input:active {
-  top: 4px;
-  border: 0 solid #000;
-  color: #495069;
-  background-color: #fff;
-  border-radius: 4px;
-  width: 60px;
-  height: 50px;
-  float: left;
-  margin: 5px;
-  font-size: 20px;
-  box-shadow: none;
-}
-
-.mainCol #resultDisplay {
-  width: 265px;
-  max-width: 270px;
-  font-size: 26px;
-  text-align: right;
-  background-color:  #d1d5db;
-  float: left;
-  padding-right: 10px;
-}
-
-.mainCol .operator {
-  background-color: #cee9ef;
-  position: relative;
-}
-
-.mainCol .operator:hover {
-
-  color: #495069;
-  
-}
-
-.mainCol .operator:active {
-  top: 4px;
-  box-shadow: none;
-}
-
-.mainCol #clear {
-  float: left;
-  position: relative;
-  resultDisplay: block;
-  background-color: #ff9fa8;
-}
-
-.mainCol #clear:hover {
-  float: left;
-  resultDisplay: block;
-  background-color: #F297A0;
-  margin-bottom: 15px;
-  
-}
-
-.mainCol #clear:active {
-  float: left;
-  top: 4px;
-  resultDisplay: block;
-  background-color: #F297A0;
-  margin-bottom: 15px;
-  box-shadow: none;
-}
-
-</style>
   `;
 }
-
-// This line is for testing package with browserify bundle
-// window.math = math("2 + 2");
-
 async function trigger(query) {
   const chars = new RegExp(/([a-zA-Z])+/g);
   if (!isNaN(query) || chars.test(query)) return false;
