@@ -1,0 +1,12 @@
+extends _layout
+
+include ./wrapper
+
+block content
+    +wrapper
+        div(x-data="searchResults({html:window.packageData.split('END_OF_SCRIPT_TAG').join('</script>'), info: window.packageInfo})" :class="state.results.error ? 'mt-20 flex-1 justify-center' : ''")
+            include ./_partials/error
+            include ./_partials/presearch-package
+            div(class="w-full 2lg:flex 2lg:flex-row-reverse 2lg:justify-end")
+                include ./_partials/special-sections/info
+                include ./_partials/standard-results

@@ -10,9 +10,8 @@ async function math(query) {
    <table>
       <tr>
          <td colspan="4">
-            <input  type="text" name="resultDisplay" value=${
-              typeof data === "number" ? data : ``
-            } id="resultDisplay" disabled>
+            <input  type="text" name="resultDisplay" value=${typeof data === "number" ? data : ``
+    } id="resultDisplay" disabled>
          </td>
       </tr>
       <tr>

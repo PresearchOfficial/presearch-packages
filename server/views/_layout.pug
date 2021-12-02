@@ -1,0 +1,34 @@
+doctype html
+html(lang="en" class="dark h-full")
+    head
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, shrink-to-fit=no")
+        meta(http-equiv="x-ua-compatible" content="ie=edge")
+
+        title #{title}
+        script. 
+            if (document.cookie.includes("screenMode=dark")|| (!document.cookie.includes("screenMode") && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        script. 
+            try {
+                window.packageData = `!{packageData ? packageData.split("</script>").join("END_OF_SCRIPT_TAG") : ""}`;
+            } catch(err) {
+                window.packageData = "";
+            }
+        script.
+            try {
+                window.packageInfo = JSON.parse('!{packageInfo}');
+            } catch(err) {
+                console.log(err)
+                window.packageInfo = {};
+            }
+           
+        link(rel="stylesheet" href="/assets/app.css")
+        link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous")
+        script(src="assets/app.js", defer)
+    body(class="bg-background-light200 dark:bg-background-dark500 h-full")
+        div(x-data=`userInfo("${settings.PRESEARCH_DOMAIN}")` :class="'h-full'")
+            block content

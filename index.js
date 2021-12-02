@@ -6,6 +6,7 @@ const moduleExports = {};
 
 fs.readdir(`${__dirname}/packages`, (err, dirs) => {
   if (!err) {
+    dirs = dirs.filter(dir => dir[0] !== '.');
     dirs.map(dir => moduleExports[dir] = require(`${__dirname}/packages/${dir}`))
   }
   else {
