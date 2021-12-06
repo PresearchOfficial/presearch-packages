@@ -22,7 +22,6 @@ async function math(query) {
 
   return `
 
-
 <div id="presearchPackage">
 <table>
 
@@ -190,6 +189,7 @@ class Calculator {
           this.previousOperandTextElement.innerText =''
       }
   }
+
 }
 
 
