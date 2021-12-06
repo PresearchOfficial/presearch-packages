@@ -3,80 +3,33 @@ const mathjs = require("mathjs");
 
 
 async function math(query) {
+  let expression;
+  let answer;
+  if (query === "cal" || query === "calculator") {
+    expression = 0;
+    answer = '';
+  } else {
+    try {
+      const data = mathjs.evaluate(query);
+      expression = query;
+      answer = `=${data}`
+    } catch (error) {
+      return null;
+    }
+
+  }
 
 
   return `
-<style>
-#presearchPackage{
-  
-}
-.output-container{
-  width: 100%;
-  height: 45px;
-  text-align: right;
-  font-weight: bold;
-  font-size: x-large;
-  border-width: 1px;
-  border-style: solid;
-  opacity: 0.5;
-  margin: 100px;
-}
-.output-container:hover{
-  opacity: 1;
-}
-button[type=button]{
-  opacity: 0.8;
-  background-color: #f5f5f5;
-  background-image: linear-gradient(top, #f5f5f5, #f1f1f1);
-  border: 1px solid #dedede;
-  color: #444;
-  height: 40px;
-  width: 80px;
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: normal;
-}
-button[type=button]:hover{
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
-    opacity: 1;
-    border: 1px solid #c6c6c6;
-    color: #222;
-    cursor: pointer;
-}
-button[name=equal] {
-  background-color: #4d90fe;
-  background-image: linear-gradient(top, #4d90fe, #4787ed);
-  border: 1px solid #3079ed;
-  color: #fefefe;
-}
-button[name=equal]:hover {
-  background-color: #4d90fe;
-  background-image: linear-gradient(top, #4d90fe, #357ae8);
-  border: 1px solid #2f5bb7;
-  color: #fefefe;
-}
-button[name=operator] {
-  border: 1px solid #c6c6c6;
-  background-color: #d6d6d6;
-}
-button[name=ac] {
-  width: 100%;
-}
-button[name=del] {
-  width: 100%;
-}
-</style>
+
 
 <div id="presearchPackage">
 <table>
 
   <tr>
     <td colspan="4" class="output-container">
-      <span data-previous-operand></span>
-      <span data-current-operand></span>
+      <span data-previous-operand>${expression}</span>
+      <span data-current-operand>${answer}</span>
     </td>
   </tr>
 
@@ -279,7 +232,7 @@ deleteButton.addEventListener('click', () => {
   calculator.updateDisplay()
 })
 
-document.getElementById("presearchPackage").addEventListener('keydown', function (event) {
+document.addEventListener('keydown', function (event) {
   event.preventDefault();
   switch (event.key) {
     case '+':
@@ -363,11 +316,82 @@ document.getElementById("presearchPackage").addEventListener('keydown', function
 }
 });
 </script>
-
+<style>
+#presearchPackage{
+  
+}
+.output-container{
+  width: 100%;
+  height: 45px;
+  text-align: right;
+  font-weight: bold;
+  font-size: x-large;
+  border-width: 1px;
+  border-style: solid;
+  opacity: 0.5;
+  margin: 100px;
+}
+.output-container:hover{
+  opacity: 1;
+}
+button[type=button]{
+  opacity: 0.8;
+  background-color: #f5f5f5;
+  background-image: linear-gradient(top, #f5f5f5, #f1f1f1);
+  border: 1px solid #dedede;
+  color: #444;
+  height: 40px;
+  width: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: normal;
+}
+button[type=button]:hover{
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
+    opacity: 1;
+    border: 1px solid #c6c6c6;
+    color: #222;
+    cursor: pointer;
+}
+button[name=equal] {
+  background-color: #4d90fe;
+  background-image: linear-gradient(top, #4d90fe, #4787ed);
+  border: 1px solid #3079ed;
+  color: #fefefe;
+}
+button[name=equal]:hover {
+  background-color: #4d90fe;
+  background-image: linear-gradient(top, #4d90fe, #357ae8);
+  border: 1px solid #2f5bb7;
+  color: #fefefe;
+}
+button[name=operator] {
+  border: 1px solid #c6c6c6;
+  background-color: #d6d6d6;
+}
+button[name=ac] {
+  width: 100%;
+}
+button[name=del] {
+  width: 100%;
+}
+</style>
 
   `;
 }
 async function trigger(query) {
+  //ignore phone numbers
+  const regexPhoneNumber = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+  if (query.match(regexPhoneNumber)) {
+    return false;
+  }
+  query = query.toLowerCase();
+  if (query === "calculator" || query === "cal") {
+    return true
+  }
   const chars = new RegExp(/([a-zA-Z])+/g);
   if (!isNaN(query) || chars.test(query)) return false;
   try {
