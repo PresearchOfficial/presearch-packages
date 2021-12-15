@@ -12,11 +12,10 @@ async function math(query) {
     try {
       const data = mathjs.evaluate(query);
       expression = query;
-      answer = `=${data}`
+      answer = `= ${data}`
     } catch (error) {
       return null;
     }
-
   }
 
 
@@ -233,7 +232,7 @@ deleteButton.addEventListener('click', () => {
 })
 
 let searchInputFocused = false;
-document.querySelector('input').addEventListener('click', e => {
+document.querySelector('input').addEventListener('mouseover', e => {
   searchInputFocused = true;
 })
 
@@ -327,72 +326,71 @@ document.addEventListener('keydown', function (event) {
 });
 </script>
 <style>
-#presearchPackage{
-  
-}
-#presearchPackage .output-container{
-  width: 100%;
-  height: 45px;
-  text-align: right;
-  font-weight: bold;
-  font-size: x-large;
-  border-width: 1px;
-  border-style: solid;
-  opacity: 0.5;
-  margin: 100px;
-  padding-right:6px;
-}
-.dark #presearchPackage .output-container {
-  color: #fff;
-  opacity: .8;
-}
-#presearchPackage .output-container:hover{
-  opacity: 1;
-}
-#presearchPackage button[type=button]{
-  opacity: 0.8;
-  background-color: #f5f5f5;
-  background-image: linear-gradient(top, #f5f5f5, #f1f1f1);
-  border: 1px solid #dedede;
-  color: #444;
-  height: 40px;
-  width: 80px;
-  border-radius: 10px;
-  overflow: hidden;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: normal;
-}
-#presearchPackage button[type=button]:hover{
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
+  #presearchPackage .output-container{
+    width: 100%;
+    height: 45px;
+    text-align: right;
+    font-weight: bold;
+    font-size: x-large;
+    border-width: 1px;
+    border-style: solid;
+    opacity: 0.5;
+    margin: 100px;
+    padding-right:6px;
+    max-width: 30px;
+    overflow-wrap: anywhere;
+  }
+  .dark #presearchPackage .output-container {
+    color: #fff;
+    opacity: .8;
+  }
+  #presearchPackage .output-container:hover{
     opacity: 1;
+  }
+  #presearchPackage button[type=button]{
+    opacity: 0.8;
+    background-color: #f5f5f5;
+    background-image: linear-gradient(top, #f5f5f5, #f1f1f1);
+    border: 1px solid #dedede;
+    color: #444;
+    height: 40px;
+    width: 80px;
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: normal;
+  }
+  #presearchPackage button[type=button]:hover{
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+      background-image: linear-gradient(top, #f8f8f8, #f1f1f1);
+      opacity: 1;
+      border: 1px solid #c6c6c6;
+      color: #222;
+      cursor: pointer;
+  }
+  #presearchPackage button[name=equal] {
+    background-color: #4d90fe;
+    background-image: linear-gradient(top, #4d90fe, #4787ed);
+    border: 1px solid #3079ed;
+    color: #fefefe;
+  }
+  #presearchPackage button[name=equal]:hover {
+    background-color: #4d90fe;
+    background-image: linear-gradient(top, #4d90fe, #357ae8);
+    border: 1px solid #2f5bb7;
+    color: #fefefe;
+  }
+  #presearchPackage button[name=operator] {
     border: 1px solid #c6c6c6;
-    color: #222;
-    cursor: pointer;
-}
-#presearchPackage button[name=equal] {
-  background-color: #4d90fe;
-  background-image: linear-gradient(top, #4d90fe, #4787ed);
-  border: 1px solid #3079ed;
-  color: #fefefe;
-}
-#presearchPackage button[name=equal]:hover {
-  background-color: #4d90fe;
-  background-image: linear-gradient(top, #4d90fe, #357ae8);
-  border: 1px solid #2f5bb7;
-  color: #fefefe;
-}
-#presearchPackage button[name=operator] {
-  border: 1px solid #c6c6c6;
-  background-color: #d6d6d6;
-}
-#presearchPackage button[name=ac] {
-  width: 100%;
-}
-#presearchPackage button[name=del] {
-  width: 100%;
-}
+    background-color: #d6d6d6;
+  }
+  #presearchPackage button[name=ac] {
+    width: 100%;
+  }
+  #presearchPackage button[name=del] {
+    width: 100%;
+  }
 </style>
 
   `;
@@ -404,7 +402,7 @@ async function trigger(query) {
     return false;
   }
   query = query.toLowerCase();
-  if (query === "calculator" || query === "cal") {
+  if (query === "calculator" || query === "cal" || query === "calc") {
     return true
   }
   const chars = new RegExp(/([a-zA-Z])+/g);
