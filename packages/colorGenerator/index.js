@@ -20,7 +20,7 @@ async function colorGenerator(query) {
 		color: #fff;
 		z-index: 1;
 	}
-	.margin1 {
+	.main .margin1 {
 		margin-top: 30px;
 		font-size: 25px;
 		opacity: 0.25;
@@ -28,7 +28,7 @@ async function colorGenerator(query) {
 		width: 40%;
 		fill:#fff;
 	}
-	.margin2 {
+	.main .margin2 {
 		font-size: 22px;
 	}
 	.main input[type="text"] {
@@ -41,7 +41,7 @@ async function colorGenerator(query) {
     cursor: pointer;
     padding-bottom: 5px;
 	}
-	.noselect {
+	.main.noselect {
 		-webkit-touch-callout: none;
 		-webkit-user-select: none;
 		-khtml-user-select: none;
@@ -49,7 +49,7 @@ async function colorGenerator(query) {
 		-ms-user-select: none;
 		user-select: none;
 	}
-	.active {
+	.main .active {
 		opacity: 1;
   }
   .main p {
@@ -64,17 +64,17 @@ async function colorGenerator(query) {
 			width: 20px;
 			height:48px;
 		}
-		p input[type="text"] {
+		.main p input[type="text"] {
 			font-size:7px;
 		}
-		p {
+		.main p {
 			font-size: 20px !important;
     }
     .main,
 		.sub {
 			height: 200px;
 		}
-		.margin2 {
+		.main .margin2 {
 			margin: 0;
 		}
 	}
@@ -313,11 +313,11 @@ async function colorGenerator(query) {
 
       item.id.addEventListener("mousemove", (e) => {
         let clientWidth = item.id.clientWidth / 2;
-        let position = e.clientX - clientWidth;
+        let position = e.clientX - document.querySelector(".main").offsetLeft - clientWidth;
         let pos = parseInt(item.id.classList[1].substring(3));
         if (item.clicked) {
-          item.id.style.left = position - 75 + "px";
-          if (e.clientX < columsGrid[pos - 1] + clientWidth * 2) {
+          item.id.style.left = position + "px";
+          if (e.clientX - document.querySelector(".main").offsetLeft < columsGrid[pos - 1] + clientWidth * 2) {
             let element = document.querySelector(".pos" + (pos - 1));
             let currentElement = document.querySelector(".pos" + pos);
             element.classList.remove("pos" + (pos - 1));
@@ -325,7 +325,7 @@ async function colorGenerator(query) {
             currentElement.classList.add("pos" + (pos - 1));
             currentElement.classList.remove("pos" + pos);
           }
-          if (e.clientX > columsGrid[pos + 1]) {
+          if (e.clientX - document.querySelector(".main").offsetLeft > columsGrid[pos + 1]) {
             let element = document.querySelector(".pos" + (pos + 1));
             let currentElement = document.querySelector(".pos" + pos);
             element.classList.remove("pos" + (pos + 1));

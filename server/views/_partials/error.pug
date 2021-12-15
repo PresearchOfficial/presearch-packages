@@ -1,0 +1,14 @@
+div(x-show="state.results.error" class="flex flex-1 flex-col md:justify-center items-center pt-4 my-auto" x-cloak)   
+    svg(class="w-16 h-16 mb-2 stroke-current text-primary-500 opacity-85 dark:opacity-100 dark:text-blue-300" mlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round")
+        path(d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z")
+        line(x1="12" y1="9" x2="12" y2="13")
+        line(x1="12" y1="17" x2="12.01" y2="17")
+
+    div(class="font-light flex text-center justify-center flex-col dark:text-white")
+        p Oops, something went wrong with your search...
+        p(class="mt-1 text-base") While we're working on a fix, you can try your search again on our #[span backup engine]:
+        a(class="mt-2 text-lg text-primary-600 transition duration-150 hover:text-primary-700 hover:underline dark:text-blue-300 dark:hover:text-blue-200" href=`https://dsearch.com${path}?q=${requestQuery}`) #{ `https://dsearch.com${path}?q=${requestQuery}` }
+
+    div(class="text-xs mt-4 text-center border p-2 dark:border-gray-300 dark:text-white")
+        p Code: #[span(class="text-gray-600 dark:text-gray-400" x-html="state.results.error ? state.results.error.code : ''")] 
+        p Message: #[span(class="text-gray-600 dark:text-gray-400" x-html="state.results.error ? state.results.error.message : ''")]

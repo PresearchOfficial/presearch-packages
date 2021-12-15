@@ -1,0 +1,36 @@
+div(x-show="$store.showSettings && $store.showSettings.show" x-transition:enter="transition ease-out" x-transition:enter-start="opacity-0 transform scale-95" x-transition:enter-end="opacity-100 transform scale-100" x-transition:leave="transition ease-in" x-transition:leave-start="opacity-100 transform scale-100" x-transition:leave-end="opacity-0 transform scale-95" class="fixed z-20 p-6 sm:w-96 w-full max-w-full h-auto min-h-full bg-background-light100 dark:bg-background-dark200 shadow top-0 right-0" :class="Alpine.store('lowWidthScreen') && Alpine.store('lowWidthScreen').status ? 'absolute' : ''" @click.outside="hideSettings(user.shareVisible)" x-cloak)
+    div(x-data=`settings('${settings.PRESEARCH_DOMAIN}')` class="flex flex-col dark:text-white")
+        div(class="flex" style="justify-content:flex-end")
+            div(class="self-end mt-2 flex items-center cursor-pointer text-black dark:text-white hover:opacity-60 transition font-light" @click="hideSettings(true, true)")
+                include ./icons/header/arrow-left
+                div(class="select-none") Back
+        div(class="p-4 bg-white dark:bg-background-dark400 rounded mt-6")
+            div(class="uppercase text-xs text-presearch-alternative")
+                div
+                    span(class="mr-1") Interface
+            div
+                hr(class="my-3")
+                div(class="mb-3")
+                    div(class="flex items-center justify-between")
+                        div
+                            div(class="text-sm") Theme
+                            div(class="text-xs font-light") Update the look and feel.
+                        div(class="flex items-center")
+                            div(@click="enableDarkMode()" class="flex items-center p-2 cursor-pointer hover:opacity-60 transition rounded" :class="`${state.darkModeEnabled ? 'bg-background-dark200' : ''}`")
+                                div(class="mr-2") 
+                                    include ./icons/header/moon
+                                div(class="text-sm font-light") Dark 
+                            div(@click="disableDarkMode()" class="flex items-center p-2 cursor-pointer hover:opacity-60 transition rounded" :class="`${!state.darkModeEnabled ? 'bg-gray-100' : ''}`")
+                                div(class="mr-2")
+                                    include ./icons/header/sun
+                                div(class="text-sm font-light") Light
+                div
+                    div(class="flex items-center justify-between")
+                        div
+                            div(class="text-sm") Text Size
+                            div(class="text-xs font-light") Change results text size.
+                        div(class="flex items-center")
+                            div(@click="useLargeText(false)" class="flex items-center p-2 mr-3 cursor-pointer hover:opacity-60 transition rounded" :class="`${$store.largeText && !$store.largeText.status ? 'bg-gray-100 dark:bg-background-dark200' : ''}`")
+                                div(class="text-sm select-none") aA
+                            div(@click="useLargeText(true)" class="flex items-center p-1 px-2 cursor-pointer hover:opacity-60 transition rounded" :class="`${$store.largeText && $store.largeText.status ? 'bg-gray-100 dark:bg-background-dark200' : ''}`")
+                                div(class="text-lg select-none") aA

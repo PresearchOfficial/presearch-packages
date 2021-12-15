@@ -1,4 +1,10 @@
 # Change Log
+## 0.2.0
+    - New test enviorment
+
+## 0.1.34
+    - Updated cryptoInfo package
+    
 ## 0.1.33
     - Updated cryptoInfo coin list
 
