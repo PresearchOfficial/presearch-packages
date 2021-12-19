@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "main": "index.js",
   "license": "MIT",
-  "author": "PresearchOfficial",
+  "author": "Ishan-Ravindu",
   "dependencies": {
     "mathjs": "^9.5.1"
   }

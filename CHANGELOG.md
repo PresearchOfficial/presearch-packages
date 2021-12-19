@@ -1,4 +1,9 @@
 # Change Log
+## 0.2.1
+    - New package 'cryptoConversion'
+    - Updated 'math' package
+    - Updated coin list for 'cryptoInfo' package
+
 ## 0.2.0
     - New test enviorment
 
