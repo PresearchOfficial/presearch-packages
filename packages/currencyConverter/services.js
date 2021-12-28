@@ -22,10 +22,11 @@ const USD_CODE = "USD";
  */
 
 /**
- * @typedef Converted
+ * @typedef Currency
  * @type {object}
  * @property {number} value
  * @property {number|undefined} How many decimals to round to when formatting, if allowed at all
+ * @property {string} code The code of the currency
  */
 
 /**
@@ -124,7 +125,7 @@ async function fetchRates(conversion, API_KEY) {
  * Execute the conversion using the given rates
  * @param {Conversion} conversion
  * @param {CurrencyRate[]} rates
- * @returns {Converted | undefined}
+ * @returns {Currency | undefined}
  */
 function convert(conversion, rates) {
   const fromRate = rates.find(currency => currency.code === conversion.from);
@@ -137,18 +138,36 @@ function convert(conversion, rates) {
   const eurValue = conversion.value / fromRate.rate;
   const toValue = eurValue * toRate.rate;
 
-  return { value: toValue, round: toRate.round };
+  return { value: toValue, round: toRate.round, code: toRate.code };
 }
 
 /**
- * Format a conversion for output
- * @param {Converted} converted
+ * Format a currency for output
+ * @param {Currency} currency
  * @returns {string}
  */
-function format(converted) {
-  const value = converted.round ? converted.value.toFixed(converted.round) : converted.value;
-
-  return value.toLocaleString();
+function formatCurrency(currency) {
+  try {
+    return currency.value.toLocaleString(
+      undefined,
+      {
+        style: "currency",
+        currency: currency.code,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: currency.round ? currency.round : 20,
+      }
+    );
+  } catch (error) {
+    // since we're dealing with crypto currencies, the locale string
+    // does not always like the currency codes we put in. detect those
+    // cases and fallback
+    if (error instanceof RangeError) {
+      const value = currency.round ? currency.value.toFixed(currency.round) : currency.value;
+      return `${value} ${currency.code}`;
+    } else {
+      throw error;
+    }
+  }
 }
 
-module.exports = { parseAndNormalize, fetchRates, convert, format };
+module.exports = { parseAndNormalize, fetchRates, convert, formatCurrency };
