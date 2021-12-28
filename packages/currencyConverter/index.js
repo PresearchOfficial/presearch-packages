@@ -1,20 +1,20 @@
 'use strict';
-const services = require('./services');
+const {parseAndNormalize, fetchRates, convert, formatCurrency} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
-  const conversion = services.parseAndNormalize(query);
+  const conversion = parseAndNormalize(query);
 
   if (!conversion) {
     return undefined;
   }
 
-  const rates = await services.fetchRates(conversion, API_KEY);
+  const rates = await fetchRates(conversion, API_KEY);
 
   if (!rates) {
     return undefined;
   }
 
-  const converted = services.convert(conversion, rates);
+  const converted = convert(conversion, rates);
 
   if (!converted) {
     return undefined;
@@ -23,8 +23,8 @@ async function currencyConverter(query, API_KEY) {
   return `
     <div id="presearchPackage">
       <div id="currencyConverter">
-        <div class="from">${services.formatCurrency({value: conversion.value, code: conversion.from})} <i>&asymp;</i></div>
-        <div class="to">${services.formatCurrency(converted)}</div>
+        <div class="from">${formatCurrency({value: conversion.value, code: conversion.from})} <i>&asymp;</i></div>
+        <div class="to">${formatCurrency(converted)}</div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
       </div>
     </div>

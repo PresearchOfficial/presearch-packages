@@ -36,7 +36,7 @@ const USD_CODE = "USD";
  */
 function parseAndNormalize(query) {
   // normalize the input
-  query = query.replace(",", ".").toUpperCase();
+  query = query.trim().replace(",", ".").toUpperCase();
 
   // check for the input eg. "3 EUR to USD"
   const match = query.match(/((\d+(\.\d+)?) )?([A-Z]{3,5}) (TO|INTO|=) ([A-Z]{3,5})/);
@@ -76,7 +76,7 @@ async function fetchFiatRates(conversion) {
  * @param {string} API_KEY
  * @returns {Promise<CurrencyRate[]>}
  */
-async function fetchCryptoRates(conversion, API_KEY) {
+async function fetchCryptoRates(conversion, API_KEY = undefined) {
   // the "aux" parameter controls which fields we get. we only need the "quote" field, but it can't
   // be specified in the "aux" parameter. just send one value in order to reduce the payload.
   const response = await axios.get(
@@ -92,7 +92,7 @@ async function fetchCryptoRates(conversion, API_KEY) {
     .map(currency => ({
       code: currency.symbol,
       rate: currency.quote[USD_CODE].price,
-      round: undefined
+      round: undefined,
     }));
 }
 
@@ -144,12 +144,13 @@ function convert(conversion, rates) {
 /**
  * Format a currency for output
  * @param {Currency} currency
+ * @param {string} locale
  * @returns {string}
  */
-function formatCurrency(currency) {
+function formatCurrency(currency, locale = undefined) {
   try {
     return currency.value.toLocaleString(
-      undefined,
+      locale,
       {
         style: "currency",
         currency: currency.code,
