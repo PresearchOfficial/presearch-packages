@@ -1,5 +1,5 @@
 'use strict';
-const {parseAndNormalize, fetchRates, convert, formatCurrency} = require('./services');
+const {parseAndNormalize, fetchRates, convert, formatMoney} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
   const conversion = parseAndNormalize(query);
@@ -23,8 +23,8 @@ async function currencyConverter(query, API_KEY) {
   return `
     <div id="presearchPackage">
       <div id="currencyConverter">
-        <div class="from">${formatCurrency({value: conversion.value, code: conversion.from})} <i>&asymp;</i></div>
-        <div class="to">${formatCurrency(converted)}</div>
+        <div class="from">${formatMoney({value: conversion.value, code: conversion.from})} <i>&asymp;</i></div>
+        <div class="to">${formatMoney(converted)}</div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
       </div>
     </div>
@@ -56,7 +56,7 @@ async function currencyConverter(query, API_KEY) {
 //	here you should check, if the query should trigger your package
 //	ie. if you are building 'randomNumber' package, 'random number' query will be a good choice
 function trigger(query) {
-  return services.parseAndNormalize(query) !== undefined;
+  return parseAndNormalize(query) !== undefined;
 }
 
 module.exports = { currencyConverter, trigger };

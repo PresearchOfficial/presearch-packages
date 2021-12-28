@@ -8,8 +8,8 @@ const USD_CODE = "USD";
 /**
  * @typedef Conversion
  * @type {object}
- * @property {string} to Code of the to currency
- * @property {string} from Code of the from currency
+ * @property {string} to Which currency to convert from
+ * @property {string} from Which currency to convert to
  * @property {number} value The value to convert
  */
 
@@ -22,10 +22,10 @@ const USD_CODE = "USD";
  */
 
 /**
- * @typedef Currency
+ * @typedef Money
  * @type {object}
  * @property {number} value
- * @property {number|undefined} How many decimals to round to when formatting, if allowed at all
+ * @property {number|undefined} round many decimals to round to when formatting, if allowed at all
  * @property {string} code The code of the currency
  */
 
@@ -83,7 +83,7 @@ async function fetchCryptoRates(conversion, API_KEY = undefined) {
     `${CRYPTO_API}?skip_invalid=true&aux=date_added&symbol=${conversion.from},${conversion.to}`,
     {
       headers: {
-        "X-CMC_PRO_API_KEY": API_KEY
+        "X-CMC_PRO_API_KEY": API_KEY,
       }
     }
   );
@@ -125,7 +125,7 @@ async function fetchRates(conversion, API_KEY) {
  * Execute the conversion using the given rates
  * @param {Conversion} conversion
  * @param {CurrencyRate[]} rates
- * @returns {Currency | undefined}
+ * @returns {Money | undefined}
  */
 function convert(conversion, rates) {
   const fromRate = rates.find(currency => currency.code === conversion.from);
@@ -143,11 +143,11 @@ function convert(conversion, rates) {
 
 /**
  * Format a currency for output
- * @param {Currency} currency
+ * @param {Money} currency
  * @param {string} locale
  * @returns {string}
  */
-function formatCurrency(currency, locale = undefined) {
+function formatMoney(currency, locale = undefined) {
   try {
     return currency.value.toLocaleString(
       locale,
@@ -171,4 +171,4 @@ function formatCurrency(currency, locale = undefined) {
   }
 }
 
-module.exports = { parseAndNormalize, fetchRates, convert, formatCurrency };
+module.exports = { parseAndNormalize, fetchRates, convert, formatMoney };
