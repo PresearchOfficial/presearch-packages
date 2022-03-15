@@ -1,0 +1,18 @@
+{
+  "name": "currencyConverter",
+  "version": "1.0.0",
+  "description": "Convert currencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "keywords": [],
+  "author": "Niklas Ekman <nikl.ekman@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0"
+  },
+  "devDependencies": {
+    "jest": "^27.4.5"
+  }
+}
