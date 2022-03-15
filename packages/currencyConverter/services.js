@@ -58,7 +58,9 @@ function parseAndNormalize(query) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchFiatRates(conversion) {
-  const response = await axios.get(FIAT_API);
+  const response = await axios.get(FIAT_API).catch(error => ({error}));
+
+  if (response.error) return [];
 
   const targetCurrencies = [conversion.from, conversion.to, USD_CODE];
 
