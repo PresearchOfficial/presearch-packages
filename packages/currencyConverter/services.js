@@ -76,7 +76,8 @@ async function fetchFiatRates(conversion) {
  * @param {string} API_KEY
  * @returns {Promise<CurrencyRate[]>}
  */
-async function fetchCryptoRates(conversion, API_KEY = undefined) {
+async function fetchCryptoRates(conversion, API_KEY) {
+  if (!API_KEY) return [];
   // the "aux" parameter controls which fields we get. we only need the "quote" field, but it can't
   // be specified in the "aux" parameter. just send one value in order to reduce the payload.
   const response = await axios.get(
@@ -86,7 +87,9 @@ async function fetchCryptoRates(conversion, API_KEY = undefined) {
         "X-CMC_PRO_API_KEY": API_KEY,
       }
     }
-  );
+  ).catch(error => ({error}));
+
+  if (response.error) return [];
 
   return Object.values(response.data.data)
     .map(currency => ({
