@@ -4,24 +4,29 @@ const WEATHER_API_URL = `https://api.openweathermap.org/data/2.5/onecall?lat=24.
 const WEATHER_API_URL_2 = `https://api.openweathermap.org/data/2.5/forecast?lat=24.8702571&lon=67.0338954&cnt=${8}&id=524901`;
 // var WEATHER_API_URL_2 = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=24.8702571&lon=67.0338954&cnt=${7}`;
 
+let temperature;
+let weatherData;
+let weatherData2;
+
 async function weather(query, API_KEY) {
   console.log(query, "-", API_KEY);
 
   const headers = { Accept: "application/json", "X-CMC_PRO_API_KEY": API_KEY };
 
-  let [weatherData] = await Promise.all([
+  [weatherData] = await Promise.all([
     axios
       .get(`${WEATHER_API_URL}&appid=${API_KEY}`, { headers })
       .catch((error) => ({ error })),
   ]);
-  let [weatherData2] = await Promise.all([
+  [weatherData2] = await Promise.all([
     axios
       .get(`${WEATHER_API_URL_2}&appid=${API_KEY}`, { headers })
       .catch((error) => ({ error })),
   ]);
-  weatherData2 = weatherData2.data;
-  weatherData = weatherData.data;
-  console.log(weatherData, weatherData2);
+  weatherData2 = weatherData2?.data;
+  weatherData = weatherData?.data;
+  // console.log(weatherData, weatherData2);
+  console.log(weatherData);
 
   Date.prototype.timeNow = function () {
     return (
@@ -36,22 +41,76 @@ async function weather(query, API_KEY) {
     );
   };
 
+  temperature = (weatherData?.current.temp - 273.15).toFixed();
+
+  const weekDays = [
+    'Sun',
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat'
+  ]
+
   // returns a random integer between 0 and 9
   // here you need to return HTML code for your package. You can use <style> and <script> tags
   // you need to keep <div id="presearchPackage"> here, you can remove everything else
   return `
+  <script>
+    function getTemp(temp){
+      return (temp - 273.15).toFixed()
+    }
+
+    function changeTempType(type) {
+      var temperature = document.getElementById("temperature");
+      if(type === 'c'){
+        temperature.innerHTML = (${temperature} * 9) / 5 + 32+'°';
+        document.getElementById("tempF").classList.add('tempDeselected');
+        document.getElementById("tempC").classList.remove('tempDeselected');
+      }else{
+        temperature.innerHTML = ${temperature}+'°';
+        document.getElementById("tempC").classList.add('tempDeselected');
+        document.getElementById("tempF").classList.remove('tempDeselected');
+      }
+    }
+
+    let weekDays = ${JSON.stringify(weekDays)}
+    console.log(${JSON.stringify(weatherData.current.weather[0].icon)});
+    console.log(${JSON.stringify(weatherData.current)});
+    console.log(${JSON.stringify(weatherData.hourly)});
+    Object.values(${JSON.stringify(weatherData.daily)}).forEach((val, i) => {
+      console.log(val);
+      let button = document.createElement("button");
+      button.classList.add('weather-button');
+      if(i === 0){
+        button.classList.add('currentDay');
+      }
+      document.getElementById("buttons").appendChild(button);
+      let span = document.createElement("span");
+      span.innerHTML = weekDays[new Date(val.dt*1000).getDay()]
+      button.appendChild(span);
+      let img = document.createElement("img");
+      // img.src = '/assets/images/cloud.png'
+      img.src = "http://openweathermap.org/img/w/" + val.weather[0].icon + ".png"
+      button.appendChild(img);
+      let span2 = document.createElement("span");
+      span2.innerHTML = getTemp(val.temp.max)+'° '+ getTemp(val.temp.min)+'°'
+      button.appendChild(span2);
+    });
+  </script>
   <div class="background">
   <div class="box">
       <div class="box1">
           <div class="weather-box">
               <div class="left">
-                  <img src="/assets/images/moon.png" class="moon">
+                  <img src="http://openweathermap.org/img/w/${JSON.stringify(weatherData.current.weather[0].icon)}.png" class="moon">
               </div>
               <div class="main-right">
                   <div class="right">
-                      <h1>${(weatherData.current.temp - 273.15).toFixed()}°</h1>
+                      <h1 id="temperature">${temperature}°</h1>
                       <div class="h2">
-                          <h2>F | <strong class="C"> C</strong></h2>
+                          <button id="tempC" class="tempDeselected" onclick="changeTempType('c')">F</button> | <button id="tempF" onclick="changeTempType('f')">C</button>
                       </div>
                   </div>
                   <div class="right2">
@@ -63,28 +122,28 @@ async function weather(query, API_KEY) {
           <div class="weather-details">
               <div class="country">
                   <div class="left-side">
-                      <span>${weatherData2.city.name}, ${
-                        weatherData2.city.country
-                      }</span>
+                      <span>${weatherData2?.city.name}, ${
+    weatherData2?.city.country
+  }</span>
                   </div>
                   <div class="right-side">
                       <span class="day">${new Date(
-                        weatherData.current.dt * 1000
+                        weatherData?.current.dt * 1000
                       ).toDateString()}</span>
                       <strong class="time">${new Date(
-                        weatherData.current.dt
+                        weatherData?.current.dt
                       ).timeNow()}</strong>
                   </div>
               </div>
               <div class="sky-details">
                   <h1 class="sky">${
-                    weatherData.current.weather[0].description
+                    weatherData?.current.weather[0].description
                   }</h1>
                   <div class="heading-5">
                       <div class="row1">
                           <h5>Humidity:</h5>
                           <span class="sub">${
-                            weatherData.current.humidity
+                            weatherData?.current.humidity
                           }%</span>
                       </div>
                       <div class="row2">
@@ -140,47 +199,7 @@ async function weather(query, API_KEY) {
       </div>
   </div>
   <div class="dark-back">
-      <div class="button-row">
-          <button class="weather-button">
-              wed
-              <img src="/assets/images/cloud.png">
-              18° 10°
-          </button>
-          <button class="weather-button">
-              thu
-              <img src="/assets/images/clouds.png">
-              24° 4°
-          </button>
-          <button class="weather-button">
-              fri
-              <img src="/assets/images/cloud.png">
-              24° 0°
-          </button>
-          <button class="weather-button">
-              sat
-              <img src="/assets/images/cloudy.png">
-              24° -5°
-          </button>
-          <button class="weather-button">
-              sun
-              <img src="/assets/images/sun.png">
-              38° 22°
-          </button>
-          <button class="weather-button">
-              mon
-              <img src="/assets/images/cloud.png">
-              39° 31°
-          </button>
-          <button class="weather-button">
-              tue
-              <img src="/assets/images/clouds.png">
-              43° 24°
-          </button>
-          <button class="weather-button">
-              wed
-              <img src="/assets/images/scattered-thunderstorms.png">
-              54° 36°
-          </button>
+      <div class="button-row" id="buttons">
       </div>
   </div>
 </div>
@@ -261,12 +280,16 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 165px;
+  width: 145px;
   padding-left: 10px;
 }
 
 .right .h2 {
   width: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #d2dde5;
 }
 
 h1 {
@@ -275,15 +298,15 @@ h1 {
   font-family: arial;
 }
 
-.h2 h2 {
+.h2 button {
   color: #d2dde5;
   font-size: 15px;
   align-items: center;
   justify-content: center;
   display: flex;
-  margin-top: 5px;
   font-family: arial;
   padding-top: 4px;
+  margin: 0 4px;
 }
 
 .right2 {
@@ -306,10 +329,8 @@ h3 {
   font-size: 15px;
 }
 
-.C {
-  padding-left: 4px;
-  color: #8490a2;
-  font-family: arial;
+.tempDeselected {
+  color: #8490a2 !important;
 }
 
 .weather-details {
@@ -504,7 +525,7 @@ h5 {
   padding: 10px 0px;
 }
 
-.weather-button:focus {
+.currentDay {
   background: linear-gradient(#12141a, #1d1f26);
   color: white;
 }
@@ -540,7 +561,7 @@ function showPosition(position) {
 }
 
 getLocation();
-	</script>
+	</>
 	`;
 }
 
