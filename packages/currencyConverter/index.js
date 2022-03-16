@@ -30,7 +30,7 @@ async function currencyConverter(query, API_KEY) {
     </div>
     <style>
     .to {
-      font-size: xx-large;
+      font-size: x-large;
     }
 
     .from {
@@ -48,11 +48,6 @@ async function currencyConverter(query, API_KEY) {
 
     .disclaimer a {
       text-decoration: underline;
-    }
-    @media only screen and (max-width:800px) {
-      .to.shrink {
-        font-size: x-large;
-      }
     }
     @media only screen and (max-width:400px) {
       .to.shrink {
