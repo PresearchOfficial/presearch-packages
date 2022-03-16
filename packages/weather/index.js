@@ -58,31 +58,37 @@ async function weather(query, API_KEY) {
   // you need to keep <div id="presearchPackage"> here, you can remove everything else
   return `
   <script>
+
+    let tempTypeG = 'c';
     function getTemp(temp){
       return (temp - 273.15).toFixed()
     }
 
     function changeTempType(type) {
       var temperature = document.getElementById("temperature");
-      if(type === 'c'){
-        temperature.innerHTML = (${temperature} * 9) / 5 + 32+'°';
-        document.getElementById("tempF").classList.add('tempDeselected');
-        document.getElementById("tempC").classList.remove('tempDeselected');
-      }else{
-        temperature.innerHTML = ${temperature}+'°';
-        document.getElementById("tempC").classList.add('tempDeselected');
-        document.getElementById("tempF").classList.remove('tempDeselected');
+      if(tempTypeG !== type){
+        tempTypeG = type;
+        if(type === 'c'){
+          temperature.innerHTML = ((temperature.innerHTML - 32) * 5 / 9).toFixed();
+          document.getElementById("tempC").classList.add('tempDeselected');
+          document.getElementById("tempF").classList.remove('tempDeselected');
+        }else{
+          temperature.innerHTML = ((temperature.innerHTML * 9) / 5 + 32).toFixed();
+          document.getElementById("tempF").classList.add('tempDeselected');
+          document.getElementById("tempC").classList.remove('tempDeselected');
+        }
       }
     }
 
+
     let weekDays = ${JSON.stringify(weekDays)}
-    console.log(${JSON.stringify(weatherData.current.weather[0].icon)});
     console.log(${JSON.stringify(weatherData.current)});
     console.log(${JSON.stringify(weatherData.hourly)});
     Object.values(${JSON.stringify(weatherData.daily)}).forEach((val, i) => {
       console.log(val);
       let button = document.createElement("button");
       button.classList.add('weather-button');
+      button.setAttribute('id','weather-button'+i);
       if(i === 0){
         button.classList.add('currentDay');
       }
@@ -91,12 +97,25 @@ async function weather(query, API_KEY) {
       span.innerHTML = weekDays[new Date(val.dt*1000).getDay()]
       button.appendChild(span);
       let img = document.createElement("img");
-      // img.src = '/assets/images/cloud.png'
       img.src = "http://openweathermap.org/img/w/" + val.weather[0].icon + ".png"
       button.appendChild(img);
       let span2 = document.createElement("span");
       span2.innerHTML = getTemp(val.temp.max)+'° '+ getTemp(val.temp.min)+'°'
       button.appendChild(span2);
+		  button.addEventListener("click", () => {
+        console.log(val.dt)
+        document.getElementById("temperature").innerHTML = getTemp(val.temp.day);
+        document.getElementById("humidity").innerHTML = val.humidity+"%";
+        document.getElementById("weatherSky").innerHTML = val.weather[0].description;
+        document.getElementById("currDate").innerHTML = new Date(val.dt * 1000).toDateString();
+        Object.values(${JSON.stringify(weatherData.daily)}).forEach((val, idx) => {
+          document.getElementById("weather-button"+idx).classList.remove('currentDay');
+        })
+        button.classList.add('currentDay');
+        document.getElementById("tempC").classList.add('tempDeselected');
+        document.getElementById("tempF").classList.remove('tempDeselected');
+        tempTypeG = 'c';
+      });
     });
   </script>
   <div class="background">
@@ -104,18 +123,14 @@ async function weather(query, API_KEY) {
       <div class="box1">
           <div class="weather-box">
               <div class="left">
-                  <img src="http://openweathermap.org/img/w/${JSON.stringify(weatherData.current.weather[0].icon)}.png" class="moon">
+                  <img src="http://openweathermap.org/img/w/${weatherData.current.weather[0].icon}.png" class="moon">
               </div>
               <div class="main-right">
                   <div class="right">
-                      <h1 id="temperature">${temperature}°</h1>
+                      <h1 id="temperature">${temperature}</h1>
                       <div class="h2">
-                          <button id="tempC" class="tempDeselected" onclick="changeTempType('c')">F</button> | <button id="tempF" onclick="changeTempType('f')">C</button>
+                          <button id="tempC" class="tempDeselected" onclick="changeTempType('f')">F</button> | <button id="tempF" onclick="changeTempType('c')">C</button>
                       </div>
-                  </div>
-                  <div class="right2">
-                      <h3>18°</h3>
-                      <h3 class="degree">10°</h3>
                   </div>
               </div>
           </div>
@@ -127,22 +142,19 @@ async function weather(query, API_KEY) {
   }</span>
                   </div>
                   <div class="right-side">
-                      <span class="day">${new Date(
+                      <span class="day" id="currDate">${new Date(
                         weatherData?.current.dt * 1000
                       ).toDateString()}</span>
-                      <strong class="time">${new Date(
-                        weatherData?.current.dt
-                      ).timeNow()}</strong>
                   </div>
               </div>
               <div class="sky-details">
-                  <h1 class="sky">${
+                  <h1 class="sky" id="weatherSky">${
                     weatherData?.current.weather[0].description
                   }</h1>
                   <div class="heading-5">
                       <div class="row1">
                           <h5>Humidity:</h5>
-                          <span class="sub">${
+                          <span class="sub" id="humidity">${
                             weatherData?.current.humidity
                           }%</span>
                       </div>
@@ -258,6 +270,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 20%;
   min-width: 200px;
   margin-top: 60px;
