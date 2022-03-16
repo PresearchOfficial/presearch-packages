@@ -1,4 +1,9 @@
 # Change Log
+## 0.2.2
+    - New package 'currencyConverter'
+    - Removed 'exchangeRates' package
+    - Temporarly disabled 'cryptoConversion' package, because 'currencyConverter' has similar functionality
+
 ## 0.2.1
     - New package 'cryptoConversion'
     - Updated 'math' package

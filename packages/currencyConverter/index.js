@@ -1,5 +1,5 @@
 'use strict';
-const {parseAndNormalize, fetchRates, convert, formatMoney} = require('./services');
+const {parseAndNormalize, fetchRates, convert} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
   const conversion = parseAndNormalize(query);
@@ -23,8 +23,8 @@ async function currencyConverter(query, API_KEY) {
   return `
     <div id="presearchPackage">
       <div id="currencyConverter">
-        <div class="from">${formatMoney({value: conversion.value, code: conversion.from})} <i>&asymp;</i></div>
-        <div class="to">${formatMoney(converted)}</div>
+        <div class="from"><span></span><i> &asymp;</i></div>
+        <div class="to"><span></span></div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
       </div>
     </div>
@@ -49,7 +49,57 @@ async function currencyConverter(query, API_KEY) {
     .disclaimer a {
       text-decoration: underline;
     }
+    @media only screen and (max-width:800px) {
+      .to.shrink {
+        font-size: x-large;
+      }
+    }
+    @media only screen and (max-width:400px) {
+      .to.shrink {
+        font-size: large;
+        margin-bottom: 2px;
+      }
+    }
     </style>
+    <script>
+    const formatMoney = (currency, locale = undefined) => {
+      try {
+        return currency.value.toLocaleString(
+          locale,
+          {
+            style: "currency",
+            currency: currency.code,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: currency.round ? currency.round : 20,
+          }
+        );
+      } catch (error) {
+        // since we're dealing with crypto currencies, the locale string
+        // does not always like the currency codes we put in. detect those
+        // cases and fallback
+        if (error instanceof RangeError) {
+          const value = currency.round ? currency.value.toFixed(currency.round) : currency.value;
+          return value + " " + currency.code;
+        } else {
+          throw error;
+        }
+      }
+    }
+    const from = document.querySelector(".from span");
+    const to = document.querySelector(".to span");
+    if (from) {
+      from.innerHTML = formatMoney({ value: ${conversion.value}, code: "${conversion.from}" })
+    }
+    if (to) {
+      to.innerHTML = formatMoney({ value: ${converted.value}, round: ${converted.round}, code: "${converted.code}" });
+      if (to.innerHTML) {
+        const numbers = to.innerHTML.split(/[a-z&;.,]/gi).join("");
+        if (numbers && numbers.length > 8) {
+          to.parentElement.classList.add("shrink");
+        }
+      }
+    }
+    </script>
   `;
 }
 

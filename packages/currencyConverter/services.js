@@ -146,34 +146,4 @@ function convert(conversion, rates) {
   return { value: toValue, round: toRate.round, code: toRate.code };
 }
 
-/**
- * Format a currency for output
- * @param {Money} currency
- * @param {string} locale
- * @returns {string}
- */
-function formatMoney(currency, locale = undefined) {
-  try {
-    return currency.value.toLocaleString(
-      locale,
-      {
-        style: "currency",
-        currency: currency.code,
-        minimumFractionDigits: 0,
-        maximumFractionDigits: currency.round ? currency.round : 20,
-      }
-    );
-  } catch (error) {
-    // since we're dealing with crypto currencies, the locale string
-    // does not always like the currency codes we put in. detect those
-    // cases and fallback
-    if (error instanceof RangeError) {
-      const value = currency.round ? currency.value.toFixed(currency.round) : currency.value;
-      return `${value} ${currency.code}`;
-    } else {
-      throw error;
-    }
-  }
-}
-
-module.exports = { parseAndNormalize, fetchRates, convert, formatMoney };
+module.exports = { parseAndNormalize, fetchRates, convert };
