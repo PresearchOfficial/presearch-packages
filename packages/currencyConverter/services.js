@@ -1,6 +1,9 @@
 'use strict';
 const axios = require("axios");
 
+const cryptoCurrencies = require("./cryptoCurrencies.json");
+const fiatCurrencies = require("./fiatCurrencies.json");
+
 const FIAT_API = "https://ec.europa.eu/budg/inforeuro/api/public/monthly-rates";
 const CRYPTO_API = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
 const USD_CODE = "USD";
@@ -11,6 +14,7 @@ const USD_CODE = "USD";
  * @property {string} to Which currency to convert from
  * @property {string} from Which currency to convert to
  * @property {number} value The value to convert
+ * @property {fromName} fromName Full name of the cryptocurrency (if from is cryptocurrency)
  */
 
 /**
@@ -39,17 +43,46 @@ function parseAndNormalize(query) {
   query = query.trim().replace(",", ".").toUpperCase();
 
   // check for the input eg. "3 EUR to USD"
-  const match = query.match(/((\d+(\.\d+)?) )?([A-Z]{3,5}) (TO|INTO|=) ([A-Z]{3,5})/);
+  // we are expecting fiat currencies to have 3 chars and crypto currencies to have up to 8 chars (at least most of them)
+  const match = query.match(/((\d+(\.\d+)?) )?([A-Z]{2,8}) {0,1}(TO|INTO|=| ) {0,1}([A-Z]{2,8})/);
 
   if (!match) {
     return undefined;
   }
 
-  const [, , valueString, , from, , to] = match;
+  // leave just amount, from and to
+  const filteredMatch = match.filter((el) => {
+    if(!el) return false;
+    const lowercaseEl = el.toLowerCase();
+    return (
+      el != query && !el.includes(" ") && lowercaseEl != query && lowercaseEl != "to" && lowercaseEl != "into" && lowercaseEl != "=" && lowercaseEl != " "
+    )
+  })
+
+  let valueString, from, to;
+
+  if (filteredMatch && filteredMatch.length) {
+    // handle the case when there's nothing between currencies, i.e. 'usd eur'
+    if (filteredMatch.length == 2) {
+      [from, to] = filteredMatch;
+    } else {
+      [valueString, from, to] = filteredMatch;
+    }
+  } else {
+    return undefined;
+  }
 
   const value = parseFloat(valueString ?? 1);
 
-  return { value, from, to };
+  if (!cryptoCurrencies[from] && !fiatCurrencies[from]) {
+    return undefined;
+  }
+
+  if (!cryptoCurrencies[to] && !fiatCurrencies[to]) {
+    return undefined;
+  }
+
+  return { value, from, to, fromName: cryptoCurrencies[from] ? cryptoCurrencies[from].name : '' };
 }
 
 /**
