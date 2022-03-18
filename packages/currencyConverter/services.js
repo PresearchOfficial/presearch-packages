@@ -82,7 +82,9 @@ function parseAndNormalize(query) {
     return undefined;
   }
 
-  return { value, from, to, fromName: cryptoCurrencies[from] ? cryptoCurrencies[from].name : '' };
+  const fromName = (cryptoCurrencies[from] && !fiatCurrencies[from]) ? cryptoCurrencies[from].name : '';
+  
+  return { value, from, to, fromName};
 }
 
 /**
@@ -91,6 +93,7 @@ function parseAndNormalize(query) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchFiatRates(conversion) {
+
   const response = await axios.get(FIAT_API).catch(error => ({error}));
 
   if (response.error) return [];
