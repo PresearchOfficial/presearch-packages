@@ -1,4 +1,8 @@
 # Change Log
+## 0.2.3
+    - Added offline list for fiat and cryptocurrencies for 'currencyConverter' package
+    - Improved regex for math package to exclude phone numbers
+
 ## 0.2.2
     - New package 'currencyConverter'
     - Removed 'exchangeRates' package

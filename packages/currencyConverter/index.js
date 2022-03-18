@@ -3,7 +3,6 @@ const {parseAndNormalize, fetchRates, convert} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
   const conversion = parseAndNormalize(query);
-
   if (!conversion) {
     return undefined;
   }
@@ -83,7 +82,7 @@ async function currencyConverter(query, API_KEY) {
     const from = document.querySelector(".from span");
     const to = document.querySelector(".to span");
     if (from) {
-      from.innerHTML = formatMoney({ value: ${conversion.value}, code: "${conversion.from}" })
+      from.innerHTML = "${conversion.fromName}".length ? (formatMoney({ value: ${conversion.value}, code: "${conversion.from}" }) + " (${conversion.fromName})") : formatMoney({ value: ${conversion.value}, code: "${conversion.from}" });
     }
     if (to) {
       to.innerHTML = formatMoney({ value: ${converted.value}, round: ${converted.round}, code: "${converted.code}" });
