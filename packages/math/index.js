@@ -118,7 +118,13 @@ class Calculator {
   }
 
   delete() {
-      this.currentOperand = this.currentOperand.toString().slice(0, -1)
+      if (this.currentOperand.length == 0 && this.operation) {
+          this.operation = undefined
+          this.currentOperand = this.previousOperand
+          this.previousOperand = ''
+      } else {
+          this.currentOperand = this.currentOperand.toString().slice(0, -1)
+      }
   }
 
   appendNumber(number) {
@@ -182,8 +188,8 @@ class Calculator {
   updateDisplay() {
       this.currentOperandTextElement.innerText =
           this.getDisplayNumber(this.currentOperand)
-      if (this.operation != null) {
-          this.previousOperandTextElement.innerText =this.getDisplayNumber(this.previousOperand)+this.operation 
+      if (this.previousOperand.length != 0) {
+          this.previousOperandTextElement.innerText =this.getDisplayNumber(this.previousOperand)+(this.operation ? this.operation : '')
       } else {
           this.previousOperandTextElement.innerText =''
       }
