@@ -1,6 +1,6 @@
 {
   "name": "currencyConverter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Convert currencies",
   "main": "index.js",
   "scripts": {
