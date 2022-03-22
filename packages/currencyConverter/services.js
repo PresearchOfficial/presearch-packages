@@ -44,7 +44,7 @@ function parseAndNormalize(query) {
 
   // check for the input eg. "3 EUR to USD"
   // we are expecting fiat currencies to have 3 chars and crypto currencies to have up to 8 chars (at least most of them)
-  const match = query.match(/((\d+(\.\d+)?) )?([A-Z]{2,8}) {0,1}(TO|INTO|=| ) {0,1}([A-Z]{2,8})/);
+  const match = query.match(/^((\d+(\.\d+)?) )?([A-Z]{2,8}) {0,1}(TO|INTO|=| ) {0,1}([A-Z]{2,8})$/);
 
   if (!match) {
     return undefined;
@@ -55,9 +55,10 @@ function parseAndNormalize(query) {
     if(!el) return false;
     const lowercaseEl = el.toLowerCase();
     return (
-      el != query && !el.includes(" ") && lowercaseEl != query && lowercaseEl != "to" && lowercaseEl != "into" && lowercaseEl != "=" && lowercaseEl != " "
+      el != query && !el.includes(" ") && lowercaseEl != query && lowercaseEl != "to" && lowercaseEl != "into" && lowercaseEl != "=" && lowercaseEl != " " && !lowercaseEl.startsWith(".")
     )
   })
+
 
   let valueString, from, to;
 
@@ -83,7 +84,7 @@ function parseAndNormalize(query) {
   }
 
   const fromName = (cryptoCurrencies[from] && !fiatCurrencies[from]) ? cryptoCurrencies[from].name : '';
-  
+
   return { value, from, to, fromName};
 }
 
