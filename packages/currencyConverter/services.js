@@ -59,7 +59,6 @@ function parseAndNormalize(query) {
     )
   })
 
-
   let valueString, from, to;
 
   if (filteredMatch && filteredMatch.length) {
