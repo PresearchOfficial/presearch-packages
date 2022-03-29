@@ -10,8 +10,12 @@ async function math(query) {
     answer = '';
   } else {
     try {
-      const data = mathjs.evaluate(query);
-      expression = query;
+      //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.) 
+      let result = query.replace(/×/gi, "*");
+      result = result.replace(/⋅/gi, "*");
+      result = result.replace(/÷/gi, "/");
+      const data = mathjs.evaluate(result);
+      expression = result;
       answer = `= ${data}`
     } catch (error) {
       return null;
@@ -408,7 +412,11 @@ async function trigger(query) {
   const chars = new RegExp(/([a-zA-Z])+/g);
   if (!isNaN(query) || chars.test(query)) return false;
   try {
-    mathjs.evaluate(query);
+    //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
+    let result = query.replace(/×/gi, "*");
+    result = result.replace(/⋅/gi, "*");
+    result = result.replace(/÷/gi, "/");
+    mathjs.evaluate(result);
     return true;
   } catch (error) {
     return false;
