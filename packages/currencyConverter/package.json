@@ -7,7 +7,7 @@
     "test": "jest --watch"
   },
   "keywords": [],
-  "author": "Niklas Ekman <nikl.ekman@gmail.com>",
+  "author": "Niklas Ekman, Joshua Tomajko",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.24.0"

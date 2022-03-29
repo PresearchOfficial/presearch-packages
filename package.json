@@ -1,6 +1,6 @@
 {
     "name": "presearch-packages",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Instant information packages for the Presearch engine",
     "main": "index.js",
     "scripts": {
