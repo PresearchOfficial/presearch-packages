@@ -136,12 +136,11 @@ function parseAndNormalize(query) {
     if (!el) return false;
     const lowercaseEl = el.toLowerCase();
     return (
-      el != query && !el.includes(" ") && lowercaseEl != query && !joints.includes(lowercaseEl)
+      el != query && !el.includes(" ") && lowercaseEl != query && !joints.includes(el)
     )
   })
 
   let valueString, from, to;
-
   if (filteredMatch && filteredMatch.length) {
     // handle the case when there's nothing between currencies, i.e. 'usd eur'
     if (filteredMatch.length == 2) {
