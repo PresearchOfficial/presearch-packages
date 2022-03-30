@@ -1,4 +1,8 @@
 # Change Log
+## 0.2.4
+    - Use part of the trigger function from cryptoConverter package in currencyConverter package
+    - Improved dev environment - show warning message when there's more than one package triggered buy the query
+
 ## 0.2.3
     - Added offline list for fiat and cryptocurrencies for 'currencyConverter' package
     - Improved regex for math package to exclude phone numbers

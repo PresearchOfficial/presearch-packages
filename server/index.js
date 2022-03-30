@@ -18,9 +18,27 @@ app.use((req, res, next) => {
     next();
 });
 
-const addRoutesInterval = setInterval(() => {
+const checkOverlapingTrigger = async (query) => {
+    return new Promise(async (resolve, reject) => {
+        const packages = Object.keys(packageObject);
+        const triggeredPackages = [];
+        for (const packageName of packages) {
+            const trigger = await packageObject[packageName].trigger(query);
+            if (trigger) {
+                triggeredPackages.push(packageName)
+            }
+        }
+        if (triggeredPackages.length > 1) {
+            return resolve(triggeredPackages)
+        }
+        resolve(false)
+    })
+    
+}
+
+const addRoutesTimeout = setTimeout(() => {
     if (packageObject && Object.keys(packageObject).length) {
-        clearInterval(addRoutesInterval);
+        clearTimeout(addRoutesTimeout);
         Object.keys(packageObject).forEach((packageName) => {
             let packageInfo = fs.readFileSync(`../packages/${packageName}/package.json`);
             const { version, author } = JSON.parse(packageInfo);
@@ -28,8 +46,9 @@ const addRoutesInterval = setInterval(() => {
                 const query = req.query.q ? req.query.q : "";
                 const trigger = await packageObject[packageName].trigger(query);
                 if (trigger) {
+                    const overlappingPackages = await checkOverlapingTrigger(query);
                     const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`]);
-                    return res.render("search", { title: packageName, packageData, triggered: true, query, packageInfo: JSON.stringify({ version, author }) });
+                    return res.render("search", { title: packageName, packageData, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }) });
                 }
                 res.render("search", { title: packageName, triggered: false, query, packageInfo });
             });

@@ -10,8 +10,12 @@ async function math(query) {
     answer = '';
   } else {
     try {
-      const data = mathjs.evaluate(query);
-      expression = query;
+      //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.) 
+      let result = query.replace(/×/gi, "*");
+      result = result.replace(/⋅/gi, "*");
+      result = result.replace(/÷/gi, "/");
+      const data = mathjs.evaluate(result);
+      expression = result;
       answer = `= ${data}`
     } catch (error) {
       return null;
@@ -118,7 +122,13 @@ class Calculator {
   }
 
   delete() {
-      this.currentOperand = this.currentOperand.toString().slice(0, -1)
+      if (this.currentOperand.length == 0 && this.operation) {
+          this.operation = undefined
+          this.currentOperand = this.previousOperand
+          this.previousOperand = ''
+      } else {
+          this.currentOperand = this.currentOperand.toString().slice(0, -1)
+      }
   }
 
   appendNumber(number) {
@@ -182,8 +192,8 @@ class Calculator {
   updateDisplay() {
       this.currentOperandTextElement.innerText =
           this.getDisplayNumber(this.currentOperand)
-      if (this.operation != null) {
-          this.previousOperandTextElement.innerText =this.getDisplayNumber(this.previousOperand)+this.operation 
+      if (this.previousOperand.length != 0) {
+          this.previousOperandTextElement.innerText =this.getDisplayNumber(this.previousOperand)+(this.operation ? this.operation : '')
       } else {
           this.previousOperandTextElement.innerText =''
       }
@@ -408,7 +418,11 @@ async function trigger(query) {
   const chars = new RegExp(/([a-zA-Z])+/g);
   if (!isNaN(query) || chars.test(query)) return false;
   try {
-    mathjs.evaluate(query);
+    //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
+    let result = query.replace(/×/gi, "*");
+    result = result.replace(/⋅/gi, "*");
+    result = result.replace(/÷/gi, "/");
+    mathjs.evaluate(result);
     return true;
   } catch (error) {
     return false;

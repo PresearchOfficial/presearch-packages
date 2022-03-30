@@ -1,6 +1,6 @@
 {
     "name": "presearch-packages",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "Instant information packages for the Presearch engine",
     "main": "index.js",
     "scripts": {
@@ -27,8 +27,7 @@
         "emoji-regex": "^10.0.0",
         "ethereum-address": "^0.0.4",
         "mathjs": "^9.5.1",
-        "mathsteps": "^0.2.0",
-        "node-fetch": "^2.6.1",
+        "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
         "wikijs": "^6.3.2"
     },
