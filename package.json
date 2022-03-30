@@ -29,7 +29,8 @@
         "mathjs": "^9.5.1",
         "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
-        "wikijs": "^6.3.2"
+        "wikijs": "^6.3.2",
+        "world-countries": "^4.0.0"
     },
     "devDependencies": {
         "pre-commit": "^1.2.2"
