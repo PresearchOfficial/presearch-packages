@@ -1,0 +1,14 @@
+{
+  "name": "sportsscore",
+  "version": "1.0.0",
+  "description": "Display recent sport scores",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "author": "Niklas Ekman",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}
