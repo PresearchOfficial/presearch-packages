@@ -1,14 +1,28 @@
 'use strict';
 
-const {parseAndNormalize, getTeamByName} = require("./services");
+const {parseAndNormalize, getTeamByName, fetchGames} = require("./services");
 
 async function sportsScore(query) {
-	const stuff = 'foo';
-	return `<span>Some markup</span>`;
+  const team = parseAndNormalize(query);
+
+  if (!team) {
+    return undefined;
+  }
+
+  const games = await fetchGames(team.teamName);
+
+  if (!games) {
+    return undefined;
+  }
+
+  const stuff = games.map(game => `<span>${game.date}</span>`)
+    .join("<br/>");
+
+  return `<span>${stuff}</span>`;
 }
 
 function trigger(query) {
-	const team = parseAndNormalize(query);
+  const team = parseAndNormalize(query);
 
   if (!team) {
     return false;
@@ -17,4 +31,4 @@ function trigger(query) {
   return getTeamByName(team.teamName) !== undefined;
 }
 
-module.exports = { sportsScore, trigger };
+module.exports = {sportsScore, trigger};
