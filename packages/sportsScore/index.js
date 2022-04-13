@@ -15,10 +15,20 @@ async function sportsScore(query) {
     return undefined;
   }
 
-  const stuff = games.map(game => `<span>${game.date}</span>`)
-    .join("<br/>");
+  const stuff = games.map(game => `<li>
+    <div id="homeTeam">
+      <span class="teamName">${game.homeTeam}</span>
+      <time>${game.date}</time>
+      ${game.scoreHome && `<span class="score">${game.scoreHome}</span>`}
+    </div>
+    <div id="awayTeam">
+      <span class="teamName">${game.awayTeam}</span>
+      <time>${game.date}</time>
+      ${game.scoreAway && `<span class="score">${game.scoreAway}</span>`}
+    </div>
+  </li>`).join("");
 
-  return `<span>${stuff}</span>`;
+  return `<ul>${stuff}</ul>`;
 }
 
 function trigger(query) {
