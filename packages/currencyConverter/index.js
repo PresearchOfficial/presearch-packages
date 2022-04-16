@@ -26,10 +26,10 @@ async function currencyConverter(query, API_KEY) {
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${conversion.from}" class="interactive-currency-input" type="number" value="${conversion.value}" /><label id="interactive_from_label" for="interactive_${conversion.from}">${conversion.from}</label>
+              <input id="interactive_${conversion.from}" class="interactive-currency-input" type="number" value="${conversion.value}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
             </div>
             <div class="interactive-input-container">
-              <input id="interactive_${converted.code}" class="interactive-currency-input" type="number" value="${convertedFixed}" /><label id="interactive_to_label" for="interactive_${converted.code}">${converted.code}</label>
+              <input id="interactive_${converted.code}" class="interactive-currency-input" type="number" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
             </div>
         </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
