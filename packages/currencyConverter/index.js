@@ -8,22 +8,30 @@ async function currencyConverter(query, API_KEY) {
   }
 
   const rates = await fetchRates(conversion, API_KEY);
-
   if (!rates) {
     return undefined;
   }
+  const ratesJs = JSON.stringify(rates)
 
   const converted = convert(conversion, rates);
-
   if (!converted) {
     return undefined;
   }
+  const convertedFixed = converted.value.toFixed(2)
 
   return `
     <div id="presearchPackage">
       <div id="currencyConverter">
         <div class="from"><span></span><i> &asymp;</i></div>
         <div class="to"><span></span></div>
+        <div class="interactive-calculation">
+            <div class="interactive-input-container">
+              <input id="interactive_${conversion.from}" class="interactive-currency-input" type="number" value="${conversion.value}" /><label id="interactive_from_label" for="interactive_${conversion.from}">${conversion.from}</label>
+            </div>
+            <div class="interactive-input-container">
+              <input id="interactive_${converted.code}" class="interactive-currency-input" type="number" value="${convertedFixed}" /><label id="interactive_to_label" for="interactive_${converted.code}">${converted.code}</label>
+            </div>
+        </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
       </div>
     </div>
@@ -48,6 +56,24 @@ async function currencyConverter(query, API_KEY) {
     .disclaimer a {
       text-decoration: underline;
     }
+
+    .interactive-calculation {
+      margin: 8px 0;
+    }
+
+    .interactive-calculation .interactive-input-container:first-child {
+        margin-bottom: 6px;
+    }
+
+    .interactive-calculation .interactive-currency-input {
+      border: 1px solid #dadce0;
+      background: transparent;
+      border-radius: 6px;
+      color: #70757a;
+      padding: 6px 0 6px 12px;
+      margin-right: 6px;
+    }
+
     @media only screen and (max-width:400px) {
       .to.shrink {
         font-size: large;
@@ -56,6 +82,8 @@ async function currencyConverter(query, API_KEY) {
     }
     </style>
     <script>
+    ${convert.toString()}
+
     const formatMoney = (currency, locale = undefined) => {
       try {
         return currency.value.toLocaleString(
@@ -93,6 +121,38 @@ async function currencyConverter(query, API_KEY) {
         }
       }
     }
+
+    // Interactive Input JS
+    const interactiveInputs = document.querySelectorAll('.interactive-currency-input');
+    const rates = ${ratesJs}
+    let currentFromCurrency = "${conversion.from}"
+
+    interactiveInputs.forEach(input => {
+      input.addEventListener('focus', (event) => {
+        currentFromCurrency = event.target.id.split('_').pop();
+      })
+    })
+
+    interactiveInputs.forEach(input => {
+      input.addEventListener('input', (event) => {
+        event.preventDefault()
+        const from = currentFromCurrency
+        const to = rates.find(rate => rate.code !== currentFromCurrency)
+        const localConversionObj = {
+            from: from,
+            to: to.code,
+            value: event.target.value,
+            fromName: from.fromName
+        };
+        const result = convert(localConversionObj, rates);
+        const inputToChange = document.getElementById("interactive_" + to.code)
+        inputToChange.value = result.value.toLocaleString(undefined, {
+          currency: to.code,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: to.round ? to.round : 20
+        })
+      });
+    });
     </script>
   `;
 }
