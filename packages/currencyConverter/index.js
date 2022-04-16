@@ -152,11 +152,7 @@ async function currencyConverter(query, API_KEY) {
             fromName: from.fromName
         };
         const result = convert(localConversionObj, rates);
-        inputToChange.value = result.value.toLocaleString(undefined, {
-          currency: to.code,
-          minimumFractionDigits: 0,
-          maximumFractionDigits: to.round ? to.round : 20
-        })
+        inputToChange.value = result.value === 0 ? result.value : result.value.toFixed(2)
       });
     });
     </script>
