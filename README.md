@@ -22,8 +22,8 @@ Development server will be available at: `http://localhost:4000/`
 
 ### API keys
 
-Use `.env` file, inside `presearch-packages/server` directory to store your API keys. 
-When you will set up your API key correctly, it will be accesible inside your package main function as `API_KEY`.
+Use `.env` file, inside `presearch-packages/server` directory to store your API keys.
+When you will set up your API key correctly, it will be accessible inside your package main function as `API_KEY`.
 
 You can copy example file `.env-example` and change the file name to `.env`
 
@@ -53,7 +53,7 @@ Developing a new package for the Presearch engine:
 
 Review Step:
 
-Open up the pull request for the package and take a look a the file changes under the `Files changed` tab
+Open up the pull request for the package and take a look at the file changes under the `Files changed` tab
 
 You're going to need to look over these files for any malicious code
 
@@ -67,7 +67,7 @@ You're going to need to look over these files for any malicious code
 - Check the code for quality
   - Is it concise?
   - Is it effective code?
-  - Are there any uneccesary steps being taken?
+  - Are there any unnecessary steps being taken?
   - Is there repetition that could be minimized?
   - Is it built to allow easy future maintenance?
 - Check that there are no api keys or other sensitive data exposed
