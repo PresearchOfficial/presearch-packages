@@ -1,13 +1,13 @@
 {
   "name": "currencyConverter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Convert currencies",
   "main": "index.js",
   "scripts": {
     "test": "jest --watch"
   },
   "keywords": [],
-  "author": "Niklas Ekman, Joshua Tomajko",
+  "author": "Niklas Ekman, Joshua Tomajko, Alex Vernacchia",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.24.0"
