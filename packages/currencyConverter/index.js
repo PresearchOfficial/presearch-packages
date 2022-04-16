@@ -62,7 +62,7 @@ async function currencyConverter(query, API_KEY) {
     }
 
     .interactive-calculation .interactive-input-container:first-child {
-        margin-bottom: 6px;
+      margin-bottom: 6px;
     }
 
     .interactive-calculation .interactive-currency-input {
