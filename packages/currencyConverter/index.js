@@ -140,7 +140,7 @@ async function currencyConverter(query, API_KEY) {
         const to = rates.find(rate => rate.code !== currentFromCurrency)
         const inputToChange = document.getElementById("interactive_" + to.code)
 
-        if(event.target.value < 0) {
+        if(event.target.value === "" || event.target.value < 0) {
           inputToChange.value = ""
           return;
         }
