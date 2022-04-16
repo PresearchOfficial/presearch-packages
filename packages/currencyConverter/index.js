@@ -138,6 +138,13 @@ async function currencyConverter(query, API_KEY) {
         event.preventDefault()
         const from = currentFromCurrency
         const to = rates.find(rate => rate.code !== currentFromCurrency)
+        const inputToChange = document.getElementById("interactive_" + to.code)
+
+        if(event.target.value < 0) {
+          inputToChange.value = ""
+          return;
+        }
+
         const localConversionObj = {
             from: from,
             to: to.code,
@@ -145,7 +152,6 @@ async function currencyConverter(query, API_KEY) {
             fromName: from.fromName
         };
         const result = convert(localConversionObj, rates);
-        const inputToChange = document.getElementById("interactive_" + to.code)
         inputToChange.value = result.value.toLocaleString(undefined, {
           currency: to.code,
           minimumFractionDigits: 0,
