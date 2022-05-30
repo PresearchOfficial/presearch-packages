@@ -1,4 +1,7 @@
 # Change Log
+## 0.2.5
+    - Filter out low mcap coins from cryptoInfo package
+    - Updated coin_list and coin_metadata for cryptoInfo package
 ## 0.2.4
     - Use part of the trigger function from cryptoConverter package in currencyConverter package
     - Improved dev environment - show warning message when there's more than one package triggered buy the query

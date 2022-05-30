@@ -66,6 +66,13 @@ async function cryptoInfo(query, API_KEY) {
         const tag = coin_metadata[coinId].platform ? "Token" : "Coin";
         const { price, volume_24h, percent_change_24h, percent_change_7d, market_cap, last_updated } = priceData.quote.USD;
 
+        // filter out low mcap coins
+        const MIN_VOLUME = 10000;
+        const MIN_RANK = 2000;
+        if (volume_24h < MIN_VOLUME || cmc_rank > MIN_RANK) {
+          return null;
+        }
+
         const formatNumber = (num) => {
           var parts = num.toString().split(".");
           parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
