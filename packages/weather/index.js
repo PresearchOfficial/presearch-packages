@@ -38,7 +38,7 @@ async function weather(query, API_KEY) {
     const createDayDetailInfo = function (current) {
         return '<div class="title">' + current.weather[0].description + '</div>' +
             '<div class="description">Humidity <span>' + current.humidity + '%</span></div>' +
-            '<div class="description">Precipitation<span>' + ((current.pop || 0) * 100) + '%</span></div>' +
+            '<div class="description">Precipitation<span>' + Math.round(((current.pop || 0) * 100)) + '%</span></div>' +
             '<div class="description">Wind<span data-speed="'+current.wind_speed+'">' + current.wind_speed + 'mph</span></div>';
     };
 
