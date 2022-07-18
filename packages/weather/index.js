@@ -8,8 +8,12 @@ async function weather(query, API_KEY) {
     const data = await getWeather(query, API_KEY);
     console.log(data);
 
-    const allHours = [].concat(...(data.forecast.map(x => x.hourly)));
+    const allHours = [].concat(...(data.forecast.slice(0,7).map(x => x.hourly)));
     var temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time }));
+    
+    // since we have only 7 days forecast, 7day +1hour is missing, so chart looks incomplete
+    // to avoid that duplicating last value
+    temperatures.push(temperatures[temperatures.length-1]);
 
     var max = Math.max.apply(Math, temperatures.map(x => x.temp));
 
@@ -21,14 +25,14 @@ async function weather(query, API_KEY) {
     var ratio = 1;
 
     var points = temperatures.map((degree, index) => {
-        return `${index * step},${(degree.temp * ratio * -1) + offset}`;
-    }).join(" ");
+        return `${Math.round(index * step)},${((degree.temp * ratio * -1) + offset).toFixed(1)}`;
+    });
 
     var chartTexts = temperatures.map((x, index) => {
         if ((index % 3) === 1) {
             return [
-                `<text text-anchor="middle" x="${index * step}" y="${x.temp * ratio * -1 + offset - 10}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
-                `<text text-anchor="middle" x="${index * step}" y="95">${x.time}</text>`
+                `<text text-anchor="middle" x="${Math.round(index * step)}" y="${Math.round(x.temp * ratio * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
+                `<text text-anchor="middle" x="${Math.round(index * step)}" y="95">${x.time}</text>`
             ];
         }
     });
@@ -104,7 +108,7 @@ async function weather(query, API_KEY) {
 
                     <polyline id="polylineFill" points="0,0 ${points} ${step * (temperatures.length - 1)},0" fill="url(#grad1)" />
                     <polyline id="polyline" points="${points}"  fill="none" stroke-width="2" />
-                    ${allTexts}
+                    ${allTexts.join('')}
                 </svg>
             </div>
             <div class="forecast-container" >
@@ -504,7 +508,7 @@ async function getWeather(query, API_KEY) {
                         temp: day.avgtemp_f,
 
                         hourly: forecast.hour
-                            .filter(x => dayjs(x.time_epoch * 1000).isSame(forecast.date_epoch * 1000, 'day'))
+                            .filter(x => x.time.indexOf(forecast.date) === 0)
                             .map(x => {
                                 return {
                                     temp: x.temp_f,
@@ -525,7 +529,8 @@ async function getWeather(query, API_KEY) {
                 days: 8,
                 aqi: 'no',
                 alerts: 'no',
-                q: q
+                q: q,
+                lang: 'en'
             }
         });
 
