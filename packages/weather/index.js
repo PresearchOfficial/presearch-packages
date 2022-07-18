@@ -8,12 +8,12 @@ async function weather(query, API_KEY) {
     const data = await getWeather(query, API_KEY);
     console.log(data);
 
-    const allHours = [].concat(...(data.forecast.slice(0,7).map(x => x.hourly)));
-    var temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time }));
-    
+    const allHours = [].concat(...(data.forecast.slice(0, 7).map(x => x.hourly)));
+    var temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day }));
+
     // since we have only 7 days forecast, 7day +1hour is missing, so chart looks incomplete
     // to avoid that duplicating last value
-    temperatures.push(temperatures[temperatures.length-1]);
+    temperatures.push(temperatures[temperatures.length - 1]);
 
     var max = Math.max.apply(Math, temperatures.map(x => x.temp));
 
@@ -31,8 +31,8 @@ async function weather(query, API_KEY) {
     var chartTexts = temperatures.map((x, index) => {
         if ((index % 3) === 1) {
             return [
-                `<text text-anchor="middle" x="${Math.round(index * step)}" y="${Math.round(x.temp * ratio * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
-                `<text text-anchor="middle" x="${Math.round(index * step)}" y="95">${x.time}</text>`
+                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="${Math.round(x.temp * ratio * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
+                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="95">${x.time}</text>`
             ];
         }
     });
@@ -43,18 +43,18 @@ async function weather(query, API_KEY) {
     const createForecast = function (daily) {
         return daily.map((day, index) => {
             return `<button class="day-forecast ${!index ? 'active' : ''}" >
-            <div style="text-align: center">
-                ${day.date.dayOfWeek}
-            </div>
-            <div class="icon icon-${day.icon}"></div>
-            <div style="text-align: center">
-            <span data-degrees="${day.mintemp}">
-            ${Math.round(day.mintemp)}°
-            </span>
-            <span data-degrees="${day.maxtemp}" style="margin-left: 5px; opacity: 0.7">
-            ${Math.round(day.maxtemp)}°
-            </span>
-            </div>
+                <div>
+                    ${day.date.dayOfWeek}
+                </div>
+                <div class="icon icon-${day.icon}"></div>
+                <div class="degrees-container">
+                    <span data-degrees="${day.maxtemp}" class="degrees-max">
+                        ${Math.round(day.maxtemp)}°
+                    </span>
+                    <span data-degrees="${day.mintemp}" class="degrees-min">
+                        ${Math.round(day.mintemp)}°
+                    </span>
+                </div>
         </button > `;
         }).join('');
     };
@@ -70,7 +70,7 @@ async function weather(query, API_KEY) {
                         <div class="forecast-icon icon-${current.icon}"></div>
                         <div>
                             <div class="flex">
-                                <div class="degrees-now" data-degrees="${current.temp}">${Math.round(current.temp)}°</div>
+                                <div class="degrees-now degrees-day-now" data-degrees="${current.temp}">${Math.round(current.temp)}°</div>
                                 <div class="degrees-switch">
                                     <button class="active" data-units="F">°F</button>
                                     <div class="separator"></div>
@@ -78,8 +78,8 @@ async function weather(query, API_KEY) {
                                 </div>
                             </div>
                             <div class="degrees-day">
-                                <span class="degrees-max" data-degrees="${current.maxtemp}"> ${Math.round(current.maxtemp)}°</span>
-                                <span class="degrees-min" data-degrees="${current.mintemp}"> ${Math.round(current.mintemp)}°</span>
+                                <span class="degrees-max degrees-day-max" data-degrees="${current.maxtemp}"> ${Math.round(current.maxtemp)}°</span>
+                                <span class="degrees-min degrees-day-min" data-degrees="${current.mintemp}"> ${Math.round(current.mintemp)}°</span>
                             </div>
                         </div>
                     </div>
@@ -127,24 +127,44 @@ async function weather(query, API_KEY) {
         elements.forEach((element, index) => handler(element, index));
     };
 
-    const selectElement = (selector, handler)=>{
+    const selectElement = (selector, handler) => {
         const element = document.querySelector('#presearch-weather-package ' + selector);
         handler(element);
     };
 
-    const refreshUnits = function(newUnits){
+    const refreshUnits = function(selector, newUnits){
         if (newUnits) {
             units = newUnits;
         }
         
-        enumerateElements('[data-degrees]', (element, index) => {
-            if (units === "C") {
-                element.innerText = element.textContent =  Math.round((parseFloat(element.dataset.degrees) - 32) * 5 / 9) + '°';
-            }
+        enumerateElements(selector, (element, index) => {
+            console.log("here");
+            let degrees = element.dataset.degrees;
+
+            if(degrees !== "undefined") {
+                degrees = units === "C" 
+                    ? Math.round((parseFloat(degrees) - 32) * 5 / 9) + '°'
+                    : Math.round(degrees) + '°';
+            } 
             else {
-                element.innerText = element.textContent = Math.round(element.dataset.degrees) + '°';
+                degrees = "";
             }
+
+            element.innerText = element.textContent = degrees; 
         });
+    };
+
+    const setForecast = function (dayData, date) {
+        selectElement('.degrees-day-now', (el)=> el.dataset.degrees = dayData.temp);
+        selectElement('.degrees-day-min', (el)=> el.dataset.degrees = dayData.mintemp);
+        selectElement('.degrees-day-max', (el)=> el.dataset.degrees = dayData.maxtemp);
+
+        selectElement('.forecast-icon', (el)=> el.setAttribute("class", 'forecast-icon icon-' + dayData.icon));
+        selectElement('.forecast-name', (el)=> el.innerText = dayData.name);
+        selectElement('.forecast-humidity', element => element.innerText = dayData.humidity + '%');
+        selectElement('.forecast-precipitation', element => element.innerText = dayData.rain + '%');
+        selectElement('.forecast-wind', element => element.innerText = dayData.wind + 'm/s');
+        selectElement('.forecast-time', element => element.innerText = date || dayData.date.date);
     };
 
     enumerateElements('button.day-forecast', (btn, index) => {
@@ -155,31 +175,34 @@ async function weather(query, API_KEY) {
 
             const dayData = data.forecast[btn.dataset.index];
 
-            selectElement('.degrees-now', (el)=> el.dataset.degrees = dayData.temp);
-            selectElement('.degrees-min', (el)=> el.dataset.degrees = dayData.mintemp);
-            selectElement('.degrees-max', (el)=> el.dataset.degrees = dayData.maxtemp);
-
-            selectElement('.forecast-icon', (el)=> el.setAttribute("class", 'forecast-icon icon-' + dayData.icon));
-            selectElement('.forecast-name', (el)=> el.innerText = dayData.name);
-            selectElement('.forecast-humidity', element => element.innerText = dayData.humidity + '%');
-            selectElement('.forecast-precipitation', element => element.innerText = dayData.rain + '%');
-            selectElement('.forecast-wind', element => element.innerText = dayData.wind + 'm/s');
-            selectElement('.forecast-time', element => element.innerText = dayData.date.date);
+            setForecast(dayData);
 
             selectElement('#chart', chart =>
-             chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * 544 * -1) + 'px)'));
+                chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * 544 * -1) + 'px)'));
 
-            refreshUnits();
+            refreshUnits('[class*="degrees-day-"]');
         });
     });
 
     enumerateElements('button[data-units]', (btn) => {
         btn.addEventListener('click', (e)=> {
-            const activeBtn = document.querySelector('button[data-units].active');
-            activeBtn?.classList.remove('active');
+            selectElement('button[data-units].active', (btn)=> btn?.classList.remove('active'));
             btn.classList.add('active');
 
-            refreshUnits(btn.dataset.units);
+            refreshUnits('[data-degrees]', btn.dataset.units);
+        });
+    });
+
+    enumerateElements('#chart text', (el) => {
+        el.addEventListener('click', (e) => {
+            const dayIndex = parseInt(el.dataset.day);
+            const hourIndex = parseInt(el.dataset.hour);
+
+            var forecast = data.forecast[dayIndex].hourly[hourIndex];
+
+            setForecast(forecast, forecast.date.full);
+            
+            refreshUnits('[class*="degrees-day-"]');
         });
     });
 } )();
@@ -265,8 +288,17 @@ async function weather(query, API_KEY) {
         float: right;
     }
     
-    #presearch-weather-package .degrees-day .degrees-max {
+    #presearch-weather-package .degrees-max {
         font-weight: bold;
+    }
+
+    #presearch-weather-package .degrees-min {
+        opacity: 0.8;
+        margin-left: 5px;
+    }
+
+    #presearch-weather-package .degrees-container {
+        margin-top: 5px;
     }
 
     #presearch-weather-package .details .title {
@@ -325,28 +357,28 @@ async function weather(query, API_KEY) {
         background-color: #dddddd;
     }
 
-    #chart {
+    #presearch-weather-package #chart {
         margin-top: 10px;
         transform: translate(0px);
         transition: transform 300ms ease-in-out 0s;
     }
 
-    #chart #polyline {
+    #presearch-weather-package #chart #polyline {
         stroke: #a89b2c;
     }
 
-    .chart-container {
+    #presearch-weather-package .chart-container {
         overflow: hidden;
     }
 
-    #chart text {
+    #presearch-weather-package #chart text {
         font-size: 12px;
         fill: #666666;
         font-family: Arial, Helvetica, sans-serif;
         cursor: pointer;
         font-weight: bold;
     }
-
+    
     .dark #presearch-weather-package #chart text {
         fill: white;
         font-weight: normal;
@@ -479,7 +511,7 @@ async function getWeather(query, API_KEY) {
                 mintemp: day.mintemp_f,
                 maxtemp: day.maxtemp_f,
                 humidity: "humidity" in day ? day.humidity : day.avghumidity,
-                rain: day.daily_chance_of_rain,
+                rain: "daily_chance_of_rain" in day ? day.daily_chance_of_rain : day.chance_of_rain,
                 wind: Math.round(("wind_kph" in day ? day.wind_kph : day.maxwind_kph) * (5 / 18)),
             };
         };
@@ -499,7 +531,7 @@ async function getWeather(query, API_KEY) {
                 ...extractTemperatures(today.day)
             },
             forecast: data.forecast.forecastday
-                .map((forecast) => {
+                .map((forecast, index) => {
                     const day = forecast.day;
                     return {
                         date: toDateContract(forecast.date_epoch),
@@ -509,10 +541,14 @@ async function getWeather(query, API_KEY) {
 
                         hourly: forecast.hour
                             .filter(x => x.time.indexOf(forecast.date) === 0)
-                            .map(x => {
+                            .map((x, hourIndex) => {
                                 return {
+                                    day: index,
+                                    hour: hourIndex,
                                     temp: x.temp_f,
-                                    date: toDateContract(x.time_epoch)
+                                    date: toDateContract(x.time_epoch),
+                                    ...extractCondition(x.condition),
+                                    ...extractTemperatures(x)
                                 };
                             })
                     }
