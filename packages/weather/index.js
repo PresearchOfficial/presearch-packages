@@ -602,6 +602,7 @@ async function getWeather(query, API_KEY) {
             current: {
                 date: toDateContract(current.last_updated_epoch),
                 ...extractCondition(current.condition, !!data.current.is_day),
+                ...extractTemperatures(today.day),
                 temp: current.temp_f,
                 feelslike: current.feelslike_f
             },
