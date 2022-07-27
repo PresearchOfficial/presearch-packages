@@ -9,35 +9,46 @@ async function weather(query, API_KEY) {
     console.log(data);
 
     const allHours = [].concat(...(data.forecast.slice(0, 7).map(x => x.hourly)));
-    var temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day }));
+    const temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
 
     // since we have only 7 days forecast, 7day +1hour is missing, so chart looks incomplete
     // to avoid that duplicating last value
     temperatures.push(temperatures[temperatures.length - 1]);
 
-    var max = Math.max.apply(Math, temperatures.map(x => x.temp));
+    const max = Math.max.apply(Math, temperatures.map(x => x.temp));
 
-    var offset = max + 30;
+    const offset = max + 30;
     const chartHeight = 100;
     const chartWidth = 544;
 
-    var step = chartWidth / 24;
-    var ratio = 1;
+    const step = chartWidth / 24;
 
-    var points = temperatures.map((degree, index) => {
-        return `${Math.round(index * step)},${((degree.temp * ratio * -1) + offset).toFixed(1)}`;
+    const tempPoints = temperatures.map((degree, index) => {
+        return `${Math.round(index * step)},${((degree.temp * -1) + offset).toFixed(1)}`;
     });
 
-    var chartTexts = temperatures.map((x, index) => {
+    const rainPoints = temperatures.map((hour, index) => {
+        return `${Math.round(index * step)},${(Math.round((chartHeight - hour.rain) * 0.5) + 20).toFixed(1)}`;
+    });
+
+    const tempTexts = temperatures.map((x, index) => {
         if ((index % 3) === 1) {
             return [
-                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="${Math.round(x.temp * ratio * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
+                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="${Math.round(x.temp * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
                 `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="95">${x.time}</text>`
             ];
         }
     });
 
-    const allTexts = [].concat(...chartTexts);
+    const rainTexts = temperatures.map((x, index) => {
+        if ((index % 3) === 1) {
+            return [
+                `<text text-anchor="middle" x="${Math.round(index * step)}" y="${10}">${Math.round(x.rain) + '%'}</text>`,
+                `<text text-anchor="middle" x="${Math.round(index * step)}" y="95">${x.time}</text>`
+            ];
+        }
+    });
+
     const current = data.current;
 
     const createForecast = function (daily) {
@@ -93,22 +104,42 @@ async function weather(query, API_KEY) {
                 </div>
             </div>
 
-            <div class="forecast-time">
-                ${current.date.full}
+            <div class="forecast-type-container">
+                <div class="forecast-time">
+                    ${current.date.full}
+                </div>
+
+                <div class="chart-switch">
+                    <button data-chart="T" class="active">Temperature</button>
+                    <button data-chart="P">Precipitation</button>
+                </div>
             </div>
 
             <div class="chart-container">
-                <svg id="chart" width="${chartWidth * 7}" height="${chartHeight}">
+                <svg class="active" data-chart="T" width="${chartWidth * 7}" height="${chartHeight}">
                     <defs>
-                        <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="80%">
-                            <stop offset="0%" style="stop-color: #a89b2c;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color: #a89b2c;stop-opacity:0" />
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="80%">
+                            <stop offset="0%" style="stop-color: #ffcc0070;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color: #ffcc0070;stop-opacity:0" />
                         </linearGradient>
                     </defs>
 
-                    <polyline id="polylineFill" points="0,0 ${points} ${step * (temperatures.length - 1)},0" fill="url(#grad1)" />
-                    <polyline id="polyline" points="${points}"  fill="none" stroke-width="2" />
-                    ${allTexts.join('')}
+                    <polyline points="0,0 ${tempPoints} ${step * (temperatures.length - 1)},0" fill="url(#gradient)" />
+                    <polyline points="${tempPoints}" fill="none" stroke="#a89b2c" stroke-width="2" />
+                    ${[].concat(...tempTexts).join('')}
+                </svg>
+                
+                <svg data-chart="P" width="${chartWidth * 7}" height="${chartHeight}">
+                    <defs>
+                        <linearGradient id="gradP" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color: #6092e370;stop-opacity:0" />
+                            <stop offset="100%" style="stop-color: #6092e370;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+
+                    <polyline points="0,70 ${rainPoints}" stroke="none" ${step * (temperatures.length - 1)},70" fill="url(#gradP)" style="transform: translate(0, 1px)" />
+                    <polyline points="${rainPoints}" stroke="#6092e3" fill="none" stroke-width="2" />
+                    ${[].concat(...rainTexts).join('')}
                 </svg>
             </div>
             <div class="forecast-container" >
@@ -138,7 +169,6 @@ async function weather(query, API_KEY) {
         }
         
         enumerateElements(selector, (element, index) => {
-            console.log("here");
             let degrees = element.dataset.degrees;
 
             if(degrees !== "undefined") {
@@ -177,7 +207,7 @@ async function weather(query, API_KEY) {
 
             setForecast(dayData);
 
-            selectElement('#chart', chart =>
+            enumerateElements('svg[data-chart]', chart =>
                 chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * 544 * -1) + 'px)'));
 
             refreshUnits('[class*="degrees-day-"]');
@@ -193,7 +223,7 @@ async function weather(query, API_KEY) {
         });
     });
 
-    enumerateElements('#chart text', (el) => {
+    enumerateElements('svg[data-chart="T"] text', (el) => {
         el.addEventListener('click', (e) => {
             const dayIndex = parseInt(el.dataset.day);
             const hourIndex = parseInt(el.dataset.hour);
@@ -203,6 +233,16 @@ async function weather(query, API_KEY) {
             setForecast(forecast, forecast.date.full);
             
             refreshUnits('[class*="degrees-day-"]');
+        });
+    });
+
+    enumerateElements('button[data-chart]', btn => {
+        btn.addEventListener('click', (e) => {
+            enumerateElements('[data-chart].active', (btn)=> btn?.classList.remove('active'));
+            btn.classList.add('active');
+
+            const chartType = btn.dataset.chart;
+            selectElement('svg[data-chart="'+chartType+'"]', (chart)=> chart?.classList.add('active'));
         });
     });
 } )();
@@ -320,8 +360,8 @@ async function weather(query, API_KEY) {
     }
 
     #presearch-weather-package .forecast-time {
-        margin-top: 15px;
         font-size: 18px;
+        align-self: center;
     }
 
     #presearch-weather-package .info-container .main {
@@ -347,7 +387,8 @@ async function weather(query, API_KEY) {
         width: 95px;
     }
     
-    .dark #presearch-weather-package .day-forecast.active {
+    .dark #presearch-weather-package .day-forecast.active, 
+    .dark #presearch-weather-package button[data-chart].active {
         background-color: #3d3e40;
     }
 
@@ -357,21 +398,17 @@ async function weather(query, API_KEY) {
         background-color: #dddddd;
     }
 
-    #presearch-weather-package #chart {
+    #presearch-weather-package svg[data-chart] {
         margin-top: 10px;
         transform: translate(0px);
         transition: transform 300ms ease-in-out 0s;
-    }
-
-    #presearch-weather-package #chart #polyline {
-        stroke: #a89b2c;
     }
 
     #presearch-weather-package .chart-container {
         overflow: hidden;
     }
 
-    #presearch-weather-package #chart text {
+    #presearch-weather-package svg[data-chart] text {
         font-size: 12px;
         fill: #666666;
         font-family: Arial, Helvetica, sans-serif;
@@ -379,9 +416,37 @@ async function weather(query, API_KEY) {
         font-weight: bold;
     }
     
-    .dark #presearch-weather-package #chart text {
+    .dark #presearch-weather-package svg[data-chart] text {
         fill: white;
         font-weight: normal;
+    }
+
+    #presearch-weather-package svg[data-chart] {
+        display: none;
+    }
+    
+    #presearch-weather-package svg[data-chart].active {
+        display: inherit;
+    }
+
+    #presearch-weather-package button[data-chart] {
+        padding: 5px 10px;
+        border-radius: 10px;
+    }
+
+    #presearch-weather-package button[data-chart].active {
+        background-color: #dddddd;
+    }
+
+    #presearch-weather-package .forecast-type-container {
+        display: flex; 
+        justify-content: space-between; 
+        margin-top: 15px;
+    }
+
+    #presearch-weather-package .chart-switch {
+        font-size: 13px; 
+        align-self: center
     }
 
 .icon-113-night { background-image:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.7499 4.08998L15.2199 6.02998L16.1299 9.08998L13.4999 7.27998L10.8699 9.08998L11.7799 6.02998L9.24995 4.08998L12.4399 3.99998L13.4999 0.999977L14.5599 3.99998L17.7499 4.08998ZM21.2499 11L19.6099 12.25L20.1999 14.23L18.4999 13.06L16.7999 14.23L17.3899 12.25L15.7499 11L17.8099 10.95L18.4999 8.99998L19.1899 10.95L21.2499 11ZM18.9699 15.95C19.7999 15.87 20.6899 17.05 20.1599 17.8C19.8399 18.25 19.4999 18.67 19.0799 19.07C15.1699 23 8.83995 23 4.93995 19.07C1.02995 15.17 1.02995 8.82998 4.93995 4.92998C5.33995 4.52998 5.75995 4.16998 6.20995 3.84998C6.95995 3.31998 8.13995 4.20998 8.05995 5.03998C7.78995 7.89998 8.74995 10.87 10.9499 13.06C13.1399 15.26 16.0999 16.22 18.9699 15.95Z' fill='white'/%3E%3C/svg%3E")}
