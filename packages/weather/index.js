@@ -89,8 +89,9 @@ async function weather(query, API_KEY) {
                                 </div>
                             </div>
                             <div class="degrees-day">
-                                <span class="degrees-max degrees-day-max" data-degrees="${current.maxtemp}"> ${Math.round(current.maxtemp)}°</span>
-                                <span class="degrees-min degrees-day-min" data-degrees="${current.mintemp}"> ${Math.round(current.mintemp)}°</span>
+                                <span class="degrees-max degrees-day-max" data-degrees="${current.maxtemp}"></span>
+                                <span class="degrees-min degrees-day-min" data-degrees="${current.mintemp}"></span>
+                                <span class="degrees-day-feelslike">Feels like <span data-degrees="${current.feelslike}">${Math.round(current.feelslike)}°</span></span>
                             </div>
                         </div>
                     </div>
@@ -188,6 +189,7 @@ async function weather(query, API_KEY) {
         selectElement('.degrees-day-now', (el)=> el.dataset.degrees = dayData.temp);
         selectElement('.degrees-day-min', (el)=> el.dataset.degrees = dayData.mintemp);
         selectElement('.degrees-day-max', (el)=> el.dataset.degrees = dayData.maxtemp);
+        selectElement('.degrees-day-feelslike', (el)=> el.setAttribute("style", 'display: none'));
 
         selectElement('.forecast-icon', (el)=> el.setAttribute("class", 'forecast-icon icon-' + dayData.icon));
         selectElement('.forecast-name', (el)=> el.innerText = dayData.name);
@@ -335,6 +337,14 @@ async function weather(query, API_KEY) {
     #presearch-weather-package .degrees-min {
         opacity: 0.8;
         margin-left: 5px;
+    }
+    
+    #presearch-weather-package .degrees-day-feelslike {
+        font-style: italic;
+    }
+    
+    #presearch-weather-package .degrees-day-feelslike span {
+        font-weight: bold;
     }
 
     #presearch-weather-package .degrees-container {
@@ -593,7 +603,7 @@ async function getWeather(query, API_KEY) {
                 date: toDateContract(current.last_updated_epoch),
                 ...extractCondition(current.condition, !!data.current.is_day),
                 temp: current.temp_f,
-                ...extractTemperatures(today.day)
+                feelslike: current.feelslike_f
             },
             forecast: data.forecast.forecastday
                 .map((forecast, index) => {
