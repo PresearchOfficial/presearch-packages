@@ -1,6 +1,9 @@
 'use strict';
 const axios = require("axios");
 const dayjs = require("dayjs");
+// cities extracted form
+// https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json
+const cities = require("./cities.json");
 
 const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 
@@ -659,36 +662,34 @@ async function getWeather(query, API_KEY) {
                 q: q,
                 lang: 'en'
             }
-        }).catch(error => ({data: {error}}))
+        }).catch(error => ({ data: { error } }))
 
         return toContract(data);
     }
 
-    const place = query.toLowerCase()
-        .split(' ')
-        .filter(x => x && ["in", "weather"].every(y => y != x))
-        .join(' ');
+    const city = extractCity(query);
 
-    const searchLocal = place && ["local", "today", "near", "me"].some(x => place.indexOf(x) !== -1);
-
-    try {
-        return await fetch(searchLocal || !place ? "auto:ip" : place);
-    }
-    catch {
-        return await fetch("auto:ip");
-    }
+    return await fetch(city)
 }
 
-//	here you should check, if the query should trigger your package
-//	ie. if you are building 'randomNumber' package, 'random number' query will be a good choice
-async function trigger(query) {
-    if (query) {
-        // convert query to lower case, to trigger the package with queries like 'Random number', 'RANDOM NUMBER' etc.
-        query = query ? query.toLowerCase() : "";
-        if (query.indexOf("weather") !== -1) return true;
+function extractCity(query) {
+    query = query ? query.toLowerCase() : "";
+
+    const keywords = ["weather in ", "weather "];
+    const isKeywordUsed = keywords.some(k => query.indexOf(k) === 0);
+
+    if (!isKeywordUsed) {
+        return null;
     }
-    // you need to return false when the query should not trigger your package
-    return false;
+
+    const city = keywords.reduce((a, keyword) => a.replace(keyword, ""), query).trim();
+    const isCityRecognized = cities.indexOf(city) !== -1;
+
+    return isCityRecognized ? city : null;
+}
+
+async function trigger(query) {
+    return !!extractCity(query);
 }
 
 module.exports = { weather, trigger };
