@@ -9,7 +9,7 @@ async function weather(query, API_KEY) {
 
     if (data.error) return null;
 
-    const allHours = [].concat(...(data.forecast.slice(0, 7).map(x => x.hourly)));
+    const allHours = [].concat(...(data.forecast.map(x => x.hourly)));
     const temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
 
     // since we have only 7 days forecast, 7day +1hour is missing, so chart looks incomplete
@@ -622,7 +622,7 @@ async function getWeather(query, API_KEY) {
                 temp: current.temp_f,
                 feelslike: current.feelslike_f
             },
-            forecast: data.forecast.forecastday
+            forecast: data.forecast.forecastday.slice(0, 7)
                 .map((forecast, index) => {
                     const day = forecast.day;
                     return {
