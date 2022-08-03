@@ -6,7 +6,8 @@ const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 
 async function weather(query, API_KEY) {
     const data = await getWeather(query, API_KEY);
-    console.log(data);
+
+    if (data.error) return null;
 
     const allHours = [].concat(...(data.forecast.slice(0, 7).map(x => x.hourly)));
     const temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
@@ -151,8 +152,8 @@ async function weather(query, API_KEY) {
 <script>
 (()=> {  
     const data = ${JSON.stringify(data)};
-    let units ="F";
-    console.log(data);
+    const savedUnits = window.localStorage ? window.localStorage.getItem("weatherUnits") : null;
+    let units = savedUnits ? savedUnits : "F";
 
     const enumerateElements = (selector, handler) => {
         const elements = document.querySelectorAll('#presearch-weather-package ' + selector);
@@ -164,9 +165,15 @@ async function weather(query, API_KEY) {
         handler(element);
     };
 
+    const selectAllElements = (selector, handler) => {
+        const element = document.querySelectorAll('#presearch-weather-package ' + selector);
+        handler(element);
+    };
+
     const refreshUnits = function(selector, newUnits){
         if (newUnits) {
             units = newUnits;
+            if (window.localStorage) window.localStorage.setItem("weatherUnits", newUnits);
         }
         
         enumerateElements(selector, (element, index) => {
@@ -185,6 +192,10 @@ async function weather(query, API_KEY) {
         });
     };
 
+    if (savedUnits && savedUnits === "C") {
+        refreshUnits('[data-degrees]', "C");
+    }
+
     const setForecast = function (dayData, date) {
         selectElement('.degrees-day-now', (el)=> el.dataset.degrees = dayData.temp);
         selectElement('.degrees-day-min', (el)=> el.dataset.degrees = dayData.mintemp);
@@ -198,6 +209,7 @@ async function weather(query, API_KEY) {
         selectElement('.forecast-wind', element => element.innerText = dayData.wind + 'm/s');
         selectElement('.forecast-time', element => element.innerText = date || dayData.date.date);
     };
+
 
     enumerateElements('button.day-forecast', (btn, index) => {
         btn.dataset.index = index;
@@ -217,6 +229,9 @@ async function weather(query, API_KEY) {
     });
 
     enumerateElements('button[data-units]', (btn) => {
+        if (savedUnits && savedUnits === "C") {
+            btn.classList.toggle('active')
+        }
         btn.addEventListener('click', (e)=> {
             selectElement('button[data-units].active', (btn)=> btn?.classList.remove('active'));
             btn.classList.add('active');
@@ -563,6 +578,7 @@ async function weather(query, API_KEY) {
 
 async function getWeather(query, API_KEY) {
     const toContract = (data) => {
+        if (data.error) return data;
         const toDateContract = (epoch) => {
             var date = dayjs(epoch * 1000);
             return {
@@ -634,7 +650,6 @@ async function getWeather(query, API_KEY) {
     };
 
     const fetch = async (q) => {
-        console.log("query", q);
         const { data } = await axios.get(WEATHER_API_URL, {
             params: {
                 key: API_KEY,
@@ -644,7 +659,7 @@ async function getWeather(query, API_KEY) {
                 q: q,
                 lang: 'en'
             }
-        });
+        }).catch(error => ({data: {error}}))
 
         return toContract(data);
     }
