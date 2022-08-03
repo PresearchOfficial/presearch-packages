@@ -622,7 +622,7 @@ async function getWeather(query, API_KEY) {
                 temp: current.temp_f,
                 feelslike: current.feelslike_f
             },
-            forecast: data.forecast.forecastday.slice(0, 7)
+            forecast: data.forecast.forecastday
                 .map((forecast, index) => {
                     const day = forecast.day;
                     return {
@@ -653,7 +653,7 @@ async function getWeather(query, API_KEY) {
         const { data } = await axios.get(WEATHER_API_URL, {
             params: {
                 key: API_KEY,
-                days: 8,
+                days: 7,
                 aqi: 'no',
                 alerts: 'no',
                 q: q,
