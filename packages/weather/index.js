@@ -112,26 +112,26 @@ async function weather(query, API_KEY) {
             <div class="chart-container">
                 <svg class="active" data-chart="T" height="100">
                     <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="80%">
-                            <stop offset="0%" style="stop-color: #ffcc0070;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color: #ffcc0070;stop-opacity:0" />
+                        <linearGradient id="gradientT" x1="0%" y1="0%" x2="0%" y2="80%">
+                            <stop offset="0%" style="stop-opacity:1" />
+                            <stop offset="100%" style=";stop-opacity:0" />
                         </linearGradient>
                     </defs>
 
-                    <polyline fill="url(#gradient)" />
-                    <polyline fill="none" stroke="#a89b2c" stroke-width="2" />
+                    <polyline fill="url(#gradientT)" />
+                    <polyline fill="none" stroke-width="2" />
                     ${[].concat(...tempTexts).join('')}
                 </svg>
                 
                 <svg data-chart="P" height="100">
                     <defs>
-                        <linearGradient id="gradP" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <linearGradient id="gradientP" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" style="stop-color: #6092e370;stop-opacity:0" />
                             <stop offset="100%" style="stop-color: #6092e370;stop-opacity:1" />
                         </linearGradient>
                     </defs>
 
-                    <polyline fill="url(#gradP)" style="transform: translate(0, 1px)" />
+                    <polyline fill="url(#gradientP)" style="transform: translate(0, 1px)" />
                     <polyline fill="none" stroke="#6092e3" stroke-width="2" />
                     ${[].concat(...rainTexts).join('')}
                 </svg>
@@ -301,7 +301,8 @@ async function weather(query, API_KEY) {
 
 <style>
     #presearch-weather-package {
-         margin-bottom: 30px;
+        margin-bottom: 30px;
+        color: #666666;
     }
 
     .dark #presearch-weather-package {
@@ -326,13 +327,29 @@ async function weather(query, API_KEY) {
     #presearch-weather-package .header {
         font-size: 20px;
         font-weight: 400;
-        border-bottom: 2px solid #3d3e40;
+        border-bottom: 2px solid #7c7c7c;
         padding-bottom: 5px;
         margin-bottom: 10px;
     }
     
     .dark #presearch-weather-package .header {
         border-bottom: 2px solid #3d3e40;
+    }
+
+    #presearch-weather-package svg[data-chart="T"] linearGradient stop {
+        stop-color: #f4dc29;
+    }
+    
+    .dark #presearch-weather-package svg[data-chart="T"] linearGradient stop {
+        stop-color: #ffcc0070;
+    }
+
+    #presearch-weather-package svg[data-chart="T"] polyline:nth-child(2) {
+        stroke: #ccb20b;
+    }
+
+    .dark #presearch-weather-package svg[data-chart="T"] polyline:nth-child(2) {
+        stroke: #a89b2c;
     }
 
     #presearch-weather-package div.forecast-icon {
@@ -513,7 +530,6 @@ async function weather(query, API_KEY) {
         #presearch-weather-package .info-container > .flex {
             display: block;
         }
-
     }
 
     @media only screen and (max-width: 380px) {
