@@ -10,45 +10,34 @@ const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 async function weather(query, API_KEY) {
     const data = await getWeather(query, API_KEY);
 
-    if (data.error) return null;
+    if (data.error) {
+        return null;
+    }
 
     const allHours = [].concat(...(data.forecast.map(x => x.hourly)));
-    const temperatures = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
+    const hourlyForecast = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
 
     // since we have only 7 days forecast, 7day +1hour is missing, so chart looks incomplete
     // to avoid that duplicating last value
-    temperatures.push(temperatures[temperatures.length - 1]);
+    hourlyForecast.push(hourlyForecast[hourlyForecast.length - 1]);
 
-    const max = Math.max.apply(Math, temperatures.map(x => x.temp));
+    const maxTemperature = Math.max.apply(Math, hourlyForecast.map(x => x.temp));
+    const verticalOffset = maxTemperature + 30;
 
-    const offset = max + 30;
-    const chartHeight = 100;
-    const chartWidth = 544;
-
-    const step = chartWidth / 24;
-
-    const tempPoints = temperatures.map((degree, index) => {
-        return `${Math.round(index * step)},${((degree.temp * -1) + offset).toFixed(1)}`;
-    });
-
-    const rainPoints = temperatures.map((hour, index) => {
-        return `${Math.round(index * step)},${(Math.round((chartHeight - hour.rain) * 0.5) + 20).toFixed(1)}`;
-    });
-
-    const tempTexts = temperatures.map((x, index) => {
+    const tempTexts = hourlyForecast.map((x, index) => {
         if ((index % 3) === 1) {
             return [
-                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="${Math.round(x.temp * -1 + offset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
-                `<text text-anchor="middle" data-day="${x.day}" data-hour="${x.hour}" x="${Math.round(index * step)}" y="95">${x.time}</text>`
+                `<text text-anchor="middle" data-index="${index}" data-day="${x.day}" data-hour="${x.hour}" y="${Math.round(x.temp * -1 + verticalOffset - 10)}" data-degrees="${x.temp}">${Math.round(x.temp) + '°'}</text>`,
+                `<text text-anchor="middle" data-index="${index}" data-day="${x.day}" data-hour="${x.hour}" y="95">${x.time}</text>`
             ];
         }
     });
 
-    const rainTexts = temperatures.map((x, index) => {
+    const rainTexts = hourlyForecast.map((x, index) => {
         if ((index % 3) === 1) {
             return [
-                `<text text-anchor="middle" x="${Math.round(index * step)}" y="${10}">${Math.round(x.rain) + '%'}</text>`,
-                `<text text-anchor="middle" x="${Math.round(index * step)}" y="95">${x.time}</text>`
+                `<text text-anchor="middle" data-index="${index}" y="${10}">${Math.round(x.rain) + '%'}</text>`,
+                `<text text-anchor="middle" data-index="${index}" y="95">${x.time}</text>`
             ];
         }
     });
@@ -121,7 +110,7 @@ async function weather(query, API_KEY) {
             </div>
 
             <div class="chart-container">
-                <svg class="active" data-chart="T" width="${chartWidth * 7}" height="${chartHeight}">
+                <svg class="active" data-chart="T" height="100">
                     <defs>
                         <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="80%">
                             <stop offset="0%" style="stop-color: #ffcc0070;stop-opacity:1" />
@@ -129,12 +118,12 @@ async function weather(query, API_KEY) {
                         </linearGradient>
                     </defs>
 
-                    <polyline points="0,0 ${tempPoints} ${step * (temperatures.length - 1)},0" fill="url(#gradient)" />
-                    <polyline points="${tempPoints}" fill="none" stroke="#a89b2c" stroke-width="2" />
+                    <polyline fill="url(#gradient)" />
+                    <polyline fill="none" stroke="#a89b2c" stroke-width="2" />
                     ${[].concat(...tempTexts).join('')}
                 </svg>
                 
-                <svg data-chart="P" width="${chartWidth * 7}" height="${chartHeight}">
+                <svg data-chart="P" height="100">
                     <defs>
                         <linearGradient id="gradP" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" style="stop-color: #6092e370;stop-opacity:0" />
@@ -142,8 +131,8 @@ async function weather(query, API_KEY) {
                         </linearGradient>
                     </defs>
 
-                    <polyline points="0,70 ${rainPoints}" stroke="none" ${step * (temperatures.length - 1)},70" fill="url(#gradP)" style="transform: translate(0, 1px)" />
-                    <polyline points="${rainPoints}" stroke="#6092e3" fill="none" stroke-width="2" />
+                    <polyline fill="url(#gradP)" style="transform: translate(0, 1px)" />
+                    <polyline fill="none" stroke="#6092e3" stroke-width="2" />
                     ${[].concat(...rainTexts).join('')}
                 </svg>
             </div>
@@ -153,8 +142,11 @@ async function weather(query, API_KEY) {
     </div >
 
 <script>
+
 (()=> {  
     const data = ${JSON.stringify(data)};
+    const hourlyForecast = ${JSON.stringify(hourlyForecast)};
+
     const savedUnits = window.localStorage ? window.localStorage.getItem("weatherUnits") : null;
     let units = savedUnits ? savedUnits : "F";
 
@@ -165,13 +157,53 @@ async function weather(query, API_KEY) {
 
     const selectElement = (selector, handler) => {
         const element = document.querySelector('#presearch-weather-package ' + selector);
-        handler(element);
+        return handler(element);
     };
 
-    const selectAllElements = (selector, handler) => {
-        const element = document.querySelectorAll('#presearch-weather-package ' + selector);
-        handler(element);
+    const redrawCharts = ()=> {
+        console.log("width " + chartContainer.offsetWidth);
+        console.log("height " + chartContainer.offsetHeight);
+        const max = Math.max.apply(Math, hourlyForecast.map(x => x.temp));
+
+        const chartWidth = chartContainer.offsetWidth;
+        const offset = max + 30;
+        const chartHeight = 100;
+
+        const step = chartWidth / 24;
+
+        const forecastIndex = selectElement("button.day-forecast.active", btn => btn.dataset.index);
+
+        const allPoints = [
+            hourlyForecast.map((degree, index) => {
+                return Math.round(index * step) + ',' + ((degree.temp * -1) + offset).toFixed(1) + " ";
+            }), 
+            hourlyForecast.map((hour, index) => {
+                return Math.round(index * step) + ',' + (Math.round((chartHeight - hour.rain) * 0.5) + 20).toFixed(1) + " "; 
+            })
+        ];
+        
+        enumerateElements('svg[data-chart]', (chart, index) => { 
+            chart.setAttribute('width',  chartWidth * 7);
+            const polylines = chart.querySelectorAll('polyline');
+            const points = allPoints[index];
+            
+            const offsetTop = index == 1 ? 70 : 0;
+            polylines[0].setAttribute('points', '0,'+ offsetTop + ' ' + points + ' ' + (step * (points.length - 1)) + ',' + offsetTop);
+            polylines[1].setAttribute('points', points);
+            
+            chart.setAttribute("style", 'transform: translate('+(forecastIndex * chartContainer.offsetWidth * -1) + 'px); transition: none');
+
+            const texts = chart.querySelectorAll('text');
+            texts.forEach((text) => {
+                const index = parseInt(text.dataset.index);
+                text.setAttribute('x', Math.round(index * step));
+            });
+        });
     };
+
+    const chartContainer = document.querySelector('#presearch-weather-package .chart-container');
+    const chartContainerObserver = new ResizeObserver(redrawCharts);
+    chartContainerObserver.observe(chartContainer);
 
     const refreshUnits = function(selector, newUnits){
         if (newUnits) {
@@ -213,7 +245,6 @@ async function weather(query, API_KEY) {
         selectElement('.forecast-time', element => element.innerText = date || dayData.date.date);
     };
 
-
     enumerateElements('button.day-forecast', (btn, index) => {
         btn.dataset.index = index;
         btn.addEventListener('click', e => {
@@ -225,7 +256,7 @@ async function weather(query, API_KEY) {
             setForecast(dayData);
 
             enumerateElements('svg[data-chart]', chart =>
-                chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * 544 * -1) + 'px)'));
+                chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * chartContainer.offsetWidth * -1) + 'px)'));
 
             refreshUnits('[class*="degrees-day-"]');
         });
@@ -271,7 +302,6 @@ async function weather(query, API_KEY) {
 <style>
     #presearch-weather-package {
          margin-bottom: 30px;
-         width:  544px;
     }
 
     .dark #presearch-weather-package {
@@ -394,7 +424,7 @@ async function weather(query, API_KEY) {
 
     #presearch-weather-package .info-container .main {
         margin-right: 40px;
-        display: flex;
+        display: inline-flex;
         justify-content: flex-start;
     }
 
@@ -406,6 +436,7 @@ async function weather(query, API_KEY) {
     #presearch-weather-package .forecast-container {
         display: flex; 
         margin-top: 20px;
+        overflow-x: auto;
     }
 
     #presearch-weather-package .day-forecast {
@@ -413,6 +444,7 @@ async function weather(query, API_KEY) {
         border-radius: 5px;
         padding: 5px;
         width: 95px;
+        min-width: 75px;
     }
     
     .dark #presearch-weather-package .day-forecast.active, 
@@ -475,6 +507,46 @@ async function weather(query, API_KEY) {
     #presearch-weather-package .chart-switch {
         font-size: 13px; 
         align-self: center
+    }
+
+    @media only screen and (max-width: 320px) {
+        #presearch-weather-package .info-container > .flex {
+            display: block;
+        }
+
+    }
+
+    @media only screen and (max-width: 380px) {
+        svg text:nth-child(4n+1), svg text:nth-child(4n) {
+            display: none;
+        }
+    }
+    
+    @media only screen and (max-width: 480px) {
+        #presearch-weather-package .info-container > .flex {
+            display: block;
+        }
+
+        #presearch-weather-package .info-container .details .description {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        #presearch-weather-package .forecast-type-container {
+            display: block;
+        }
+    }
+
+    @media only screen and (min-width: 768px) {
+        #presearch-weather-package {
+            width: 554px;
+        }
+    }
+    
+    @media only screen and (min-width: 1024px) {
+        #presearch-weather-package {
+            width: 644px;
+        }
     }
 
 .icon-113-night { background-image:  url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M17.7499 4.08998L15.2199 6.02998L16.1299 9.08998L13.4999 7.27998L10.8699 9.08998L11.7799 6.02998L9.24995 4.08998L12.4399 3.99998L13.4999 0.999977L14.5599 3.99998L17.7499 4.08998ZM21.2499 11L19.6099 12.25L20.1999 14.23L18.4999 13.06L16.7999 14.23L17.3899 12.25L15.7499 11L17.8099 10.95L18.4999 8.99998L19.1899 10.95L21.2499 11ZM18.9699 15.95C19.7999 15.87 20.6899 17.05 20.1599 17.8C19.8399 18.25 19.4999 18.67 19.0799 19.07C15.1699 23 8.83995 23 4.93995 19.07C1.02995 15.17 1.02995 8.82998 4.93995 4.92998C5.33995 4.52998 5.75995 4.16998 6.20995 3.84998C6.95995 3.31998 8.13995 4.20998 8.05995 5.03998C7.78995 7.89998 8.74995 10.87 10.9499 13.06C13.1399 15.26 16.0999 16.22 18.9699 15.95Z' fill='white'/%3E%3C/svg%3E")}
