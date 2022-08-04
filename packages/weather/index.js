@@ -344,11 +344,11 @@ async function weather(query, API_KEY) {
         stop-color: #ffcc0070;
     }
 
-    #presearch-weather-package svg[data-chart="T"] polyline:nth-child(2) {
+    #presearch-weather-package svg[data-chart="T"] polyline:nth-child(3) {
         stroke: #ccb20b;
     }
 
-    .dark #presearch-weather-package svg[data-chart="T"] polyline:nth-child(2) {
+    .dark #presearch-weather-package svg[data-chart="T"] polyline:nth-child(3) {
         stroke: #a89b2c;
     }
 
