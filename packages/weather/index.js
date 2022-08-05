@@ -7,10 +7,10 @@ const cities = require("./cities.json");
 
 const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 
-async function weather(query, API_KEY) {
-    const data = await getWeather(query, API_KEY);
+async function weather(query, API_KEY, geoLocation) {
+    const data = await getWeather(query, API_KEY, geoLocation);
 
-    if (data.error) {
+    if (!data || data.error) {
         return null;
     }
 
@@ -161,8 +161,6 @@ async function weather(query, API_KEY) {
     };
 
     const redrawCharts = ()=> {
-        console.log("width " + chartContainer.offsetWidth);
-        console.log("height " + chartContainer.offsetHeight);
         const max = Math.max.apply(Math, hourlyForecast.map(x => x.temp));
 
         const chartWidth = chartContainer.offsetWidth;
@@ -667,7 +665,7 @@ async function weather(query, API_KEY) {
     `;
 }
 
-async function getWeather(query, API_KEY) {
+async function getWeather(query, API_KEY, geoLocation) {
     const toContract = (data) => {
         if (data.error) return data;
         const toDateContract = (epoch) => {
@@ -755,9 +753,14 @@ async function getWeather(query, API_KEY) {
         return toContract(data);
     }
 
-    const city = extractCity(query);
+    let city;
+    if (query.toLowerCase() === "weather") {
+        city = geoLocation ? geoLocation.city : null;
+    } else {
+        city = extractCity(query)
+    }
 
-    return await fetch(city)
+    return city ? await fetch(city) : null;
 }
 
 function extractCity(query) {
@@ -777,7 +780,7 @@ function extractCity(query) {
 }
 
 async function trigger(query) {
-    return !!extractCity(query);
+    return !!extractCity(query) || query.toLowerCase() === "weather";
 }
 
 module.exports = { weather, trigger };
