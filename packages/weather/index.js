@@ -14,6 +14,29 @@ async function weather(query, API_KEY, geoLocation) {
         return null;
     }
 
+    if (data.geoLocationFailed) {
+        return (
+            `
+            <div id="presearch-weather-package">
+                <div class="header">
+                    <div><strong>Weather package</strong> is unable to get your location. You have turned off <strong>Local Search</strong> option.</div>
+                    <div>Turn <strong>Local Search</strong> back on, or use <strong>weather &lt;city&gt;</strong> query to get the weather for your location.</div>
+                </div>
+            </div>
+            <style>
+                #presearch-weather-package {
+                    color: #666666;
+                    font-size: 15px;
+                }
+            
+                .dark #presearch-weather-package {
+                    color: #ced5e2;
+                }
+            </style>
+            `
+        )
+    }
+
     const allHours = [].concat(...(data.forecast.map(x => x.hourly)));
     const hourlyForecast = allHours.map(x => ({ temp: x.temp, time: x.date.time, hour: x.hour, day: x.day, rain: x.rain }));
 
@@ -142,11 +165,9 @@ async function weather(query, API_KEY, geoLocation) {
     </div >
 
 <script>
-
 (()=> {  
     const data = ${JSON.stringify(data)};
     const hourlyForecast = ${JSON.stringify(hourlyForecast)};
-
     const savedUnits = window.localStorage ? window.localStorage.getItem("weatherUnits") : null;
     let units = savedUnits ? savedUnits : "F";
 
@@ -306,6 +327,9 @@ async function weather(query, API_KEY, geoLocation) {
     .dark #presearch-weather-package {
         color: #ced5e2;
     }
+    #presearch-weather-package .hidden {
+        display: none;
+    }
 
     #presearch-weather-package div[class*='icon'] {
         width: 50px;
@@ -328,6 +352,7 @@ async function weather(query, API_KEY, geoLocation) {
         border-bottom: 2px solid #7c7c7c;
         padding-bottom: 5px;
         margin-bottom: 10px;
+        align-items: center;
     }
     
     .dark #presearch-weather-package .header {
@@ -444,7 +469,6 @@ async function weather(query, API_KEY, geoLocation) {
     }
 
     #presearch-weather-package {
-        cursor: pointer;
         font-family: sans-serif;
     }
 
@@ -760,7 +784,7 @@ async function getWeather(query, API_KEY, geoLocation) {
         city = extractCity(query)
     }
 
-    return city ? await fetch(city) : null;
+    return city ? await fetch(city) : { geoLocationFailed: true };
 }
 
 function extractCity(query) {
