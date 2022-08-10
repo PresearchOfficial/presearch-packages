@@ -1,9 +1,6 @@
 'use strict';
 const axios = require("axios");
 const dayjs = require("dayjs");
-// cities extracted form
-// https://raw.githubusercontent.com/lutangar/cities.json/master/cities.json
-const cities = require("./cities.json");
 
 const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 
