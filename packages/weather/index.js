@@ -90,7 +90,7 @@ async function weather(query, API_KEY, geoLocation) {
         <div id="presearch-weather-package">
             <div class="info-container">
                 <div class="header">
-                    ${data.location.name}, ${data.location.country}
+                    ${data.location.name}, ${data.location.region && data.location.region + ","} ${data.location.country}
                 </div>
                 <div class="flex">
                     <div class="main">
@@ -726,7 +726,8 @@ async function getWeather(query, API_KEY, geoLocation) {
         return {
             location: {
                 name: data.location.name,
-                country: data.location.country
+                country: data.location.country,
+                region: data.location.region
             },
             current: {
                 date: toDateContract(current.last_updated_epoch),
@@ -798,9 +799,7 @@ function extractCity(query) {
     }
 
     const city = keywords.reduce((a, keyword) => a.replace(keyword, ""), query).trim();
-    const isCityRecognized = cities.indexOf(city) !== -1;
-
-    return isCityRecognized ? city : null;
+    return city;
 }
 
 async function trigger(query) {
