@@ -34,7 +34,7 @@ async function weather(query, API_KEY, geoLocation) {
         )
     }
 
-    if (geoLocation && !geoLocation.localSearchEnabled) {
+    if (geoLocation && !geoLocation.localSearchEnabled && query.trim().toLowerCase() === "weather") {
         return (
             `
             <div id="presearch-weather-package">
@@ -844,7 +844,7 @@ async function getWeather(query, API_KEY, geoLocation) {
     }
 
     let city;
-    if (query.toLowerCase() === "weather") {
+    if (query.trim().toLowerCase() === "weather") {
         if (geoLocation) {
             if (!geoLocation.localSearchEnabled) return { localSearchEnabled: false };
             else if (geoLocation.city) city = geoLocation.city;
@@ -873,7 +873,7 @@ function extractCity(query) {
 }
 
 async function trigger(query) {
-    return !!extractCity(query) || query.toLowerCase() === "weather";
+    return !!extractCity(query) || query.trim().toLowerCase() === "weather";
 }
 
 module.exports = { weather, trigger };
