@@ -16,8 +16,8 @@ async function weather(query, API_KEY, geoLocation) {
             `
             <div id="presearch-weather-package">
                 <div class="header">
-                    <div><strong>Weather package</strong> is unable to get your location. You have turned off <strong>Local Search</strong> option.</div>
-                    <div>Turn <strong>Local Search</strong> back on, or use <strong>weather &lt;city&gt;</strong> query to get the weather for your location.</div>
+                    <div>Couldn't find weather information for your location.</div>
+                    <div>You can use <strong>weather &lt;city&gt;</strong> query to get the weather for specific location.</div>
                 </div>
             </div>
             <style>
@@ -30,6 +30,68 @@ async function weather(query, API_KEY, geoLocation) {
                     color: #ced5e2;
                 }
             </style>
+            `
+        )
+    }
+
+    if (geoLocation && !geoLocation.localSearchEnabled) {
+        return (
+            `
+            <div id="presearch-weather-package">
+                <div class="header">
+                    <div class="locationEnabledInfo">Local Search results option is now enabled. Refresh the page to get the weather for your location.</div>
+                    <div>Weather package is unable to get your location, because you have turned off Local Search results.</div>
+                    <span class="enableLocalSearch">Click here</span> to enable Local Search results, or use <strong>weather &lt;city&gt;</strong> query to get the weather for specific location.</div>
+                </div>
+            </div>
+            <style>
+                #presearch-weather-package {
+                    color: #666666;
+                    font-size: 15px;
+                }
+
+                #presearch-weather-package .locationEnabledInfo {
+                    background: green;
+                    color: #f2f2f2;
+                    padding: 4px;
+                    border-radius: 2px;
+                    margin-bottom:2px;
+                    width: max-content;
+                    display: none;
+                }
+
+                #presearch-weather-package .enableLocalSearch {
+                    color:  #3083e3;
+                    cursor: pointer;
+                    transition: opacity 300ms;
+                }
+                #presearch-weather-package .enableLocalSearch:hover {
+                    opacity:0.6;
+                }
+
+                #presearch-weather-package .localSearchInfo {
+                    display: flex;
+                }
+            
+                .dark #presearch-weather-package {
+                    color: #ced5e2;
+                }
+                .dark #presearch-weather-package .enableLocalSearch {
+                    color: #80baff;
+                }
+            </style>
+            <script>
+                (() => {
+                    const enableLocalSearch = document.querySelector("#presearch-weather-package .enableLocalSearch");
+                    if (enableLocalSearch) {
+                        enableLocalSearch.addEventListener("click", (event) => {
+                            window.postMessage({ changeSettings: { enableLocalSearch: true } });
+                            document.querySelector("#presearch-weather-package .locationEnabledInfo").style.display = "block"
+                        });
+                    }
+                })();
+                
+            </script>
             `
         )
     }
@@ -242,6 +304,12 @@ async function weather(query, API_KEY, geoLocation) {
             element.innerText = element.textContent = degrees; 
         });
     };
+
+    if (${geoLocation && geoLocation.country && geoLocation.country === "United States" ? true : false}) {
+        refreshUnits('[data-degrees]', "F");
+    } else {
+        refreshUnits('[data-degrees]', "C");
+    }
 
     if (savedUnits && savedUnits === "C") {
         refreshUnits('[data-degrees]', "C");
@@ -777,12 +845,17 @@ async function getWeather(query, API_KEY, geoLocation) {
 
     let city;
     if (query.toLowerCase() === "weather") {
-        city = geoLocation ? geoLocation.city : null;
+        if (geoLocation) {
+            if (!geoLocation.localSearchEnabled) return { localSearchEnabled: false };
+            else if (geoLocation.city) city = geoLocation.city;
+            else if (geoLocation.coords) city = `${geoLocation.coords.lat},${geoLocation.coords.lon}`
+            else return { geoLocationFailed: true };
+        }
     } else {
         city = extractCity(query)
     }
 
-    return city ? await fetch(city) : { geoLocationFailed: true };
+    return city && await fetch(city);
 }
 
 function extractCity(query) {
