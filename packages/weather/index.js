@@ -283,10 +283,10 @@ async function weather(query, API_KEY, geoLocation) {
     const chartContainerObserver = new ResizeObserver(redrawCharts);
     chartContainerObserver.observe(chartContainer);
 
-    const refreshUnits = function(selector, newUnits){
+    const refreshUnits = function(selector, newUnits, save){
         if (newUnits) {
             units = newUnits;
-            if (window.localStorage) window.localStorage.setItem("weatherUnits", newUnits);
+            if (window.localStorage && save) window.localStorage.setItem("weatherUnits", newUnits);
         }
         
         enumerateElements(selector, (element, index) => {
@@ -305,14 +305,15 @@ async function weather(query, API_KEY, geoLocation) {
         });
     };
 
-    if (${geoLocation && geoLocation.country && geoLocation.country === "United States" ? true : false}) {
+    const isFromUSA = ${(geoLocation && geoLocation.country && geoLocation.country === "United States" ? true : false)};
+    if (isFromUSA) {
         refreshUnits('[data-degrees]', "F");
     } else {
-        refreshUnits('[data-degrees]', "C");
+       refreshUnits('[data-degrees]', "C");
     }
 
-    if (savedUnits && savedUnits === "C") {
-        refreshUnits('[data-degrees]', "C");
+    if (savedUnits) {
+        refreshUnits('[data-degrees]', savedUnits);
     }
 
     const setForecast = function (dayData, date) {
@@ -347,14 +348,14 @@ async function weather(query, API_KEY, geoLocation) {
     });
 
     enumerateElements('button[data-units]', (btn) => {
-        if (savedUnits && savedUnits === "C") {
+        if ((savedUnits && savedUnits === "C") || !isFromUSA) {
             btn.classList.toggle('active')
         }
         btn.addEventListener('click', (e)=> {
             selectElement('button[data-units].active', (btn)=> btn?.classList.remove('active'));
             btn.classList.add('active');
 
-            refreshUnits('[data-degrees]', btn.dataset.units);
+            refreshUnits('[data-degrees]', btn.dataset.units, true);
         });
     });
 
