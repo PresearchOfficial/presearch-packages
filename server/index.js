@@ -11,7 +11,7 @@ app.set("view engine", "pug");
 app.set("title", "Presearch");
 app.set("PRESEARCH_DOMAIN", "/");
 app.use(express.static("public"));
-
+app.use(express.static('../packages/passwordGenerator/src'));
 // share current path and query with views
 app.use((req, res, next) => {
     res.locals.path = req.path;
