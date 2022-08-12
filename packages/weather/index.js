@@ -11,6 +11,7 @@ async function weather(query, API_KEY, geoLocation) {
         return null;
     }
 
+    // handle the error case when there's no weather data for specified/geolocated location
     if (data.geoLocationFailed) {
         return (
             `
@@ -34,12 +35,12 @@ async function weather(query, API_KEY, geoLocation) {
         )
     }
 
+    // handle the case when user has local search results turned off, and the query is just weather
     if (geoLocation && !geoLocation.localSearchEnabled && query.trim().toLowerCase() === "weather") {
         return (
             `
             <div id="presearch-weather-package">
                 <div class="header">
-                    <div class="locationEnabledInfo">Local Search results option is now enabled. Refresh the page to get the weather for your location.</div>
                     <div>Weather package is unable to get your location, because you have turned off Local Search results.</div>
                     <span class="enableLocalSearch">Click here</span> to enable Local Search results, or use <strong>weather &lt;city&gt;</strong> query to get the weather for specific location.</div>
                 </div>
@@ -48,16 +49,6 @@ async function weather(query, API_KEY, geoLocation) {
                 #presearch-weather-package {
                     color: #666666;
                     font-size: 15px;
-                }
-
-                #presearch-weather-package .locationEnabledInfo {
-                    background: green;
-                    color: #f2f2f2;
-                    padding: 4px;
-                    border-radius: 2px;
-                    margin-bottom:2px;
-                    width: max-content;
-                    display: none;
                 }
 
                 #presearch-weather-package .enableLocalSearch {
@@ -82,11 +73,14 @@ async function weather(query, API_KEY, geoLocation) {
             </style>
             <script>
                 (() => {
+                    // enable local search results and refresh the page
                     const enableLocalSearch = document.querySelector("#presearch-weather-package .enableLocalSearch");
                     if (enableLocalSearch) {
                         enableLocalSearch.addEventListener("click", (event) => {
                             window.postMessage({ changeSettings: { enableLocalSearch: true } });
-                            document.querySelector("#presearch-weather-package .locationEnabledInfo").style.display = "block"
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500)
                         });
                     }
                 })();
@@ -144,6 +138,14 @@ async function weather(query, API_KEY, geoLocation) {
         </button > `;
         }).join('');
     };
+
+    // fix for "USA United States of America" displayed as country sometimes
+    if (data.location.country) {
+        const { country } = data.location
+        if (country.includes("USA") && country.includes("United")) {
+            data.location.country = data.location.country.split("USA ").join("");
+        }
+    }
 
     return `
         <div id="presearch-weather-package">
@@ -306,7 +308,8 @@ async function weather(query, API_KEY, geoLocation) {
     };
 
     const isFromUSA = ${(geoLocation && geoLocation.country && geoLocation.country === "United States" ? true : false)};
-    if (isFromUSA) {
+    const isCityInUSA = ${data.location.country === "United States of America"}
+    if (isFromUSA || isCityInUSA) {
         refreshUnits('[data-degrees]', "F");
     } else {
        refreshUnits('[data-degrees]', "C");
@@ -348,7 +351,7 @@ async function weather(query, API_KEY, geoLocation) {
     });
 
     enumerateElements('button[data-units]', (btn) => {
-        if ((savedUnits && savedUnits === "C") || !isFromUSA) {
+        if ((savedUnits && savedUnits === "C") || (!savedUnits && !isCityInUSA)) {
             btn.classList.toggle('active')
         }
         btn.addEventListener('click', (e)=> {
@@ -845,7 +848,9 @@ async function getWeather(query, API_KEY, geoLocation) {
     }
 
     let city;
-    if (query.trim().toLowerCase() === "weather") {
+    const translations = weatherTranslations();
+    const weatherWord = translations.filter(el => query.trim().toLowerCase() === el.toLowerCase());
+    if (weatherWord.length) {
         if (geoLocation) {
             if (!geoLocation.localSearchEnabled) return { localSearchEnabled: false };
             else if (geoLocation.city) city = geoLocation.city;
@@ -859,22 +864,38 @@ async function getWeather(query, API_KEY, geoLocation) {
     return city && await fetch(city);
 }
 
+function weatherTranslations() {
+    return ["weather", "het weer", "vejr", "hava", "météo", "meteo", "clima", "pogoda", "wetter", "tempo atmosferico", "väder", "vader", "počasí", "pocasi", "vær", "vaer", "mausam", "मौसम", "tiānqì", "tianqi", "天气", "nalssi", "날씨", "tenki", "天気"]
+}
+
 function extractCity(query) {
     query = query ? query.toLowerCase() : "";
 
-    const keywords = ["weather in ", "weather "];
-    const isKeywordUsed = keywords.some(k => query.indexOf(k) === 0);
+    const translations = weatherTranslations();
+    const filterWeatherWord = translations.filter(el => query.match(el))
+    const weatherWord = filterWeatherWord.length ? filterWeatherWord[0] : "weather"
+    const regexString = `\\b ${weatherWord}\\b`;
+    const weatherRegex = new RegExp(regexString)
+    // match the query with "... weather" at the end
+    if (query.match(weatherRegex)) {
+        return query.split(weatherRegex).join("");
+    }
+
+    const keywords = [weatherWord, "weather in", "weather near", "weather around", "weather by"];
+    const isKeywordUsed = keywords.some((k, i) => query.indexOf(k) === 0);
 
     if (!isKeywordUsed) {
         return null;
     }
 
-    const city = keywords.reduce((a, keyword) => a.replace(keyword, ""), query).trim();
+    const city = keywords.reduce((a, keyword, i) => a.replace(i === 0 ? keyword : keyword.split("weather").join(""), ""), query).trim();
     return city;
 }
 
 async function trigger(query) {
-    return !!extractCity(query) || query.trim().toLowerCase() === "weather";
+    const translations = weatherTranslations();
+    const weatherWord = translations.filter(el => query.trim().toLowerCase() === el.toLowerCase());
+    return !!extractCity(query) || weatherWord.length;
 }
 
 module.exports = { weather, trigger };
