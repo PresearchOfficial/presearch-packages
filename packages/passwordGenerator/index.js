@@ -13,7 +13,6 @@ async function passwordGenerator(query) {
   return `
     <head>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-      <link rel="stylesheet" type="text/css" href="/css/passwordgenerator.css">
      </head>
     <div id="presearchPackage">
       <div id="passwordGenerator">
@@ -55,6 +54,79 @@ async function passwordGenerator(query) {
       }, 500);
     });
     </script>
+    <style>
+
+    #passwordGenerator {
+      box-sizing: border-box;
+      border: none;
+      margin: 0;
+      color: #000;
+      text-align: left;
+      display: block;
+      width: auto;
+      position: relative;
+    }
+
+    .title {
+       padding-bottom: 6px;
+       color: #127fff;
+    }
+
+    #pw {
+        margin: 8px 0;
+        padding: 8px 24px;
+        text-align: left;
+        font-weight: 400;
+        border-left: 4px solid #127fff;
+        border-radius: 4px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        letter-spacing: 2px;
+    }
+    #pw:hover{
+      transition: all ease 200ms;
+    }
+
+    #copy {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings:
+      'FILL' 0,
+      'wght' 400,
+      'GRAD' 0,
+      'opsz' 48
+    }
+
+    .dark #passwordGenerator {
+      color: white;
+    }
+
+    .disclaimer {
+      font-size: x-small;
+      color: grey;
+    }
+    .disclaimer_example{
+      color: grey;
+    }
+    .disclaimer_sample{
+      color: #127fff;
+    }
+    .disclaimer a {
+      text-decoration: underline;
+      color: grey;
+    }
+    @media only screen and (max-width:400px) {
+      .to.shrink {
+        font-size: large;
+        margin-bottom: 2px;
+      }
+    }
+    </style>
   `;
 }
 
