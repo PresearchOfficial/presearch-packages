@@ -11,7 +11,6 @@ app.set("view engine", "pug");
 app.set("title", "Presearch");
 app.set("PRESEARCH_DOMAIN", "/");
 app.use(express.static("public"));
-
 // share current path and query with views
 app.use((req, res, next) => {
     res.locals.path = req.path;
@@ -44,10 +43,11 @@ const addRoutesTimeout = setTimeout(() => {
             const { version, author } = JSON.parse(packageInfo);
             app.get(`/${packageName}`, async (req, res) => {
                 const query = req.query.q ? req.query.q : "";
+                const geolocation = req.query.geolocation && req.query.geolocation === "1" ? { city: 'London', coords: { lat: 51.5095, lon: -0.0955 } } : null;
                 const trigger = await packageObject[packageName].trigger(query);
                 if (trigger) {
                     const overlappingPackages = await checkOverlapingTrigger(query);
-                    const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`]);
+                    const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`], geolocation);
                     return res.render("search", { title: packageName, packageData, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }) });
                 }
                 res.render("search", { title: packageName, triggered: false, query, packageInfo });

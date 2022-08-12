@@ -1,6 +1,6 @@
 'use strict';
 
-const DEFAULT_LENGTH = 8;
+const DEFAULT_LENGTH = 8; 
 const terms = require("./trigger-terms.json");
 
 /**
