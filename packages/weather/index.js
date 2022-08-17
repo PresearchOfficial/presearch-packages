@@ -6,7 +6,6 @@ const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 
 async function weather(query, API_KEY, geoLocation) {
     const data = await getWeather(query, API_KEY, geoLocation);
-
     if (!data || data.error) {
         return null;
     }
@@ -36,7 +35,7 @@ async function weather(query, API_KEY, geoLocation) {
     }
 
     // handle the case when user has local search results turned off, and the query is just weather
-    if (geoLocation && !geoLocation.localSearchEnabled && query.trim().toLowerCase() === "weather") {
+    if (geoLocation && !geoLocation.localSearchEnabled && weatherTranslations().includes(query.trim().toLowerCase())) {
         return (
             `
             <div id="presearch-weather-package">
@@ -168,7 +167,7 @@ async function weather(query, API_KEY, geoLocation) {
                             <div class="degrees-day">
                                 <span class="degrees-max degrees-day-max" data-degrees="${current.maxtemp}"></span>
                                 <span class="degrees-min degrees-day-min" data-degrees="${current.mintemp}"></span>
-                                <span class="degrees-day-feelslike">Feels like <span data-degrees="${current.feelslike}">${Math.round(current.feelslike)}°</span></span>
+                                <span class="degrees-feelslike">Feels like <span data-degrees="${current.feelslike}">${Math.round(current.feelslike)}°</span></span>
                             </div>
                         </div>
                     </div>
@@ -323,7 +322,14 @@ async function weather(query, API_KEY, geoLocation) {
         selectElement('.degrees-day-now', (el)=> el.dataset.degrees = dayData.temp);
         selectElement('.degrees-day-min', (el)=> el.dataset.degrees = dayData.mintemp);
         selectElement('.degrees-day-max', (el)=> el.dataset.degrees = dayData.maxtemp);
-        selectElement('.degrees-day-feelslike', (el)=> el.setAttribute("style", 'display: none'));
+        selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: none'));
+
+        if (date && date.includes(":")) {
+            const time = new Date();
+            const hour = time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            date = date.split(/[0-9]{1,2}:.*/gi).join(hour);
+            selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: initial'));
+        }
 
         selectElement('.forecast-icon', (el)=> el.setAttribute("class", 'forecast-icon icon-' + dayData.icon));
         selectElement('.forecast-name', (el)=> el.innerText = dayData.name);
@@ -333,15 +339,17 @@ async function weather(query, API_KEY, geoLocation) {
         selectElement('.forecast-time', element => element.innerText = date || dayData.date.date);
     };
 
+    setForecast(data.current, data.current.date.full);
+
     enumerateElements('button.day-forecast', (btn, index) => {
         btn.dataset.index = index;
         btn.addEventListener('click', e => {
             selectElement('button.day-forecast.active', (btn)=> btn?.classList.remove('active'));
             btn.classList.add('active');
 
-            const dayData = data.forecast[btn.dataset.index];
+            const dayData = index === 0 ? data.current : data.forecast[btn.dataset.index];
 
-            setForecast(dayData);
+            setForecast(dayData, index === 0 && data.current.date.full);
 
             enumerateElements('svg[data-chart]', chart =>
                 chart.setAttribute("style", 'transform: translate('+(btn.dataset.index * chartContainer.offsetWidth * -1) + 'px)'));
@@ -853,19 +861,19 @@ async function getWeather(query, API_KEY, geoLocation) {
     if (weatherWord.length) {
         if (geoLocation) {
             if (!geoLocation.localSearchEnabled) return { localSearchEnabled: false };
+            else if (geoLocation.coords) city = `${geoLocation.coords.lat},${geoLocation.coords.lon}`;
             else if (geoLocation.city) city = geoLocation.city;
-            else if (geoLocation.coords) city = `${geoLocation.coords.lat},${geoLocation.coords.lon}`
             else return { geoLocationFailed: true };
         }
     } else {
         city = extractCity(query)
     }
 
-    return city && await fetch(city);
+    return city ? await fetch(city) : null;
 }
 
 function weatherTranslations() {
-    return ["weather", "het weer", "vejr", "hava", "météo", "meteo", "clima", "pogoda", "wetter", "tempo atmosferico", "väder", "vader", "počasí", "pocasi", "vær", "vaer", "mausam", "मौसम", "tiānqì", "tianqi", "天气", "nalssi", "날씨", "tenki", "天気"]
+    return ["weather", "temperature", "precipitation", "wind", "forecast", "rain", "het weer", "vejr", "hava", "météo", "meteo", "clima", "pogoda", "wetter", "tempo atmosferico", "väder", "vader", "počasí", "pocasi", "vær", "vaer", "mausam", "मौसम", "tiānqì", "tianqi", "天气", "nalssi", "날씨", "tenki", "天気"]
 }
 
 function extractCity(query) {
@@ -881,14 +889,15 @@ function extractCity(query) {
         return query.split(weatherRegex).join("");
     }
 
-    const keywords = [weatherWord, "weather in", "weather near", "weather around", "weather by"];
+    const keywords = [weatherWord, ...["in", "near", "around", "by"].map((el) => `${weatherWord} ${el}`)];
     const isKeywordUsed = keywords.some((k, i) => query.indexOf(k) === 0);
+
 
     if (!isKeywordUsed) {
         return null;
     }
 
-    const city = keywords.reduce((a, keyword, i) => a.replace(i === 0 ? keyword : keyword.split("weather").join(""), ""), query).trim();
+    const city = keywords.reduce((a, keyword, i) => a.replace(i === 0 ? keyword : keyword.split(weatherWord).join(""), ""), query).trim();
     return city;
 }
 

@@ -8,5 +8,6 @@
   },
   "keywords": [],
   "author": "Marijuš Mackevič",
-  "license": "MIT"
+  "license": "MIT",
+  "order": "1"
 }
