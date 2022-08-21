@@ -7,6 +7,7 @@ const fiatCurrenciesExtended = require("./fiatCurrenciesExtended.json");
 
 const FIAT_API = "https://ec.europa.eu/budg/inforeuro/api/public/monthly-rates";
 const CRYPTO_API = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
+const SPREADSHEET_URI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfp_xd8g5Sgw3v2rfgOSbMPnNaSkZsV6KMjJRPFDxY5Kb9AJoyUv8v54IqK-bHgjFV4efHrXntXGf5/pub?output=csv";
 const USD_CODE = "USD";
 
 /**
@@ -106,7 +107,7 @@ function convertFiatNamesToSymbols(query) {
 
 function parseAndNormalize(query) {
   // normalize the input
-  query = query.trim().replace(",", ".").toUpperCase();
+  query = query.trim().replaceAll(",", "").toUpperCase();
 
   // convert fiat names in query to symbols, i.e 1000 pounds to usd will return 1000 gbp to usd
   query = convertFiatNamesToSymbols(query);
@@ -131,7 +132,7 @@ function parseAndNormalize(query) {
    
   }
 
-  // leave just amount, from and to
+  // Extract amount, from and to into an array
   const filteredMatch = match.filter((el) => {
     if (!el) return false;
     const lowercaseEl = el.toLowerCase();
@@ -166,8 +167,8 @@ function parseAndNormalize(query) {
     return undefined;
   }
 
-  // allow search with " " as joint only for fiat currencies. there are a lot of cryptocurrencies and because of that, 
-  // the package has been triggered for the wrong queries sometimes
+  // Allow search with " " as joint for fiat currencies only,
+  // Because there are lot of Cryptocurrencies and sometimes package triggers for wrong queries also
   if (emptySpaceJoint) {
     if (!fiatCurrencies[from] || !fiatCurrencies[to]) {
       return undefined;
@@ -179,8 +180,8 @@ function parseAndNormalize(query) {
   }
 
   const fromName = (cryptoCurrencies[from] && !fiatCurrencies[from]) ? cryptoCurrencies[from].name : '';
-  
-  return { value, from, to, fromName};
+  const isFiatConversion = fiatCurrencies[from] && fiatCurrencies[to];
+  return { value, from, to, fromName, isFiatConversion};
 }
 
 /**
@@ -189,18 +190,25 @@ function parseAndNormalize(query) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchFiatRates(conversion) {
-
-  const response = await axios.get(FIAT_API).catch(error => ({error}));
-
-  if (response.error) return [];
-
+  //Not supported by google finance api
+  const NS = ["CUC","ERN","FKP","GGP","GIP","IMP","JEP","KPW","MNT","MRO","SHP","SSP","STD","STN","SYP","VEF","VUV","WST","XAG","XAU","XDR","XPD","XPT","ZWL"];
   const targetCurrencies = [conversion.from, conversion.to, USD_CODE];
+
+  var response = {};
+  if(targetCurrencies.some(x=>NS.includes(x))){
+    response = await axios.get(FIAT_API).catch(error => ({error}));
+    if (response.error) return [];
+  }else{
+    const res = await axios.get(SPREADSHEET_URI).catch(error => ({error}));
+    if (res.error) return [];
+    response['data'] = parseCSV(res.data);
+  }
 
   return response.data.filter(currency => targetCurrencies.includes(currency.isoA3Code))
     .map(currency => ({
       code: currency.isoA3Code,
       rate: currency.value,
-      round: 2
+      round: 2 
     }));
 }
 
@@ -211,7 +219,8 @@ async function fetchFiatRates(conversion) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchCryptoRates(conversion, API_KEY) {
-  if (!API_KEY) return [];
+  if (!API_KEY || conversion.isFiatConversion) return [];
+
   // the "aux" parameter controls which fields we get. we only need the "quote" field, but it can't
   // be specified in the "aux" parameter. just send one value in order to reduce the payload.
   const response = await axios.get(
@@ -274,8 +283,34 @@ function convert(conversion, rates) {
 
   const eurValue = conversion.value / fromRate.rate;
   const toValue = eurValue * toRate.rate;
+  // Computes number of digits to put after decimal for given float value
+  const round = toValue > 1 ? 2 : -Math.floor( Math.log10(toValue) + 1) + 2;
 
-  return { value: toValue, round: toRate.round, code: toRate.code };
+  const fromName = fiatCurrencies[conversion.from] || cryptoCurrencies[conversion.from].name;
+  const toName = fiatCurrencies[conversion.to] || cryptoCurrencies[conversion.to].name;
+  return { value: toValue, round: round, code: toRate.code, fromName: fromName, toName:toName};
+}
+
+/**
+ * Function to parse and convert CSV response to relevent currency object array
+ * @param {string} str 
+ * @param {char} delimiter 
+ * @returns {array}
+ */
+function parseCSV(str, delimiter = ','){
+  if(str.match('\\r\\n')){
+      str = str.replaceAll('\r\n','\n');
+  }
+  const rows = str.split('\n');
+  var parsed = [];
+  rows.map((row)=>{
+      var temp = row.split(delimiter);
+      parsed.push({
+          'isoA3Code': temp[0],
+          'value': temp[1]
+      });
+  })
+  return parsed;
 }
 
 module.exports = { parseAndNormalize, fetchRates, convert };
