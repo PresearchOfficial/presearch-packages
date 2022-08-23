@@ -890,8 +890,12 @@ function extractCity(query) {
     }
 
     const keywords = [weatherWord, ...["in", "near", "around", "by"].map((el) => `${weatherWord} ${el}`)];
-    const isKeywordUsed = keywords.some((k, i) => query.indexOf(k) === 0);
-
+    
+    const isKeywordUsed = keywords.some((k, i) => {
+        const regexKeyword = `\\b${k}\\b`;
+        const keywordRegex = new RegExp(regexKeyword);
+        return query.match(keywordRegex);
+    });
 
     if (!isKeywordUsed) {
         return null;
