@@ -325,9 +325,6 @@ async function weather(query, API_KEY, geoLocation) {
         selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: none'));
 
         if (date && date.includes(":")) {
-            const time = new Date();
-            const hour = time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-            date = date.split(/[0-9]{1,2}:.*/gi).join(hour);
             selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: initial'));
         }
 
@@ -338,8 +335,6 @@ async function weather(query, API_KEY, geoLocation) {
         selectElement('.forecast-wind', element => element.innerText = dayData.wind + 'm/s');
         selectElement('.forecast-time', element => element.innerText = date || dayData.date.date);
     };
-
-    setForecast(data.current, data.current.date.full);
 
     enumerateElements('button.day-forecast', (btn, index) => {
         btn.dataset.index = index;
@@ -769,8 +764,8 @@ async function weather(query, API_KEY, geoLocation) {
 async function getWeather(query, API_KEY, geoLocation) {
     const toContract = (data) => {
         if (data.error) return data;
-        const toDateContract = (epoch) => {
-            var date = dayjs(epoch * 1000);
+        const toDateContract = (dateString) => {
+            let date = dayjs(dateString, 'YYYY-MM-DD hh-mm');
             return {
                 full: date.format('dddd, MMMM D, h:mm A'),
                 dayOfWeek: date.format('ddd'),
@@ -797,9 +792,8 @@ async function getWeather(query, API_KEY, geoLocation) {
             };
         };
 
-        const current = data.current;
+        const { current, location } = data;
         const today = data.forecast.forecastday[0];
-
         return {
             location: {
                 name: data.location.name,
@@ -807,7 +801,7 @@ async function getWeather(query, API_KEY, geoLocation) {
                 region: data.location.region
             },
             current: {
-                date: toDateContract(current.last_updated_epoch),
+                date: toDateContract(location.localtime),
                 ...extractCondition(current.condition, !!data.current.is_day),
                 ...extractTemperatures(today.day),
                 temp: current.temp_f,
@@ -817,7 +811,7 @@ async function getWeather(query, API_KEY, geoLocation) {
                 .map((forecast, index) => {
                     const day = forecast.day;
                     return {
-                        date: toDateContract(forecast.date_epoch),
+                        date: toDateContract(forecast.date),
                         ...extractCondition(day.condition),
                         ...extractTemperatures(day),
                         temp: day.avgtemp_f,
@@ -829,7 +823,7 @@ async function getWeather(query, API_KEY, geoLocation) {
                                     day: index,
                                     hour: hourIndex,
                                     temp: x.temp_f,
-                                    date: toDateContract(x.time_epoch),
+                                    date: toDateContract(x.time),
                                     ...extractCondition(x.condition),
                                     ...extractTemperatures(x)
                                 };
@@ -851,7 +845,6 @@ async function getWeather(query, API_KEY, geoLocation) {
                 lang: 'en'
             }
         }).catch(error => ({ data: { error } }))
-
         return toContract(data);
     }
 
@@ -890,7 +883,7 @@ function extractCity(query) {
     }
 
     const keywords = [weatherWord, ...["in", "near", "around", "by"].map((el) => `${weatherWord} ${el}`)];
-    
+
     const isKeywordUsed = keywords.some((k, i) => {
         const regexKeyword = `\\b${k}\\b`;
         const keywordRegex = new RegExp(regexKeyword);
