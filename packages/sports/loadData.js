@@ -18,7 +18,11 @@ async function getLeagues() {
     const leaguesArrayFilter = leaguesArray
         .filter(leagueResponse => leagueResponse.seasons[0].current && leagueResponse.seasons[0].coverage.standings)
         .map(leagueResponse => leagueResponse.league)
-        .map(league => league.name);
+        .map(league => league.name)
+        .reduce(function(a,b){
+            if (a.indexOf(b) < 0 ) a.push(b);
+            return a;
+          },[]);;
 
     // write JSON string to a file
     fs.writeFile('leagues.json', JSON.stringify(leaguesArrayFilter), (err) => {
