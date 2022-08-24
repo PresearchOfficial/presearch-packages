@@ -47,6 +47,7 @@ async function flight(query, API_KEY) {
             <div class="flight-details">
                 <div class="flight-detail flight-departure">
                     <div>
+                        <span class="flight-point-city"></span>
                         <span class="flight-detail-date"></span>
                     </div>
                     <div class="flight-detail-row">
@@ -67,6 +68,7 @@ async function flight(query, API_KEY) {
                 </div>
                 <div class="flight-detail flight-arrival">
                     <div>
+                        <span class="flight-point-city"></span>
                         <span class="flight-detail-date"></span>
                     </div>
                     <div class="flight-detail-row">
@@ -105,7 +107,7 @@ async function flight(query, API_KEY) {
 
             const setFlight = (selector, flightData) => {
                 const setValue = (elementSelector, value) => {
-                    return selectElement(selector + ' ' + elementSelector, (element) => element.innerText = value);
+                    enumerateElements(selector + ' ' + elementSelector, (element) => element.innerText = value);
                 };
 
                 selectElement(selector + '.flight-detail', (element)=>{
@@ -149,24 +151,32 @@ async function flight(query, API_KEY) {
     </script>
 
     <style>
-        .dark #presearch-flight-package {
-            color: whitesmoke;
-        }
-
         #presearch-flight-package {
             cursor: pointer;
+            color: #202124;
+        }
+        
+        .dark #presearch-flight-package {
+            color: #ced5e2;
         }
 
         #presearch-flight-package .header {
-            border-bottom: 2px solid #3d3e40;
             padding-bottom: 10px;
+            border-bottom: 2px solid #e4e4e4;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+
+        .dark #presearch-flight-package .header {
+            border-bottom: 2px solid #3d3e40;
         }
 
         #presearch-flight-package .flight-number {
             font-size: 26px;
+            margin-right: 10px;
         }
         
         #presearch-flight-package .flight-airline {
@@ -180,6 +190,10 @@ async function flight(query, API_KEY) {
         }
 
         #presearch-flight-package button[data-flight].active {
+            background-color: #dddddd;
+        }
+        
+        .dark #presearch-flight-package button[data-flight].active {
             background-color: #3d3e40;
         }
 
@@ -214,10 +228,14 @@ async function flight(query, API_KEY) {
         }
 
         #presearch-flight-package .flight-progress {
-            border: 1px solid gray;
+            border: 1px solid #bebbbb;
             margin: 3px 0;
         }
-        
+
+        .dark #presearch-flight-package .flight-progress {
+            border: 1px solid gray;
+        }
+
         #presearch-flight-package .flight-duration {
             text-align: center;
             font-size: 16px;
@@ -228,6 +246,7 @@ async function flight(query, API_KEY) {
             display: flex;
             margin-top: 10px;
             margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         #presearch-flight-package .flight-detail {
@@ -243,6 +262,10 @@ async function flight(query, API_KEY) {
         }
 
         #presearch-flight-package .flight-detail-label {
+            color: #7e8184
+        }
+        
+        .dark #presearch-flight-package .flight-detail-label {
             color: #9aa0a6;
         }
 
@@ -253,10 +276,12 @@ async function flight(query, API_KEY) {
         #presearch-flight-package .flight-detail-scheduled-time {
             color: #4eb66e;
             font-size: 22px;
+            width: 100px;
         }
         
         #presearch-flight-package .flight-detail-estimated-time {
             display: none;
+            width: 100px;
         }
         
         #presearch-flight-package .flight-not-in-time .flight-detail-scheduled-time {
@@ -269,6 +294,34 @@ async function flight(query, API_KEY) {
             color: #4eb66e;
             font-size: 22px;
             display: block;
+        }
+
+        #presearch-flight-package .flight-detail .flight-point-city {
+            display: none;
+        }
+
+        #presearch-flight-package .flight-detail .flight-point-city::after {
+            content: ' ·'
+        }
+        
+        @media only screen and (max-width: 600px) {
+            #presearch-flight-package .flight-detail .flight-point-city {
+                display: inline;
+                color: inherit;
+                font-weight: bold;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            #presearch-flight-package {
+                width: 554px;
+            }
+        }
+        
+        @media only screen and (min-width: 1024px) {
+            #presearch-flight-package {
+                width: 644px;
+            }
         }
 
     </style>`;
@@ -290,15 +343,13 @@ async function getFlight(query, API_KEY) {
             }
         });
 
-        console.log(data);
-        const flightData = data.data;
-        console.log(flightData);
+        const flights = data.data;
 
-        if (!(flightData?.length)) {
+        if (!(flights?.length)) {
             return null;
         }
 
-        const flightInfo = flightData[0];
+        const flightInfo = flights[0];
 
         const toAirportInfo = (airport) => {
             const dateTime = dayjs(airport.actual || airport.estimated || airport.scheduled);
@@ -318,7 +369,7 @@ async function getFlight(query, API_KEY) {
             airline: flightInfo.airline.name,
             number: `${flightInfo.airline.iata} ${flightInfo.flight.number}`,
 
-            flights: flightData.map(f => {
+            flights: flights.map(f => {
                 const departureDate = dayjs(f.departure.actual || f.departure.estimated);
                 const arrivalDate = dayjs(f.arrival.actual || f.arrival.estimated);
 
