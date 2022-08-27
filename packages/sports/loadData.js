@@ -4,7 +4,9 @@ const fs = require('fs');
 const headers = { 'x-rapidapi-key': '20335a832eedb54420e58e72280d7529', 'x-rapidapi-host': 'v3.football.api-sports.io' };
 const season = 2022;
 
-const portugueseLeagueId = 94;
+// go here to add ids of leagues https://dashboard.api-football.com/soccer/ids
+//portuguese, england, spain, italy, germany, france
+const leaguesIdArray = [94, 39, 140, 135, 78, 61];
 
 async function getLeagues() {
     const url = `https://v3.football.api-sports.io/leagues?season=${season}`;
@@ -22,10 +24,10 @@ async function getLeagues() {
         .reduce(function(a,b){
             if (a.indexOf(b) < 0 ) a.push(b);
             return a;
-          },[]);;
+        },[]);
 
     // write JSON string to a file
-    fs.writeFile('leagues.json', JSON.stringify(leaguesArrayFilter), (err) => {
+    fs.appendFile('leagues.json', JSON.stringify(leaguesArrayFilter), (err) => {
         if (err) {
             throw err;
         }
@@ -33,18 +35,27 @@ async function getLeagues() {
     });
 };
 
-async function getTeams(leagueId) {
-    const url = `https://v3.football.api-sports.io/teams?season=${season}&league=${leagueId}`;
+async function getTeams() {
+    var allTeams = [];
 
-    const findTeamsResponse = await Promise.resolve(
-        axios.get(url, { headers }).catch(error => ({ error }))
-    );
-    const teamsArray = findTeamsResponse.data.response;
+    for(leagueId of leaguesIdArray){
+        const url = `https://v3.football.api-sports.io/teams?season=${season}&league=${leagueId}`;
+        const findTeamsResponse = await Promise.resolve(
+            axios.get(url, { headers }).catch(error => ({ error }))
+        );
+        const teamsArray = findTeamsResponse.data.response;
+        const teamsFiler = teamsArray.map(teamResponse => teamResponse.team).map(team => team.name);
 
-    const teamsFiler = teamsArray.map(teamResponse => teamResponse.team).map(team => team.name);
+        Array.prototype.push.apply(allTeams, teamsFiler);
+    };
+
+    allTeams.reduce(function(a,b){
+        if (a.indexOf(b) < 0 ) a.push(b);
+        return a;
+    },[]);
 
     // write JSON string to a file
-    fs.writeFile('teams.json', JSON.stringify(teamsFiler), (err) => {
+    fs.appendFile('teams.json', JSON.stringify(allTeams), (err) => {
         if (err) {
             throw err;
         }
@@ -52,6 +63,11 @@ async function getTeams(leagueId) {
     });
 };
 
-
-getLeagues();
-getTeams(portugueseLeagueId);
+// if (fs.existsSync('leagues.json')) {
+//     fs.unlinkSync('leagues.json');
+// }
+//getLeagues();
+if (fs.existsSync('teams.json')) {
+    fs.unlinkSync('teams.json');
+}
+getTeams();
