@@ -1,7 +1,8 @@
 var axios = require('axios');
 const fs = require('fs');
 
-const headers = { 'x-rapidapi-key': '20335a832eedb54420e58e72280d7529', 'x-rapidapi-host': 'v3.football.api-sports.io' };
+const API_KEY = '';
+const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api-sports.io' };
 const season = 2022;
 
 // go here to add ids of leagues https://dashboard.api-football.com/soccer/ids
@@ -63,10 +64,10 @@ async function getTeams() {
     });
 };
 
-// if (fs.existsSync('leagues.json')) {
-//     fs.unlinkSync('leagues.json');
-// }
-//getLeagues();
+if (fs.existsSync('leagues.json')) {
+    fs.unlinkSync('leagues.json');
+}
+getLeagues();
 if (fs.existsSync('teams.json')) {
     fs.unlinkSync('teams.json');
 }
