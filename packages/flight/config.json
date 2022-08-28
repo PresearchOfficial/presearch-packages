@@ -1,0 +1,11 @@
+{
+    "amadeus" : {
+        "hostname" : "production",
+        "clientId" : "",
+        "clientSecret" : ""
+    },
+    "amadeus_test" : {
+        "clientId" : "",
+        "clientSecret" : ""
+    }
+}
