@@ -1,8 +1,17 @@
 'use strict';
 
 const axios = require("axios");
+
 const dayjs = require("dayjs");
+const timezone = require('dayjs/plugin/timezone');
+const utc = require('dayjs/plugin/utc');
+const localizedFormat = require('dayjs/plugin/localizedFormat');
+ 
 const airports = require("./airports.json");
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(localizedFormat);
 
 const FLIGHT_API_URL = "http://api.aviationstack.com/v1";
 
@@ -36,7 +45,14 @@ async function flight(query, API_KEY) {
                 </div>
                 <div class="flight-info">
                     <div class="flight-status"></div>
-                    <div class="flight-progress"></div>
+                    <div class="flight-progress-container">
+                        <div class="flight-progress-start">
+                        </div>
+                        <div class="flight-progress-plain">
+                        </div>
+                        <div class="flight-progress-end">
+                        </div>
+                    </div>
                     <div class="flight-duration"></div>
                 </div>
                 <div class="flight-point flight-arrival">
@@ -134,6 +150,8 @@ async function flight(query, API_KEY) {
                 
                 selectElement('.flight-status', (element)=> element.innerText = currentFlight.status);
                 selectElement('.flight-duration', (element)=> element.innerText = currentFlight.duration);
+                selectElement('.flight-progress-start', (element)=> element.style.flex = currentFlight.progress);
+                selectElement('.flight-progress-end', (element)=> element.style.flex = 100 - currentFlight.progress);
 
                 setFlight('.flight-departure', currentFlight.departure);
                 setFlight('.flight-arrival', currentFlight.arrival);
@@ -227,13 +245,36 @@ async function flight(query, API_KEY) {
             margin-top: 2px;
         }
 
-        #presearch-flight-package .flight-progress {
-            border: 1px solid #bebbbb;
-            margin: 3px 0;
+        #presearch-flight-package .flight-progress-container {
+            display: flex;
+            align-items: center;
         }
 
-        .dark #presearch-flight-package .flight-progress {
-            border: 1px solid gray;
+        #presearch-flight-package .flight-progress-start {
+            height: 2px;
+            background-color: #4eb66e;
+            flex: 0;
+        }
+
+        #presearch-flight-package .flight-progress-plain {
+            margin: 0 10px 0 5px;
+            width: 30px;
+            height: 30px;
+            transform: rotate(45deg);
+            background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 375.04 375.04' style='enable-background:new 0 0 375.04 375.04;' xml:space='preserve'%3E%3Cg%3E%3Cpath style='fill: %234eb66e' d='M365.938,8.173c-18.008-16.392-48.41-3.005-62.883,11.475c0,0-33.939,32.109-48.018,44.313 c-3.334,2.89-6.641,1.855-6.641,1.855L95.341,38.898c-6.58-0.938-15.801,2.136-20.494,6.836L61.185,59.392 c-4.703,4.695-3.691,10.982,2.244,13.967l112.941,58.683c0,0,8.709,4.326,3.459,9.326c-18.617,17.73-50.209,49.563-67.314,66.77 c-5.607,5.641-13.006,4.793-13.006,4.793l-52.154-6.371c-6.633-0.475-15.893,2.979-20.596,7.675L3.107,237.893 c-4.697,4.697-3.99,11.502,1.584,15.125l86.676,20.646c5.574,3.621,7.094,5.137,10.713,10.703l19.295,85.343 c3.623,5.569,10.43,6.277,15.127,1.583l23.658-23.663c4.693-4.694,8.156-13.957,7.689-20.579l-6.186-50.286 c0,0-0.918-6.397,2.596-9.958c17.371-17.601,51.955-51.27,70.17-69.719c5.65-5.721,8.043,1.451,8.043,1.451l58.281,112.134 c2.982,5.94,9.275,6.954,13.973,2.258l13.658-13.668c4.691-4.698,7.779-13.919,6.85-20.492L309.36,130.072 c0,0-1.113-5.204,2.023-8.592c11.238-12.143,44.842-48.672,44.842-48.672C370.692,58.334,384.83,25.368,365.938,8.173z'/%3E%3C/g%3E%3C/svg%3E%0A");
+            background-repeat: no-repeat no-repeat;
+            background-position: center center;
+            background-size: cover;
+        }
+
+        #presearch-flight-package .flight-progress-end {
+            height: 2px;
+            background-color: #bebbbb;
+            flex: 100;
+        }
+
+        .dark #presearch-flight-package .flight-progress-end {
+            background-color: gray;
         }
 
         #presearch-flight-package .flight-duration {
@@ -352,7 +393,9 @@ async function getFlight(query, API_KEY) {
         const flightInfo = flights[0];
 
         const toAirportInfo = (airport) => {
-            const dateTime = dayjs(airport.actual || airport.estimated || airport.scheduled);
+            const dateTime = dayjs.tz(airport.actual || airport.estimated || airport.scheduled, airport.timezone);
+            const isInTime = dateTime.utc().isSame(dayjs.tz(airport.estimated, airport.timezone).utc(), 'minute');
+
             return {
                 code: airport.iata,
                 date: dateTime.format('ddd, MMM D'),
@@ -360,8 +403,8 @@ async function getFlight(query, API_KEY) {
                 terminal: airport.terminal || '-',
                 gate: airport.gate || '-',
                 time: dateTime.format('h:mm A'),
-                scheduledTime: dayjs(airport.scheduled).format('h:mm A'),
-                inTime: dateTime.isSame(airport.estimated, 'minute')
+                scheduledTime: dayjs.tz(airport.scheduled, airport.timezone).format('h:mm A'),
+                inTime: isInTime 
             }
         };
 
@@ -370,20 +413,35 @@ async function getFlight(query, API_KEY) {
             number: `${flightInfo.airline.iata} ${flightInfo.flight.number}`,
 
             flights: flights.map(f => {
-                const departureDate = dayjs(f.departure.actual || f.departure.estimated);
-                const arrivalDate = dayjs(f.arrival.actual || f.arrival.estimated);
+                const departureDate = dayjs.tz(f.departure.actual || f.departure.estimated, f.departure.timezone);
+                const arrivalDate = dayjs.tz(f.arrival.actual || f.arrival.estimated, f.arrival.timezone);
 
                 const durationHours = arrivalDate.diff(departureDate, 'h');
-                const durationMins = arrivalDate.diff(departureDate, 'm') % 60;
+                const durationMins = arrivalDate.diff(departureDate, 'm');
 
-                const duration = `${durationHours ? (durationHours + 'h') : ''} ${durationMins}m`;
+                const duration = `${durationHours ? (durationHours + 'h') : ''} ${durationMins % 60}m`;
+
+                let progress = 0;
+
+                switch (f.flight_status) {
+                    case 'active':
+                        const inAirMins = dayjs.tz(dayjs(), f.departure.timezone).utc().diff(departureDate.utc(), 'm');
+                        console.log(inAirMins);
+                        progress = Math.round(inAirMins * 100 / durationMins);
+                        progress = progress > 100 ? 100 : progress;
+                        break;
+                    case 'landed':
+                        progress = 100;
+                        break;
+                }
 
                 return {
                     date: dayjs(f.flight_date, 'YYYY-MM-DD').format('ddd, MMM D'),
                     status: f.flight_status,
                     departure: toAirportInfo(f.departure),
                     arrival: toAirportInfo(f.arrival),
-                    duration: duration
+                    duration: duration,
+                    progress: progress
                 };
             }).reverse()
         };
