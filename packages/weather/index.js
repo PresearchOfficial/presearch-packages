@@ -167,7 +167,7 @@ async function weather(query, API_KEY, geoLocation) {
                             <div class="degrees-day">
                                 <span class="degrees-max degrees-day-max" data-degrees="${current.maxtemp}"></span>
                                 <span class="degrees-min degrees-day-min" data-degrees="${current.mintemp}"></span>
-                                <span class="degrees-feelslike">Feels like <span data-degrees="${current.feelslike}">${Math.round(current.feelslike)}°</span></span>
+                                <span class="degrees-feelslike-container">Feels like <span class="degrees-day-feelslike" data-degrees="${current.feelslike}">${Math.round(current.feelslike)}°</span></span>
                             </div>
                         </div>
                     </div>
@@ -322,10 +322,11 @@ async function weather(query, API_KEY, geoLocation) {
         selectElement('.degrees-day-now', (el)=> el.dataset.degrees = dayData.temp);
         selectElement('.degrees-day-min', (el)=> el.dataset.degrees = dayData.mintemp);
         selectElement('.degrees-day-max', (el)=> el.dataset.degrees = dayData.maxtemp);
-        selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: none'));
+        selectElement('.degrees-feelslike-container', (el)=> el.setAttribute("style", 'display: none'));
+        selectElement('.degrees-day-feelslike', (el)=> el.dataset.degrees = dayData.feelslike);
 
         if (date && date.includes(":")) {
-            selectElement('.degrees-feelslike', (el)=> el.setAttribute("style", 'display: initial'));
+            selectElement('.degrees-feelslike-container', (el)=> el.setAttribute("style", 'display: initial'));
         }
 
         selectElement('.forecast-icon', (el)=> el.setAttribute("class", 'forecast-icon icon-' + dayData.icon));
@@ -499,11 +500,11 @@ async function weather(query, API_KEY, geoLocation) {
         margin-left: 5px;
     }
     
-    #presearch-weather-package .degrees-day-feelslike {
+    #presearch-weather-package .degrees-feelslike-container {
         font-style: italic;
     }
     
-    #presearch-weather-package .degrees-day-feelslike span {
+    #presearch-weather-package .degrees-day-feelslike {
         font-weight: bold;
     }
 
@@ -823,6 +824,7 @@ async function getWeather(query, API_KEY, geoLocation) {
                                     day: index,
                                     hour: hourIndex,
                                     temp: x.temp_f,
+                                    feelslike: x.feelslike_f,
                                     date: toDateContract(x.time),
                                     ...extractCondition(x.condition),
                                     ...extractTemperatures(x)
@@ -844,7 +846,7 @@ async function getWeather(query, API_KEY, geoLocation) {
                 q: q,
                 lang: 'en'
             }
-        }).catch(error => ({ data: { error } }))
+        }).catch(error => ({ data: { error } }));
         return toContract(data);
     }
 
