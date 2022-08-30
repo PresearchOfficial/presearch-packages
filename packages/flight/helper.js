@@ -33,6 +33,14 @@ const style = `<style>
 #presearchPackage table td{
     padding-right: 2em;
 }
+#presearchPackage .popular-destinations p{
+    padding: 5px 10px;
+    border: 2px solid #2d8fff;
+    border-radius: 20px;
+    background: #2d8fff2e;
+    display: inline-block;
+    margin: 10px 10px 10px 0;
+}
 .airport-details table tr td:nth-child(2){
     font-size:1.2em;
 }

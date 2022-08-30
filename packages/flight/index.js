@@ -1,9 +1,10 @@
 'use strict';
 
 // global variables
-var airlineIndex = -1;
-var flightNo = -1;
-var airportCode = null;
+var AIRLINEINDEX = -1;
+var FLIGHTNO = -1;
+var AIRPORTCODE = null;
+var DESTINATIONS = null;
 
 // Usefull json data
 const airlines = require('./airlines.json');
@@ -11,24 +12,45 @@ const airports = require('./airports.json');
 
 // require helper functions
 const {getAirportDetails} = require('./airportDetails');
+const {getPopularDestinations} = require('./popularDestinations');
 const {getLiveStatus} = require('./liveStatus');
 const { style } = require('./helper');
 
 async function flight(query, API_KEY) {
-	if (airportCode !== null) {
-		const airportDetails = getAirportDetails(airportCode, airports);
-		return airportDetails + style;
-	} else if (flightNo !== -1){
-		const status = getLiveStatus(flightNo, airlineIndex, airlines, airports);
-		return status + style;
+	if (AIRPORTCODE !== null) {
+		
+		// Show airport details if airport code is queried
+		const airportDetails = getAirportDetails(AIRPORTCODE, airports);
+		if(airportDetails) return airportDetails + style;
+
+	} else if (DESTINATIONS !== null){
+		
+		// show popular destinations
+		const pd = await getPopularDestinations(DESTINATIONS, airports);
+		if(pd) return pd + style;
+
+	} else if (FLIGHTNO !== -1){
+
+		// Show live status of flight
+		const status = await getLiveStatus(FLIGHTNO, AIRLINEINDEX, airlines, airports);
+		if(status) return status + style;
+
 	}
+	return undefined;
 }
 
 function checkQuery(query){
 	// Show airport details if airport code is queried
-	const airportCodeMatch = query.toLowerCase().match(/^(airport )?[a-z]{3}( airport)?$/i);
-	if(airportCodeMatch){
-		airportCode = query.replace("airport",'').trim();
+	const airportcodeMatch = query.toLowerCase().match(/^(airport )?[a-z]{3}( airport)?$/i);
+	if(airportcodeMatch){
+		AIRPORTCODE = query.replace("airport",'').trim();
+		return true;
+	}
+
+	// show popular destinations
+	const destinationsMatch = query.toLowerCase().match(/^flights from ([a-z]{1,})$/i);
+	if(destinationsMatch && destinationsMatch.length === 2){
+		DESTINATIONS = destinationsMatch[1];
 		return true;
 	}
 
@@ -39,15 +61,15 @@ function checkQuery(query){
 
 		var subject = match[1].toUpperCase();
 		// Get airline index from arlines array if requested query matches with ICAO
-		airlineIndex = airlines.findIndex(e => e.icao == subject);
+		AIRLINEINDEX = airlines.findIndex(e => e.icao == subject);
 
 		// store flight no
-		airlineIndex > -1 ? flightNo = match[2] : 0 ;
+		AIRLINEINDEX > -1 ? FLIGHTNO = match[2] : 0 ;
 
 	}
 
 	// If ICAO not in query then check for IATA
-	if (airlineIndex === -1) { 
+	if (AIRLINEINDEX === -1) { 
 		
 		// regex for matching flight no with IATA
 		const match = query.match(/^([0-9A-Z]{2}) ?([0-9][0-9A-Z]{1,})$/i);
@@ -56,14 +78,14 @@ function checkQuery(query){
 
 		var subject = match[1].toUpperCase();
 		// Get airline index from arlines array if requested query matches with IATA
-		airlineIndex = airlines.findIndex(e => e.iata == subject);
+		AIRLINEINDEX = airlines.findIndex(e => e.iata == subject);
 
 		// store flight no globally
-		airlineIndex > -1 ? flightNo = match[2] : 0 ;
+		AIRLINEINDEX > -1 ? FLIGHTNO = match[2] : 0 ;
 	}
 
-	// return live status of flight if found airlineIndex
-	if(airlineIndex > -1) return true;
+	// return live status of flight if found airlineindex
+	if(AIRLINEINDEX > -1) return true;
 
 }
 
