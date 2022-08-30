@@ -6,8 +6,7 @@ const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api
 const season = 2022;
 
 // go here to add ids of leagues https://dashboard.api-football.com/soccer/ids
-//portuguese, england, spain, italy, germany, france
-const leaguesIdArray = [94, 39, 140, 135, 78, 61];
+const leaguesIdArray = [94];
 
 async function getLeagues() {
     const url = `https://v3.football.api-sports.io/leagues?season=${season}`;
@@ -21,14 +20,11 @@ async function getLeagues() {
     const leaguesArrayFilter = leaguesArray
         .filter(leagueResponse => leagueResponse.seasons[0].current && leagueResponse.seasons[0].coverage.standings)
         .map(leagueResponse => leagueResponse.league)
-        .map(league => league.name)
-        .reduce(function(a,b){
-            if (a.indexOf(b) < 0 ) a.push(b);
-            return a;
-        },[]);
+        .map(league => ({ id: league.id, name: league.name, logo: league.logo }));
 
+    const leaguesArrayUnique = [...new Map(leaguesArrayFilter.map((v) => [v.id, v])).values()]
     // write JSON string to a file
-    fs.appendFile('leagues.json', JSON.stringify(leaguesArrayFilter), (err) => {
+    fs.appendFile('leagues.json', JSON.stringify(leaguesArrayUnique), (err) => {
         if (err) {
             throw err;
         }
@@ -39,21 +35,23 @@ async function getLeagues() {
 async function getTeams() {
     var allTeams = [];
 
-    for(leagueId of leaguesIdArray){
+    for (leagueId of leaguesIdArray) {
         const url = `https://v3.football.api-sports.io/teams?season=${season}&league=${leagueId}`;
         const findTeamsResponse = await Promise.resolve(
             axios.get(url, { headers }).catch(error => ({ error }))
         );
         const teamsArray = findTeamsResponse.data.response;
-        const teamsFiler = teamsArray.map(teamResponse => teamResponse.team).map(team => team.name);
+        const teamsFiler = teamsArray
+            .map(teamResponse => teamResponse.team)
+            .map(team => ({ id: team.id, name: team.name, country: team.country, logo: team.logo }));
 
         Array.prototype.push.apply(allTeams, teamsFiler);
     };
 
-    allTeams.reduce(function(a,b){
-        if (a.indexOf(b) < 0 ) a.push(b);
+    allTeams.reduce(function (a, b) {
+        if (a.indexOf(b) < 0) a.push(b);
         return a;
-    },[]);
+    }, []);
 
     // write JSON string to a file
     fs.appendFile('teams.json', JSON.stringify(allTeams), (err) => {
