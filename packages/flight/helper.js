@@ -9,6 +9,9 @@ const style = `<style>
 .dark #presearchPackage .green{
     color: #4eb66e;
 }
+.dark #presearchPackage .darkbg{
+    background: #212121;
+}
 #presearchPackage .flexrow{
     display: flex;
     flex-flow: row;
@@ -27,11 +30,27 @@ const style = `<style>
 #presearchPackage .greenbg{
     background:#4eb66e;
 }
+#presearchPackage .darkbg{
+    background: white;
+}
 #presearchPackage table{
     margin: 10px 0;
 }
 #presearchPackage table td{
     padding-right: 2em;
+}
+#presearchPackage input.darkbg{
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 15px 15px 15px 0;
+    width: 30%;
+}
+#presearchPackage img.logos{
+    background: white;
+    margin: 0 10px 0 0;
+    height: 30px;
+    width: 30px;
 }
 #presearchPackage .popular-destinations p{
     padding: 5px 10px;

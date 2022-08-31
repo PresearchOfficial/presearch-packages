@@ -5,6 +5,7 @@ var AIRLINEINDEX = -1;
 var FLIGHTNO = -1;
 var AIRPORTCODE = null;
 var DESTINATIONS = null;
+var TRIPSEARCH = {};
 
 // Usefull json data
 const airlines = require('./airlines.json');
@@ -12,8 +13,9 @@ const airports = require('./airports.json');
 
 // require helper functions
 const {getAirportDetails} = require('./airportDetails');
-const {getPopularDestinations} = require('./popularDestinations');
 const {getLiveStatus} = require('./liveStatus');
+const {getPopularDestinations} = require('./popularDestinations');
+const {searchTrip} = require('./tripSearch');
 const { style } = require('./helper');
 
 async function flight(query, API_KEY) {
@@ -35,7 +37,14 @@ async function flight(query, API_KEY) {
 		const status = await getLiveStatus(FLIGHTNO, AIRLINEINDEX, airlines, airports);
 		if(status) return status + style;
 
+	}else if (Object.keys(TRIPSEARCH).length === 2){
+		
+		// show flights between cities
+		const trips = await searchTrip(TRIPSEARCH.origin, TRIPSEARCH.destination, airports, airlines);
+		if(trips) return trips + style;
+
 	}
+
 	return undefined;
 }
 
@@ -51,6 +60,14 @@ function checkQuery(query){
 	const destinationsMatch = query.toLowerCase().match(/^flights from ([a-z]{1,})$/i);
 	if(destinationsMatch && destinationsMatch.length === 2){
 		DESTINATIONS = destinationsMatch[1];
+		return true;
+	}
+
+	// show flights between two cities
+	const citiesMatch = query.toLowerCase().match(/^(flights from )?([a-z]{1,}) to ([a-z]{1,})( flights)?$/i);
+	if(citiesMatch && citiesMatch.length > 2 && query.split(' ').includes('flights')){
+		TRIPSEARCH.origin = citiesMatch[2];
+		TRIPSEARCH.destination = citiesMatch[3];
 		return true;
 	}
 
