@@ -6,25 +6,31 @@ const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api
 const season = 2022;
 
 // go here to add ids of leagues https://dashboard.api-football.com/soccer/ids
-const leaguesIdArray = [94];
+const leaguesIdArray = [94, 39];
 
 async function getLeagues() {
-    const url = `https://v3.football.api-sports.io/leagues?season=${season}`;
+    var allLeagues = [];
 
-    const findLeaguesResponse = await Promise.resolve(
-        axios.get(url, { headers }).catch(error => ({ error }))
-    );
-    const leaguesArray = findLeaguesResponse.data.response;
+    for (leagueId of leaguesIdArray) {
+        const url = `https://v3.football.api-sports.io/leagues?season=${season}&id=${leagueId}`;
 
-    //do some filtering excluding not current leagues and leagues doesnt have stadings data
-    const leaguesArrayFilter = leaguesArray
-        .filter(leagueResponse => leagueResponse.seasons[0].current && leagueResponse.seasons[0].coverage.standings)
-        .map(leagueResponse => leagueResponse.league)
-        .map(league => ({ id: league.id, name: league.name, logo: league.logo }));
+        const findLeaguesResponse = await Promise.resolve(
+            axios.get(url, { headers }).catch(error => ({ error }))
+        );
+        const leaguesArray = findLeaguesResponse.data.response;
 
-    const leaguesArrayUnique = [...new Map(leaguesArrayFilter.map((v) => [v.id, v])).values()]
+        //do some filtering excluding not current leagues and leagues doesnt have standings data
+        const leaguesArrayFilter = leaguesArray
+            .filter(leagueResponse => leagueResponse.seasons[0].current && leagueResponse.seasons[0].coverage.standings)
+            .map(leagueResponse => leagueResponse.league)
+            .map(league => ({ id: league.id, name: league.name, logo: league.logo }));
+
+        Array.prototype.push.apply(allLeagues, leaguesArrayFilter);
+    }
+    // const leaguesArrayUnique = [...new Map(leaguesArrayFilter.map((v) => [v.id, v])).values()]
+
     // write JSON string to a file
-    fs.appendFile('leagues.json', JSON.stringify(leaguesArrayUnique), (err) => {
+    fs.appendFile('leagues.json', JSON.stringify(allLeagues), (err) => {
         if (err) {
             throw err;
         }

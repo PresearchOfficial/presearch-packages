@@ -90,12 +90,14 @@ function htmlGameSection(fixture, right) {
             </div>
         </div>
         <div class="col gameDate">
-            <div><label>${getDate(fixture.fixture.timestamp)}</label></div>
+            <div><label>${liveStatusOnGoing.includes(fixture.fixture.status.short) 
+                                ? fixture.fixture.status.short
+                                : getDate(fixture.fixture.timestamp)}</label></div>
             <div><label>${fixture.fixture.status.short === "NS" 
                                 ? getTime(fixture.fixture.timestamp) 
                                 : liveStatusOnGoing.includes(fixture.fixture.status.short) 
                                         ? fixture.fixture.status.elapsed + '\'' 
-                                        : fixture.fixture.status.long}</label></div>
+                                        : fixture.fixture.status.short}</label></div>
         </div>
     `;
 }
@@ -123,7 +125,10 @@ function htmlClosestGameSection(fixture) {
             <div class="col">
                 <div class="row" style="padding-bottom: 1rem;">
                     <div style="flex: 1;">
-                        <label class="leagueLabel">${fixture.league.name} - ${getDate(fixture.fixture.timestamp)}</label>
+                        <label class="leagueLabel">
+                                ${fixture.league.name} 
+                                ${liveStatusOnGoing.includes(fixture.fixture.status.short) 
+                                    ? '' : ' - ' + getDate(fixture.fixture.timestamp) + ', ' + getTime(fixture.fixture.timestamp)}
                     </div>
                     <div style="flex: 1;text-align: end;">
                         <label>${liveStatusOnGoing.includes(fixture.fixture.status.short) 
@@ -183,67 +188,13 @@ function htmlGoalEvent(goalEvents, fixture) {
 
         html +=
             `<div class="row" style="padding-top: 0.2rem;">
-                <div class="col" style="font-size: 0.7rem; ${css}">
+                <div class="col goal" style="${css}">
                     <label class="leagueLabel">${goalEvent.player.name} ${goalEvent.time.elapsed}'</label>
                 </div>
             </div>`
     });
     return html;
 }
-
-// function htmlAllGamesTeam(lastFixtures, nextFixtures, liveFixtures) {
-//     var html = '';
-//     lastFixtures = lastFixtures.filter(fixture => !liveFixtures.find(live => (fixture.fixture.id === live.fixture.id)));
-//     nextFixtures = nextFixtures.filter(fixture => !liveFixtures.find(live => (fixture.fixture.id === live.fixture.id)));
-
-//     if (nextFixtures && lastFixtures) {
-
-//         if (liveFixtures && liveFixtures.length == 1) {
-//             html += htmlClosestGameSection(liveFixtures[0]);
-//             html += htmlGameRow(lastFixtures[0], nextFixtures[0]);
-//             html += htmlGameRow(lastFixtures[1], nextFixtures[1]);
-//             return html;
-//         }
-
-//         const now = Math.floor(Date.now() / 1000);
-//         const timeLastGame = lastFixtures[0].fixture.timestamp;
-//         const timeNextGame = nextFixtures[0].fixture.timestamp;
-//         const diffNextGame = Math.abs(now - timeNextGame);
-//         const diffLastGame = Math.abs(now - timeLastGame);
-
-//         if (diffNextGame > diffLastGame) {
-//             html += htmlClosestGameSection(lastFixtures[0]);
-//         } else {
-//             html += htmlClosestGameSection(nextFixtures[0]);
-//         }
-
-//         html += htmlGameRow(lastFixtures[1], nextFixtures[1]);
-//         html += htmlGameRow(lastFixtures[2], nextFixtures[2]);
-//     }
-//     return html;
-// }
-
-// function htmlAllGamesLeague(lastFixtures, nextFixtures, liveFixtures) {
-//     var html = '';
-
-//     const liveFixturesCount = liveFixtures.length;
-//     const diffCount = 6 - liveFixturesCount;
-
-//     var mergeNextAndLastFixtures = lastFixtures.map(
-//         (element, index) => [element, nextFixtures[index]]
-//     ).flat();
-
-//     var count = 0;
-//     while (count < liveFixturesCount) {
-//         html += htmlGameRow(liveFixtures[count++], liveFixtures[count++]);
-//     }
-
-//     count = 0;
-//     while (count < diffCount) {
-//         html += htmlGameRow(mergeNextAndLastFixtures[count++], mergeNextAndLastFixtures[count++]);
-//     }
-//     return html;
-// }
 
 function htmlAllGamesLeague(fixtures) {
     var html = '';
@@ -399,14 +350,15 @@ async function sports(query, API_KEY) {
     return `
     <div id="presearchSportPackage">
         <div class="header">
-            <g-img class="logo">
-                <img src="${logo}"
-                    height="32" width="32" alt="">
-            </g-img>
-            <label class="subject">${nameLabel}</label>
-
-            <div class="tabs">
-                <div data-tab-value="#tab_1" class="tab">Games</div>
+            <div class="row">
+                <g-img class="logo">
+                    <img src="${logo}"
+                        height="32" width="32" alt="">
+                </g-img>
+                <label class="subject">${nameLabel}</label>
+            </div>
+            <div class="tabs row">
+                <div data-tab-value="#tab_1" class="tab tab-clicked">Games</div>
                 <div data-tab-value="#tab_2" class="tab">Standings</div>
             </div>
         </div>
@@ -440,6 +392,12 @@ async function sports(query, API_KEY) {
             font-size: 0.9rem;
         }
 
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage {
+                font-size: 0.5rem;
+            }
+        }
+
         .dark #presearchSportPackage {
             color: #ffffff;
         }
@@ -456,6 +414,12 @@ async function sports(query, API_KEY) {
             font-weight: bold;
             font-size: 2rem;
             color: #000000;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage .subject {
+                font-size: 1.2rem;
+            }
         }
 
         #presearchSportPackage .logo {
@@ -487,7 +451,17 @@ async function sports(query, API_KEY) {
             font-weight: 900;
         }
 
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage .tab {
+                font-size: 0.6rem;
+            }
+        }
+
         #presearchSportPackage .tab:hover {
+            background-color: rgba(9,9,121,0.4);
+        }
+
+        #presearchSportPackage .tab-clicked {
             background-color: rgba(9,9,121,0.2);
         }
 
@@ -533,8 +507,14 @@ async function sports(query, API_KEY) {
         #presearchSportPackage .gameDate {
             flex: 0.4;
             padding-right: 1vw;
-            font-size: 0.5rem;
+            font-size: 0.7rem;
             text-align: center;
+        }
+
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage .gameDate {
+                font-size: 0.4rem;
+            }
         }
 
         #presearchSportPackage .gameRow {
@@ -585,9 +565,25 @@ async function sports(query, API_KEY) {
             font-weight: bold;
         }
 
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage .gameLiveScore {
+                font-size: 1rem;
+            }
+        }
+
         #presearchSportPackage .liveGame {
             padding: 1vw; 
             background: linear-gradient(218deg, rgba(0,14,255,1) 0%, rgba(82,135,255,1) 0%, rgba(0,0,0,0) 16%);
+        }
+
+        #presearchSportPackage .goal {
+            font-size: 0.7rem; 
+        }
+
+        @media only screen and (max-width: 600px) {
+            #presearchSportPackage .goal {
+                font-size: 0.4rem;
+            }
         }
     </style>
     <!-- example javascript -->
@@ -600,12 +596,16 @@ async function sports(query, API_KEY) {
                 const target = document
                     .querySelector(tab.dataset.tabValue);
 
+                tabs.forEach(tab => {
+                    tab.classList.remove('tab-clicked')
+                })
                 tabInfos.forEach(tabInfo => {
                     tabInfo.classList.remove('active')
                 })
                 target.classList.add('active');
+                tab.classList.add('tab-clicked');
             })
-        })
+        });
     </script>
 	`;
 }
