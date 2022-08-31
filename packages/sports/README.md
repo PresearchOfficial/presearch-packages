@@ -10,6 +10,7 @@ The API used is https://www.api-football.com/documentation-v3
 # Load data
 
 To load static data from the sports API we must run with node the script loadData.js. The script will create two files: teams.json and leagues.json. The array present in the file (*leaguesIdArray*) represents the ids of the leagues to import. The two json files will be used in the package trigger function, avoiding that every search calls the sports API.
+We must add the API key In the script file.
 
 # Next steps
 
