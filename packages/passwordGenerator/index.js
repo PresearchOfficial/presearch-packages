@@ -14,8 +14,13 @@ async function passwordGenerator(query) {
     <div id="presearchPackage">
       <div id="passwordGenerator">
           <div id="title" class="title"><a href="/search?q=pass+8">Random password has been created</a></div>
-          <div id="pw"></div>
-          <span id="copy" class="material-symbols-outlined" title="Copy">content_copy</span>
+          <div id="pw-container">
+            <div id="pw"></div>
+            <span id="copy" title="Copy">
+              <svg style="width:20px;" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg>
+            </span>
+          </div>
+         
       </div>
       <div class="disclaimer">
           <div class="disclaimer_example"><b>Examples</b></div>
@@ -26,13 +31,11 @@ async function passwordGenerator(query) {
     </div>
    
     <script>
-    function copyToClipboard(containerId) {
-        const range = document.createRange();
-        range.selectNode(document.getElementById(containerId));
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand("copy");
-        window.getSelection().removeAllRanges();
+    const copyTextToClipboard  = (text) => {
+      navigator.clipboard.writeText(text).then(() => {
+      }, (err) => {
+        console.error('Async: Could not copy text: ', err);
+      });
     }
   	let isMobile = false;
   	if (window.innerWidth < 500) {
@@ -43,11 +46,11 @@ async function passwordGenerator(query) {
     const copy = document.querySelector("#copy");
     pw.textContent = "${generatedStr}";
     copy.addEventListener(isMobile ? "touchstart" : "mousedown", () => {
-      copyToClipboard("pw");
-      let temp = pw.textContent;
-      pw.textContent = "Copied!";
+      copyTextToClipboard(pw.textContent);
+      let temp = copy.innerHTML;
+      copy.innerHTML = "Copied!";
       setTimeout(() => {
-        pw.textContent = temp;
+        copy.innerHTML = temp;
       }, 500);
     });
     </script>
@@ -69,26 +72,36 @@ async function passwordGenerator(query) {
        color: #127fff;
     }
 
+    #copy {
+      margin-left: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #copy:hover {
+      transition: all;
+      opacity: 0.6;
+    }
+
+    #pw-container {
+      display:flex;
+      align-items:center;
+    }
     #pw {
-        margin: 8px 0;
-        padding: 8px 24px;
         text-align: left;
         font-weight: 400;
+        margin: 8px 0;
+        padding: 8px 24px;
         border-left: 4px solid #127fff;
         border-radius: 4px;
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
         letter-spacing: 2px;
+        width: max-content;
+        max-width: 90%;
+        word-break: break-all;
     }
     #pw:hover{
       transition: all ease 200ms;
-    }
-
-    #copy {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 6px;
-      cursor: pointer;
     }
 
     .material-symbols-outlined {
