@@ -11,20 +11,17 @@ async function passwordGenerator(query) {
   }
 
   return `
-    <head>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-     </head>
     <div id="presearchPackage">
       <div id="passwordGenerator">
-          <div id="title" class="title"><a href="/passwordGenerator?q=pass+8">Random password has been created</a></div>
+          <div id="title" class="title"><a href="/search?q=pass+8">Random password has been created</a></div>
           <div id="pw"></div>
           <span id="copy" class="material-symbols-outlined" title="Copy">content_copy</span>
       </div>
       <div class="disclaimer">
           <div class="disclaimer_example"><b>Examples</b></div>
-          <div class="disclaimer_sample"><a href="/passwordGenerator?q=pass+8">Pass 8</a> generates 8 chars password</div>
-          <div class="disclaimer_sample"><a href="/passwordGenerator?q=password+12">Password 12</a> generates 12 chars password</div>
-          <div class="disclaimer_sample"><a href="/passwordGenerator?q=random+pw+32">Random pw 20</a> generates 20 chars password</div>
+          <div class="disclaimer_sample"><a href="/search?q=pass+8">Pass 8</a> generates 8 chars password</div>
+          <div class="disclaimer_sample"><a href="/search?q=password+12">Password 12</a> generates 12 chars password</div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 20</a> generates 20 chars password</div>
       </div>
     </div>
    

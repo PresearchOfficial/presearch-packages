@@ -1,7 +1,6 @@
 'use strict';
 
 const DEFAULT_LENGTH = 8; 
-const terms = require("./trigger-terms.json");
 
 /**
  * Execute the password generation using the provided character length
@@ -29,6 +28,8 @@ function generate(len) {
  * @returns {int}
  */
 function parseAndNormalize(query) {
+  const terms = ["randompassword", "randompw","pass","password","random password","random pw","generate password","pwd"];
+  
   for (let term of terms) {
     if (query.startsWith(term.toLowerCase())) {
       const queryArray = query.trim().split(" ");
