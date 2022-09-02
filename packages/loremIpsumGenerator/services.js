@@ -1,7 +1,7 @@
 'use strict';
 
 const DEFAULT_LENGTH = 12; 
-const terms = require("./trigger-terms.json");
+const terms = ["lorem", "lorem ipsum", "ipsum"];
 
 /**
  * Execute the lorem ipsum generation using the provided word length
