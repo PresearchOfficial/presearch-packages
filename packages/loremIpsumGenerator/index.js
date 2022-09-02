@@ -67,6 +67,7 @@ async function loremIpsumGenerator(query) {
     .title {
        padding-bottom: 6px;
        color: #127fff;
+       width: 90%;
     }
 
     #output {
@@ -89,14 +90,6 @@ async function loremIpsumGenerator(query) {
       right: 0;
       padding: 6px;
       cursor: pointer;
-    }
-
-    .material-symbols-outlined {
-      font-variation-settings:
-      'FILL' 0,
-      'wght' 400,
-      'GRAD' 0,
-      'opsz' 48
     }
 
     .dark #packageContainer {
