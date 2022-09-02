@@ -1,0 +1,15 @@
+{
+  "name": "passwordGenerator",
+  "version": "1.0.0",
+  "description": "Generate random password",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "keywords": [],
+  "author": "Alexander Gerk, Essel Adjei-Mensah",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^27.4.5"
+  }
+}
