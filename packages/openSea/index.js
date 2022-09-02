@@ -1,7 +1,7 @@
 "use strict";
 
 // @ts-ignore
-const fetch = require("node-fetch");
+const axios = require("axios");
 const ethereum_address = require('ethereum-address');
 
 const defaultImg = `
@@ -33,27 +33,33 @@ const truncate = (fullStr, strLen, separator = "...") => {
   )}`;
 };
 
-const loadAssets = async (query) => {
+const loadAssets = async (query, API_KEY) => {
   const [response1, response2] = await Promise.all([
-    fetch(
-      `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=5`
-    ).catch(error => ({error})),
-    fetch(
-      `https://api.opensea.io/api/v1/assets?format=json&owner=${query}&order_direction=desc&offset=0&limit=5`
-    ).catch(error => ({error})),
+    axios.get(
+      `https://api.opensea.io/api/v1/assets?format=json&asset_contract_address=${query}&order_direction=desc&offset=0&limit=5`, {
+        headers: {
+          "X-API-KEY": API_KEY
+        }
+      }
+    ).catch(error => ({ error })),
+    axios.get(
+      `https://api.opensea.io/api/v1/assets?format=json&owner=${query}&order_direction=desc&offset=0&limit=5`, {
+        headers: {
+          "X-API-KEY": API_KEY
+        }
+      }
+    ).catch(error => ({ error })),
   ]);
 
-  // eturn null when there's no response from OpenSea API;
-  if (!response1 || response1.error || !response2 || response2.error) {
-    return null;
+  // return null when there's no response from OpenSea API;
+  if (!response1.data || response1.error) 
+      if (!response2.data || response2.error) {
+        return null;
   }
 
-  const [data1, data2] = await Promise.all([
-    response1.json(),
-    response2.json(),
-  ]);
+  const data1 = response1.data, data2 = response2.data;
 
-  if (data1.assets.length) {
+  if (data1 && data1.assets && data1.assets.length) {
     return data1.assets;
   }
   // return null when there's no response from OpenSea API;
@@ -64,8 +70,8 @@ const loadAssets = async (query) => {
   return data2.assets;
 };
 
-async function openSea(query) {
-  const assets = await loadAssets(query);
+async function openSea(query, API_KEY) {
+  const assets = await loadAssets(query, API_KEY);
 
   if (!assets) {
     return null;
