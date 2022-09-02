@@ -4,17 +4,12 @@
   "description": "Generate a random lorem ipsum",
   "main": "index.js",
   "scripts": {
-    "test": "mocha *.test.js"
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "Alexander Gerk, Essel Adjei-Mensah",
   "license": "MIT",
-  "dependencies": {
-    "axios": "^0.24.0"
-  },
   "devDependencies": {
-    "jest": "^27.4.5",
-    "mocha": "4.0.1",
-    "expect.js": "^0.3.1"
+    "jest": "^27.4.5"
   }
 }
