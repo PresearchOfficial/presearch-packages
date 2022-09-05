@@ -13,7 +13,7 @@ async function passwordGenerator(query) {
   return `
     <div id="presearchPackage">
       <div id="passwordGenerator">
-          <div id="title" class="title"><a href="/search?q=pass+8">Random password has been created</a></div>
+          <div id="title" class="title">Random password has been created</div>
           <div id="pw-container">
             <div id="pw"></div>
             <span id="copy" title="Copy">
@@ -69,7 +69,6 @@ async function passwordGenerator(query) {
 
     .title {
        padding-bottom: 6px;
-       color: #127fff;
     }
 
     #copy {
@@ -95,7 +94,6 @@ async function passwordGenerator(query) {
         border-left: 4px solid #127fff;
         border-radius: 4px;
         box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-        letter-spacing: 2px;
         width: max-content;
         max-width: 90%;
         word-break: break-all;
@@ -123,12 +121,12 @@ async function passwordGenerator(query) {
     .disclaimer_example{
       color: grey;
     }
-    .disclaimer_sample{
-      color: #127fff;
-    }
     .disclaimer a {
       text-decoration: underline;
-      color: grey;
+      color: #3083e3;
+    }
+    .dark .disclaimer a {
+      color: #80baff;
     }
     @media only screen and (max-width:400px) {
       .to.shrink {
