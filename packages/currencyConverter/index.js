@@ -17,7 +17,7 @@ async function currencyConverter(query, API_KEY) {
   if (!converted) {
     return undefined;
   }
-  const convertedFixed = converted.value.toFixed(2)
+  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString("en-US")
 
   return `
     <div id="presearchPackage">
@@ -26,10 +26,10 @@ async function currencyConverter(query, API_KEY) {
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${conversion.from}" class="interactive-currency-input" type="number" value="${conversion.value}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
+              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString("en-US")}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
             </div>
             <div class="interactive-input-container">
-              <input id="interactive_${converted.code}" class="interactive-currency-input" type="number" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
+              <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
             </div>
         </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
@@ -70,8 +70,14 @@ async function currencyConverter(query, API_KEY) {
       background: transparent;
       border-radius: 6px;
       color: #70757a;
-      padding: 6px 0 6px 12px;
+      padding: 6px 6px 6px 12px;
       margin-right: 6px;
+      max-width: 80%;
+      outline: none;
+      width: 160px;
+    }
+    .dark .interactive-calculation .interactive-currency-input {
+      color: lightgray;
     }
 
     @media only screen and (max-width:400px) {
@@ -140,19 +146,44 @@ async function currencyConverter(query, API_KEY) {
         const to = rates.find(rate => rate.code !== currentFromCurrency)
         const inputToChange = document.getElementById("interactive_" + to.code)
 
-        if(event.target.value === "" || event.target.value < 0) {
+        const { value } = event.target
+        if (value === "" || value < 0) {
           inputToChange.value = ""
           return;
+        }
+
+        // check user input
+        if (event.data) {
+
+          // allow to use "," and "."
+          if ([",", "."].includes(event.data)) {
+            return;
+          }
+  
+          // if the last input is "0", check if we have "," or "." before
+          if (event.data === "0") {
+            const previousInput = value.substring(value.length - 2, value.length - 1);
+            if (previousInput === "." || previousInput === ",") {
+              return;
+            }
+          }
+  
+          // prevent from entering values other than numbers
+          if (!event.data.match(/[0-9]/g)) {
+            event.target.value = event.target.value.split(event.data).join("");
+            return;
+          }
         }
 
         const localConversionObj = {
             from: from,
             to: to.code,
-            value: event.target.value,
+            value: value.split(",").join(""),
             fromName: from.fromName
         };
+        event.target.value = parseFloat(value.split(",").join("")).toLocaleString("en-US");
         const result = convert(localConversionObj, rates);
-        inputToChange.value = result.value === 0 ? result.value : result.value.toFixed(2)
+        inputToChange.value = result.value === 0 ? result.value.toLocaleString("en-US") : parseFloat(result.value.toFixed(2)).toLocaleString("en-US")
       });
     });
     </script>
