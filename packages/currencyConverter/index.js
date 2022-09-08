@@ -2,6 +2,7 @@
 const {parseAndNormalize, fetchRates, convert} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
+  const browserLang = "en-US"; // how to get dynamically as this is not executed in browser?
   const conversion = parseAndNormalize(query);
   if (!conversion) {
     return undefined;
@@ -17,7 +18,7 @@ async function currencyConverter(query, API_KEY) {
   if (!converted) {
     return undefined;
   }
-  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString("en-US")
+  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString(browserLang)
 
   return `
     <div id="presearchPackage">
@@ -26,7 +27,7 @@ async function currencyConverter(query, API_KEY) {
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString("en-US")}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
+              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString(browserLang)}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
             </div>
             <div class="interactive-input-container">
               <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
@@ -88,6 +89,7 @@ async function currencyConverter(query, API_KEY) {
     }
     </style>
     <script>
+    const browserLang = navigator.language;
     ${convert.toString()}
 
     const formatMoney = (currency, locale = undefined) => {
@@ -159,7 +161,7 @@ async function currencyConverter(query, API_KEY) {
           if ([",", "."].includes(event.data)) {
             return;
           }
-  
+
           // if the last input is "0", check if we have "," or "." before
           if (event.data === "0") {
             const previousInput = value.substring(value.length - 2, value.length - 1);
@@ -167,7 +169,7 @@ async function currencyConverter(query, API_KEY) {
               return;
             }
           }
-  
+
           // prevent from entering values other than numbers
           if (!event.data.match(/[0-9]/g)) {
             event.target.value = event.target.value.split(event.data).join("");
@@ -181,9 +183,9 @@ async function currencyConverter(query, API_KEY) {
             value: value.split(",").join(""),
             fromName: from.fromName
         };
-        event.target.value = parseFloat(value.split(",").join("")).toLocaleString("en-US");
+        event.target.value = parseFloat(value.split(",").join("")).toLocaleString(browserLang);
         const result = convert(localConversionObj, rates);
-        inputToChange.value = result.value === 0 ? result.value.toLocaleString("en-US") : parseFloat(result.value.toFixed(2)).toLocaleString("en-US")
+        inputToChange.value = result.value === 0 ? result.value.toLocaleString(browserLang) : parseFloat(result.value.toFixed(2)).toLocaleString(browserLang)
       });
     });
     </script>
