@@ -23,14 +23,27 @@ const urlCurrentRound = `https://v3.football.api-sports.io/fixtures/rounds?seaso
 
 const liveStatus = ['1H', 'HT', '2H', 'ET', 'P', 'BT', 'LIVE'];
 
+const queryTypes = [
+    {'file': teams, 'type': 'team'},
+    {'file': leagues, 'type': 'league'}
+];
+
 function isLive(fixture) {
     return liveStatus.includes(fixture.status.short);
 }
 
 async function sports(query, API_KEY) {
-    if (this.objQuery.type === '') {
-        return;
-    }
+    
+    const found = queryTypes.some(q => {
+        const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
+        if (foundObj && foundObj.length == 1) {
+            this.objQuery = foundObj[0];
+            this.objQuery['type'] = q.type;
+            return true;
+        }
+    });
+    if(!found) return;
+    
     var fixtures = [];
     const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api-sports.io' };
 
@@ -140,22 +153,11 @@ async function trigger(query) {
     if (!query) {
         return false;
     }
-    const team = teams.filter(team => team.name.toLowerCase() === query.toLowerCase());
 
-    if (team && team.length == 1) {
-        this.objQuery = team[0];
-        this.objQuery['type'] = 'team';
-        return true;
-    }
-    //searh for league
-    const league = leagues.filter(league => league.name.toLowerCase() === query.toLowerCase());
-
-    if (league && league.length == 1) {
-        this.objQuery = league[0];
-        this.objQuery['type'] = 'league';
-        return true;
-    }
-    return false;
+    return queryTypes.some(q => {
+        const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
+        return foundObj && foundObj.length === 1;
+    });
 }
 
-module.exports = { sports, trigger, objQuery };
+module.exports = { sports, trigger };
