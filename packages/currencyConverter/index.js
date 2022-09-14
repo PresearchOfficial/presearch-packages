@@ -2,7 +2,6 @@
 const {parseAndNormalize, fetchRates, convert} = require('./services');
 
 async function currencyConverter(query, API_KEY) {
-  const browserLang = "en-US"; // how to get dynamically as this is not executed in browser?
   const conversion = parseAndNormalize(query);
   if (!conversion) {
     return undefined;
@@ -18,7 +17,7 @@ async function currencyConverter(query, API_KEY) {
   if (!converted) {
     return undefined;
   }
-  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString(browserLang)
+  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString()
 
   return `
     <div id="presearchPackage">
@@ -27,7 +26,7 @@ async function currencyConverter(query, API_KEY) {
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString(browserLang)}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
+              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString()}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
             </div>
             <div class="interactive-input-container">
               <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
@@ -89,7 +88,6 @@ async function currencyConverter(query, API_KEY) {
     }
     </style>
     <script>
-    const browserLang = navigator.language;
     ${convert.toString()}
 
     const formatMoney = (currency, locale = undefined) => {
@@ -183,9 +181,9 @@ async function currencyConverter(query, API_KEY) {
             value: value.split(",").join(""),
             fromName: from.fromName
         };
-        event.target.value = parseFloat(value.split(",").join("")).toLocaleString(browserLang);
+        event.target.value = parseFloat(value.split(",").join("")).toLocaleString();
         const result = convert(localConversionObj, rates);
-        inputToChange.value = result.value === 0 ? result.value.toLocaleString(browserLang) : parseFloat(result.value.toFixed(2)).toLocaleString(browserLang)
+        inputToChange.value = result.value === 0 ? result.value.toLocaleString() : parseFloat(result.value.toFixed(2)).toLocaleString()
       });
     });
     </script>
