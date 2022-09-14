@@ -136,6 +136,17 @@ async function currencyConverter(query, API_KEY) {
     interactiveInputs.forEach(input => {
       input.addEventListener('focus', (event) => {
         currentFromCurrency = event.target.id.split('_').pop();
+        const value = event.target.value.split(",").join("");
+        event.target.setAttribute('type','number');
+        event.target.value = parseFloat(value);
+      })
+    })
+
+    interactiveInputs.forEach(input => {
+      input.addEventListener('focusout', (event) => {
+        const value = event.target.value;
+        event.target.setAttribute('type','text');
+        event.target.value = parseFloat(value).toLocaleString();
       })
     })
 
@@ -169,10 +180,10 @@ async function currencyConverter(query, API_KEY) {
           }
 
           // prevent from entering values other than numbers
-          if (!event.data.match(/[0-9]/g)) {
-            event.target.value = event.target.value.split(event.data).join("");
-            return;
-          }
+          // if (!event.data.match(/[0-9]/g)) {
+          //   event.target.value = event.target.value.split(event.data).join("");
+          //   return;
+          // }
         }
 
         const localConversionObj = {
@@ -181,7 +192,7 @@ async function currencyConverter(query, API_KEY) {
             value: value.split(",").join(""),
             fromName: from.fromName
         };
-        event.target.value = parseFloat(value.split(",").join("")).toLocaleString();
+        //event.target.value = parseFloat(value.split(",").join("")).toLocaleString();
         const result = convert(localConversionObj, rates);
         inputToChange.value = result.value === 0 ? result.value.toLocaleString() : parseFloat(result.value.toFixed(2)).toLocaleString()
       });
