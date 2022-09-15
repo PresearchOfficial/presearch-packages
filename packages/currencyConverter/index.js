@@ -1,23 +1,24 @@
 'use strict';
 const {parseAndNormalize, fetchRates, convert} = require('./services');
 
-async function currencyConverter(query, API_KEY) {
-  const conversion = parseAndNormalize(query);
-  if (!conversion) {
+//global variabel to store return value from parseAndNormalize function 
+var rateConversion = '';
+
+async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf6215b') {
+  if (!rateConversion) {
     return undefined;
   }
 
-  const rates = await fetchRates(conversion, API_KEY);
+  const rates = await fetchRates(rateConversion, API_KEY);
   if (!rates) {
     return undefined;
   }
-  const ratesJs = JSON.stringify(rates)
 
-  const converted = convert(conversion, rates);
+  const converted = convert(rateConversion, rates);
   if (!converted) {
     return undefined;
   }
-  const convertedFixed = parseFloat(converted.value.toFixed(2)).toLocaleString()
+  const convertedFixed = (Math.round(converted.value * (10**converted.round))/(10**converted.round)).toLocaleString(undefined,{maximumFractionDigits:converted.round});;
 
   return `
     <div id="presearchPackage">
@@ -26,10 +27,10 @@ async function currencyConverter(query, API_KEY) {
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${conversion.from}" class="interactive-currency-input" value="${conversion.value.toLocaleString()}" /><label for="interactive_${conversion.from}">${conversion.from}</label>
+              <input id="interactive_${rateConversion.from}" class="interactive-currency-input" value="${rateConversion.value.toLocaleString()}" data-conversionRate="${converted.value}" data-targetId="interactive_${converted.code}" /><label for="interactive_${rateConversion.from}">${converted.fromName}</label>
             </div>
             <div class="interactive-input-container">
-              <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" /><label for="interactive_${converted.code}">${converted.code}</label>
+              <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" data-conversionRate="${converted.value}" data-targetId="interactive_${rateConversion.from}" /><label for="interactive_${converted.code}">${converted.toName}</label>
             </div>
         </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
@@ -88,19 +89,17 @@ async function currencyConverter(query, API_KEY) {
     }
     </style>
     <script>
-    ${convert.toString()}
-
     const formatMoney = (currency, locale = undefined) => {
       try {
-        return currency.value.toLocaleString(
-          locale,
-          {
-            style: "currency",
-            currency: currency.code,
-            minimumFractionDigits: 0,
-            maximumFractionDigits: currency.round ? currency.round : 20,
-          }
-        );
+        var options = {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: currency.round || 20,
+        };
+        if(currency.code){
+          options['style'] = "currency";
+          options['currency'] = currency.code;
+        }
+        return currency.value.toLocaleString(locale, options);
       } catch (error) {
         // since we're dealing with crypto currencies, the locale string
         // does not always like the currency codes we put in. detect those
@@ -116,7 +115,7 @@ async function currencyConverter(query, API_KEY) {
     const from = document.querySelector(".from span");
     const to = document.querySelector(".to span");
     if (from) {
-      from.innerHTML = "${conversion.fromName}".length ? (formatMoney({ value: ${conversion.value}, code: "${conversion.from}" }) + " (${conversion.fromName})") : formatMoney({ value: ${conversion.value}, code: "${conversion.from}" });
+      from.innerHTML = "${rateConversion.fromName}".length ? (formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" }) + " (${rateConversion.fromName})") : formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" });
     }
     if (to) {
       to.innerHTML = formatMoney({ value: ${converted.value}, round: ${converted.round}, code: "${converted.code}" });
@@ -130,8 +129,8 @@ async function currencyConverter(query, API_KEY) {
 
     // Interactive Input JS
     const interactiveInputs = document.querySelectorAll('.interactive-currency-input');
-    const rates = ${ratesJs}
-    let currentFromCurrency = "${conversion.from}"
+
+    let currentFromCurrency = "${rateConversion.from}"
 
     interactiveInputs.forEach(input => {
       input.addEventListener('focus', (event) => {
@@ -150,12 +149,25 @@ async function currencyConverter(query, API_KEY) {
       })
     })
 
+    const convert = (target, inputValue, conversionRate) => {
+      var result = 0;
+      if(target === 'interactive_${converted.code}'){
+        result = inputValue * conversionRate;
+      }else if(target === 'interactive_${rateConversion.from}'){
+        result = inputValue / conversionRate;
+      }
+      const round = result > 1 ? 2 : -Math.floor( Math.log10(result) + 1) + 2;
+      result = Math.round(result * (10**round)) / (10**round);
+      return { value : result, round : round};
+    }
+
     interactiveInputs.forEach(input => {
       input.addEventListener('input', (event) => {
         event.preventDefault()
         const from = currentFromCurrency
-        const to = rates.find(rate => rate.code !== currentFromCurrency)
-        const inputToChange = document.getElementById("interactive_" + to.code)
+        const target = event.target.dataset.targetid;
+        const conversionRate = event.target.dataset.conversionrate;
+        const inputToChange = document.getElementById(target)
 
         const { value } = event.target
         if (value === "" || value < 0) {
@@ -180,21 +192,15 @@ async function currencyConverter(query, API_KEY) {
           }
 
           // prevent from entering values other than numbers
-          // if (!event.data.match(/[0-9]/g)) {
-          //   event.target.value = event.target.value.split(event.data).join("");
-          //   return;
-          // }
+          if (!event.data.match(/[0-9]/g)) {
+            event.target.value = event.target.value.split(event.data).join("");
+            return;
+          }
         }
 
-        const localConversionObj = {
-            from: from,
-            to: to.code,
-            value: value.split(",").join(""),
-            fromName: from.fromName
-        };
         //event.target.value = parseFloat(value.split(",").join("")).toLocaleString();
-        const result = convert(localConversionObj, rates);
-        inputToChange.value = result.value === 0 ? result.value.toLocaleString() : parseFloat(result.value.toFixed(2)).toLocaleString()
+        const result = convert(target, value.split(",").join(""), conversionRate);
+        inputToChange.value = result.value === 0 ? result.value.toLocaleString() : formatMoney(result);
       });
     });
     </script>
@@ -204,7 +210,9 @@ async function currencyConverter(query, API_KEY) {
 //	here you should check, if the query should trigger your package
 //	ie. if you are building 'randomNumber' package, 'random number' query will be a good choice
 function trigger(query) {
-  return parseAndNormalize(query) !== undefined;
+  // store result into global variable for further use if package triggers
+  rateConversion = parseAndNormalize(query)
+  return rateConversion !== undefined;
 }
 
 module.exports = { currencyConverter, trigger };
