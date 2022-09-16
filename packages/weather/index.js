@@ -33,9 +33,8 @@ async function weather(query, API_KEY, geoLocation) {
             `
         )
     }
-
     // handle the case when user has local search results turned off, and the query is just weather
-    if (geoLocation && !geoLocation.localSearchEnabled && weatherTranslations().includes(query.trim().toLowerCase())) {
+    if (geoLocation && !geoLocation.coords && !geoLocation.localSearchEnabled && weatherTranslations().includes(query.trim().toLowerCase())) {
         return (
             `
             <div id="presearch-weather-package">
@@ -853,7 +852,7 @@ async function getWeather(query, API_KEY, geoLocation) {
     const weatherWord = translations.filter(el => query.trim().toLowerCase() === el.toLowerCase());
     if (weatherWord.length) {
         if (geoLocation) {
-            if (!geoLocation.localSearchEnabled) return { localSearchEnabled: false };
+            if (!geoLocation.localSearchEnabled && !geoLocation.coords) return { localSearchEnabled: false };
             else if (geoLocation.coords) city = `${geoLocation.coords.lat},${geoLocation.coords.lon}`;
             else if (geoLocation.city) city = geoLocation.city;
             else return { geoLocationFailed: true };
