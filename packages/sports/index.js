@@ -24,8 +24,8 @@ const urlCurrentRound = `https://v3.football.api-sports.io/fixtures/rounds?seaso
 const liveStatus = ['1H', 'HT', '2H', 'ET', 'P', 'BT', 'LIVE'];
 
 const queryTypes = [
-    {'file': teams, 'type': 'team'},
-    {'file': leagues, 'type': 'league'}
+    { 'file': teams, 'type': 'team' },
+    { 'file': leagues, 'type': 'league' }
 ];
 
 function isLive(fixture) {
@@ -33,7 +33,7 @@ function isLive(fixture) {
 }
 
 async function sports(query, API_KEY) {
-    
+
     const found = queryTypes.some(q => {
         const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
         if (foundObj && foundObj.length == 1) {
@@ -42,10 +42,20 @@ async function sports(query, API_KEY) {
             return true;
         }
     });
-    if(!found) return;
-    
+    if (!found) return;
+
     var fixtures = [];
     const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api-sports.io' };
+
+    //interceptor to catch error messages with 200 code status
+    axios.interceptors.response.use(res => {
+        if (Object.keys(res.data.errors).length !== 0) {
+            const error = new Error(JSON.stringify(res.data.errors));
+            error.path = res.request.path;
+            throw error;
+        }
+        return res;
+    });
 
     /////////////////////////////////////////////////////
     /////////////////// MOCK DATA  //////////////////////
@@ -65,47 +75,54 @@ async function sports(query, API_KEY) {
     /////////////////////////////////////////////////////
     /////////////////////////////////////////////////////
 
-    if (this.objQuery.type === 'team') {
-        const findNextFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&next=3`, { headers }).catch(error => ({ error }));
-        Array.prototype.push.apply(fixtures, findNextFixtures.data.response);
+    try {
+        if (this.objQuery.type === 'team') {
+            const findNextFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&next=3`, { headers });
+            Array.prototype.push.apply(fixtures, findNextFixtures.data.response);
 
-        const findLastFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&last=3`, { headers }).catch(error => ({ error }));
-        Array.prototype.push.apply(fixtures, findLastFixtures.data.response);
+            const findLastFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&last=3`, { headers });
+            Array.prototype.push.apply(fixtures, findLastFixtures.data.response);
 
-        const findStandingsLeague = await axios.get(urlStandings + `&team=${this.objQuery.id}`, { headers }).catch(error => ({ error }));
-        const league = findStandingsLeague.data.response.filter(s => s.league.country === this.objQuery.country)[0];
+            const findStandingsLeague = await axios.get(urlStandings + `&team=${this.objQuery.id}`, { headers });
+            const league = findStandingsLeague.data.response.filter(s => s.league.country === this.objQuery.country)[0];
 
-        const findStandings = await axios.get(urlStandings + `&league=${league.league.id}`, { headers }).catch(error => ({ error }));
-        var standings = findStandings.data.response[0].league.standings[0];
-    }
+            const findStandings = await axios.get(urlStandings + `&league=${league.league.id}`, { headers });
+            var standings = findStandings.data.response[0].league.standings[0];
+        }
 
-    if (this.objQuery.type === 'league') {
-        const findCurrentRound = await axios.get(urlCurrentRound + `&league=${this.objQuery.id}&current=true`, { headers }).catch(error => ({ error }));
-        var currentRound = findCurrentRound.data.response[0];
+        if (this.objQuery.type === 'league') {
+            const findCurrentRound = await axios.get(urlCurrentRound + `&league=${this.objQuery.id}&current=true`, { headers });
+            var currentRound = findCurrentRound.data.response[0];
 
-        const findFixtures = await axios.get(urlFixtures + `&league=${this.objQuery.id}&round=${currentRound}`, { headers }).catch(error => ({ error }));
-        Array.prototype.push.apply(fixtures, findFixtures.data.response);
+            const findFixtures = await axios.get(urlFixtures + `&league=${this.objQuery.id}&round=${currentRound}`, { headers });
+            Array.prototype.push.apply(fixtures, findFixtures.data.response);
 
-        const findStandings = await axios.get(urlStandings + `&league=${this.objQuery.id}`, { headers }).catch(error => ({ error }));
-        var standings = findStandings.data.response[0].league.standings[0];
-    }
+            const findStandings = await axios.get(urlStandings + `&league=${this.objQuery.id}`, { headers });
+            var standings = findStandings.data.response[0].league.standings[0];
+        }
 
-    var nameLabel = this.objQuery.name;
-    var logo = this.objQuery.logo;
+        var nameLabel = this.objQuery.name;
+        var logo = this.objQuery.logo;
 
-    const now = Math.floor(Date.now() / 1000);
-    fixtures.sort(function (a, b) {
-        return Math.abs(now - a.fixture.timestamp) - Math.abs(now - b.fixture.timestamp)
-    });
+        const now = Math.floor(Date.now() / 1000);
+        fixtures.sort(function (a, b) {
+            return Math.abs(now - a.fixture.timestamp) - Math.abs(now - b.fixture.timestamp)
+        });
 
-    // match is live
-    if (this.objQuery.type === 'team' && isLive(fixtures[0].fixture)) {
-        const findLiveFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&live=all`, { headers }).catch(error => ({ error }));
-        fixtures[0] = findLiveFixtures.data.response[0];
+        // match is live
+        if (this.objQuery.type === 'team' && isLive(fixtures[0].fixture)) {
+            const findLiveFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&live=all`, { headers });
+            fixtures[0] = findLiveFixtures.data.response[0];
 
-        // Mock data
-        // const live = { "get": "fixtures", "parameters": { "season": "2022", "team": "211", "live": "all" }, "errors": [], "results": 1, "paging": { "current": 1, "total": 1 }, "response": [{ "fixture": { "id": 898630, "referee": "Artur Soares Dias, Portugal", "timezone": "UTC", "date": "2022-08-30T19:15:00+00:00", "timestamp": 1661886900, "periods": { "first": 1661886900, "second": null }, "venue": { "id": null, "name": "Estadio do Sport Lisboa e Benfica", "city": "Lisbon" }, "status": { "long": "First Half", "short": "1H", "elapsed": 44 } }, "league": { "id": 94, "name": "Primeira Liga", "country": "Portugal", "logo": "https:\/\/media.api-sports.io\/football\/leagues\/94.png", "flag": "https:\/\/media.api-sports.io\/flags\/pt.svg", "season": 2022, "round": "Regular Season - 3" }, "teams": { "home": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png", "winner": null }, "away": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png", "winner": null } }, "goals": { "home": 1, "away": 1 }, "score": { "halftime": { "home": 1, "away": 1 }, "fulltime": { "home": null, "away": null }, "extratime": { "home": null, "away": null }, "penalty": { "home": null, "away": null } }, "events": [{ "time": { "elapsed": 14, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 129728, "name": "J. Holsgrove" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Holding" }, { "time": { "elapsed": 16, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 573, "name": "Rafa Silva" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Tripping" }, { "time": { "elapsed": 31, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 624, "name": "N. Otamendi" }, "assist": { "id": null, "name": null }, "type": "Var", "detail": "Goal Disallowed - offside", "comments": null }, { "time": { "elapsed": 35, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 41490, "name": "Flavio" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Foul" }, { "time": { "elapsed": 39, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 174564, "name": "N. P. Koffi" }, "assist": { "id": 47255, "name": "V. Antunes" }, "type": "Goal", "detail": "Normal Goal", "comments": null }, { "time": { "elapsed": 42, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 552, "name": "D. Neres" }, "assist": { "id": 573, "name": "Rafa Silva" }, "type": "Goal", "detail": "Normal Goal", "comments": null }] }] };
-        // fixtures[0] = live.response[0];
+            // Mock data
+            // const live = { "get": "fixtures", "parameters": { "season": "2022", "team": "211", "live": "all" }, "errors": [], "results": 1, "paging": { "current": 1, "total": 1 }, "response": [{ "fixture": { "id": 898630, "referee": "Artur Soares Dias, Portugal", "timezone": "UTC", "date": "2022-08-30T19:15:00+00:00", "timestamp": 1661886900, "periods": { "first": 1661886900, "second": null }, "venue": { "id": null, "name": "Estadio do Sport Lisboa e Benfica", "city": "Lisbon" }, "status": { "long": "First Half", "short": "1H", "elapsed": 44 } }, "league": { "id": 94, "name": "Primeira Liga", "country": "Portugal", "logo": "https:\/\/media.api-sports.io\/football\/leagues\/94.png", "flag": "https:\/\/media.api-sports.io\/flags\/pt.svg", "season": 2022, "round": "Regular Season - 3" }, "teams": { "home": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png", "winner": null }, "away": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png", "winner": null } }, "goals": { "home": 1, "away": 1 }, "score": { "halftime": { "home": 1, "away": 1 }, "fulltime": { "home": null, "away": null }, "extratime": { "home": null, "away": null }, "penalty": { "home": null, "away": null } }, "events": [{ "time": { "elapsed": 14, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 129728, "name": "J. Holsgrove" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Holding" }, { "time": { "elapsed": 16, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 573, "name": "Rafa Silva" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Tripping" }, { "time": { "elapsed": 31, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 624, "name": "N. Otamendi" }, "assist": { "id": null, "name": null }, "type": "Var", "detail": "Goal Disallowed - offside", "comments": null }, { "time": { "elapsed": 35, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 41490, "name": "Flavio" }, "assist": { "id": null, "name": null }, "type": "Card", "detail": "Yellow Card", "comments": "Foul" }, { "time": { "elapsed": 39, "extra": null }, "team": { "id": 234, "name": "Pacos Ferreira", "logo": "https:\/\/media.api-sports.io\/football\/teams\/234.png" }, "player": { "id": 174564, "name": "N. P. Koffi" }, "assist": { "id": 47255, "name": "V. Antunes" }, "type": "Goal", "detail": "Normal Goal", "comments": null }, { "time": { "elapsed": 42, "extra": null }, "team": { "id": 211, "name": "Benfica", "logo": "https:\/\/media.api-sports.io\/football\/teams\/211.png" }, "player": { "id": 552, "name": "D. Neres" }, "assist": { "id": 573, "name": "Rafa Silva" }, "type": "Goal", "detail": "Normal Goal", "comments": null }] }] };
+            // fixtures[0] = live.response[0];
+        }
+    } catch (error) {
+        var errorMessage = error.path ? 'Error calling endpoint ' + error.path + ' with message ' : '';
+        errorMessage += error.message;
+        console.log(errorMessage);
+        return;
     }
 
     /////////////////////////////////////////////////////
