@@ -36,7 +36,7 @@ async function sports(query, API_KEY) {
 
     const found = queryTypes.some(q => {
         const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
-        if (foundObj && foundObj.length == 1) {
+        if (foundObj) {
             this.objQuery = foundObj[0];
             this.objQuery['type'] = q.type;
             return true;
@@ -173,7 +173,9 @@ async function trigger(query) {
 
     return queryTypes.some(q => {
         const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
-        return foundObj && foundObj.length === 1;
+        return foundObj 
+            && foundObj.length > 0 
+            && !foundObj.map(o => o.id).some(v => v !== foundObj[0].id);
     });
 }
 
