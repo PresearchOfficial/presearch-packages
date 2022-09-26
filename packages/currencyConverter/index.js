@@ -1,7 +1,7 @@
 'use strict';
 const {parseAndNormalize, fetchRates, convert} = require('./services');
 
-//global variabel to store return value from parseAndNormalize function 
+//global variabel to store return value from parseAndNormalize function
 var rateConversion = '';
 
 async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf6215b') {
@@ -142,7 +142,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
     })
 
     interactiveInputs.forEach(input => {
-      input.addEventListener('focusout', (event) => {
+      input.addEventListener('blur', (event) => {
         const value = event.target.value;
         event.target.setAttribute('type','text');
         event.target.value = parseFloat(value).toLocaleString();
