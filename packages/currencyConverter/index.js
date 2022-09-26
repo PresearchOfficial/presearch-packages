@@ -112,6 +112,18 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
         }
       }
     }
+    const convert = (target, inputValue, conversionRate) => {
+      var result = 0;
+      if(target === "interactive_${converted.code}"){
+        result = inputValue * conversionRate;
+      }else if(target === 'interactive_${rateConversion.from}'){
+        result = inputValue / conversionRate;
+      }
+      const round = result > 1 ? 2 : -Math.floor( Math.log10(result) + 1) + 2;
+      result = Math.round(result * (10**round)) / (10**round);
+      return { value : result, round : round};
+    }
+
     const from = document.querySelector(".from span");
     const to = document.querySelector(".to span");
     if (from) {
@@ -148,18 +160,6 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
         event.target.value = parseFloat(value).toLocaleString();
       })
     })
-
-    const convert = (target, inputValue, conversionRate) => {
-      var result = 0;
-      if(target === 'interactive_${converted.code}'){
-        result = inputValue * conversionRate;
-      }else if(target === 'interactive_${rateConversion.from}'){
-        result = inputValue / conversionRate;
-      }
-      const round = result > 1 ? 2 : -Math.floor( Math.log10(result) + 1) + 2;
-      result = Math.round(result * (10**round)) / (10**round);
-      return { value : result, round : round};
-    }
 
     interactiveInputs.forEach(input => {
       input.addEventListener('input', (event) => {
@@ -198,7 +198,6 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
           }
         }
 
-        //event.target.value = parseFloat(value.split(",").join("")).toLocaleString();
         const result = convert(target, value.split(",").join(""), conversionRate);
         inputToChange.value = result.value === 0 ? result.value.toLocaleString() : formatMoney(result);
       });
