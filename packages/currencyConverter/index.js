@@ -4,7 +4,7 @@ const {parseAndNormalize, fetchRates, convert: serverConvert} = require('./servi
 // global variable to store return value from parseAndNormalize function
 let rateConversion = '';
 
-async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf6215b') {
+async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acfdf6215b') {
   if (!rateConversion) {
     return undefined;
   }
@@ -18,7 +18,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
   if (!converted) {
     return undefined;
   }
-  const convertedFixed = (Math.round(converted.value * (10**converted.round))/(10**converted.round)).toLocaleString(undefined,{maximumFractionDigits:converted.round});;
+  const convertedFixed = (Math.round(converted.value * (10 ** converted.round)) / (10 ** converted.round)).toLocaleString(undefined, {maximumFractionDigits: converted.round});
 
   return `
     <div id="presearchPackage">
@@ -101,7 +101,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
         }
         return currency.value.toLocaleString(locale, options);
       } catch (error) {
-        // since we're dealing with crypto currencies, the locale string
+        // since we're dealing with cryptocurrencies, the locale string
         // does not always like the currency codes we put in. detect those
         // cases and fallback
         if (error instanceof RangeError) {
@@ -126,6 +126,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
 
     const from = document.querySelector(".from span");
     const to = document.querySelector(".to span");
+
     if (from) {
       from.innerHTML = "${rateConversion.fromName}".length ? (formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" }) + " (${rateConversion.fromName})") : formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" });
     }
@@ -141,7 +142,6 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
 
     // Interactive Input JS
     const interactiveInputs = document.querySelectorAll('.interactive-currency-input');
-
     let currentFromCurrency = "${rateConversion.from}"
 
     interactiveInputs.forEach(input => {
@@ -207,7 +207,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
 }
 
 //	here you should check, if the query should trigger your package
-//	ie. if you are building 'randomNumber' package, 'random number' query will be a good choice
+//	i.e. if you are building 'randomNumber' package, 'random number' query will be a good choice
 function trigger(query) {
   // store result into global variable for further use if package triggers
   rateConversion = parseAndNormalize(query)
