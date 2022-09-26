@@ -1,5 +1,5 @@
 'use strict';
-const {parseAndNormalize, fetchRates, convert} = require('./services');
+const {parseAndNormalize, fetchRates, convert: serverConvert} = require('./services');
 
 // global variable to store return value from parseAndNormalize function
 let rateConversion = '';
@@ -14,7 +14,7 @@ async function currencyConverter(query, API_KEY='96a50d99-e968-468a-b415-49acfdf
     return undefined;
   }
 
-  const converted = convert(rateConversion, rates);
+  const converted = serverConvert(rateConversion, rates);
   if (!converted) {
     return undefined;
   }
