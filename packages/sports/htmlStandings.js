@@ -1,9 +1,9 @@
 const logoUtils = require('./logoUtils');
 
-function htmlStandings(standing, i) {
+function htmlStandings(standing) {
     return `
         <div class="row" style="padding-top: 0.5rem;">
-            <div class="col">${i}</div>
+            <div class="col">${standing.rank}</div>
             <div class="col standingTeam">
                 <div class="row">
                     <div class="col" style="flex: 1;">
@@ -26,15 +26,38 @@ function htmlStandings(standing, i) {
     `;
 }
 
+function htmlStandingsHeader(standings){
+    return `
+        <div class="standingTable">
+            <div style="padding-bottom: 0.7rem;font-weight: bold">
+                <label>${standings[0].group}</label>
+            </div>
+            <div class="row standingHeader" style="padding-bottom: 0.2rem;">
+                <div class="col"><label class="standingHeaderLabel">#</label></div>
+                <div class="col standingTeam"><label class="standingHeaderLabel">Team</label></div>
+                <div class="col"><label class="standingHeaderLabel">MP</label></div>
+                <div class="col"><label class="standingHeaderLabel">W</label></div>
+                <div class="col"><label class="standingHeaderLabel">D</label></div>
+                <div class="col"><label class="standingHeaderLabel">L</label></div>
+                <div class="col"><label class="standingHeaderLabel">Pts</label></div>
+            </div>
+    `;
+}
+
 function htmlAllStandings(standings) {
-    if (!standings) {
+    if (!standings || standings.length == 0) {
         return '';
     }
     var html = '';
     for (let i = 0; i < standings.length; i++) {
-        html += htmlStandings(standings[i], i + 1);
+        html += htmlStandingsHeader(standings[i]);
+
+        for (let j = 0; j < standings[i].length; j++) {
+            html += htmlStandings(standings[i][j]);
+        }
+        html += '</div>';
     }
     return html;
 }
 
-module.exports = {htmlAllStandings}
+module.exports = { htmlAllStandings }

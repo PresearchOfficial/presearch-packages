@@ -2,7 +2,7 @@ function getTime(timestamp) {
     const mili = timestamp * 1000;
     const date = new Date(mili);
 
-    return date.toLocaleTimeString();
+    return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
 
 function getDate(timestamp) {

@@ -15,11 +15,8 @@ var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 var objQuery = {};
 
 const season = 2022;
-const urlTeam = `https://v3.football.api-sports.io/teams`;
-const urlLeague = `https://v3.football.api-sports.io/leagues`;
 const urlFixtures = `https://v3.football.api-sports.io/fixtures?timezone=${timezone}&season=${season}`;
 const urlStandings = `https://v3.football.api-sports.io/standings?season=${season}`;
-const urlCurrentRound = `https://v3.football.api-sports.io/fixtures/rounds?season=${season}`;
 
 const liveStatus = ['1H', 'HT', '2H', 'ET', 'P', 'BT', 'LIVE'];
 
@@ -36,7 +33,7 @@ async function sports(query, API_KEY) {
 
     const found = queryTypes.some(q => {
         const foundObj = q.file.filter(item => item.name.toLowerCase() === query.toLowerCase());
-        if (foundObj) {
+        if (foundObj && foundObj.length > 0) {
             this.objQuery = foundObj[0];
             this.objQuery['type'] = q.type;
             return true;
@@ -45,6 +42,7 @@ async function sports(query, API_KEY) {
     if (!found) return;
 
     var fixtures = [];
+    var standings = [];
     const headers = { 'x-rapidapi-key': API_KEY, 'x-rapidapi-host': 'v3.football.api-sports.io' };
 
     //interceptor to catch error messages with 200 code status
@@ -66,7 +64,6 @@ async function sports(query, API_KEY) {
     // const nextFixtures = [{ "fixture": { "id": 933174, "referee": null, "timezone": "Europe/London", "date": "2022-08-23T20:00:00+01:00", "timestamp": 1661281200, "periods": { "first": null, "second": null }, "venue": { "id": null, "name": "Estádio do Sport Lisboa e Benfica", "city": "Lisboa" }, "status": { "long": "Not Started", "short": "NS", "elapsed": null } }, "league": { "id": 2, "name": "UEFA Champions League", "country": "World", "logo": "https://media.api-sports.io/football/leagues/2.png", "flag": null, "season": 2022, "round": "Play-offs" }, "teams": { "home": { "id": 211, "name": "Benfica", "logo": "https://media.api-sports.io/football/teams/211.png", "winner": null }, "away": { "id": 572, "name": "Dynamo Kyiv", "logo": "https://media.api-sports.io/football/teams/572.png", "winner": null } }, "goals": { "home": null, "away": null }, "score": { "halftime": { "home": null, "away": null }, "fulltime": { "home": null, "away": null }, "extratime": { "home": null, "away": null }, "penalty": { "home": null, "away": null } } }, { "fixture": { "id": 898637, "referee": null, "timezone": "Europe/London", "date": "2022-08-27T18:00:00+01:00", "timestamp": 1661619600, "periods": { "first": null, "second": null }, "venue": { "id": 1267, "name": "Estádio do Bessa Século XXI", "city": "Porto" }, "status": { "long": "Not Started", "short": "NS", "elapsed": null } }, "league": { "id": 94, "name": "Primeira Liga", "country": "Portugal", "logo": "https://media.api-sports.io/football/leagues/94.png", "flag": "https://media.api-sports.io/flags/pt.svg", "season": 2022, "round": "Regular Season - 4" }, "teams": { "home": { "id": 222, "name": "Boavista", "logo": "https://media.api-sports.io/football/teams/222.png", "winner": null }, "away": { "id": 211, "name": "Benfica", "logo": "https://media.api-sports.io/football/teams/211.png", "winner": null } }, "goals": { "home": null, "away": null }, "score": { "halftime": { "home": null, "away": null }, "fulltime": { "home": null, "away": null }, "extratime": { "home": null, "away": null }, "penalty": { "home": null, "away": null } } }, { "fixture": { "id": 898630, "referee": null, "timezone": "Europe/London", "date": "2022-08-30T20:15:00+01:00", "timestamp": 1661886900, "periods": { "first": null, "second": null }, "venue": { "id": null, "name": "Estádio do Sport Lisboa e Benfica", "city": "Lisboa" }, "status": { "long": "Not Started", "short": "LIVE", "elapsed": null } }, "league": { "id": 94, "name": "Primeira Liga", "country": "Portugal", "logo": "https://media.api-sports.io/football/leagues/94.png", "flag": "https://media.api-sports.io/flags/pt.svg", "season": 2022, "round": "Regular Season - 3" }, "teams": { "home": { "id": 211, "name": "Benfica", "logo": "https://media.api-sports.io/football/teams/211.png", "winner": null }, "away": { "id": 234, "name": "Pacos Ferreira", "logo": "https://media.api-sports.io/football/teams/234.png", "winner": null } }, "goals": { "home": null, "away": null }, "score": { "halftime": { "home": null, "away": null }, "fulltime": { "home": null, "away": null }, "extratime": { "home": null, "away": null }, "penalty": { "home": null, "away": null } } }];
     // Array.prototype.push.apply(fixtures, lastFixtures);
     // Array.prototype.push.apply(fixtures, nextFixtures);
-    // const standings = [];
 
     // var nameLabel = name[0].team.name;
     // var logo = name[0].team.logo;
@@ -77,28 +74,19 @@ async function sports(query, API_KEY) {
 
     try {
         if (this.objQuery.type === 'team') {
-            const findNextFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&next=3`, { headers });
-            Array.prototype.push.apply(fixtures, findNextFixtures.data.response);
+            const findFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}`, { headers });
+            Array.prototype.push.apply(fixtures, findFixtures.data.response);
 
-            const findLastFixtures = await axios.get(urlFixtures + `&team=${this.objQuery.id}&last=3`, { headers });
-            Array.prototype.push.apply(fixtures, findLastFixtures.data.response);
-
-            const findStandingsLeague = await axios.get(urlStandings + `&team=${this.objQuery.id}`, { headers });
-            const league = findStandingsLeague.data.response.filter(s => s.league.country === this.objQuery.country)[0];
-
-            const findStandings = await axios.get(urlStandings + `&league=${league.league.id}`, { headers });
-            var standings = findStandings.data.response[0].league.standings[0];
+            const findStandings = await axios.get(urlStandings + `&league=${this.objQuery.league}`, { headers });
+            var standings = findStandings.data.response[0].league.standings;
         }
 
         if (this.objQuery.type === 'league') {
-            const findCurrentRound = await axios.get(urlCurrentRound + `&league=${this.objQuery.id}&current=true`, { headers });
-            var currentRound = findCurrentRound.data.response[0];
-
-            const findFixtures = await axios.get(urlFixtures + `&league=${this.objQuery.id}&round=${currentRound}`, { headers });
+            const findFixtures = await axios.get(urlFixtures + `&league=${this.objQuery.id}`, { headers });
             Array.prototype.push.apply(fixtures, findFixtures.data.response);
 
             const findStandings = await axios.get(urlStandings + `&league=${this.objQuery.id}`, { headers });
-            var standings = findStandings.data.response[0].league.standings[0];
+            var standings = findStandings.data.response[0].league.standings;
         }
 
         var nameLabel = this.objQuery.name;
@@ -149,18 +137,7 @@ async function sports(query, API_KEY) {
         </div>
 
         <div id="tab_2" class="content" data-tab-info>
-            <div class="standingTable">
-                <div class="row standingHeader" style="padding-bottom: 0.2rem;">
-                    <div class="col"><label class="standingHeaderLabel">#</label></div>
-                    <div class="col standingTeam"><label class="standingHeaderLabel">Team</label></div>
-                    <div class="col"><label class="standingHeaderLabel">MP</label></div>
-                    <div class="col"><label class="standingHeaderLabel">W</label></div>
-                    <div class="col"><label class="standingHeaderLabel">D</label></div>
-                    <div class="col"><label class="standingHeaderLabel">L</label></div>
-                    <div class="col"><label class="standingHeaderLabel">Pts</label></div>
-                </div>
-                ${htmlAllStandings(standings)}
-            </div>
+            ${htmlAllStandings(standings)}
         </div>
     </div>
     ` + style + javascript;

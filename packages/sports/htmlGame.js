@@ -96,13 +96,13 @@ function htmlClosestGameSection(fixture) {
                         </g-img>
                     </div>
                     <div class="col">
-                        <label class="gameLiveScore">${fixture.goals.home.toString() ? fixture.goals.home : ''}</label>
+                        <label class="gameLiveScore">${fixture.goals.home != null ? fixture.goals.home : ''}</label>
                     </div>
                     <div class="col">
                         <label class="gameLiveScore">-</label>
                     </div>
                     <div class="col">
-                        <label class="gameLiveScore">${fixture.goals.away.toString() ? fixture.goals.away : ''}</label>
+                        <label class="gameLiveScore">${fixture.goals.away != null ? fixture.goals.away : ''}</label>
                     </div>
                     <div class="col">
                         <g-img class="logo">
