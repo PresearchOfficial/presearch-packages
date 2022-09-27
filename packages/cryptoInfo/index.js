@@ -97,7 +97,6 @@ async function cryptoInfo(query, API_KEY) {
           <div class="mainCol cryptoMainCol">
           <div class="mainCol1">
             <div class="headerRow">
-              ${logo ? `<img src="${logo}" class="logo" alt="" />` : ``}
               ${name && symbol ? `<h2 class="name">${name} (${symbol.toUpperCase()})</h2>` : ``}
               <div class="tag" style="backgroundColor: #0c9">
                 ${tag.toUpperCase()}
