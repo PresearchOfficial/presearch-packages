@@ -2,6 +2,7 @@
 const axios = require("axios");
 const coin_list = require("./coin_list.json");
 const coin_metadata = require("./coin_metadata.json");
+const imageFromCache = require('../../utils/image-cache');
 
 const CMC_API_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/";
 
@@ -60,11 +61,12 @@ async function cryptoInfo(query, API_KEY) {
             "30d": generateDataPoints(quotes, 30),
         };
 
-        const { name, symbol, logo, slug } = coin_metadata[coinId];
+        const { name, symbol, logo: originalLogo, slug } = coin_metadata[coinId];
         const { website, twitter, chat, explorer, reddit, source_code } = coin_metadata[coinId].urls;
         const { circulating_supply, total_supply, cmc_rank } = priceData;
         const tag = coin_metadata[coinId].platform ? "Token" : "Coin";
         const { price, volume_24h, percent_change_24h, percent_change_7d, market_cap, last_updated } = priceData.quote.USD;
+        const logo = imageFromCache(originalLogo);
 
         // filter out low mcap coins
         const MIN_VOLUME = 10000;
@@ -97,6 +99,7 @@ async function cryptoInfo(query, API_KEY) {
           <div class="mainCol cryptoMainCol">
           <div class="mainCol1">
             <div class="headerRow">
+              ${logo ? `<img src="${logo}" class="logo" alt="" />` : ``}
               ${name && symbol ? `<h2 class="name">${name} (${symbol.toUpperCase()})</h2>` : ``}
               <div class="tag" style="backgroundColor: #0c9">
                 ${tag.toUpperCase()}
@@ -107,7 +110,7 @@ async function cryptoInfo(query, API_KEY) {
                   price
                       ? `<div class="priceItem">
                     <p class="priceLabel">Price</p>
-                    <h1 class="price ${percent_change_24h > 0 ? `price-green` : `price-red `}"> 
+                    <h1 class="price ${percent_change_24h > 0 ? `price-green` : `price-red `}">
                       ${displayPrice ? formatNumber(displayPrice) : "<0.00000001"}<span class="textGray400"> USD</span>
                     </h1>
                   </div>`
@@ -146,9 +149,9 @@ async function cryptoInfo(query, API_KEY) {
                 <div id="infoBoxLeft" class="boxItem" style="display:none; border:0; font-family: Sans-Serif; position: absolute; font-size:11px; z-index: 4; top:0px; left:0px; border-radius:2px; padding: 4px;"></div>
                 <div id="infoBoxBottom" class="boxItem" style="display:none; border:0; font-family: Sans-Serif; position: absolute; font-size:11px; z-index: 4; top:0px; left:0px; border-radius:2px; padding: 4px;"></div>
             </div>
-            
+
             ${last_updated ? `<p class="priceLabel textGray">Last updated on ${new Date(last_updated).toLocaleString("en-US")}</p>` : ``}
-          
+
           </div>
           <div class="sideCol cryptoSideContain">
             ${cmc_rank ? `<h3 class="rank"><a href="https://coinmarketcap.com/currencies/${slug}">Ranked <span class="ranking">${cmc_rank}</span> by CoinMarketCap</a></h3>` : ``}
@@ -247,7 +250,7 @@ async function cryptoInfo(query, API_KEY) {
                                     ? `<div class="explorerOuter">
                           <a href="${item}" class="explorerLink">
                             <span class="textBlue300">${item.split("://")[1].split("/")[0]}</span>
-                          </a>${(i < explorer.length -1) ? "<span style='margin-left:-4px; margin-right:4px;'>,</span>" : ""} 
+                          </a>${(i < explorer.length -1) ? "<span style='margin-left:-4px; margin-right:4px;'>,</span>" : ""}
                         </div>`
                                     : ""
                             )
@@ -557,24 +560,24 @@ async function cryptoInfo(query, API_KEY) {
           const infoBoxDiv = document.querySelector("#infoBox");
           const infoBoxLeftDiv = document.querySelector("#infoBoxLeft");
           const infoBoxBottomDiv = document.querySelector("#infoBoxBottom");
-      
+
           const DARK_MODE = document.querySelector("html").className.includes("dark");
           const COLOR_RED = "#ff5050";
           const COLOR_GREEN = "#00b386";
           const TEXT_COLOR = DARK_MODE ? "#D1D5DB" : "#4e616c";
-      
+
           const DATE_RANGE = RANGE;
-      
+
           const positions = [];
-      
+
           let formatNumberHighestLength = 0;
           let infoBoxLeftMargin;
-      
+
           let data;
           if (selectedRange === 1) data = JSON.parse('${JSON.stringify(periods["24h"])}');
           else if (selectedRange === 7) data = JSON.parse('${JSON.stringify(periods["7d"])}');
           else if (selectedRange === 30) data = JSON.parse('${JSON.stringify(periods["30d"])}');
-      
+
           data = data.map((el) => ({ price: el.quote.USD.price, timestamp: el.quote.USD.timestamp, volume: el.quote.USD.volume_24h }));
           const priceArray = [];
           const timestampsArray = [];
@@ -582,46 +585,46 @@ async function cryptoInfo(query, API_KEY) {
             priceArray.push(el.price);
             timestampsArray.push(el.timestamp);
           });
-      
+
           const highestPrice = priceArray.reduce((a, b) => (a > b ? a : b));
           const lowestPrice = priceArray.reduce((a, b) => (a < b ? a : b));
           const difference = highestPrice - lowestPrice;
           // space between data points on y axis
           const step = difference / 6;
-      
+
           // canvas for graph
           const canvasGraph = document.querySelector("#graph");
           const ctxGraph = canvasGraph.getContext("2d");
-      
+
           // canvas for info (mouseover)
           const canvasInfo = document.querySelector("#info");
           const ctxInfo = canvasInfo.getContext("2d");
-      
+
           canvasGraph.parentElement.style.width = CANVAS_WIDTH + "px";
           canvasGraph.parentElement.style.height = CANVAS_HEIGHT + "px";
           canvasGraph.style.width = CANVAS_WIDTH + 2 + "px";
           canvasInfo.style.width = CANVAS_WIDTH + 2 + "px";
           canvasGraph.style.height = CANVAS_HEIGHT + "px";
           canvasInfo.style.height = CANVAS_HEIGHT + "px";
-      
+
           const rect = canvasGraph.getBoundingClientRect();
-      
+
           // increase the actual size of our canvas
           canvasGraph.width = rect.width * devicePixelRatio;
           canvasGraph.height = rect.height * devicePixelRatio;
           canvasInfo.width = rect.width * devicePixelRatio;
           canvasInfo.height = rect.height * devicePixelRatio;
-      
+
           // ensure all drawing operations are scaled
           ctxGraph.scale(devicePixelRatio, devicePixelRatio);
           ctxInfo.scale(devicePixelRatio, devicePixelRatio);
-      
+
           // scale everything down using CSS
           canvasGraph.style.width = rect.width + "px";
           canvasGraph.style.height = rect.height + "px";
           canvasInfo.style.width = rect.width + "px";
           canvasInfo.style.height = rect.height + "px";
-      
+
           // adjust the position of start of the graph based on digts (y axis)
           const margin = {
             0: 28,
@@ -633,13 +636,13 @@ async function cryptoInfo(query, API_KEY) {
             6: 66,
             9: 72,
           };
-      
+
           const getHeight = (i) => {
             let height = (CANVAS_HEIGHT / NET_LINES) * i;
             height = height % 1 === 0 ? height + 0.5 : height;
             return height;
           };
-      
+
           // check of small is the number (how much 0's after '.')
           const numberOfZeros = priceArray.reduce((a, b, i) => {
             // if the number is greather than 1, we don't need to check number of zeroes
@@ -647,13 +650,13 @@ async function cryptoInfo(query, API_KEY) {
             // in this case, we should display longer value to compare, like 1.000032, instead of 1
             if (a >= 1 && difference > 0.01) return 0;
             if (b >= 1 && difference > 0.01) return 0;
-      
+
             let firstItem = a.toString().split(".")[1];
             let firstItemZeros = 0;
-      
+
             let secondItem = b.toString().split(".")[1];
             let secondItemZeros = 0;
-      
+
             // support for very small numbers, like 1.2e-7
             let smallNumFirst;
             let smallNumSecond;
@@ -669,12 +672,12 @@ async function cryptoInfo(query, API_KEY) {
                 }
               }
             }
-      
+
             if (secondItem && secondItem.includes("e-")) {
               smallNumSecond = true;
               secondItemZeros = parseInt(secondItem.split("e-")[1]) - 1;
             }
-      
+
             if (secondItem && !smallNumSecond) {
               for (let i = 0; i < secondItem.length; i++) {
                 if (secondItem[i] !== "0") {
@@ -683,12 +686,12 @@ async function cryptoInfo(query, API_KEY) {
                 }
               }
             }
-      
+
             let highestValue = firstItemZeros > secondItemZeros ? firstItemZeros : secondItemZeros;
             if (i === 1) return highestValue;
             return a > highestValue ? a : highestValue;
           });
-      
+
           // map of the field where we are drawing price graph
           const graphMap = {
             start: margin[numberOfZeros > 6 ? (numberOfZeros > 8 ? 9 : 6) : numberOfZeros] + 2.5,
@@ -698,20 +701,20 @@ async function cryptoInfo(query, API_KEY) {
             width: CANVAS_WIDTH - (margin[numberOfZeros > 6 ? 6 : numberOfZeros] + 2.5),
             height: getHeight(NET_LINES - 1) - getHeight(1),
           };
-      
+
           // coordson Y axis of the vertical line at the start of the graph
           const verticalLine = {
             top: (CANVAS_HEIGHT / NET_LINES) * 0.6,
             bottom: CANVAS_HEIGHT - (CANVAS_HEIGHT / NET_LINES) * 0.6,
           };
-      
+
           // space on x axis between data points
           const spacer = graphMap.width / priceArray.length;
           // space on y axis
           const oneStep = step / (CANVAS_HEIGHT / NET_LINES);
-      
+
           // !------ end of variables ----- //
-      
+
           const formatNumber = (number) => {
             if (number >= 1.01) {
               function nFormatter(num, digits) {
@@ -770,11 +773,11 @@ async function cryptoInfo(query, API_KEY) {
             }
             return number.toFixed(numberOfZeros + digts);
           };
-      
+
           const drawNet = () => {
             ctxGraph.strokeStyle = "#99999920";
             ctxGraph.lineWidth = 1;
-      
+
             // draw horizontal lines and labels
             for (let i = 1; i < NET_LINES; i++) {
               let height = (CANVAS_HEIGHT / NET_LINES) * i;
@@ -798,7 +801,7 @@ async function cryptoInfo(query, API_KEY) {
             ctxGraph.stroke();
             ctxGraph.closePath();
           };
-      
+
           const drawTimeline = () => {
             ctxGraph.strokeStyle = "#aaa";
             ctxGraph.lineWidth = 1;
@@ -811,7 +814,7 @@ async function cryptoInfo(query, API_KEY) {
               } else if (DATE_RANGE === 1) {
                 date = date.toLocaleString("en-US", { hour: "numeric", minute: "numeric", hour12: true });
               }
-      
+
               let x = position * spacer + graphMap.start;
               x = x.toFixed();
               if (x % 1 === 0) {
@@ -830,7 +833,7 @@ async function cryptoInfo(query, API_KEY) {
               ctxGraph.fillStyle = TEXT_COLOR;
               ctxGraph.fillText(date, x - textWidth / 2, y + 16);
               ctxGraph.closePath();
-      
+
               ctxGraph.stroke();
             };
             timestampsArray.forEach((timestamp, i) => {
@@ -843,9 +846,9 @@ async function cryptoInfo(query, API_KEY) {
             });
             ctxGraph.stroke();
           };
-      
+
           drawTimeline();
-      
+
           // draw graph
           ctxGraph.beginPath();
           priceArray.forEach((price, i) => {
@@ -870,27 +873,27 @@ async function cryptoInfo(query, API_KEY) {
 
           ctxGraph.save()
           ctxGraph.stroke()
-      
+
           ctxGraph.restore();
           ctxGraph.lineTo(positions[positions.length-1].x, graphMap.bottom)
           ctxGraph.lineTo(graphMap.start, graphMap.bottom )
           // add linear gradient
           const gradient = ctxGraph.createLinearGradient(0, 0, 0, graphMap.bottom);
           let topColor = priceArray[0] < priceArray[priceArray.length - 1] ? COLOR_GREEN : COLOR_RED
-          gradient.addColorStop(0, DARK_MODE ? topColor + "50" : topColor + "90"); 
+          gradient.addColorStop(0, DARK_MODE ? topColor + "50" : topColor + "90");
           gradient.addColorStop(1, topColor + "10");
           ctxGraph.fillStyle = gradient;
           //ctxGraph.stroke();
           ctxGraph.fill()
           ctxGraph.closePath();
-      
+
           // draw dates
           ctxGraph.beginPath();
-      
+
           // !--- variables --- //
           const xAxisDifference = positions[1].x - positions[0].x;
           // !--- end of variables --- //
-      
+
           ctxInfo.lineJoin = "round";
           ctxInfo.lineCap = "round";
           ctxInfo.lineWidth = 1;
@@ -899,7 +902,7 @@ async function cryptoInfo(query, API_KEY) {
             ctxInfo.clearRect(0, 0, CANVAS_WIDTH + 10, CANVAS_HEIGHT);
             let currentElement = (x - graphMap.start) / xAxisDifference;
             currentElement = Math.round(currentElement);
-      
+
             // draw vertical cursor line
             if (x > graphMap.start - spacer * 0.5 && x < graphMap.end - spacer * 0.5) {
               ctxInfo.beginPath();
@@ -915,7 +918,7 @@ async function cryptoInfo(query, API_KEY) {
               ctxInfo.strokeStyle = TEXT_COLOR;
               ctxInfo.lineWidth = 1;
               ctxInfo.stroke();
-      
+
               // bottom info box (date)
               let divWidth = infoBoxBottomDiv.offsetWidth;
               let date = new Date(timestampsArray[currentElement]);
@@ -953,7 +956,7 @@ async function cryptoInfo(query, API_KEY) {
             if (x > graphMap.start - spacer * 0.5 && x < graphMap.end) {
               let radius = 5;
               ctxInfo.beginPath();
-      
+
               if (positions[currentElement]) {
                 ctxInfo.arc(positions[currentElement].x, positions[currentElement].y, radius, 0, 2 * Math.PI, false);
                 ctxInfo.fillStyle = priceArray[0] < priceArray[priceArray.length - 1] ? COLOR_GREEN : COLOR_RED;
@@ -985,7 +988,7 @@ async function cryptoInfo(query, API_KEY) {
             if ((!x && !y) || x < graphMap.start - spacer * 0.5) {
               infoBoxDiv.style.display = "none";
             }
-      
+
             // left info box (small)
             if ((x || y) && x > graphMap.start - spacer * 0.5 && y >= verticalLine.top && y <= verticalLine.bottom) {
               let temp = y - graphMap.top;
@@ -997,7 +1000,7 @@ async function cryptoInfo(query, API_KEY) {
               } else {
                 infoBoxLeftDiv.innerHTML = "$" + formatNumber(price);
               }
-      
+
               // set margin only once, to prevent left info box from 'jumping' in some cases
               if (!infoBoxLeftMargin) {
                 let boxWidth = infoBoxLeftDiv.offsetWidth;
@@ -1008,21 +1011,21 @@ async function cryptoInfo(query, API_KEY) {
             if ((!x && !y) || x < graphMap.start - spacer * 0.5 || y < verticalLine.top || y > verticalLine.bottom) {
               infoBoxLeftDiv.style.display = "none";
             }
-      
+
             // disable bottom info box (date)
             if ((!x && !y) || y > verticalLine.bottom) {
               infoBoxBottomDiv.style.display = "none";
             }
           };
-      
+
           canvasInfo.addEventListener("mousemove", (e) => {
             mouseOverFunction(e.layerX, e.layerY);
           });
-      
+
           canvasInfo.addEventListener("mouseleave", () => {
             mouseOverFunction(0, 0);
           });
-      
+
           drawNet();
         };
         const calculateWidth = () => {
@@ -1039,7 +1042,7 @@ async function cryptoInfo(query, API_KEY) {
         };
         let selectedRange = 1;
         main(300, calculateWidth(), selectedRange);
-      
+
         // refresh canvas when toggling dark mode
         const htmlDOM = document.querySelector("html");
         function callback(mutationsList, observer) {
@@ -1051,10 +1054,10 @@ async function cryptoInfo(query, API_KEY) {
         }
         const mutationObserver = new MutationObserver(callback);
         mutationObserver.observe(htmlDOM, { attributes: true });
-      
+
         const packageDiv = document.querySelector(".answerRow");
         let previousPackageDivWidth = packageDiv.offsetWidth;
-      
+
         // adjust canvas size live on browser window resize
         window.addEventListener("resize", () => {
           let currentPackageDivWidth = packageDiv.offsetWidth;
@@ -1065,7 +1068,7 @@ async function cryptoInfo(query, API_KEY) {
             main(300, calculateWidth(), selectedRange);
           }
         });
-      
+
         const button1 = document.querySelector("#button1");
         const button7 = document.querySelector("#button7");
         const button30 = document.querySelector("#button30");
@@ -1076,7 +1079,7 @@ async function cryptoInfo(query, API_KEY) {
           button30.classList.remove("buttonActive");
           main(300, calculateWidth(), selectedRange);
         });
-      
+
         document.querySelector("#button7").addEventListener("click", () => {
           selectedRange = 7;
           button1.classList.remove("buttonActive");
@@ -1084,7 +1087,7 @@ async function cryptoInfo(query, API_KEY) {
           button30.classList.remove("buttonActive");
           main(300, calculateWidth(), selectedRange);
         });
-      
+
         document.querySelector("#button30").addEventListener("click", () => {
           selectedRange = 30;
           button1.classList.remove("buttonActive");
@@ -1093,8 +1096,8 @@ async function cryptoInfo(query, API_KEY) {
           main(300, calculateWidth(), selectedRange);
         });
       })();
-      
-      
+
+
 
       </script>
     `;
