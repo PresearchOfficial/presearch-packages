@@ -1,12 +1,14 @@
-let imageFromCache;
-
-if (process.env.REGISTRATION_CODE !== undefined) {
-  imageFromCache = require('../../utils/img-cache');
-} else {
-  /**
-   * @param {string} imgUrl
-   */
-  imageFromCache = (imgUrl) => {
+/**
+ * @param {string} imgUrl
+ * @return {string}
+ */
+const imageFromCache = (imgUrl) => {
+  if (process.env.REGISTRATION_CODE !== undefined) {
+    return require('../../utils/img-cache')(imgUrl);
+  } else {
+    /**
+     * @param {string} imgUrl
+     */
     return imgUrl;
   }
 }
