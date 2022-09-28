@@ -1,7 +1,7 @@
 let imageFromCache;
 
 if (process.env.REGISTRATION_CODE !== undefined) {
-  imageFromCache = require('../../img-cache');
+  imageFromCache = require('../../utils/img-cache');
 } else {
   /**
    * @param {string} imgUrl
