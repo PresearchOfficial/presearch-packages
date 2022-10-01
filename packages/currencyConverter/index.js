@@ -27,10 +27,10 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${rateConversion.from}" class="interactive-currency-input" value="${rateConversion.value.toLocaleString()}" data-conversionRate="${converted.value}" data-targetId="interactive_${converted.code}" /><label for="interactive_${rateConversion.from}">${converted.fromName}</label>
+              <input id="interactive_${rateConversion.from}" class="interactive-currency-input" value="${rateConversion.value.toLocaleString()}" data-conversionRate="${converted.value / rateConversion.value}" data-targetId="interactive_${converted.code}" step="any"/><label for="interactive_${rateConversion.from}">${converted.fromName}</label>
             </div>
             <div class="interactive-input-container">
-              <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" data-conversionRate="${converted.value}" data-targetId="interactive_${rateConversion.from}" /><label for="interactive_${converted.code}">${converted.toName}</label>
+              <input id="interactive_${converted.code}" class="interactive-currency-input" value="${convertedFixed}" data-conversionRate="${converted.value / rateConversion.value}" data-targetId="interactive_${rateConversion.from}" step="any"/><label for="interactive_${converted.code}">${converted.toName}</label>
             </div>
         </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
