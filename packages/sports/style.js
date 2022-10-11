@@ -3,6 +3,7 @@ const style = `
         #presearchSportPackage {
             max-width: 40rem;
             font-size: 0.9rem;
+            margin-bottom: 1.2rem;
         }
 
         @media only screen and (max-width: 600px) {
@@ -12,21 +13,30 @@ const style = `
         }
 
         .dark #presearchSportPackage {
-            color: #ffffff;
+            color: #f4f4f4;
         }
 
         #presearchSportPackage .header {
-            background: linear-gradient(273deg, rgba(0,121,255,1) 0%, rgba(82,135,255,1) 16%, rgba(116,232,255,1) 100%);
+            background: #f4f4f4;
             padding-left: 5%;
             padding-top: 3%;
             border-top-left-radius: 30px;
             border-top-right-radius: 30px;
+            color: #374151;
+        }
+
+        .dark #presearchSportPackage .header {
+            background: #191919;
         }
 
         #presearchSportPackage .subject {
             font-weight: bold;
             font-size: 2rem;
-            color: #000000;
+            color: #374151;
+        }
+
+        .dark  #presearchSportPackage .subject {
+            color: #f4f4f4;
         }
 
         @media only screen and (max-width: 600px) {
@@ -38,6 +48,7 @@ const style = `
         #presearchSportPackage .logo {
             margin-right: 2%;
             float: left;
+            padding: 2px;
         }
 
         #presearchSportPackage .tabs {
@@ -46,6 +57,7 @@ const style = `
             flex-wrap: wrap;
             flex-direction: row;
             padding-top: 1rem;
+            margin-bottom: -0.2rem;
         }
 
         #presearchSportPackage .tab {
@@ -53,15 +65,24 @@ const style = `
             line-height: 2.75em;
             height: 3em;
             padding: 0 1.618em;
-            background: rgba(116,232,255,0.2);
+            background: #f4f4f4;
             border: 0.025rem solid rgba(9,9,121,0.2);
             cursor: pointer;
             top: 0;
             transition: all 0.25s;
             text-align: center;
-            color: #000000;
+            color: #374151;
             font-size: 0.8rem;
             font-weight: 900;
+            opacity: 0.8;
+        }
+
+        #presearchSportPackage [data-tab-value="#tab_1"] {
+            border-radius: 2px 0px 0px 0px;
+        }
+
+        #presearchSportPackage [data-tab-value="#tab_2"] {
+            border-radius: 0px 2px 0px 0px;
         }
 
         @media only screen and (max-width: 600px) {
@@ -71,27 +92,31 @@ const style = `
         }
 
         #presearchSportPackage .tab:hover {
-            background-color: rgba(9,9,121,0.4);
+            opacity: 0.6;
         }
 
         #presearchSportPackage .tab-clicked {
-            background-color: rgba(9,9,121,0.2);
+            background: #white;
+            opacity: 1;
         }
 
         #presearchSportPackage .leagueLabel {
-            color: #bdc3c7;
+            color: #374151;
+        }
+        .dark #presearchSportPackage .leagueLabel {
+            color: #f4f4f4;
         }
 
         #presearchSportPackage .content {}
 
         #presearchSportPackage .games {
             display: flex;
-            border: 0.25rem solid #bdc3c7;
+            border-top: 0.2rem solid #f4f4f4;
         }
 
         .dark #presearchSportPackage .games {
             display: flex;
-            border: 0.25rem solid #7F7F7F;
+            border-top: 0.2rem solid #191919;
         }
 
         #presearchSportPackage .game {
@@ -140,11 +165,11 @@ const style = `
         }
 
         #presearchSportPackage .rightGame {
-            border-left: 0.25rem solid #bdc3c7;
+            border-left: 0.25rem solid #f4f4f4;;
         }
 
         .dark #presearchSportPackage .rightGame {
-            border-left: 0.25rem solid #7F7F7F;
+            border-left: 0.25rem solid #191919;
         }
 
         #presearchSportPackage [data-tab-info] {
@@ -157,7 +182,19 @@ const style = `
 
         #presearchSportPackage .standingTable {
             padding: 1vw;
-            border: 0.25rem solid #bdc3c7;
+            border-top: 0.2rem solid #f4f4f4;
+        }
+
+        .dark #presearchSportPackage .standingTable {
+            border-top: 0.2rem solid #191919;
+        }
+
+        #presearchSportPackage .standingTable > .row:hover:not(.standingHeader) {
+            background: #edf1f4;
+        }
+
+        .dark #presearchSportPackage .standingTable > .row:hover:not(.standingHeader) {
+            background: #4f4e4e;
         }
 
         #presearchSportPackage .standingHeader {

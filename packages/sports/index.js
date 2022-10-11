@@ -107,9 +107,6 @@ async function sports(query, API_KEY) {
             // fixtures[0] = live.response[0];
         }
     } catch (error) {
-        var errorMessage = error.path ? 'Error calling endpoint ' + error.path + ' with message ' : '';
-        errorMessage += error.message;
-        console.log(errorMessage);
         return;
     }
 

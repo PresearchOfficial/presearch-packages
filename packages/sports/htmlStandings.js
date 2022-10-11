@@ -2,7 +2,7 @@ const logoUtils = require('./logoUtils');
 
 function htmlStandings(standing) {
     return `
-        <div class="row" style="padding-top: 0.5rem;">
+        <div class="row" style="margin-top: 0.5rem;">
             <div class="col">${standing.rank}</div>
             <div class="col standingTeam">
                 <div class="row">

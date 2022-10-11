@@ -15,29 +15,27 @@ function htmlGameSection(fixture, right) {
             <div class="row gameRow">
                 <div class="col" style="flex: 1;">
                     <g-img class="logo">
-                        <img src="data:image/png;base64,${logoUtils.getLogo(fixture.teams.home)}"
-                            height="32" width="32" alt="">
+                        ${logoUtils.getLogo(fixture.teams.home) ? '<img src="data:image/png;base64,' + logoUtils.getLogo(fixture.teams.home) +'" height="32" width="32" alt=""></img>' : '<div style="width:32px; height:32px;"></div>'}
                     </g-img>
                 </div>
                 <div class="col" style="flex: 3;">
                     <label>${fixture.teams.home.name}</label>
                 </div>
                 <div class="col score" style="flex: 1;">
-                    <label>${fixture.teams.home.winner ? "&#9654;" : ""}${fixture.goals.home != null ? fixture.goals.home : ""}</label>
+                    <label>${fixture.teams.home.winner ? "&#9654; " : ""}${fixture.goals.home != null ? fixture.goals.home : ""}</label>
                 </div>
             </div>
             <div class="row gameRow">
                 <div class="col" style="flex: 1;">
                     <g-img class="logo">
-                        <img src="data:image/png;base64,${logoUtils.getLogo(fixture.teams.away)}"
-                            height="32" width="32" alt="">
+                        ${logoUtils.getLogo(fixture.teams.away) ? '<img src="data:image/png;base64,' + logoUtils.getLogo(fixture.teams.away) +'" height="32" width="32" alt=""></img>' : '<div style="width:32px; height:32px;"></div>'}
                     </g-img>
                 </div>
                 <div class="col" style="flex: 3;">
                     <label>${fixture.teams.away.name}</label>
                 </div>
                 <div class="col score" style="flex: 1;">
-                    <label>${fixture.teams.away.winner ? "&#9654;" : ""}${fixture.goals.away != null ? fixture.goals.away : ""}</label>
+                    <label>${fixture.teams.away.winner ? "&#9654; " : ""}${fixture.goals.away != null ? fixture.goals.away : ""}</label>
                 </div>
             </div>
         </div>
