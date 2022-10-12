@@ -27,10 +27,10 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
         <div class="to"><span></span></div>
         <div class="interactive-calculation">
             <div class="interactive-input-container">
-              <input id="interactive_${rateConversion.from}" class="interactive-currency-input"  type="text" data-conversionRate="${converted.value / rateConversion.value}" data-targetId="interactive_${converted.code}" step="any"/><label for="interactive_${rateConversion.from}">${converted.fromName}</label>
+              <input id="interactive_${rateConversion.from}" class="interactive-currency-input"  type="text" data-targetId="interactive_${converted.code}" step="any"/><label for="interactive_${rateConversion.from}">${converted.fromName}</label>
             </div>
             <div class="interactive-input-container">
-              <input id="interactive_${converted.code}" class="interactive-currency-input" type="text" data-conversionRate="${converted.value / rateConversion.value}" data-targetId="interactive_${rateConversion.from}" step="any"/><label for="interactive_${converted.code}">${converted.toName}</label>
+              <input id="interactive_${converted.code}" class="interactive-currency-input" type="text" data-targetId="interactive_${rateConversion.from}" step="any"/><label for="interactive_${converted.code}">${converted.toName}</label>
             </div>
         </div>
         <p class="disclaimer">Exchange rates are downloaded from the <a target="_blank" rel="noreferrer" href="https://ec.europa.eu">European Commission</a> and <a target="_blank" rel="noreferrer" href="https://coinmarketcap.com">CoinMarketCap</a>. Presearch does not guarantee the accuracy.</p>
@@ -89,6 +89,10 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
     }
     </style>
     <script>
+    const conversionRate = ${converted.value / rateConversion.value};
+    var fromValue = ${rateConversion.value};
+    var toValue = ${convertedFixed};
+
     const formatMoney = (currency, locale = undefined) => {
       try {
         var options = {
@@ -112,7 +116,9 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
         }
       }
     }
-    const convert = (target, inputValue, conversionRate) => {
+
+    // rate conversion function
+    const convert = (target, inputValue) => {
       var result = 0;
       if(target === "interactive_${converted.code}"){
         result = inputValue * conversionRate;
@@ -124,19 +130,17 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
       return { value : result, round : round};
     }
 
+    // show rate conversion and set input value on page load
     const from = document.querySelector(".from span");
     const to = document.querySelector(".to span");
-
     if (from) {
-      let value = "${rateConversion.fromName}".length ? (formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" }) + " (${rateConversion.fromName})") : formatMoney({ value: ${rateConversion.value}, code: "${rateConversion.from}" });
-      from.innerHTML = value;
-      document.getElementById("interactive_${rateConversion.from}").value = value.substring(0, value.length - 1);
+      from.innerHTML = formatMoney({value: ${rateConversion.value}, code: "${rateConversion.from}"}) +  ("${rateConversion.fromName}".length ? " (${rateConversion.fromName})" :"");
+      document.getElementById("interactive_${rateConversion.from}").value = fromValue.toLocaleString();
     }
     if (to) {
-      let value = formatMoney({ value: ${converted.value}, round: ${converted.round}, code: "${converted.code}" });
-      to.innerHTML = value;
-      document.getElementById("interactive_${converted.code}").value = value.substring(0, value.length - 1);
-      
+      to.innerHTML = formatMoney({ value: ${converted.value}, round: ${converted.round}, code: "${converted.code}" });
+      document.getElementById("interactive_${converted.code}").value = toValue.toLocaleString();
+
       if (to.innerHTML) {
         const numbers = to.innerHTML.split(/[a-z&;.,]/gi).join("");
         if (numbers && numbers.length > 8) {
@@ -150,20 +154,16 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
 
     interactiveInputs.forEach(input => {
       input.addEventListener('focus', (event) => {
-        //thousand separator
-        const ts = /^1\.000$/.test(parseInt(1000).toLocaleString()) ? '.' : ',';
-        const value = event.target.value.replaceAll(ts, '').replace((ts == '.' ? ',' : '.'),'.');
         event.target.setAttribute('type','number');
-        event.target.value = parseFloat(value);
+        event.target.value = event.target.id == "interactive_${converted.code}" ? toValue : fromValue;
         event.target.select();
       })
     })
 
     interactiveInputs.forEach(input => {
       input.addEventListener('blur', (event) => {
-        const value = event.target.value;
         event.target.setAttribute('type','text');
-        event.target.value = parseFloat(value).toLocaleString();
+        event.target.value = event.target.id == "interactive_${converted.code}" ? parseFloat(toValue).toLocaleString() : parseFloat(fromValue).toLocaleString();
       })
     })
 
@@ -171,7 +171,6 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
       input.addEventListener('input', (event) => {
         event.preventDefault()
         const target = event.target.dataset.targetid;
-        const conversionRate = event.target.dataset.conversionrate;
         const inputToChange = document.getElementById(target)
 
         const { value } = event.target
@@ -203,8 +202,18 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
           }
         }
 
-        const result = convert(target, value.split(",").join(""), conversionRate);
-        inputToChange.value = result.value === 0 ? result.value.toLocaleString() : formatMoney(result);
+        const result = convert(target, value);
+
+        // update global variables
+        if(event.target.id == "interactive_${converted.code}"){
+            toValue = value;
+            fromValue = result.value;
+        }else{
+            toValue = result.value;
+            fromValue = value;
+        }
+
+        inputToChange.value = result.round === 0 ? result.value.toLocaleString() : formatMoney(result);
       });
     });
     </script>
