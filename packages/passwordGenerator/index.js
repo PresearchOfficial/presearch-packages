@@ -3,11 +3,11 @@ const { parseAndNormalize, generate } = require('./services');
 async function passwordGenerator(query) {
   const length = parseAndNormalize(query);
   if (!length) {
-    return undefined;
+    return { error: "Failed to parse query." };
   }
   const generatedStr = generate(length);
   if (!generatedStr) {
-    return undefined;
+    return { error: "Failed to generate password." };
   }
 
   return `

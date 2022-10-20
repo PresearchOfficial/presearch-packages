@@ -18,7 +18,7 @@ async function math(query) {
       expression = result;
       answer = `= ${data}`
     } catch (error) {
-      return null;
+      return { error };
     }
   }
 

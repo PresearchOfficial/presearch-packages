@@ -7,7 +7,7 @@ const WEATHER_API_URL = "https://api.weatherapi.com/v1/forecast.json";
 async function weather(query, API_KEY, geoLocation) {
     const data = await getWeather(query, API_KEY, geoLocation);
     if (!data || data.error) {
-        return null;
+        return { error: `Failed to get weather data. ${data ? data.error : ''}` };
     }
 
     // handle the error case when there's no weather data for specified/geolocated location

@@ -3,11 +3,11 @@ const { parseAndNormalize, generate } = require('./services');
 async function loremIpsumGenerator(query) {
   const length = parseAndNormalize(query);
   if (!length) {
-    return undefined;
+    return { error: "Failed to parse query." };
   }
   const generatedStr = generate(length);
   if (!generatedStr) {
-    return undefined;
+    return { error: "Failed to generate lorem ipsum string." };
   }
 
   return `

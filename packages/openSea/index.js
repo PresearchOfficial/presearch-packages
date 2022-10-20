@@ -51,10 +51,10 @@ const loadAssets = async (query, API_KEY) => {
     ).catch(error => ({ error })),
   ]);
 
-  // return null when there's no response from OpenSea API;
+  // return error when there's no response/error from OpenSea API;
   if (!response1.data || response1.error) 
       if (!response2.data || response2.error) {
-        return null;
+        return { error: `Failed to get the data from OpenSea API. ${response1.error ? response1.error : response2.error}`};
   }
 
   const data1 = response1.data, data2 = response2.data;
@@ -74,7 +74,11 @@ async function openSea(query, API_KEY) {
   const assets = await loadAssets(query, API_KEY);
 
   if (!assets) {
-    return null;
+    return { error: "Failed to parse assets from OpenSea API"};
+  }
+
+  if (assets.error) {
+    return assets;
   }
 
   let mainAsset =
@@ -86,7 +90,7 @@ async function openSea(query, API_KEY) {
     );
 
     if (!mainAsset) {
-      return null;
+      return { error: "Failed to parse assets from OpenSea API"};
     }
 
   // prevent package from crashing, when title or description includes "`";

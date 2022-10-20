@@ -25,14 +25,16 @@ async function cryptoInfo(query, API_KEY) {
         ]);
 
         // get data about price, supply etc.
-        if (!priceInfo || !priceInfo.data || priceInfo.error) return null;
+        if (!priceInfo || !priceInfo.data || priceInfo.error) return { error: priceInfo.error ? priceInfo.error.message : "Failed to get latest quotes from CMC" };
+
         const priceData = priceInfo.data.data[coinId];
 
         // get historical data for price graph
-        if (!historical || !historical.data || historical.error) return null;
+        if (!historical || !historical.data || historical.error) return { error: historical.error ? historical.error.message : "Failed to get historical quotes from CMC" };;
+
         const historicalData = historical.data.data;
         let { quotes } = historicalData;
-        if (!quotes || !quotes.length) return null;
+        if (!quotes || !quotes.length) return { error: "Failed to get historical quotes from CMC" }
         quotes = quotes.reverse();
 
         // generate data points of historical data for each period
@@ -70,7 +72,7 @@ async function cryptoInfo(query, API_KEY) {
         const MIN_VOLUME = 10000;
         const MIN_RANK = 2000;
         if (volume_24h < MIN_VOLUME || cmc_rank > MIN_RANK) {
-          return null;
+          return { returnedNull: true };
         }
 
         const formatNumber = (num) => {
@@ -1099,7 +1101,7 @@ async function cryptoInfo(query, API_KEY) {
       </script>
     `;
     } catch (error) {
-        return null;
+        return { error };
     }
 }
 

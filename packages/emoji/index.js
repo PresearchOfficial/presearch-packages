@@ -12,7 +12,7 @@ async function emoji(query, API_KEY) {
   const emoji_details = await emoji_data.get(emoji).catch(error => ({error}));
 
   if (!emoji_details || emoji_details.error) {
-    return null;
+    return { error: `Failed to get emoji data from the API. ${emoji_details ? emoji_details.error : ''}` };
   }
 
   if (
@@ -24,7 +24,7 @@ async function emoji(query, API_KEY) {
       emoji_details.images
     )
   ) {
-    return null;
+    return { error: "Incomplete emoji data" };
   }
 
   const vendorList = ["Apple", "Microsoft", "Google", "Twitter", "Facebook", "Messenger"];

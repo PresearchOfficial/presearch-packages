@@ -178,9 +178,9 @@ function parseAndNormalize(query) {
     return undefined;
   }
 
-  const fromName = (cryptoCurrencies[from] && !fiatCurrencies[from]) ? cryptoCurrencies[from].name : '';
+  const fromName = (cryptoCurrencies[from] && (!fiatCurrencies[from] || fiatCurrencies[from] == "Bitcoin")) ? cryptoCurrencies[from].name : '';
   
-  return { value, from, to, fromName};
+  return { value, from, to, fromName };
 }
 
 /**
@@ -192,7 +192,9 @@ async function fetchFiatRates(conversion) {
 
   const response = await axios.get(FIAT_API).catch(error => ({error}));
 
-  if (response.error) return [];
+  if (response.error) {
+    return { error: `Failed to get fiat rates from the API. ${response.error.message}` };
+  }
 
   const targetCurrencies = [conversion.from, conversion.to, USD_CODE];
 
@@ -211,7 +213,7 @@ async function fetchFiatRates(conversion) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchCryptoRates(conversion, API_KEY) {
-  if (!API_KEY) return [];
+  if (!API_KEY) return { error: "Failed to get API KEY for CMC"};
   // the "aux" parameter controls which fields we get. we only need the "quote" field, but it can't
   // be specified in the "aux" parameter. just send one value in order to reduce the payload.
   const response = await axios.get(
@@ -223,7 +225,7 @@ async function fetchCryptoRates(conversion, API_KEY) {
     }
   ).catch(error => ({error}));
 
-  if (response.error) return [];
+  if (response.error) return { error: `Failed to get data from CMC. ${response.error.message}`};
 
   return Object.values(response.data.data)
     .map(currency => ({
@@ -244,6 +246,14 @@ async function fetchRates(conversion, API_KEY) {
     fetchFiatRates(conversion),
     fetchCryptoRates(conversion, API_KEY),
   ]);
+
+  if (fiatCurrencies.error) {
+    return fiatCurrencies;
+  }
+
+  if (cryptoCurrencies.error) {
+    return cryptoCurrencies;
+  }
 
   // crypto rates are returned with USD base value but fiat are returned with EUR.
   // normalize everything to EUR.

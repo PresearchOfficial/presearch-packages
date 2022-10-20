@@ -49,7 +49,8 @@ const addRoutesTimeout = setTimeout(() => {
                 if (trigger) {
                     const overlappingPackages = await checkOverlapingTrigger(query);
                     const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`], geolocation);
-                    return res.render("search", { title: packageName, packageData, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }) });
+                    const packageError = (packageData && packageData.error) && packageData.error;
+                    return res.render("search", { title: packageName, packageData, packageError, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }) });
                 }
                 res.render("search", { title: packageName, triggered: false, query, packageInfo });
             });

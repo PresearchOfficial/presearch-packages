@@ -1,20 +1,22 @@
 const axios = require("axios");
-const { parseAndNormalize, convert, formatCurrency, fetchRates } = require("./services");
+const { parseAndNormalize, convert, fetchRates } = require("./services");
 
 jest.mock("axios");
 
 describe("services", function () {
   it("should be able to parse and normalize a query", function () {
-    expect(parseAndNormalize("5 btc to cad")).toEqual({ value: 5, from: "BTC", to: "CAD" });
+    expect(parseAndNormalize("5 btc to cad")).toEqual({ value: 5, from: "BTC", to: "CAD", fromName: "Bitcoin" });
     // test case sensitivity
-    expect(parseAndNormalize("1337 ETh to UsD")).toEqual({ value: 1337, from: "ETH", to: "USD" });
+    expect(parseAndNormalize("1337 ETh to UsD")).toEqual({ value: 1337, from: "ETH", to: "USD", fromName: "Ethereum" });
     // test no value
-    expect(parseAndNormalize("ETh to UsD")).toEqual({ value: 1, from: "ETH", to: "USD" });
+    expect(parseAndNormalize("ETh to UsD")).toEqual({ value: 1, from: "ETH", to: "USD", fromName: "Ethereum" });
     // test fractions
-    expect(parseAndNormalize("5,6 btc to cad")).toEqual({ value: 5.6, from: "BTC", to: "CAD" });
-    expect(parseAndNormalize("5.2 btc to cad")).toEqual({ value: 5.2, from: "BTC", to: "CAD" });
+    expect(parseAndNormalize("5,6 btc to cad")).toEqual({ value: 5.6, from: "BTC", to: "CAD", fromName: "Bitcoin" });
+    expect(parseAndNormalize("5.2 btc to cad")).toEqual({ value: 5.2, from: "BTC", to: "CAD", fromName: "Bitcoin" });
     // test trim
-    expect(parseAndNormalize(" 5 btc to cad  ")).toEqual({ value: 5, from: "BTC", to: "CAD" });
+    expect(parseAndNormalize(" 5 btc to cad  ")).toEqual({ value: 5, from: "BTC", to: "CAD", fromName: "Bitcoin" });
+    // test fiat 
+    expect(parseAndNormalize("1337 eur to UsD")).toEqual({ value: 1337, from: "EUR", to: "USD", fromName: "" });
   });
 
   it("should be able to fetch rates", async function () {
@@ -70,7 +72,7 @@ describe("services", function () {
       }
     ];
 
-    const rates = await fetchRates(conversion);
+    const rates = await fetchRates(conversion, "123");
 
     expect(rates).toEqual(expected);
   });
@@ -102,8 +104,4 @@ describe("services", function () {
     expect(convert(conversion, rates)).toEqual(expected);
   });
 
-  it("should be able to format a currency", function () {
-    expect(formatCurrency({ code: "CAD", value: 1070.5 }, "en-CA")).toEqual("$1,070.5");
-    expect(formatCurrency({ code: "SEK", value: 1070.5 }, "sv-SE")).toEqual("1 070,5 kr");
-  });
 });
