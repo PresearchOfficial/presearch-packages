@@ -4,19 +4,23 @@ const {parseAndNormalize, fetchRates, convert} = require('./services');
 async function currencyConverter(query, API_KEY) {
   const conversion = parseAndNormalize(query);
   if (!conversion) {
-    return undefined;
+    return { error: "Failed to parse query" };
   }
 
   const rates = await fetchRates(conversion, API_KEY);
 
+  if (rates.error) {
+    return rates;
+  }
+
   if (!rates) {
-    return undefined;
+    return { error: "Failed to get rates from the API" };
   }
 
   const converted = convert(conversion, rates);
 
   if (!converted) {
-    return undefined;
+    return { error: "Conversion has failed" }
   }
 
   return `

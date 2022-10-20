@@ -42,7 +42,7 @@ async function periodicElements(query) {
     `;
   }
   else {
-    return ``;
+    return { error: "Failed to generate the data." };
   }
 }
 

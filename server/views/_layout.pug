@@ -14,7 +14,16 @@ html(lang="en" class="dark h-full")
             }
         script. 
             try {
-                window.packageData = `!{packageData ? packageData.split("</script>").join("END_OF_SCRIPT_TAG") : ""}`;
+                window.packageData = `!{packageData && !packageError ? packageData.split("</script>").join("END_OF_SCRIPT_TAG") : ""}`;
+                window.packageError = `!{packageError}`;
+                setTimeout(() => {
+                    if (window.packageError) {
+                        if (typeof window.packageError !== "string") {
+                            window.packageError = JSON.stringify(window.packageError);
+                        }
+                        document.querySelector(".packageError").innerHTML = `Package error: ${window.packageError}`;
+                    }
+                }, 100)
             } catch(err) {
                 window.packageData = "";
             }

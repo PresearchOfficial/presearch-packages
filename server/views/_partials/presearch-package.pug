@@ -8,6 +8,6 @@ template(x-if="state.presearchPackage && state.presearchPackage.html" x-effect="
                 span(x-html="state.presearchPackage.info.version" class="font-bold")
             a(href="https://github.com/PresearchOfficial/presearch-packages/issues/new/choose") Feedback
 template(x-if="state.presearchPackage && state.presearchPackage.html")
-    div(class="mt-6 md:mt-4")
+    div(class="mt-6 md:mt-4 packageError")
 template(x-if="!state.presearchPackage || !state.presearchPackage.html")
-    div(class="mt-0 md:mt-9")
+    div(class="mt-0 md:mt-9 packageError text-md" style="color:#ee0000")
