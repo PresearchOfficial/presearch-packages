@@ -22,7 +22,11 @@ async function flight(query, API_KEY) {
     const data = await getFlight(query, API_KEY);
 
     if (!data) {
-        return null;
+        return { error: "Failed to get flight data"};
+    }
+
+    if (data.error) {
+        return data;
     }
 
     return `
@@ -518,7 +522,7 @@ async function getFlight(query, API_KEY) {
     const flightNo = extractFlightNo(query);
 
     if (!flightNo) {
-        return null;
+        return { error: "Failed to extract flight number "}
     }
 
     try {
@@ -540,13 +544,13 @@ async function getFlight(query, API_KEY) {
         const flights = data.flights;
 
         if (!(flights?.length)) {
-            return null;
+            return { error: "There's no flight data for this flight"};
         }
 
         return toContract(flights);
     }
-    catch {
-        return null;
+    catch (error) {
+        return { error };
     }
 }
 
