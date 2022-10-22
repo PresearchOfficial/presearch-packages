@@ -11,12 +11,12 @@ async function currencyConverter(query, API_KEY = '96a50d99-e968-468a-b415-49acf
 
   const rates = await fetchRates(rateConversion, API_KEY);
   if (!rates) {
-    return undefined;
+    return { error: "Failed to get rates from the API" };
   }
 
   const converted = serverConvert(rateConversion, rates);
   if (!converted) {
-    return undefined;
+    return { error: "Conversion has failed" }
   }
   const convertedFixed = (Math.round(converted.value * (10 ** converted.round)) / (10 ** converted.round)).toLocaleString(undefined, {maximumFractionDigits: converted.round});
 

@@ -232,7 +232,7 @@ async function fetchCryptoRates(conversion, API_KEY) {
     }
   ).catch(error => ({error}));
 
-  if (response.error) return [];
+  if (response.error) return { error: `Failed to get data from CMC. ${response.error.message}`};
 
   return Object.values(response.data.data)
     .map(currency => ({
@@ -253,6 +253,14 @@ async function fetchRates(conversion, API_KEY) {
     fetchFiatRates(conversion),
     fetchCryptoRates(conversion, API_KEY),
   ]);
+
+  if (fiatCurrencies.error) {
+    return fiatCurrencies;
+  }
+
+  if (cryptoCurrencies.error) {
+    return cryptoCurrencies;
+  }
 
   // crypto rates are returned with USD base value but fiat are returned with EUR.
   // normalize everything to EUR.
