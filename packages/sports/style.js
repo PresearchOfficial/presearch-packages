@@ -111,12 +111,12 @@ const style = `
 
         #presearchSportPackage .games {
             display: flex;
-            border-top: 0.2rem solid #f4f4f4;
+            border: 0.2rem solid #f4f4f4;
         }
 
         .dark #presearchSportPackage .games {
             display: flex;
-            border-top: 0.2rem solid #191919;
+            border: 0.2rem solid #191919;
         }
 
         #presearchSportPackage .game {
@@ -222,12 +222,12 @@ const style = `
         }
 
         #presearchSportPackage .liveGame {
-            padding: 1vw; 
+            padding: 1vw;
             background: linear-gradient(218deg, rgba(0,14,255,1) 0%, rgba(82,135,255,1) 0%, rgba(0,0,0,0) 16%);
         }
 
         #presearchSportPackage .goal {
-            font-size: 0.7rem; 
+            font-size: 0.7rem;
         }
 
         @media only screen and (max-width: 600px) {
