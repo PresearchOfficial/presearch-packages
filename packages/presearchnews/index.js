@@ -60,7 +60,7 @@ async function presearchnews(query, API_KEY) {
                 </div>
             </div>
 
-            <div class="older-videos-header">Previous epizodes</div>
+            <div class="older-videos-header">Previous episodes</div>
             <ol class="older-videos">
                 ${createVideos()}
             </ol>
