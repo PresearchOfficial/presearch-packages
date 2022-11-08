@@ -555,11 +555,10 @@ async function getFlight(query, API_KEY) {
 }
 
 function extractFlightNo(query) {
-    const regexStringFlight = new RegExp(/^flight ([a-zA-Z]{2,3}\d{1,4}[a-zA-Z]?)$/);
-    const regexString = new RegExp(/^([a-zA-Z]{2,3}\d{1,4}[a-zA-Z]?)$/);
+    const regexString = new RegExp(/^(flight )?([a-zA-Z]{2,3}\d{1,4}[a-zA-Z]?)$/);
 
-    const matches = query.match(regexStringFlight) || query.match(regexString);
-    return !!matches && matches.length === 2 ? matches[1].toUpperCase() : null;
+    const matches = query.match(regexString);
+    return !!matches && matches.length === 3 ? matches[2].toUpperCase() : null;
 }
 
 async function trigger(query) {
