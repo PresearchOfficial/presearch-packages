@@ -23,7 +23,7 @@ async function presearchNews(query, API_KEY) {
         olderVideos.map((v) => `
             <li class="video-item">
                 <a href="${v.url}">
-                    <div class="video-thumbnail" style="background-image: url('${v.image}')"></div>
+                    <div class="video-thumbnail" style="background-image: url(${v.image})"></div>
                     <div class="video-item-title">
                         ${v.title}
                     </div>
@@ -44,7 +44,7 @@ async function presearchNews(query, API_KEY) {
                 </div>
                 <div class="video-item-main flex">
                     <a href="${recentVideo.url}">
-                        <div class="video-thumbnail" style="background-image: url('${recentVideo.image}')"></div>
+                        <div class="video-thumbnail" style="background-image: url(${recentVideo.image})"></div>
                     </a>
                     <div class="recent-video-details">
                         <div class="video-item-release">
@@ -269,7 +269,7 @@ async function presearchNews(query, API_KEY) {
 }
 
 async function getVideos() {
-    const toContract = (data) => {
+    const toContract = async (data) => {
         const anchorify = (text) => {
             var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
             var text1 = text.replace(exp, "<a href='$1'>$1</a>");
@@ -277,18 +277,34 @@ async function getVideos() {
             return text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>');
         };
 
-        return data.result.items.map(item => {
-            const url = `https://odysee.com${item.canonical_url.replace(/^lbry:\//i, "")}`;
-            const image = `https://thumbnails.odycdn.com/optimize/s:390:220/quality:85/plain/${item.value.thumbnail.url}`;
+        const urlToBase64 = async (url) => {
+            try {
+                const base64 = Buffer.from((await axios.get(url, { responseType: "arraybuffer", })).data, "utf-8").toString("base64");
+                return `data:image/webp;base64,${base64}`;
+            }
+            catch (error) {
+                return ""
+            }
+        };
 
-            return {
+        const items = [];
+
+        for (let i = 0; i < data.result.items.length; i++) {
+            const item = data.result.items[i];
+
+            const url = `https://odysee.com${item.canonical_url.replace(/^lbry:\//i, "")}`;
+            const image = `https://thumbnails.odycdn.com/optimize/s:300:165/quality:85/plain/${item.value.thumbnail.url}`;
+
+            items.push({
                 title: item.value.title,
                 url: url,
-                image: image,
+                image: await urlToBase64(image),
                 description: anchorify(item.value.description),
                 release: dayjs().to(item.timestamp * 1000)
-            };
-        });
+            });
+        }
+
+        return items;
     };
 
     try {
