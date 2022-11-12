@@ -63,6 +63,11 @@ async function presearchNews(query, API_KEY) {
             <div class="older-videos-header">Previous episodes</div>
             <ol class="older-videos">
                 ${createVideos()}
+                <li class="video-more">
+                    <a href="https://odysee.com/@Presearch#${LBRY_PRESEARCH_CHANNEL_ID}">
+                        <i class="chevron-double-down"></i>
+                    </a>
+                </li>
             </ol>
         </section>
     </div>
@@ -99,6 +104,47 @@ async function presearchNews(query, API_KEY) {
             border-radius: 5px;
         }
         
+        #presearch-presearchnews-package .video-more {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 5px; 
+        }
+        
+        #presearch-presearchnews-package .video-more a {
+            width: 50px;
+            margin: 0 10px;
+            height: 50px;
+            border: 2px solid gray;
+            border-radius: 50%;
+            font-size: 30px;
+            text-align: center;
+            display: flex;
+        }
+        
+        #presearch-presearchnews-package .video-more a i {
+            align-self: center;
+            margin: auto;
+            transform: rotate(270deg);
+            color: gray;
+        }
+
+        #presearch-presearchnews-package .video-more:hover a i {
+            color: #363636;
+        }
+        
+        .dark #presearch-presearchnews-package .video-more:hover a i {
+            color: #ced5e2;
+        }
+
+        #presearch-presearchnews-package .video-more:hover a {
+            border-color: #363636;
+        }
+
+        .dark #presearch-presearchnews-package .video-more:hover a {
+            border-color: #ced5e2;
+        }
+
         #presearch-presearchnews-package .recent-video .video-item-title {
             font-size: 20px;
             font-weight: bold;
@@ -109,11 +155,13 @@ async function presearchNews(query, API_KEY) {
             margin: 5px 8px 0px 8px;
         }
 
-        #presearch-presearchnews-package .video-item:hover  {
+        #presearch-presearchnews-package .video-item:hover, 
+        #presearch-presearchnews-package .video-more:hover {
             background-color: #dddddd;
         }
 
-        .dark #presearch-presearchnews-package .video-item:hover  {
+        .dark #presearch-presearchnews-package .video-item:hover,
+        .dark #presearch-presearchnews-package .video-more:hover  {
             background-color: #3d3e40;
         }
 
@@ -316,7 +364,7 @@ async function getVideos() {
                     claim_type: ["stream"],
                     order_by: ["release_time"],
                     page: 1,
-                    page_size: 10
+                    page_size: 6
                 }
             });
 
