@@ -335,24 +335,20 @@ async function getVideos() {
             }
         };
 
-        const items = [];
-
-        for (let i = 0; i < data.result.items.length; i++) {
-            const item = data.result.items[i];
-
+        const items = data.result.items.map(async (item)=>{
             const url = `https://odysee.com${item.canonical_url.replace(/^lbry:\//i, "")}`;
             const image = `https://thumbnails.odycdn.com/optimize/s:300:165/quality:85/plain/${item.value.thumbnail.url}`;
 
-            items.push({
+            return {
                 title: item.value.title,
                 url: url,
                 image: await urlToBase64(image),
                 description: anchorify(item.value.description),
                 release: dayjs().to(item.timestamp * 1000)
-            });
-        }
+            };
+        });
 
-        return items;
+        return await Promise.all(items);
     };
 
     try {
