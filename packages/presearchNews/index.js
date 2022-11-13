@@ -19,12 +19,14 @@ async function presearchNews(query, API_KEY) {
     const recentVideo = videos[0];
     const olderVideos = videos.slice(1);
 
+    const moreVideosUrl = `https://odysee.com/@Presearch#${LBRY_PRESEARCH_CHANNEL_ID}`;
+
     const createVideos = () =>
         olderVideos.map((v) => `
             <li class="video-item">
                 <a href="${v.url}">
                     <div class="video-thumbnail" style="background-image: url(${v.image})"></div>
-                    <div class="video-item-title">
+                    <div class="video-item-title link">
                         ${v.title}
                     </div>
                     <div class="video-item-release">
@@ -38,7 +40,7 @@ async function presearchNews(query, API_KEY) {
         <section class="video-section">
             <div class="recent-video">
                 <div class="video-item-title">
-                    <a href="${recentVideo.url}">
+                    <a class="link" href="${recentVideo.url}">
                         ${recentVideo.title}
                     </a>
                 </div>
@@ -60,11 +62,13 @@ async function presearchNews(query, API_KEY) {
                 </div>
             </div>
 
-            <div class="older-videos-header">Previous episodes</div>
+                <a class="older-videos-header link" href="${moreVideosUrl}">
+                    Previous episodes
+                </a>
             <ol class="older-videos">
                 ${createVideos()}
                 <li class="video-more">
-                    <a href="https://odysee.com/@Presearch#${LBRY_PRESEARCH_CHANNEL_ID}">
+                    <a href="${moreVideosUrl}">
                         <i class="chevron-double-down"></i>
                     </a>
                 </li>
@@ -136,6 +140,10 @@ async function presearchNews(query, API_KEY) {
         .dark #presearch-presearchnews-package .video-more:hover a i {
             color: #ced5e2;
         }
+        
+        #presearch-presearchnews-package .link:hover {
+            color: #71a7ff;
+        }
 
         #presearch-presearchnews-package .video-more:hover a {
             border-color: #363636;
@@ -158,6 +166,11 @@ async function presearchNews(query, API_KEY) {
         #presearch-presearchnews-package .video-item:hover, 
         #presearch-presearchnews-package .video-more:hover {
             background-color: #dddddd;
+        }
+        
+        #presearch-presearchnews-package .video-item:hover .link,
+        #presearch-presearchnews-package .recent-video:hover .link {
+            color: #6797e6;
         }
 
         .dark #presearch-presearchnews-package .video-item:hover,
@@ -183,7 +196,7 @@ async function presearchNews(query, API_KEY) {
             background-size: 105%;
         }
         
-        #presearch-presearchnews-package .recent-video .video-thumbnail:hover {
+        #presearch-presearchnews-package .recent-video:hover .video-thumbnail {
             -moz-transition: background-size 0.2s ease-in;
             -web-kit-transition: background-size 0.2s ease-in;
             transition: background-size 0.2s ease-in;
@@ -228,7 +241,7 @@ async function presearchNews(query, API_KEY) {
         }
         
         #presearch-presearchnews-package .video-item-description a {
-            color: #3b82f6;
+            color: #71a7ff;
         }
 
         #presearch-presearchnews-package .video-item-release {
@@ -252,6 +265,11 @@ async function presearchNews(query, API_KEY) {
             margin-top: 5px;
             border-bottom: 1px solid gray;
             padding-bottom: 3px;
+            display: block;
+        }
+
+        #presearch-presearchnews-package .older-videos-header:hover {
+            border-bottom: 1px solid #6797e6;
         }
 
         #presearch-presearchnews-package .video-item-expand {
@@ -267,6 +285,14 @@ async function presearchNews(query, API_KEY) {
             align-items: center;
             justify-content: center;
             padding-bottom: 1px;
+        }
+
+        #presearch-presearchnews-package .video-item-expand:hover {
+            color: #363636;
+        }
+
+        .dark #presearch-presearchnews-package .video-item-expand:hover {
+            color: #ffffff;
         }
 
         #presearch-presearchnews-package .video-item-expand.up {
