@@ -6,7 +6,7 @@ const relativeTimePlugin = require('dayjs/plugin/relativeTime');
 
 dayjs.extend(relativeTimePlugin);
 
-const LBRY_API_URL = "https://api.lbry.tv/api/v1/proxy";
+const LBRY_API_URL = "https://api.na-backend.odysee.com/api/v1/proxy";
 const LBRY_PRESEARCH_CHANNEL_ID = "4f4fb7a173dcad5ccd95a56dac2e8e9efe9bdfa6";
 
 async function presearchNews(query, API_KEY) {
