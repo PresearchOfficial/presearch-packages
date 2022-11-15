@@ -8,87 +8,81 @@ dayjs.extend(relativeTimePlugin);
 
 const LBRY_API_URL = "https://api.na-backend.odysee.com/api/v1/proxy";
 const LBRY_PRESEARCH_CHANNEL_ID = "4f4fb7a173dcad5ccd95a56dac2e8e9efe9bdfa6";
+const MEDIUM_FEED_URL = "https://medium.com/feed/@presearch";
+const MEDIUM_FEED_NORMALIZER_URL = `https://api.rss2json.com/v1/api.json?rss_url=${MEDIUM_FEED_URL}`;
+const THUMBNAL_OPTIMIZATION_URL = "https://thumbnails.odycdn.com/optimize/s:300:165/quality:85/plain";
+const NEWS_COUNT_TO_FETCH_BY_SOURCE = 5;
 
 async function presearchNews(query, API_KEY) {
-    const data = await getVideos();
-    if (!data || data.error) {
+    const news = await getNews();
+
+    if (!news || !news.length || news.error) {
         return null;
     }
 
-    const videos = data;
-    const recentVideo = videos[0];
-    const olderVideos = videos.slice(1);
+    const recentNews = news[0];
+    const previousNews = news.slice(1);
 
-    const moreVideosUrl = `https://odysee.com/@Presearch#${LBRY_PRESEARCH_CHANNEL_ID}`;
-
-    const createVideos = () =>
-        olderVideos.map((v) => `
-            <li class="video-item">
-                <a href="${v.url}">
-                    <div class="video-thumbnail" style="background-image: url(${v.image})"></div>
-                    <div class="video-item-title link">
-                        ${v.title}
+    const createNews = () =>
+        previousNews.map((news) => `
+            <li class="news-item">
+                <a href="${news.url}">
+                    <div class="overlay-play-button">
+                        <div class="news-thumbnail" style="background-image: url(${news.image})"></div>
+                        <div class="${news.type === "video" ? "": "hidden"} overlay-play-button__overlay">
+                            <div class="overlay-play-button__play">
+                                <i class="play-button-icon"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="video-item-release">
-                        ${v.release}
+
+                    <div class="news-item-release">
+                        ${news.release}
+                    </div>
+                    <div class="news-item-title link">
+                        ${news.title}
                     </div>
                 </a>
             </li>`).join('');
 
     return `
     <div id="presearch-presearchnews-package">
-        <section class="video-section">
-            <div class="recent-video">
-                <div class="video-item-title">
-                    <a class="link" href="${recentVideo.url}">
-                        ${recentVideo.title}
+        <section>
+            <div class="recent-news">
+                <div class="news-item-title">
+                    <a class="link" href="${recentNews.url}">
+                        ${recentNews.title}
                     </a>
                 </div>
-                <div class="video-item-main flex">
-                    <a href="${recentVideo.url}">
-                        <div class="video-thumbnail" style="background-image: url(${recentVideo.image})"></div>
+                <div class="news-item-main flex">
+                    <a href="${recentNews.url}">
+                        <div class="overlay-play-button">
+                            <div class="news-thumbnail" style="background-image: url(${recentNews.image})"></div>
+                            <div class="${recentNews.type === "video" ? "": "hidden"} overlay-play-button__overlay">
+                                <div class="overlay-play-button__play">
+                                    <i class="play-button-icon"></i>
+                                </div>
+                            </div>
+                        </div>
                     </a>
-                    <div class="recent-video-details">
-                        <div class="video-item-release">
-                            ${recentVideo.release}
+                    <div class="recent-news-details">
+                        <div class="news-item-release">
+                            ${recentNews.release}
                         </div>
-                        <pre class="video-item-description">${recentVideo.description}</pre>
-                        <div class="video-item-expand-container">
-                            <button class="video-item-expand">
-                                <i class="chevron-double-down"></i>
-                            </button>
-                        </div>
+                        <pre class="news-item-description">${recentNews.description}</pre>
                     </div>
                 </div>
             </div>
 
-                <a class="older-videos-header link" href="${moreVideosUrl}">
-                    Previous episodes
-                </a>
-            <ol class="older-videos">
-                ${createVideos()}
-                <li class="video-more">
-                    <a href="${moreVideosUrl}">
-                        <i class="chevron-double-down"></i>
-                    </a>
-                </li>
+            <div class="previous-news-header">
+                Previous news
+            </div>
+
+            <ol class="previous-news">
+                ${createNews()}
             </ol>
         </section>
     </div>
-
-    <script>
-        (() => {
-            const expandButton = document.querySelector("#presearch-presearchnews-package .video-item-expand");
-            expandButton?.addEventListener("click", (event) => {
-                const element = document.querySelector('#presearch-presearchnews-package .video-item-description');
-                element.classList.toggle('expanded');
-                expandButton.classList.toggle('up');
-                const container = document.querySelector('#presearch-presearchnews-package .video-item-main');
-                container.classList.toggle('flex');
-            });
-        })();
-        
-    </script>
 
     <style>
         #presearch-presearchnews-package {
@@ -100,7 +94,7 @@ async function presearchNews(query, API_KEY) {
             color: #ced5e2;
         }
 
-        #presearch-presearchnews-package .video-item {
+        #presearch-presearchnews-package .news-item {
             width: 200px;
             min-width: 200px;
             font-weight: bold;
@@ -108,77 +102,45 @@ async function presearchNews(query, API_KEY) {
             border-radius: 5px;
         }
         
-        #presearch-presearchnews-package .video-more {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            border-radius: 5px; 
-        }
-        
-        #presearch-presearchnews-package .video-more a {
-            width: 50px;
-            margin: 0 10px;
-            height: 50px;
-            border: 2px solid gray;
-            border-radius: 50%;
-            font-size: 30px;
-            text-align: center;
-            display: flex;
-        }
-        
-        #presearch-presearchnews-package .video-more a i {
-            align-self: center;
-            margin: auto;
-            transform: rotate(270deg);
-            color: gray;
-        }
-
-        #presearch-presearchnews-package .video-more:hover a i {
-            color: #363636;
-        }
-        
-        .dark #presearch-presearchnews-package .video-more:hover a i {
-            color: #ced5e2;
-        }
-        
         #presearch-presearchnews-package .link:hover {
             color: #71a7ff;
         }
-
-        #presearch-presearchnews-package .video-more:hover a {
-            border-color: #363636;
+        
+        #presearch-presearchnews-package .recent-news {
+            cursor: pointer;
         }
 
-        .dark #presearch-presearchnews-package .video-more:hover a {
-            border-color: #ced5e2;
-        }
-
-        #presearch-presearchnews-package .recent-video .video-item-title {
+        #presearch-presearchnews-package .recent-news .news-item-title {
             font-size: 20px;
             font-weight: bold;
             margin: 0 5px 10px 5px;
+            max-height: 60px;
         }
 
-        #presearch-presearchnews-package .video-item-title {
-            margin: 5px 8px 0px 8px;
+        #presearch-presearchnews-package .news-item-title {
+            margin: 0px 8px 12px 8px;
+            max-height: 60px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: clip;
         }
 
-        #presearch-presearchnews-package .video-item:hover, 
-        #presearch-presearchnews-package .video-more:hover {
+        #presearch-presearchnews-package .news-item:hover {
             background-color: #dddddd;
         }
         
-        #presearch-presearchnews-package .video-item:hover .link,
-        #presearch-presearchnews-package .recent-video:hover .link {
+        #presearch-presearchnews-package .news-item:hover .link,
+        #presearch-presearchnews-package .recent-news:hover .link {
             color: #6797e6;
         }
 
-        .dark #presearch-presearchnews-package .video-item:hover,
-        .dark #presearch-presearchnews-package .video-more:hover  {
+        .dark #presearch-presearchnews-package .news-item:hover {
             background-color: #3d3e40;
         }
 
-        #presearch-presearchnews-package .video-thumbnail {
+        #presearch-presearchnews-package .news-thumbnail {
             object-fit: cover;
             background: black;
             height: 105px;
@@ -189,33 +151,28 @@ async function presearchNews(query, API_KEY) {
             margin: 5px;
         }
 
-        #presearch-presearchnews-package .video-item:hover .video-thumbnail {
+        #presearch-presearchnews-package .news-item:hover .news-thumbnail,
+        #presearch-presearchnews-package .recent-news:hover .news-thumbnail {
             -moz-transition: background-size 0.2s ease-in;
             -web-kit-transition: background-size 0.2s ease-in;
             transition: background-size 0.2s ease-in;
             background-size: 105%;
+            border: 2px solid #6797e6;
         }
         
-        #presearch-presearchnews-package .recent-video:hover .video-thumbnail {
-            -moz-transition: background-size 0.2s ease-in;
-            -web-kit-transition: background-size 0.2s ease-in;
-            transition: background-size 0.2s ease-in;
-            background-size: 105%;
-        }
-        
-        #presearch-presearchnews-package .video-item:hover {
+        #presearch-presearchnews-package .news-item:hover {
             color: #363636;
         }
 
-        .dark #presearch-presearchnews-package .video-item:hover {
+        .dark #presearch-presearchnews-package .news-item:hover {
             color: white;
         }
         
-        #presearch-presearchnews-package .recent-video .video-thumbnail {
+        #presearch-presearchnews-package .recent-news .news-thumbnail {
             width: 300px;
             height: 165px;
         }
-        #presearch-presearchnews-package .video-item-main:not(.flex) .video-thumbnail {
+        #presearch-presearchnews-package .news-item-main:not(.flex) .news-thumbnail {
             margin-top: 15px;
         }
         
@@ -223,15 +180,16 @@ async function presearchNews(query, API_KEY) {
             display: flex;
         }
 
-        #presearch-presearchnews-package .recent-video-details {
+        #presearch-presearchnews-package .recent-news-details {
             margin-left: 5px;
+            cursor: default;
         }
 
-        #presearch-presearchnews-package .video-item-main.flex .recent-video-details {
+        #presearch-presearchnews-package .news-item-main.flex .recent-news-details {
             margin-left: 15px;
         }
         
-        #presearch-presearchnews-package .recent-video .video-item-description {
+        #presearch-presearchnews-package .recent-news .news-item-description {
             font-size: 12px;
             height: 145px;
             -webkit-mask-image: -webkit-gradient(linear, left 55%, left bottom, from(black), to(rgba(0, 0, 0, 0)));
@@ -240,91 +198,90 @@ async function presearchNews(query, API_KEY) {
             white-space: break-spaces;
         }
         
-        #presearch-presearchnews-package .video-item-description a {
+        #presearch-presearchnews-package .recent-news .news-item-description h3 {
+            font-size: 14px;
+            line-height: 20px;
+        }
+        
+        #presearch-presearchnews-package .news-item-description a {
             color: #71a7ff;
         }
 
-        #presearch-presearchnews-package .video-item-release {
-            margin: 0px 8px 5px 8px;
+        #presearch-presearchnews-package .news-item-release {
+            margin: 0px 6px;
             font-weight: normal;
             font-style: italic;
         }
-        #presearch-presearchnews-package .recent-video .video-item-release {
+        #presearch-presearchnews-package .recent-news .news-item-release {
             margin: 0px 0px 5px 0px;
         }
 
-        #presearch-presearchnews-package .older-videos {
+        #presearch-presearchnews-package .previous-news {
             display: flex;
             overflow-x: auto;
             margin: 10px 0;
         }
         
-        #presearch-presearchnews-package .older-videos-header {
+        #presearch-presearchnews-package .previous-news-header {
             font-size: 18px;
             margin-left: 5px;
             margin-top: 5px;
             border-bottom: 1px solid gray;
             padding-bottom: 3px;
-            display: block;
+            font-weight: bold;
         }
 
-        #presearch-presearchnews-package .older-videos-header:hover {
-            border-bottom: 1px solid #6797e6;
+        #presearch-presearchnews-package .play-button-icon {
+            background: transparent;
+            box-sizing: border-box;
+            width: 0;
+            height: 55px;
+
+            border-color: transparent transparent transparent #404040;
+            transition: 100ms all ease;
+            cursor: pointer;
+
+            border-style: solid;
+            border-width: 29px 0 29px 49px;
         }
 
-        #presearch-presearchnews-package .video-item-expand {
-            width: 45px;
-            height: 45px;
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            margin-left: auto;
-            margin-right: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-bottom: 1px;
+        #presearch-presearchnews-package .previous-news .play-button-icon {
+            border-width: 18px 0 18px 30px;
+            height: 34px;
         }
 
-        #presearch-presearchnews-package .video-item-expand:hover {
-            color: #363636;
+        #presearch-presearchnews-package .news-item:hover .play-button-icon, 
+        #presearch-presearchnews-package .recent-news:hover .play-button-icon {
+            border-color: transparent transparent transparent #313131;
+            -moz-transition: transform 0.2s ease-in;
+            -web-kit-transition: transform 0.2s ease-in;
+            transition: transform 0.2s ease-in;
+            transform: scale(1.2);
         }
 
-        .dark #presearch-presearchnews-package .video-item-expand:hover {
-            color: #ffffff;
-        }
-
-        #presearch-presearchnews-package .video-item-expand.up {
-            transform: rotate(180deg);
+        #presearch-presearchnews-package .overlay-play-button {
+            position: relative;
         }
         
-        #presearch-presearchnews-package .video-item-description.expanded {
-            height: inherit;
-            mask-image: none;
-            -webkit-mask-image: none;
+        #presearch-presearchnews-package .hidden {
+            display: none !important;
         }
 
-        #presearch-presearchnews-package .video-item-expand-container {
-            position: relative;
-            opacity: 0.8;
+        #presearch-presearchnews-package .overlay-play-button__overlay {
+            left: 0;
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            align-items: center;
+            display: flex;
+            justify-content: center;
         }
 
-        #presearch-presearchnews-package .chevron-double-down::after,
-        #presearch-presearchnews-package .chevron-double-down::before {
-            content: "";
-            display: block;
-            box-sizing: border-box;
-            width: 8px;
-            height: 8px;
-            border-bottom: 2px solid;
-            border-right: 2px solid;
-            transform: rotate(45deg);
-            left: 7px;
-            top: 3px
-        }
-        #presearch-presearchnews-package .chevron-double-down::after {
-            top: 8px
+        #presearch-presearchnews-package .overlay-play-button__play {
+            align-items: center;
+            display: flex;
+            justify-content: center;
         }
 
         @media only screen and (min-width: 768px) {
@@ -342,6 +299,19 @@ async function presearchNews(query, API_KEY) {
     `;
 }
 
+async function getNews() {
+    try {
+        var news = await Promise.all([getVideos(), getArticles()]);
+        return news.filter(x => !x.error)
+            .flat()
+            .sort((a, b) => (a.release < b.release ? 1 : -1))
+            .map(n => ({ ...n, release: dayjs().to(n.release) }));
+    }
+    catch (error) {
+        return { error };
+    }
+}
+
 async function getVideos() {
     const toContract = async (data) => {
         const anchorify = (text) => {
@@ -351,26 +321,17 @@ async function getVideos() {
             return text1.replace(exp2, '$1<a target="_blank" href="http://$2">$2</a>');
         };
 
-        const urlToBase64 = async (url) => {
-            try {
-                const base64 = Buffer.from((await axios.get(url, { responseType: "arraybuffer", })).data, "utf-8").toString("base64");
-                return `data:image/webp;base64,${base64}`;
-            }
-            catch (error) {
-                return ""
-            }
-        };
-
-        const items = data.result.items.map(async (item)=>{
+        const items = data.result.items.map(async (item) => {
             const url = `https://odysee.com${item.canonical_url.replace(/^lbry:\//i, "")}`;
-            const image = `https://thumbnails.odycdn.com/optimize/s:300:165/quality:85/plain/${item.value.thumbnail.url}`;
+            const image = `${THUMBNAL_OPTIMIZATION_URL}/${item.value.thumbnail.url}`;
 
             return {
                 title: item.value.title,
                 url: url,
+                type: "video",
                 image: await urlToBase64(image),
                 description: anchorify(item.value.description),
-                release: dayjs().to(item.timestamp * 1000)
+                release: dayjs(item.timestamp * 1000)
             };
         });
 
@@ -386,16 +347,55 @@ async function getVideos() {
                     claim_type: ["stream"],
                     order_by: ["release_time"],
                     page: 1,
-                    page_size: 6
+                    page_size: NEWS_COUNT_TO_FETCH_BY_SOURCE
                 }
             });
 
         return toContract(data);
     }
     catch (error) {
-        return { data: { error } }
+        return { error };
     }
 }
+
+async function getArticles() {
+    const toContract = async (data) => {
+        const items = data.items.slice(0, NEWS_COUNT_TO_FETCH_BY_SOURCE)
+            .map(async (item) => {
+                const image = `${THUMBNAL_OPTIMIZATION_URL}/${item.thumbnail}`;
+                const content = item.content.replace(/<img .*?>/g, '');
+
+                return {
+                    title: item.title,
+                    url: item.link,
+                    type: "article",
+                    image: await urlToBase64(image),
+                    description: content,
+                    release: dayjs(item.pubDate)
+                };
+            });
+
+        return await Promise.all(items);
+    };
+
+    try {
+        const { data } = await axios.get(MEDIUM_FEED_NORMALIZER_URL);
+        return toContract(data);
+    }
+    catch (error) {
+        return { error };
+    }
+}
+
+async function urlToBase64(url) {
+    try {
+        const base64 = Buffer.from((await axios.get(url, { responseType: "arraybuffer", })).data, "utf-8").toString("base64");
+        return `data:image/webp;base64,${base64}`;
+    }
+    catch (error) {
+        return ""
+    }
+};
 
 async function trigger(query) {
     const parts = ((query || "").toLowerCase()).split(" ");
