@@ -27,7 +27,6 @@
         "emoji-api": "^2.0.1",
         "emoji-regex": "^10.0.0",
         "ethereum-address": "^0.0.4",
-        "fast-xml-parser": "^4.0.11",
         "mathjs": "^9.5.1",
         "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
