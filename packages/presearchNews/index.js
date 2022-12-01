@@ -54,7 +54,7 @@ async function presearchNews(query, API_KEY) {
                         ${recentNews.title}
                     </a>
                 </div>
-                <div class="news-item-main flex">
+                <div class="news-item-main flex flex-col md:flex-row">
                     <a href="${recentNews.url}">
                         <div class="overlay-play-button">
                             <div class="news-thumbnail" style="background-image: url(${recentNews.image})"></div>
@@ -192,9 +192,7 @@ async function presearchNews(query, API_KEY) {
         #presearch-presearchnews-package .recent-news .news-item-description {
             font-size: 12px;
             height: 145px;
-            -webkit-mask-image: -webkit-gradient(linear, left 55%, left bottom, from(black), to(rgba(0, 0, 0, 0)));
-            mask-image: -webkit-gradient(linear, left 55%, left bottom, from(black), to(rgba(0, 0, 0, 0)));
-            overflow-wrap: anywhere;
+            overflow:auto;
             white-space: break-spaces;
         }
         
