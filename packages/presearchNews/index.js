@@ -56,7 +56,7 @@ async function presearchNews(query, API_KEY) {
                 </div>
                 <div class="news-item-main flex flex-col md:flex-row">
                     <a href="${recentNews.url}">
-                        <div class="overlay-play-button">
+                        <div class="overlay-play-button md:block flex justify-center">
                             <div class="news-thumbnail" style="background-image: url(${recentNews.image})"></div>
                             <div class="${recentNews.type === "video" ? "": "hidden"} overlay-play-button__overlay">
                                 <div class="overlay-play-button__play">
@@ -282,17 +282,8 @@ async function presearchNews(query, API_KEY) {
             justify-content: center;
         }
 
-        @media only screen and (min-width: 768px) {
-            #presearch-presearchnews-package {
-                width: 554px;
-            }
-        }
+       
         
-        @media only screen and (min-width: 1024px) {
-            #presearch-presearchnews-package {
-                width: 644px;
-            }
-        }
     </style> 
     `;
 }
