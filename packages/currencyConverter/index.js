@@ -18,7 +18,7 @@ async function currencyConverter(query, API_KEY) {
   if (!converted) {
     return { error: "Conversion has failed" }
   }
-  const convertedFixed = (Math.round(converted.value * (10 ** converted.round)) / (10 ** converted.round)).toLocaleString(undefined, {maximumFractionDigits: converted.round});
+  const convertedFixed = (Math.round(converted.value * (10 ** converted.round)) / (10 ** converted.round));
 
   return `
     <div id="presearchPackage">
@@ -91,7 +91,7 @@ async function currencyConverter(query, API_KEY) {
     <script>
     const conversionRate = ${converted.value / rateConversion.value};
     var fromValue = ${rateConversion.value};
-    var toValue = ${convertedFixed};
+    var toValue = (${convertedFixed}).toLocaleString(undefined, {maximumFractionDigits: ${converted.round}});;
 
     const formatMoney = (currency, locale = undefined) => {
       try {
