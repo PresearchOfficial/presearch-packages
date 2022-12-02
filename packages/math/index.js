@@ -1,5 +1,7 @@
 "use strict";
-const mathjs = require("mathjs");
+const mathjs = require('mathjs')
+var mj = mathjs.create(mathjs.all);
+mj.config({ number: 'BigNumber' });
 
 
 async function math(query) {
@@ -14,7 +16,7 @@ async function math(query) {
       let result = query.replace(/×/gi, "*");
       result = result.replace(/⋅/gi, "*");
       result = result.replace(/÷/gi, "/");
-      const data = mathjs.evaluate(result);
+      const data = mj.evaluate(result);
       expression = result;
       answer = `= ${data}`
     } catch (error) {
@@ -106,7 +108,6 @@ async function math(query) {
 
 </table>
 </div>
-
 <script>
 class Calculator {
   constructor(previousOperandTextElement, currentOperandTextElement) {
@@ -148,21 +149,26 @@ class Calculator {
 
   compute() {
       let computation
-      const prev = parseFloat(this.previousOperand)
-      const current = parseFloat(this.currentOperand)
+      const prev = this.previousOperand
+      const current = this.currentOperand
       if (isNaN(prev) || isNaN(current)) return
       switch (this.operation) {
           case '+':
-              computation = prev + current
+              computation = new Big(prev).plus(current)
               break
           case '-':
-              computation = prev - current
+              computation = new Big(prev).minus(current)
               break
           case '*':
-              computation = prev * current
+              computation = new Big(prev).times(current)
               break
           case '/':
-              computation = prev / current
+            try{
+              computation = new Big(prev).div(current)
+            }
+            catch (e) {
+              computation = Infinity
+            }
               break
           default:
               return
@@ -200,7 +206,6 @@ class Calculator {
   }
 
 }
-
 
 const numberButtons = document.querySelectorAll('[data-number]')
 const operationButtons = document.querySelectorAll('[data-operation]')
@@ -334,6 +339,7 @@ document.addEventListener('keydown', function (event) {
         return
 }
 });
+
 </script>
 <style>
   #presearchPackage .output-container{
@@ -422,7 +428,7 @@ async function trigger(query) {
     let result = query.replace(/×/gi, "*");
     result = result.replace(/⋅/gi, "*");
     result = result.replace(/÷/gi, "/");
-    mathjs.evaluate(result);
+    mj.evaluate(result);
     return true;
   } catch (error) {
     return false;
