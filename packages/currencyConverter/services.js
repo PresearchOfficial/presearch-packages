@@ -7,7 +7,6 @@ const fiatCurrenciesExtended = require("./fiatCurrenciesExtended.json");
 
 const FIAT_API = "https://ec.europa.eu/budg/inforeuro/api/public/monthly-rates";
 const CRYPTO_API = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest";
-const SPREADSHEET_URI = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRfp_xd8g5Sgw3v2rfgOSbMPnNaSkZsV6KMjJRPFDxY5Kb9AJoyUv8v54IqK-bHgjFV4efHrXntXGf5/pub?output=csv";
 const USD_CODE = "USD";
 
 /**
@@ -190,21 +189,12 @@ function parseAndNormalize(query) {
  * @returns {Promise<CurrencyRate[]>}
  */
 async function fetchFiatRates(conversion) {
-  //Not supported by google finance api
-  const NS = ["CUC","ERN","FKP","GGP","GIP","IMP","JEP","KPW","MNT","MRO","SHP","SSP","STD","STN","SYP","VEF","VUV","WST","XAG","XAU","XDR","XPD","XPT","ZWL"];
   const targetCurrencies = [conversion.from, conversion.to, USD_CODE];
 
-  var response = {};
-  if(targetCurrencies.some(x=>NS.includes(x))){
-    response = await axios.get(FIAT_API).catch(error => ({error}));
-    if (response.error) return [];
-  }else{
-    const res = await axios.get(SPREADSHEET_URI).catch(error => ({error}));
-    if (res.error) return [];
-    response['data'] = parseCSV(res.data);
-  }
-
-  return response.data.filter(currency => targetCurrencies.includes(currency.isoA3Code))
+  const response = await axios.get(FIAT_API).catch(error => ({error}));
+  if (response.error) return [];
+  
+  return response.data && response.data.filter(currency => targetCurrencies.includes(currency.isoA3Code))
     .map(currency => ({
       code: currency.isoA3Code,
       rate: currency.value,
