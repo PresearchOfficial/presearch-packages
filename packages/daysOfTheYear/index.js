@@ -153,7 +153,7 @@ async function daysOfTheYear(query, API_KEY) {
         #presearch-daysOfTheYear-package .day-name {
             font-size: 26px;
             border-bottom: 2px solid #e4e4e4;
-            line-height: 60px;
+            padding: 10px 0;
         }
 
         .dark #presearch-daysOfTheYear-package .day-name {
@@ -170,6 +170,7 @@ async function daysOfTheYear(query, API_KEY) {
             padding: 5px 15px;
             margin: 3px 6px 3px 0px;
             border-radius: 10px;
+            text-align: left;
         }
 
         .dark #presearch-daysOfTheYear-package .day-tag {
