@@ -1,11 +1,70 @@
 "use strict";
 const mathjs = require("mathjs");
 
+// The goal of these queries are to allow the math calculator to show even when common misspellings are used (improve accessiblity).
+// Selection of mistypings of the word "calculator" from https://www.spellchecker.net/calculator
+// If at some point presearch implements a search helper, this section will not be needed.
+  // Example of Google "search helper": Google "cacualtor" -> "Showing results for calculator" - "Search instead for cacualtor"
+const mistypedQueries = [
+  "calculators",
+  "calcultor",
+  "cacualtor",
+  "caluculator",
+  "claculate",
+  "caluculate",
+  "counculater",
+  "calcualtors",
+  "calcualator",
+  "calcuatle",
+  "caculator",
+  "calulate",
+  "calculars",
+  "calculutors",
+  "calulater",
+  "calcualtor",
+  "calcualate",
+  "caluculators",
+  "callculate",
+  "caluclator",
+  "calculaters",
+  "calaculate",
+  "caluclate",
+  "calculater",
+  "cacluator",
+  "calculet",
+  "calclate",
+  "caclulate",
+  "calcluate",
+  "calcukate",
+  "calaculator",
+  "canculate",
+  "caculate",
+  "calculaor",
+  "calcalate",
+  "calcuate",
+  "calculat",
+  "calcolator",
+  "calcuator",
+  "calulator",
+  "calculaotr",
+  "claculator",
+  "calcilate",
+  "callulator",
+  "calculte",
+  "caculater",
+  "calicullar",
+  "calucator",
+  "cacultor",
+  "calculattor",
+  "calquator"
+]
+const properQueries = ["cal", "calc", "calculate", "calculator"]
+const eligibleQueries = properQueries.concat(mistypedQueries)
 
 async function math(query) {
   let expression;
   let answer;
-  if (query === "cal" || query === "calculator") {
+  if (eligibleQueries.includes(query)) {
     expression = 0;
     answer = '';
   } else {
@@ -412,7 +471,7 @@ async function trigger(query) {
     return false;
   }
   query = query.toLowerCase();
-  if (query === "calculator" || query === "cal" || query === "calc") {
+  if (eligibleQueries.includes(query)) {
     return true
   }
   const chars = new RegExp(/([a-zA-Z])+/g);
