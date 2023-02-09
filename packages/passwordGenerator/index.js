@@ -26,7 +26,7 @@ async function passwordGenerator(query) {
           <div class="disclaimer_example"><b>Examples</b></div>
           <div class="disclaimer_sample"><a href="/search?q=pass+8">Pass 8</a> generates 8 chars password</div>
           <div class="disclaimer_sample"><a href="/search?q=password+12">Password 12</a> generates 12 chars password</div>
-          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 20</a> generates 20 chars password</div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 32</a> generates 32 chars password</div>
       </div>
     </div>
    
