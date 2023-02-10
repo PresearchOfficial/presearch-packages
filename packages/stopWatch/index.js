@@ -48,11 +48,14 @@ async function stopWatch(query, API_KEY) {
 			width: 270px;
 			border: 2px solid;
 			border-radius: 50%;
+			position: relative;
 		  }
 		  
 	#presearchPackage .time {
 			font-weight: 300;
 			font-size: 50px;
+			position: absolute;
+			left: 32px;
 		  }
 	  
 	#presearchPackage .buttonContainer {
