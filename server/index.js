@@ -43,6 +43,7 @@ const addRoutesTimeout = setTimeout(() => {
             let packageInfo = fs.readFileSync(`../packages/${packageName}/package.json`);
             const { version, author } = JSON.parse(packageInfo);
             app.get(`/${packageName}`, async (req, res) => {
+                const startTime = Date.now();
                 const query = req.query.q ? req.query.q : "";
                 const geolocation = req.query.geolocation && req.query.geolocation === "1" ? { city: 'London', coords: { lat: 51.5095, lon: -0.0955 } } : null;
                 const trigger = await packageObject[packageName].trigger(query);
@@ -50,9 +51,10 @@ const addRoutesTimeout = setTimeout(() => {
                     const overlappingPackages = await checkOverlapingTrigger(query);
                     const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`], geolocation);
                     const packageError = (packageData && packageData.error) && packageData.error;
-                    return res.render("search", { title: packageName, packageData, packageError, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }) });
+                    const totalTime = Date.now() - startTime;
+                    return res.render("search", { title: packageName, packageData, packageError, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }), totalTime });
                 }
-                res.render("search", { title: packageName, triggered: false, query, packageInfo });
+                res.render("search", { title: packageName, triggered: false, query, packageInfo});
             });
         });
     }
