@@ -105,7 +105,7 @@ async function daysOfTheYear(query, API_KEY) {
 
     <style>
         #presearch-daysOfTheYear-package {
-            color: #666666;
+            color: #1f2937;
             cursor: default;
         }
 
@@ -124,7 +124,7 @@ async function daysOfTheYear(query, API_KEY) {
         }
 
         #presearch-daysOfTheYear-package .header .day-date {
-            font-size: 26px;
+            font-size: 22px;
         }
 
         .dark #presearch-daysOfTheYear-package .header {
@@ -151,7 +151,7 @@ async function daysOfTheYear(query, API_KEY) {
         }
 
         #presearch-daysOfTheYear-package .day-name {
-            font-size: 26px;
+            font-size: 22px;
             border-bottom: 2px solid #e4e4e4;
             padding: 10px 0;
         }
@@ -161,7 +161,7 @@ async function daysOfTheYear(query, API_KEY) {
         }
 
         #presearch-daysOfTheYear-package .day-description {
-            font-size: 18px;
+            font-size: 16px;
             padding: 10px 0;
         }
 
@@ -248,7 +248,6 @@ async function getMemorableDays(API_KEY) {
         return await Promise.all(promises);
     }
     catch (error) {
-        console.error(error);
         return { error };
     }
 }
