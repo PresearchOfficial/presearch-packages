@@ -1,8 +1,10 @@
-div(class="text-sm p-4 fixed bottom-0 dark:text-white") 
+div(class="text-sm p-4 fixed bottom-0 dark:text-white bg-white dark:bg-background-dark200 rounded") 
     div name: #{title}
     div query: !{query}
     div(style=`background: ${triggered ? '#00ff0040' : '#FF000040'}`) triggered: 
         span #{triggered ? 'yes' : 'no'}
+    div(x-show=`${totalTime && totalTime} > 0` style=`background: ${totalTime && totalTime > 1500 ? '#FF000040' : (totalTime && totalTime > 1000 ? '#ffff0040' : '#00ff0040')}`) time: 
+        span #{totalTime && totalTime}ms
     div(style=`background: red`)
         if (overlappingPackages)
             span Overlapping packages: !{overlappingPackages.join(", ")}
