@@ -39,6 +39,11 @@ async function daysOfTheYear(query, API_KEY) {
             const data = ${JSON.stringify(data)};
             let selectedDay;
 
+            const decodedString = (str) => {
+                const decoded = str.replace("&amp;#8217;", "'");
+                return decoded;
+            }
+
             const selectElement = (selector, handler) => {
                 const element = document.querySelector('#presearch-daysOfTheYear-package ' + selector);
                 return handler(element);
@@ -60,7 +65,7 @@ async function daysOfTheYear(query, API_KEY) {
 
                 selectElement('.day-tags', (element)=> {
                     const html = selectedDay.data.map((day, index) => {
-                        return '<button data-dayevent="' + index + '" class="day-tag ' + (!index ? 'active' : '') + '">' + day.name + '</button>';
+                        return '<button data-dayevent="' + index + '" class="day-tag ' + (!index ? 'active' : '') + '">' + decodedString(day.name) + '</button>';
                     }).join('');
 
                     element.innerHTML = html;
@@ -76,7 +81,7 @@ async function daysOfTheYear(query, API_KEY) {
                 selectElement('button[data-dayevent="' + index + '"]', (btn)=> btn?.classList.add('active'));
 
                 selectElement('.day-name a', (item)=> { 
-                    item.innerText = dayEvent.name;
+                    item.innerText = decodedString(dayEvent.name);
                     item.href = dayEvent.url;
                 });
                 selectElement('.day-description', (item)=> item.innerHTML = dayEvent.description);
