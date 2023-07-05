@@ -75,9 +75,11 @@ async function math(query) {
       let result = query.replace(/×/gi, "*");
       result = result.replace(/⋅/gi, "*");
       result = result.replace(/÷/gi, "/");
+      result = result.replace(/,/gi, "");
       const data = mj.evaluate(result);
+      const decimalPart = String(data).split('.')[1];
       expression = result;
-      answer = `= ${data}`
+      answer = `= ${decimalPart && decimalPart > 6 ? data.toFixed(6) : data}`
     } catch (error) {
       return { error };
     }
@@ -1339,6 +1341,7 @@ async function trigger(query) {
     let result = query.replace(/×/gi, "*");
     result = result.replace(/⋅/gi, "*");
     result = result.replace(/÷/gi, "/");
+    result = result.replace(/,/gi, "");
     mj.evaluate(result);
     return true;
   } catch (error) {
