@@ -31,7 +31,7 @@ async function userAgents() {
 async function trigger(query) {
 	if (query) {
 		query = query ? query.toLowerCase() : "";
-		if (query === "whats my user agent" || "user agent" || "useragent") return true;
+		if (query.includes("user agent") || query.includes("useragent")) return true;
 	}
 	return false;
 }
