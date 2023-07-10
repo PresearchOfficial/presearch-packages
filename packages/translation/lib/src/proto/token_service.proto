@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package escrow;
+
+option java_package = "io.singularitynet.daemon.escrow";
+//It is expected that the user would call the GetChannelState to Determine the Current state of the Channel
+//Based on the usage forecast, the user/client will have to sign for an amount L + U , where L is the last amount Signed
+//and U is the amount based on expected usage.
+//Please be aware that the Signing up an amount upfront ( Pre Paid) does come with a risk and hence the
+//user must exercise caution on the amount signed specially with new service providers.
+//If there is no need of making concurrent calls then you may consider pay per mode.
+//Using a Token, the Client can now make concurrent calls, which was not supported previously with the pay per mode.
+//However the pay per mode is a lot secure than the pre-paid mode.
+service TokenService {
+    // GetToken method checks the Signature sent and returns a Token
+    // 1) The Signature is valid and has to be signed in the below format
+    //"__MPE_claim_message"+MpeContractAddress+ChannelID+ChannelNonce+SignedAmount
+    //Signature is to let the Service Provider make a claim
+    // 2) Signed amount >= Last amount Signed.
+    //  if Signed amount == Last Signed amount , then check if planned_amount < used_amount
+    //  if Signed amount > Last Signed amount , then update the planned amount = Signed Amount
+    // GetToken method in a way behaves as a renew Token too!.
+    rpc GetToken(TokenRequest) returns (TokenReply) {}
+
+
+
+}
+
+// TokenRequest is a request for getting a valid token.
+message TokenRequest {
+    // channel_id contains id of the channel which state is requested.
+    uint64 channel_id = 1;
+    // current_nonce is a latest nonce of the payment channel.
+    uint64 current_nonce = 2;
+    //signed_amount is the amount signed by client with current_nonce
+    uint64 signed_amount = 3;
+    // Signature is a client signature of the message which contains 2 parts
+    //Part 1 : MPE Signature "__MPE_claim_message"+MpeContractAddress+ChannelID+ChannelNonce+SignedAmount
+    //Part 2 : Current Block Number
+    bytes signature = 4;
+    //current block number (signature will be valid only for short time around this block number)
+    uint64 current_block = 5;
+
+    bytes claim_signature = 6;
+
+}
+
+// TokenReply message contains a latest channel state. current_nonce and
+message TokenReply {
+    // current_nonce is a latest nonce of the payment channel.
+    uint64 channel_id = 1;
+
+    //it could be absent if none message was signed with current_nonce
+    string token = 2;
+
+    //If the client / user chooses to sign upfront , the planned amount in cogs will be indicative of this.
+    uint64 planned_amount = 3;
+
+    //If the client / user chooses to sign upfront , the used amount in cogs will be indicative of how much of the
+    //planned amount has actually been used.
+    uint64 used_amount = 4;
+
+}
