@@ -37,8 +37,8 @@
         "mathjs": "^9.5.1",
         "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
-        "singularitynet-platform-contracts": "^1.0.1",
-        "singularitynet-token-contracts": "^3.0.0",
+        "singularitynet-platform-contracts": "1.0.1",
+        "singularitynet-token-contracts": "3.0.0",
         "web3": "^1.3.5",
         "wikijs": "^6.3.2",
         "winston": "^3.3.3"

@@ -2,14 +2,15 @@
 
 const dotenv = require("dotenv");
 // const { SnetSDK, DefaultPaymentStrategy } = require("snet-sdk-shark");
-const {SnetSDK} = require("./lib/dist/core/src/sdk");
+const SnetSDK = require("./lib/dist").default;
+console.log(SnetSDK)
 //  const {SnetSDK} = require("./lib/src/sdk-core");
 const service = require("./translate_grpc_pb");
 const messages = require("./translate_pb");
 
-const config ={
-	"private_key": "0xeE6aadfb9c93E5cC93050F3efA20FCC90B471868",
-	"networkId": "https://mainnet.infura.io/v3/fe81d4fa6f89464080bba633260efc70",
+const config = {
+	"privateKey": "0xeE6aadfb9c93E5cC93050F3efA20FCC90B471868",
+	"networkId": 1,
 	"org_id": "naint",
 	"service_id": "machine-translation",
  }
