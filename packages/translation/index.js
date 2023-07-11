@@ -80,21 +80,6 @@ async function translation(query, API_KEY) {
 	<div id="presearchPackage">
 		<span class="mycolor">Translation: ${translation}</span>
 	</div>
-	<!-- example styles - remember to use #presearchPackage before each class -->
-	<style>
-		/* styles for dark mode should have .dark before */
-		.dark #presearchPackage .mycolor {
-			color: yellow;
-		}
-		#presearchPackage .mycolor {
-			color: green;
-			cursor: pointer;
-		}
-	</style>
-	<!-- example javascript -->
-	<script>
-		document.querySelector(".mycolor").addEventListener("click", () => alert("clicked!"));
-	</script>
 	`;
 }
 
