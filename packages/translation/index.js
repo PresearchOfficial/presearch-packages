@@ -9,17 +9,48 @@ const service = require("./translate_grpc_pb");
 const messages = require("./translate_pb");
 
 const config = {
-	"privateKey": "0xeE6aadfb9c93E5cC93050F3efA20FCC90B471868",
+	"privateKey": "<USE_PRIVATE_KEY>",
 	"networkId": 1,
 	"org_id": "naint",
 	"service_id": "machine-translation",
+	"web3Provider": "<WEB3_PROVIDER>",
  }
 
  dotenv.config();
  const sdk = new SnetSDK(config);
 async function translation(query, API_KEY) {
 	// returns a random integer between 0 and 9
-	const randomNumber = Math.floor(Math.random() * 10);
+	// await wait(1000);
+	// sdk.paymentChannelManagementStrategy = new DefaultPaymentStrategy(100);
+	const client = await sdk.createServiceClient(
+		"naint",
+		"machine-translation",
+		service.RomanceTranslatorClient,
+		'default_group',
+		null,
+		{ email: 'dev.codesymphony@gmail.com', tokenToMakeFreeCall:
+		'',
+	},
+	);
+	const translateReq = new Promise(function(resolve, reject) {
+		// Uncomment this to test real translation
+		// const input = new messages.Input();
+		// input.setSentencesUrl(query);
+		// input.setSourceLang("eng_Latn");
+		// input.setTargetLang("fra_Latn");
+		// client.service.translate(input, (err, resp) => {
+		// 	console.log(err);
+		// 	console.log(resp);
+		// 	console.log(resp.array)
+		// 	console.log(resp.array[0])
+		// 	if (err) reject(err);
+		// 	resolve(resp);
+		// });
+		resolve({array: ['translated mock text']});
+	});
+	const resp = await translateReq;
+	console.log(resp.array[0]);
+	const randomNumber = resp.array[0];
 	// here you need to return HTML code for your package. You can use <style> and <script> tags
 	// you need to keep <div id="presearchPackage"> here, you can remove everything else
 	return `
@@ -50,7 +81,7 @@ async function trigger(query) {
 	if (query) {
 		// convert query to lower case, to trigger the package with queries like 'Random number', 'RANDOM NUMBER' etc.
 		query = query ? query.toLowerCase() : "";
-		if (query === "translate") return true;
+		if (query.indexOf("translate") === 0) return true;
 	}
 	// you need to return false when the query should not trigger your package
 	return false;

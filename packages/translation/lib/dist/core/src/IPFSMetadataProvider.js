@@ -69,9 +69,11 @@ class IPFSMetadataProvider {
     const ipfsCID = `${this._web3.utils.hexToUtf8(metadataURI).substring(7)}`;
 
     _logger.default.debug(`Fetching metadata from IPFS[CID: ${ipfsCID}]`);
-
-    const data = await this._ipfsClient.cat(ipfsCID);
-    return JSON.parse(data.toString());
+    const resp = await fetch('http://ipfs.singularitynet.io:80/api/v0/cat?arg=' + ipfsCID, {
+      method: 'POST',
+    });
+    const data = await resp.text();
+    return JSON.parse(data);
   }
 
   _enhanceServiceGroupDetails(serviceMetadata, orgMetadata) {
