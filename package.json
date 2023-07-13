@@ -15,6 +15,7 @@
         "merge-dependencies",
         "add-package-json"
     ],
+    "postinstall": "./patch.sh",
     "author": "",
     "license": "MIT",
     "dependencies": {
@@ -28,9 +29,13 @@
         "emoji-regex": "^10.0.0",
         "ethereum-address": "^0.0.4",
         "mathjs": "^9.5.1",
+        "snet-sdk": "2.0.0-beta.0",
         "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
         "wikijs": "^6.3.2"
+    },
+    "overrides": {
+        "concat-stream": "2.0.0"
     },
     "devDependencies": {
         "pre-commit": "^1.2.2"
