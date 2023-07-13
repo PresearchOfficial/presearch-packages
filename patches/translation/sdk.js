@@ -10,9 +10,9 @@ var _web = _interopRequireDefault(require("web3"));
 var _lodash = require("lodash");
 
 var _Account = _interopRequireDefault(require("./Account"));
-var DefaultPaymentStrategy = _interopRequireDefault(require("../../payment_strategies")).DefaultPaymentStrategy;
 
 var _MPEContract = _interopRequireDefault(require("./MPEContract"));
+var DefaultPaymentStrategy = _interopRequireDefault(require("../../payment_strategies")).DefaultPaymentStrategy;
 
 var _logger = _interopRequireDefault(require("./utils/logger"));
 
@@ -116,4 +116,3 @@ class SnetSDK {
 
 var _default = SnetSDK;
 exports.default = _default;
-exports.SnetSDK = SnetSDK;

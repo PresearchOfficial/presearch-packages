@@ -1,7 +1,7 @@
 "use strict";
 
 const dotenv = require("dotenv");
-const SnetSDK = require("./lib/src").default;
+const SnetSDK = require("snet-sdk").default;
 const service = require("./translate_grpc_pb");
 const messages = require("./translate_pb");
 
@@ -16,7 +16,7 @@ function getQueryLanguages(query) {
 }
 function wordAfterLastFrom(query) {
 	return getQueryLanguages(query).split("to")[0].trim();
-  }
+}
   
 function extractQuery(query) {
 	if( findMatchingLanguage(languages, wordAfterLastFrom(query)) ) {
@@ -38,16 +38,6 @@ function extractQuery(query) {
 		return queryWithoutLangAndTo;	  
 	}
 }
-
-const config = {
-  privateKey:
-    "<your private key here>",
-  networkId: 1,
-  orgId: "naint",
-  serviceId: "machine-translation",
-  web3Provider: "<your web3 provider here>",
-};
-
 function findMatchingLanguage(languageList, language) {
   const matchingLanguage = languageList.filter(
     (lang) => lang.language.toLowerCase() === language.toLowerCase()
@@ -58,8 +48,20 @@ function findMatchingLanguage(languageList, language) {
 }
 
 dotenv.config();
-const sdk = new SnetSDK(config);
 async function translation(query, API_KEY) {
+  // API_KEY format: <your private key>;<your web3 provider>;<your email>
+  const privateKey = API_KEY.split(";")[0];
+  const web3Provider = API_KEY.split(";")[1];
+  const email = API_KEY.split(";")[2];
+  const config = {
+    privateKey,
+    networkId: 1,
+    orgId: "naint",
+    serviceId: "machine-translation",
+    web3Provider,
+  };
+  const sdk = new SnetSDK(config);
+  
 	const possibleFromLang = wordAfterLastFrom(query);
 	const possibleToLang = wordAfterLastTo(query);
 	const detectedFromLanguage = findMatchingLanguage(languages, possibleFromLang);
@@ -70,7 +72,7 @@ async function translation(query, API_KEY) {
     service.RomanceTranslatorClient,
     "default_group",
     null,
-    { email: "dev.codesymphony@gmail.com", tokenToMakeFreeCall: "" }
+    { email, tokenToMakeFreeCall: "" }
   );
   const translateReq = new Promise(function (resolve, reject) {
     const input = new messages.Input();
@@ -85,6 +87,7 @@ async function translation(query, API_KEY) {
     	if (err) reject(err);
     	resolve(resp);
     });
+    // resolve({array: [extractQuery(query) + " " + detectedFromLanguage + " " + detectedToLanguage]});
   });
   const resp = await translateReq;
   const translation = resp.array[0];
@@ -92,6 +95,15 @@ async function translation(query, API_KEY) {
 	<div id="presearchPackage">
 		<span class="mycolor">Translation: ${translation}</span>
 	</div>
+	<style>
+    /* styles for dark mode should have .dark before */
+    .dark #presearchPackage .mycolor {
+      color: white;
+    }
+    #presearchPackage .mycolor {
+      color: black;
+    }
+  </style>
 	`;
 }
 
@@ -101,7 +113,7 @@ async function trigger(query) {
     if (
       query.indexOf("translate ") === 0 &&
       query.indexOf(" to ") > -1 &&
-	  findMatchingLanguage(languages, wordAfterLastTo(query))
+	    findMatchingLanguage(languages, wordAfterLastTo(query))
     )
       return true;
   }
