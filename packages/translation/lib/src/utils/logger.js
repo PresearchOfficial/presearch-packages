@@ -1,19 +1,20 @@
-import { format, transports } from 'winston';
-import { logger } from '../sdk-core';
+"use strict";
 
-const combinedFormat = format.combine(
-  format.timestamp(),
-  format.json()
-);
-const errorLogger = new transports.File({
+var _winston = require("winston");
+
+var _sdkCore = require("../sdk-core");
+
+const combinedFormat = _winston.format.combine(_winston.format.timestamp(), _winston.format.json());
+
+const errorLogger = new _winston.transports.File({
   format: combinedFormat,
   filename: './logs/error.log',
   level: 'error'
 });
-const combinedLogger = new transports.File({
+const combinedLogger = new _winston.transports.File({
   format: combinedFormat,
   filename: './logs/combined.log',
   level: 'info'
 });
 
-logger.add(combinedLogger).add(errorLogger);
+_sdkCore.logger.add(combinedLogger).add(errorLogger);

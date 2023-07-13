@@ -1,7 +1,7 @@
 "use strict";
 
 const dotenv = require("dotenv");
-const SnetSDK = require("./lib/dist").default;
+const SnetSDK = require("./lib/src").default;
 const service = require("./translate_grpc_pb");
 const messages = require("./translate_pb");
 

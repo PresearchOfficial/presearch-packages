@@ -1,4 +1,5 @@
 // source: token_service.proto
+
 /**
  * @fileoverview
  * @enhanceable
@@ -7,13 +8,13 @@
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+
 /* eslint-disable */
 // @ts-nocheck
-
 var jspb = require('google-protobuf');
+
 var goog = jspb;
 var global = Function('return this')();
-
 goog.exportSymbol('proto.escrow.TokenReply', null, global);
 goog.exportSymbol('proto.escrow.TokenRequest', null, global);
 /**
@@ -26,10 +27,13 @@ goog.exportSymbol('proto.escrow.TokenRequest', null, global);
  * @extends {jspb.Message}
  * @constructor
  */
-proto.escrow.TokenRequest = function(opt_data) {
+
+proto.escrow.TokenRequest = function (opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
+
 goog.inherits(proto.escrow.TokenRequest, jspb.Message);
+
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
@@ -47,10 +51,14 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
-proto.escrow.TokenReply = function(opt_data) {
+
+
+proto.escrow.TokenReply = function (opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
+
 goog.inherits(proto.escrow.TokenReply, jspb.Message);
+
 if (goog.DEBUG && !COMPILED) {
   /**
    * @public
@@ -59,65 +67,63 @@ if (goog.DEBUG && !COMPILED) {
   proto.escrow.TokenReply.displayName = 'proto.escrow.TokenReply';
 }
 
-
-
 if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.escrow.TokenRequest.prototype.toObject = function(opt_includeInstance) {
-  return proto.escrow.TokenRequest.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.escrow.TokenRequest} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.escrow.TokenRequest.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    channelId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    currentNonce: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    signedAmount: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    signature: msg.getSignature_asB64(),
-    currentBlock: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    claimSignature: msg.getClaimSignature_asB64()
+  /**
+   * Creates an object representation of this proto.
+   * Field names that are reserved in JavaScript and will be renamed to pb_name.
+   * Optional fields that are not set will be set to undefined.
+   * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+   * For the list of reserved names please see:
+   *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+   * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+   *     JSPB instance for transitional soy proto support:
+   *     http://goto/soy-param-migration
+   * @return {!Object}
+   */
+  proto.escrow.TokenRequest.prototype.toObject = function (opt_includeInstance) {
+    return proto.escrow.TokenRequest.toObject(opt_includeInstance, this);
   };
+  /**
+   * Static version of the {@see toObject} method.
+   * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+   *     the JSPB instance for transitional soy proto support:
+   *     http://goto/soy-param-migration
+   * @param {!proto.escrow.TokenRequest} msg The msg instance to transform.
+   * @return {!Object}
+   * @suppress {unusedLocalVariables} f is only used for nested messages
+   */
 
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
+
+  proto.escrow.TokenRequest.toObject = function (includeInstance, msg) {
+    var f,
+        obj = {
+      channelId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+      currentNonce: jspb.Message.getFieldWithDefault(msg, 2, 0),
+      signedAmount: jspb.Message.getFieldWithDefault(msg, 3, 0),
+      signature: msg.getSignature_asB64(),
+      currentBlock: jspb.Message.getFieldWithDefault(msg, 5, 0),
+      claimSignature: msg.getClaimSignature_asB64()
+    };
+
+    if (includeInstance) {
+      obj.$jspbMessageInstance = msg;
+    }
+
+    return obj;
+  };
 }
-
-
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
  * @return {!proto.escrow.TokenRequest}
  */
-proto.escrow.TokenRequest.deserializeBinary = function(bytes) {
+
+
+proto.escrow.TokenRequest.deserializeBinary = function (bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.escrow.TokenRequest;
+  var msg = new proto.escrow.TokenRequest();
   return proto.escrow.TokenRequest.deserializeBinaryFromReader(msg, reader);
 };
-
-
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
@@ -125,57 +131,78 @@ proto.escrow.TokenRequest.deserializeBinary = function(bytes) {
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
  * @return {!proto.escrow.TokenRequest}
  */
-proto.escrow.TokenRequest.deserializeBinaryFromReader = function(msg, reader) {
+
+
+proto.escrow.TokenRequest.deserializeBinaryFromReader = function (msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
     }
+
     var field = reader.getFieldNumber();
+
     switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setChannelId(value);
-      break;
-    case 2:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setCurrentNonce(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setSignedAmount(value);
-      break;
-    case 4:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setSignature(value);
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setCurrentBlock(value);
-      break;
-    case 6:
-      var value = /** @type {!Uint8Array} */ (reader.readBytes());
-      msg.setClaimSignature(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 1:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setChannelId(value);
+        break;
+
+      case 2:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setCurrentNonce(value);
+        break;
+
+      case 3:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setSignedAmount(value);
+        break;
+
+      case 4:
+        var value =
+        /** @type {!Uint8Array} */
+        reader.readBytes();
+        msg.setSignature(value);
+        break;
+
+      case 5:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setCurrentBlock(value);
+        break;
+
+      case 6:
+        var value =
+        /** @type {!Uint8Array} */
+        reader.readBytes();
+        msg.setClaimSignature(value);
+        break;
+
+      default:
+        reader.skipField();
+        break;
     }
   }
+
   return msg;
 };
-
-
 /**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.escrow.TokenRequest.prototype.serializeBinary = function() {
+
+
+proto.escrow.TokenRequest.prototype.serializeBinary = function () {
   var writer = new jspb.BinaryWriter();
   proto.escrow.TokenRequest.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
-
-
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
@@ -183,127 +210,134 @@ proto.escrow.TokenRequest.prototype.serializeBinary = function() {
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.escrow.TokenRequest.serializeBinaryToWriter = function(message, writer) {
+
+
+proto.escrow.TokenRequest.serializeBinaryToWriter = function (message, writer) {
   var f = undefined;
   f = message.getChannelId();
+
   if (f !== 0) {
-    writer.writeUint64(
-      1,
-      f
-    );
+    writer.writeUint64(1, f);
   }
+
   f = message.getCurrentNonce();
+
   if (f !== 0) {
-    writer.writeUint64(
-      2,
-      f
-    );
+    writer.writeUint64(2, f);
   }
+
   f = message.getSignedAmount();
+
   if (f !== 0) {
-    writer.writeUint64(
-      3,
-      f
-    );
+    writer.writeUint64(3, f);
   }
+
   f = message.getSignature_asU8();
+
   if (f.length > 0) {
-    writer.writeBytes(
-      4,
-      f
-    );
+    writer.writeBytes(4, f);
   }
+
   f = message.getCurrentBlock();
+
   if (f !== 0) {
-    writer.writeUint64(
-      5,
-      f
-    );
+    writer.writeUint64(5, f);
   }
+
   f = message.getClaimSignature_asU8();
+
   if (f.length > 0) {
-    writer.writeBytes(
-      6,
-      f
-    );
+    writer.writeBytes(6, f);
   }
 };
-
-
 /**
  * optional uint64 channel_id = 1;
  * @return {number}
  */
-proto.escrow.TokenRequest.prototype.getChannelId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+
+
+proto.escrow.TokenRequest.prototype.getChannelId = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 1, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setChannelId = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setChannelId = function (value) {
   return jspb.Message.setProto3IntField(this, 1, value);
 };
-
-
 /**
  * optional uint64 current_nonce = 2;
  * @return {number}
  */
-proto.escrow.TokenRequest.prototype.getCurrentNonce = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+
+
+proto.escrow.TokenRequest.prototype.getCurrentNonce = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 2, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setCurrentNonce = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setCurrentNonce = function (value) {
   return jspb.Message.setProto3IntField(this, 2, value);
 };
-
-
 /**
  * optional uint64 signed_amount = 3;
  * @return {number}
  */
-proto.escrow.TokenRequest.prototype.getSignedAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+
+
+proto.escrow.TokenRequest.prototype.getSignedAmount = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 3, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setSignedAmount = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setSignedAmount = function (value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
-
-
 /**
  * optional bytes signature = 4;
  * @return {!(string|Uint8Array)}
  */
-proto.escrow.TokenRequest.prototype.getSignature = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+
+
+proto.escrow.TokenRequest.prototype.getSignature = function () {
+  return (
+    /** @type {!(string|Uint8Array)} */
+    jspb.Message.getFieldWithDefault(this, 4, "")
+  );
 };
-
-
 /**
  * optional bytes signature = 4;
  * This is a type-conversion wrapper around `getSignature()`
  * @return {string}
  */
-proto.escrow.TokenRequest.prototype.getSignature_asB64 = function() {
-  return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getSignature()));
+
+
+proto.escrow.TokenRequest.prototype.getSignature_asB64 = function () {
+  return (
+    /** @type {string} */
+    jspb.Message.bytesAsB64(this.getSignature())
+  );
 };
-
-
 /**
  * optional bytes signature = 4;
  * Note that Uint8Array is not supported on all browsers.
@@ -311,59 +345,69 @@ proto.escrow.TokenRequest.prototype.getSignature_asB64 = function() {
  * This is a type-conversion wrapper around `getSignature()`
  * @return {!Uint8Array}
  */
-proto.escrow.TokenRequest.prototype.getSignature_asU8 = function() {
-  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getSignature()));
+
+
+proto.escrow.TokenRequest.prototype.getSignature_asU8 = function () {
+  return (
+    /** @type {!Uint8Array} */
+    jspb.Message.bytesAsU8(this.getSignature())
+  );
 };
-
-
 /**
  * @param {!(string|Uint8Array)} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setSignature = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setSignature = function (value) {
   return jspb.Message.setProto3BytesField(this, 4, value);
 };
-
-
 /**
  * optional uint64 current_block = 5;
  * @return {number}
  */
-proto.escrow.TokenRequest.prototype.getCurrentBlock = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+
+
+proto.escrow.TokenRequest.prototype.getCurrentBlock = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 5, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setCurrentBlock = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setCurrentBlock = function (value) {
   return jspb.Message.setProto3IntField(this, 5, value);
 };
-
-
 /**
  * optional bytes claim_signature = 6;
  * @return {!(string|Uint8Array)}
  */
-proto.escrow.TokenRequest.prototype.getClaimSignature = function() {
-  return /** @type {!(string|Uint8Array)} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+
+
+proto.escrow.TokenRequest.prototype.getClaimSignature = function () {
+  return (
+    /** @type {!(string|Uint8Array)} */
+    jspb.Message.getFieldWithDefault(this, 6, "")
+  );
 };
-
-
 /**
  * optional bytes claim_signature = 6;
  * This is a type-conversion wrapper around `getClaimSignature()`
  * @return {string}
  */
-proto.escrow.TokenRequest.prototype.getClaimSignature_asB64 = function() {
-  return /** @type {string} */ (jspb.Message.bytesAsB64(
-      this.getClaimSignature()));
+
+
+proto.escrow.TokenRequest.prototype.getClaimSignature_asB64 = function () {
+  return (
+    /** @type {string} */
+    jspb.Message.bytesAsB64(this.getClaimSignature())
+  );
 };
-
-
 /**
  * optional bytes claim_signature = 6;
  * Note that Uint8Array is not supported on all browsers.
@@ -371,79 +415,79 @@ proto.escrow.TokenRequest.prototype.getClaimSignature_asB64 = function() {
  * This is a type-conversion wrapper around `getClaimSignature()`
  * @return {!Uint8Array}
  */
-proto.escrow.TokenRequest.prototype.getClaimSignature_asU8 = function() {
-  return /** @type {!Uint8Array} */ (jspb.Message.bytesAsU8(
-      this.getClaimSignature()));
+
+
+proto.escrow.TokenRequest.prototype.getClaimSignature_asU8 = function () {
+  return (
+    /** @type {!Uint8Array} */
+    jspb.Message.bytesAsU8(this.getClaimSignature())
+  );
 };
-
-
 /**
  * @param {!(string|Uint8Array)} value
  * @return {!proto.escrow.TokenRequest} returns this
  */
-proto.escrow.TokenRequest.prototype.setClaimSignature = function(value) {
+
+
+proto.escrow.TokenRequest.prototype.setClaimSignature = function (value) {
   return jspb.Message.setProto3BytesField(this, 6, value);
 };
 
-
-
-
-
 if (jspb.Message.GENERATE_TO_OBJECT) {
-/**
- * Creates an object representation of this proto.
- * Field names that are reserved in JavaScript and will be renamed to pb_name.
- * Optional fields that are not set will be set to undefined.
- * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
- * For the list of reserved names please see:
- *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
- * @param {boolean=} opt_includeInstance Deprecated. whether to include the
- *     JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @return {!Object}
- */
-proto.escrow.TokenReply.prototype.toObject = function(opt_includeInstance) {
-  return proto.escrow.TokenReply.toObject(opt_includeInstance, this);
-};
-
-
-/**
- * Static version of the {@see toObject} method.
- * @param {boolean|undefined} includeInstance Deprecated. Whether to include
- *     the JSPB instance for transitional soy proto support:
- *     http://goto/soy-param-migration
- * @param {!proto.escrow.TokenReply} msg The msg instance to transform.
- * @return {!Object}
- * @suppress {unusedLocalVariables} f is only used for nested messages
- */
-proto.escrow.TokenReply.toObject = function(includeInstance, msg) {
-  var f, obj = {
-    channelId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    token: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    plannedAmount: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    usedAmount: jspb.Message.getFieldWithDefault(msg, 4, 0)
+  /**
+   * Creates an object representation of this proto.
+   * Field names that are reserved in JavaScript and will be renamed to pb_name.
+   * Optional fields that are not set will be set to undefined.
+   * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+   * For the list of reserved names please see:
+   *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+   * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+   *     JSPB instance for transitional soy proto support:
+   *     http://goto/soy-param-migration
+   * @return {!Object}
+   */
+  proto.escrow.TokenReply.prototype.toObject = function (opt_includeInstance) {
+    return proto.escrow.TokenReply.toObject(opt_includeInstance, this);
   };
+  /**
+   * Static version of the {@see toObject} method.
+   * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+   *     the JSPB instance for transitional soy proto support:
+   *     http://goto/soy-param-migration
+   * @param {!proto.escrow.TokenReply} msg The msg instance to transform.
+   * @return {!Object}
+   * @suppress {unusedLocalVariables} f is only used for nested messages
+   */
 
-  if (includeInstance) {
-    obj.$jspbMessageInstance = msg;
-  }
-  return obj;
-};
+
+  proto.escrow.TokenReply.toObject = function (includeInstance, msg) {
+    var f,
+        obj = {
+      channelId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+      token: jspb.Message.getFieldWithDefault(msg, 2, ""),
+      plannedAmount: jspb.Message.getFieldWithDefault(msg, 3, 0),
+      usedAmount: jspb.Message.getFieldWithDefault(msg, 4, 0)
+    };
+
+    if (includeInstance) {
+      obj.$jspbMessageInstance = msg;
+    }
+
+    return obj;
+  };
 }
-
-
 /**
  * Deserializes binary data (in protobuf wire format).
  * @param {jspb.ByteSource} bytes The bytes to deserialize.
  * @return {!proto.escrow.TokenReply}
  */
-proto.escrow.TokenReply.deserializeBinary = function(bytes) {
+
+
+proto.escrow.TokenReply.deserializeBinary = function (bytes) {
   var reader = new jspb.BinaryReader(bytes);
-  var msg = new proto.escrow.TokenReply;
+  var msg = new proto.escrow.TokenReply();
   return proto.escrow.TokenReply.deserializeBinaryFromReader(msg, reader);
 };
-
-
 /**
  * Deserializes binary data (in protobuf wire format) from the
  * given reader into the given message object.
@@ -451,49 +495,64 @@ proto.escrow.TokenReply.deserializeBinary = function(bytes) {
  * @param {!jspb.BinaryReader} reader The BinaryReader to use.
  * @return {!proto.escrow.TokenReply}
  */
-proto.escrow.TokenReply.deserializeBinaryFromReader = function(msg, reader) {
+
+
+proto.escrow.TokenReply.deserializeBinaryFromReader = function (msg, reader) {
   while (reader.nextField()) {
     if (reader.isEndGroup()) {
       break;
     }
+
     var field = reader.getFieldNumber();
+
     switch (field) {
-    case 1:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setChannelId(value);
-      break;
-    case 2:
-      var value = /** @type {string} */ (reader.readString());
-      msg.setToken(value);
-      break;
-    case 3:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setPlannedAmount(value);
-      break;
-    case 4:
-      var value = /** @type {number} */ (reader.readUint64());
-      msg.setUsedAmount(value);
-      break;
-    default:
-      reader.skipField();
-      break;
+      case 1:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setChannelId(value);
+        break;
+
+      case 2:
+        var value =
+        /** @type {string} */
+        reader.readString();
+        msg.setToken(value);
+        break;
+
+      case 3:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setPlannedAmount(value);
+        break;
+
+      case 4:
+        var value =
+        /** @type {number} */
+        reader.readUint64();
+        msg.setUsedAmount(value);
+        break;
+
+      default:
+        reader.skipField();
+        break;
     }
   }
+
   return msg;
 };
-
-
 /**
  * Serializes the message to binary data (in protobuf wire format).
  * @return {!Uint8Array}
  */
-proto.escrow.TokenReply.prototype.serializeBinary = function() {
+
+
+proto.escrow.TokenReply.prototype.serializeBinary = function () {
   var writer = new jspb.BinaryWriter();
   proto.escrow.TokenReply.serializeBinaryToWriter(this, writer);
   return writer.getResultBuffer();
 };
-
-
 /**
  * Serializes the given message to binary data (in protobuf wire
  * format), writing to the given BinaryWriter.
@@ -501,109 +560,117 @@ proto.escrow.TokenReply.prototype.serializeBinary = function() {
  * @param {!jspb.BinaryWriter} writer
  * @suppress {unusedLocalVariables} f is only used for nested messages
  */
-proto.escrow.TokenReply.serializeBinaryToWriter = function(message, writer) {
+
+
+proto.escrow.TokenReply.serializeBinaryToWriter = function (message, writer) {
   var f = undefined;
   f = message.getChannelId();
+
   if (f !== 0) {
-    writer.writeUint64(
-      1,
-      f
-    );
+    writer.writeUint64(1, f);
   }
+
   f = message.getToken();
+
   if (f.length > 0) {
-    writer.writeString(
-      2,
-      f
-    );
+    writer.writeString(2, f);
   }
+
   f = message.getPlannedAmount();
+
   if (f !== 0) {
-    writer.writeUint64(
-      3,
-      f
-    );
+    writer.writeUint64(3, f);
   }
+
   f = message.getUsedAmount();
+
   if (f !== 0) {
-    writer.writeUint64(
-      4,
-      f
-    );
+    writer.writeUint64(4, f);
   }
 };
-
-
 /**
  * optional uint64 channel_id = 1;
  * @return {number}
  */
-proto.escrow.TokenReply.prototype.getChannelId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+
+
+proto.escrow.TokenReply.prototype.getChannelId = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 1, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenReply} returns this
  */
-proto.escrow.TokenReply.prototype.setChannelId = function(value) {
+
+
+proto.escrow.TokenReply.prototype.setChannelId = function (value) {
   return jspb.Message.setProto3IntField(this, 1, value);
 };
-
-
 /**
  * optional string token = 2;
  * @return {string}
  */
-proto.escrow.TokenReply.prototype.getToken = function() {
-  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+
+
+proto.escrow.TokenReply.prototype.getToken = function () {
+  return (
+    /** @type {string} */
+    jspb.Message.getFieldWithDefault(this, 2, "")
+  );
 };
-
-
 /**
  * @param {string} value
  * @return {!proto.escrow.TokenReply} returns this
  */
-proto.escrow.TokenReply.prototype.setToken = function(value) {
+
+
+proto.escrow.TokenReply.prototype.setToken = function (value) {
   return jspb.Message.setProto3StringField(this, 2, value);
 };
-
-
 /**
  * optional uint64 planned_amount = 3;
  * @return {number}
  */
-proto.escrow.TokenReply.prototype.getPlannedAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+
+
+proto.escrow.TokenReply.prototype.getPlannedAmount = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 3, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenReply} returns this
  */
-proto.escrow.TokenReply.prototype.setPlannedAmount = function(value) {
+
+
+proto.escrow.TokenReply.prototype.setPlannedAmount = function (value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
-
-
 /**
  * optional uint64 used_amount = 4;
  * @return {number}
  */
-proto.escrow.TokenReply.prototype.getUsedAmount = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+
+
+proto.escrow.TokenReply.prototype.getUsedAmount = function () {
+  return (
+    /** @type {number} */
+    jspb.Message.getFieldWithDefault(this, 4, 0)
+  );
 };
-
-
 /**
  * @param {number} value
  * @return {!proto.escrow.TokenReply} returns this
  */
-proto.escrow.TokenReply.prototype.setUsedAmount = function(value) {
+
+
+proto.escrow.TokenReply.prototype.setUsedAmount = function (value) {
   return jspb.Message.setProto3IntField(this, 4, value);
 };
-
 
 goog.object.extend(exports, proto.escrow);
