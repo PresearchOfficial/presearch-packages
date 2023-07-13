@@ -12,31 +12,31 @@ function wordAfterLastTo(query) {
 }
 
 function getQueryLanguages(query) {
-	return query.split("from")[query.split("from").length - 1].trim();
+  return query.split("from")[query.split("from").length - 1].trim();
 }
 function wordAfterLastFrom(query) {
-	return getQueryLanguages(query).split("to")[0].trim();
+  return getQueryLanguages(query).split("to")[0].trim();
 }
-  
+
 function extractQuery(query) {
-	if( findMatchingLanguage(languages, wordAfterLastFrom(query)) ) {
-		const queryWithoutLang = query
-			.substr(10, query.length - getQueryLanguages(query).length - 10)
-			.trim();
-		const queryStatement = queryWithoutLang
-			.substr(0, queryWithoutLang.length - 4)
-			.trim();
-		return queryStatement;
-	} else {
-		const possibleLangWord = wordAfterLastTo(query);
-		const queryWithoutLang = query
-		  .substr(10, query.length - possibleLangWord.length - 10)
-		  .trim();
-		const queryWithoutLangAndTo = queryWithoutLang
-		  .substr(0, queryWithoutLang.length - 2)
-		  .trim();
-		return queryWithoutLangAndTo;	  
-	}
+  if (findMatchingLanguage(languages, wordAfterLastFrom(query))) {
+    const queryWithoutLang = query
+      .substr(10, query.length - getQueryLanguages(query).length - 10)
+      .trim();
+    const queryStatement = queryWithoutLang
+      .substr(0, queryWithoutLang.length - 4)
+      .trim();
+    return queryStatement;
+  } else {
+    const possibleLangWord = wordAfterLastTo(query);
+    const queryWithoutLang = query
+      .substr(10, query.length - possibleLangWord.length - 10)
+      .trim();
+    const queryWithoutLangAndTo = queryWithoutLang
+      .substr(0, queryWithoutLang.length - 2)
+      .trim();
+    return queryWithoutLangAndTo;
+  }
 }
 function findMatchingLanguage(languageList, language) {
   const matchingLanguage = languageList.filter(
@@ -61,11 +61,14 @@ async function translation(query, API_KEY) {
     web3Provider,
   };
   const sdk = new SnetSDK(config);
-  
-	const possibleFromLang = wordAfterLastFrom(query);
-	const possibleToLang = wordAfterLastTo(query);
-	const detectedFromLanguage = findMatchingLanguage(languages, possibleFromLang);
-	const detectedToLanguage = findMatchingLanguage(languages, possibleToLang);
+
+  const possibleFromLang = wordAfterLastFrom(query);
+  const possibleToLang = wordAfterLastTo(query);
+  const detectedFromLanguage = findMatchingLanguage(
+    languages,
+    possibleFromLang
+  );
+  const detectedToLanguage = findMatchingLanguage(languages, possibleToLang);
   const client = await sdk.createServiceClient(
     config.orgId,
     config.serviceId,
@@ -80,12 +83,8 @@ async function translation(query, API_KEY) {
     input.setSourceLang(detectedFromLanguage || "eng_Latn");
     input.setTargetLang(detectedToLanguage || "fra_Latn");
     client.service.translate(input, (err, resp) => {
-    	console.log(err);
-    	console.log(resp);
-    	console.log(resp.array)
-    	console.log(resp.array[0])
-    	if (err) reject(err);
-    	resolve(resp);
+      if (err) reject(err);
+      resolve(resp);
     });
     // resolve({array: [extractQuery(query) + " " + detectedFromLanguage + " " + detectedToLanguage]});
   });
@@ -113,7 +112,7 @@ async function trigger(query) {
     if (
       query.indexOf("translate ") === 0 &&
       query.indexOf(" to ") > -1 &&
-	    findMatchingLanguage(languages, wordAfterLastTo(query))
+      findMatchingLanguage(languages, wordAfterLastTo(query))
     )
       return true;
   }
