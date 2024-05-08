@@ -25,8 +25,10 @@ async function passwordGenerator(query) {
       <div class="disclaimer">
           <div class="disclaimer_example"><b>Examples</b></div>
           <div class="disclaimer_sample"><a href="/search?q=pass+8">Pass 8</a> generates 8 chars password</div>
-          <div class="disclaimer_sample"><a href="/search?q=password+12">Password 12</a> generates 12 chars password</div>
-          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 32</a> generates 32 chars password</div>
+          <div class="disclaimer_sample"><a href="/search?q=password+12">Password 12 !@</a> generates a 12 character password without the characters ! and @ </div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 32 no-symbols no-uppercase no-number</a> 32 characters without symbols, uppercase, or numbers</div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">pwd 42 ns nu nn</a> 42 characters without symbols, uppercase, or numbers </div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">pass 21 @)n nn</a> 21 characters without numbers, @, ), n</div>
       </div>
     </div>
    
