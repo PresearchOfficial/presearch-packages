@@ -5,7 +5,7 @@ const MIN_LENGTH = 8;
 const MAX_LENGTH = 64;
 
 /**
- * Execute the password generation using the provided character length
+ * Execute the password generation using the provided options
  * @param {options} {length, number, symbols, uppercase, exclude}
  * @returns {String}
  */
