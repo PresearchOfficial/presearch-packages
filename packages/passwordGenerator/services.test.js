@@ -130,17 +130,22 @@ function testPasswordWithExclude(expectedLength, exclude, length = expectedLengt
 
 function testQueryParser(expectedLength, query, numbers = true, symbols = true, uppercase = true, exclude = []) {
   const result = parseAndNormalize(query);
-  expect(result.length).toBe(expectedLength);
+  const password = generate(result);
+
   if (!numbers) {
-    testPasswordWithoutNumbers(expectedLength, expectedLength);
+    expect(password.length).toBe(expectedLength);
+    expect(password.match(/[0-9]/)).toBe(null);
   }
   if (!symbols) {
-    testPasswordWithoutSymbols(expectedLength, expectedLength);
+    expect(password.length).toBe(expectedLength);
+    expect(password.match(/[^0-9a-zA-Z]/)).toBe(null);
   }
   if (!uppercase) {
-    testPasswordWithoutUppercase(expectedLength, expectedLength);
+    expect(password.length).toBe(expectedLength);
+    expect(password.match(/[A-Z]/)).toBe(null);
   }
   if (exclude.length > 0) {
-    testPasswordWithExclude(expectedLength, exclude, expectedLength);
+    expect(password.length).toBe(expectedLength);
+    expect(password.match(new RegExp(`[${exclude.join('')}]`))).toBe(null);
   }
 }

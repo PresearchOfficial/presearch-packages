@@ -1,11 +1,11 @@
 'use strict';
 const { parseAndNormalize, generate } = require('./services');
 async function passwordGenerator(query) {
-  const length = parseAndNormalize(query);
-  if (!length) {
+  const options = parseAndNormalize(query);
+  if (!options) {
     return { error: "Failed to parse query." };
   }
-  const generatedStr = generate(length);
+  const generatedStr = generate(options);
   if (!generatedStr) {
     return { error: "Failed to generate password." };
   }
@@ -26,7 +26,7 @@ async function passwordGenerator(query) {
           <div class="disclaimer_example"><b>Examples</b></div>
           <div class="disclaimer_sample"><a href="/search?q=pass+8">Pass 8</a> generates 8 chars password</div>
           <div class="disclaimer_sample"><a href="/search?q=password+12">Password 12 !@</a> generates a 12 character password without the characters ! and @ </div>
-          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 32 no-symbols no-uppercase no-number</a> 32 characters without symbols, uppercase, or numbers</div>
+          <div class="disclaimer_sample"><a href="/search?q=random+pw+32">Random pw 32 no-symbols no-uppercase no-numbers</a> 32 characters without symbols, uppercase, or numbers</div>
           <div class="disclaimer_sample"><a href="/search?q=random+pw+32">pwd 42 ns nu nn</a> 42 characters without symbols, uppercase, or numbers </div>
           <div class="disclaimer_sample"><a href="/search?q=random+pw+32">pass 21 @)n nn</a> 21 characters without numbers, @, ), n</div>
       </div>
