@@ -1031,6 +1031,12 @@ if (typeof define === "function" && define.amd) {
  * ============ END big.js ============
 */
 
+
+/*
+Calculator class and compute function
+*/
+
+
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
         this.previousOperandTextElement = previousOperandTextElement;
@@ -1085,13 +1091,7 @@ class Calculator {
         }
         if (this.currentOperand === '') return;
         if (operation === '%') {
-            if (this.previousOperand !== '') {
-                this.compute();
-            }
-            if (this.currentOperand.includes('%')) return;
-            this.currentOperand = (parseFloat(this.currentOperand.replace(',', '.')) * 100).toString() + '%';
-            this.updateDisplay();
-            this.percentMode = true; // Set percent mode
+            this.computePercentage();
             return;
         }
         if (this.previousOperand !== '') {
@@ -1103,11 +1103,23 @@ class Calculator {
         this.updateDisplay();
     }
 
+    computePercentage() {
+        if (this.previousOperand === '') return;
+        const prev = parseFloat(this.previousOperand);
+        let current = parseFloat(this.currentOperand.replace('%', ''));
+        if (isNaN(prev) || isNaN(current)) return;
+        current = (prev * current) / 100;
+        this.currentOperand = current.toString();
+        this.percentMode = false; // Reset percent mode
+        this.compute(); // Perform the operation with the new percentage value
+    }
+
     compute() {
         let computation;
         const prev = parseFloat(this.previousOperand);
-        const current = parseFloat(this.currentOperand.replace('%', ''));
+        const current = parseFloat(this.currentOperand);
         if (isNaN(prev) || isNaN(current)) return;
+
         switch (this.operation) {
             case '+':
                 computation = new Big(prev).plus(current);
@@ -1131,7 +1143,6 @@ class Calculator {
         this.currentOperand = computation.toString();
         this.operation = undefined;
         this.previousOperand = '';
-        this.percentMode = false; // Reset percent mode after computation
     }
 
     getDisplayNumber(number) {
@@ -1152,7 +1163,7 @@ class Calculator {
     }
 
     updateDisplay() {
-        this.currentOperandTextElement.innerText = this.currentOperand.includes('%') ? this.currentOperand : this.getDisplayNumber(this.currentOperand);
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
         if (this.previousOperand.length != 0) {
             this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand) + (this.operation ? this.operation : '');
         } else {
@@ -1160,6 +1171,12 @@ class Calculator {
         }
     }
 }
+
+
+
+/*
+Buttons
+*/
 
 const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');
@@ -1307,7 +1324,9 @@ document.addEventListener('keydown', function (event) {
 
 
 
-
+/*
+CSS
+*/
 
 </script>
 <style>
