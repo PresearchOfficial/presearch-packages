@@ -157,7 +157,7 @@ async function math(query) {
       <button type="button" data-number>0</button>
     </td>
     <td>
-      <button type="button" data-number>.</button>
+      <button type="button" data-number=".">.</button>
     </td>
     <td>
       <button name="equal" type="button" data-equals>=</button>
@@ -1036,101 +1036,169 @@ if (typeof define === "function" && define.amd) {
 Calculator class and compute function
 */
 
+// Define the styles for different decimal formats
+const decimalStyles = {
+    SI: { decimal: ".", grouping: " " },
+    European: { decimal: ",", grouping: "." },
+    English: { decimal: ".", grouping: "," }
+};
 
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
         this.previousOperandTextElement = previousOperandTextElement;
         this.currentOperandTextElement = currentOperandTextElement;
-        this.decimalStyle = '.'; // Default decimal style
-        this.clear();
+        this.decimalStyle = "English"; // Default decimal style
+        this.setSeparators(); // Set the decimal and grouping separators based on the style
+        this.clear(); // Initialize the calculator by clearing previous operations
     }
 
+    // Set the decimal and grouping separators according to the current decimal style
+    setSeparators() {
+        const style = decimalStyles[this.decimalStyle];
+        this.decimalSeparator = style.decimal;
+        this.groupingSeparator = style.grouping;
+    }
+
+    // Clear the current and previous operands, operation, and reset percent mode
     clear() {
-        this.currentOperand = '';
-        this.previousOperand = '';
+        this.currentOperand = "";
+        this.previousOperand = "";
         this.operation = undefined;
         this.percentMode = false; // Reset percent mode on clear
+        this.updateDisplay(); // Update the display to reflect the cleared state
     }
 
+    // Delete the last character or reset operation if in percent mode
     delete() {
-        if (this.currentOperand.includes('%')) {
-            this.currentOperand = this.currentOperand.replace('%', '');
+        if (this.percentMode) {
+            this.currentOperand = this.currentOperand.replace("%", "");
             this.percentMode = false;
         } else {
             if (this.currentOperand.length == 0 && this.operation) {
                 this.operation = undefined;
                 this.currentOperand = this.previousOperand;
-                this.previousOperand = '';
+                this.previousOperand = "";
             } else {
                 this.currentOperand = this.currentOperand.toString().slice(0, -1);
             }
         }
+        this.updateDisplay(); // Update the display to reflect the deletion
     }
 
+    // Append a number or a decimal point to the current operand
     appendNumber(number) {
         if (this.percentMode) return; // Prevent input if in percent mode
-        if (number === '.' || number === ',') {
-            if (this.currentOperand.includes('.') || this.currentOperand.includes(',')) return;
-            this.currentOperand = this.currentOperand.toString() + (this.decimalStyle === ',' ? ',' : '.');
+        if (number === "." || number === ",") {
+            if (this.currentOperand.includes(this.decimalSeparator)) return;
+            this.currentOperand = this.currentOperand.toString() + this.decimalSeparator;
         } else {
             this.currentOperand = this.currentOperand.toString() + number.toString();
         }
+        this.updateDisplay(); // Update the display to reflect the new number
     }
 
+    // Toggle between different decimal styles and update the display accordingly
     toggleDecimalStyle() {
-        this.decimalStyle = this.decimalStyle === '.' ? ',' : '.';
-        this.updateDisplay();
+        switch (this.decimalStyle) {
+            case "SI":
+                this.decimalStyle = "European";
+                break;
+            case "European":
+                this.decimalStyle = "English";
+                break;
+            case "English":
+                this.decimalStyle = "SI";
+                break;
+        }
+        this.setSeparators();
+
+        // Clear the display and show the current style
+        this.clear();
+        this.previousOperandTextElement.innerText = "";
+        this.currentOperandTextElement.innerText = "Decimal Style: " + this.decimalStyle;
+
+        // Update decimal button text
+        document.querySelector('[data-number="."]').innerText = this.decimalSeparator;
     }
 
+    // Convert numbers between different decimal styles
+    convertDecimalStyle(number) {
+        switch (this.decimalStyle) {
+            case "SI":
+                return number.replace(/,/g, "").replace(/ /g, "").replace(/\./g, this.decimalSeparator);
+            case "European":
+                return number.replace(/,/g, "").replace(/ /g, "").replace(/\./g, "").replace(/,/g, ".");
+            case "English":
+                return number.replace(/\./g, "").replace(/,/g, this.decimalSeparator);
+        }
+    }
+
+    // Parse a string as a European-style float
+    parseEuropeanFloat(str) {
+        let convertedStr = str.replace(",", ".");
+        return parseFloat(convertedStr);
+    }
+
+    // Choose an operation to perform and update the display
     chooseOperation(operation) {
         if (this.percentMode) return; // Prevent input if in percent mode
-        if (this.currentOperand === '' && this.previousOperand !== '') {
+        if (this.currentOperand === "" && this.previousOperand !== "") {
             this.operation = operation;
             this.updateDisplay();
             return;
         }
-        if (this.currentOperand === '') return;
-        if (operation === '%') {
+        if (this.currentOperand === "") return;
+        if (operation === "%") {
             this.computePercentage();
             return;
         }
-        if (this.previousOperand !== '') {
+        if (this.previousOperand !== "") {
             this.compute();
         }
         this.operation = operation;
         this.previousOperand = this.currentOperand;
-        this.currentOperand = '';
-        this.updateDisplay();
+        this.currentOperand = "";
+        this.updateDisplay(); // Update the display to reflect the new operation
     }
 
+    // Compute the percentage based on the current and previous operands
     computePercentage() {
-        if (this.previousOperand === '') return;
-        const prev = parseFloat(this.previousOperand);
-        let current = parseFloat(this.currentOperand.replace('%', ''));
+        if (this.previousOperand === "" && this.currentOperand !== "") {
+            let current = this.parseEuropeanFloat(this.currentOperand);
+            if (isNaN(current)) return;
+            current = current * 100;
+            this.currentOperand = current.toString().replace(".", this.decimalSeparator) + "%";
+            this.percentMode = true; // Set percent mode
+            this.updateDisplay();
+            return;
+        }
+        if (this.previousOperand === "") return;
+        const prev = this.parseEuropeanFloat(this.previousOperand);
+        let current = this.parseEuropeanFloat(this.currentOperand);
         if (isNaN(prev) || isNaN(current)) return;
         current = (prev * current) / 100;
-        this.currentOperand = current.toString();
-        this.percentMode = false; // Reset percent mode
+        this.currentOperand = current.toString().replace(".", this.decimalSeparator);
         this.compute(); // Perform the operation with the new percentage value
     }
 
+    // Perform the computation based on the current operation
     compute() {
         let computation;
-        const prev = parseFloat(this.previousOperand);
-        const current = parseFloat(this.currentOperand);
+        const prev = this.parseEuropeanFloat(this.previousOperand);
+        const current = this.parseEuropeanFloat(this.currentOperand);
         if (isNaN(prev) || isNaN(current)) return;
 
         switch (this.operation) {
-            case '+':
+            case "+":
                 computation = new Big(prev).plus(current);
                 break;
-            case '-':
+            case "-":
                 computation = new Big(prev).minus(current);
                 break;
-            case '*':
+            case "*":
                 computation = new Big(prev).times(current);
                 break;
-            case '/':
+            case "/":
                 try {
                     computation = new Big(prev).div(current);
                 } catch (e) {
@@ -1140,178 +1208,187 @@ class Calculator {
             default:
                 return;
         }
-        this.currentOperand = computation.toString();
+        this.currentOperand = computation.toString().replace(".", this.decimalSeparator);
         this.operation = undefined;
-        this.previousOperand = '';
+        this.previousOperand = "";
+        this.updateDisplay(); // Update the display to reflect the result
     }
 
+    // Format the display number with the appropriate grouping and decimal separators
     getDisplayNumber(number) {
         const stringNumber = number.toString();
-        const integerDigits = parseFloat(stringNumber.split('.')[0]);
-        const decimalDigits = stringNumber.split('.')[1];
+        const integerDigits = parseFloat(stringNumber.split(this.decimalSeparator)[0]);
+        const decimalDigits = stringNumber.split(this.decimalSeparator)[1];
         let integerDisplay;
         if (isNaN(integerDigits)) {
-            integerDisplay = '';
+            integerDisplay = "";
         } else {
-            integerDisplay = integerDigits.toLocaleString('en', { maximumFractionDigits: 0 });
+            integerDisplay = integerDigits.toLocaleString("en", { maximumFractionDigits: 0 }).replace(/,/g, this.groupingSeparator);
         }
         if (decimalDigits != null) {
-            return integerDisplay + (this.decimalStyle === ',' ? ',' : '.') + decimalDigits;
+            return integerDisplay + this.decimalSeparator + decimalDigits;
         } else {
             return integerDisplay;
         }
     }
 
+    // Update the display elements with the current and previous operands
     updateDisplay() {
         this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+        if (this.percentMode) {
+            this.currentOperandTextElement.innerText += "%";
+        }
         if (this.previousOperand.length != 0) {
-            this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand) + (this.operation ? this.operation : '');
+            this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand) + (this.operation ? this.operation : "");
         } else {
-            this.previousOperandTextElement.innerText = '';
+            this.previousOperandTextElement.innerText = "";
         }
     }
 }
-
 
 
 /*
 Buttons
 */
 
-const numberButtons = document.querySelectorAll('[data-number]');
-const operationButtons = document.querySelectorAll('[data-operation]');
-const equalsButton = document.querySelector('[data-equals]');
-const deleteButton = document.querySelector('[data-delete]');
-const allClearButton = document.querySelector('[data-all-clear]');
-const previousOperandTextElement = document.querySelector('[data-previous-operand]');
-const currentOperandTextElement = document.querySelector('[data-current-operand]');
+const numberButtons = document.querySelectorAll("[data-number]");
+const operationButtons = document.querySelectorAll("[data-operation]");
+const equalsButton = document.querySelector("[data-equals]");
+const deleteButton = document.querySelector("[data-delete]");
+const allClearButton = document.querySelector("[data-all-clear]");
+const previousOperandTextElement = document.querySelector("[data-previous-operand]");
+const currentOperandTextElement = document.querySelector("[data-current-operand]");
+const decimalStyleButton = document.querySelector("[data-decimal-style]");
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement);
 
-numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
+numberButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
         calculator.appendNumber(button.innerText);
         calculator.updateDisplay();
     });
 });
 
-operationButtons.forEach(button => {
-    button.addEventListener('click', () => {
+operationButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
         calculator.chooseOperation(button.innerText);
         calculator.updateDisplay();
     });
 });
 
-equalsButton.addEventListener('click', () => {
+equalsButton.addEventListener("click", function() {
     calculator.compute();
     calculator.updateDisplay();
 });
 
-allClearButton.addEventListener('click', () => {
+allClearButton.addEventListener("click", function() {
     calculator.clear();
     calculator.updateDisplay();
 });
 
-deleteButton.addEventListener('click', () => {
+deleteButton.addEventListener("click", function() {
     calculator.delete();
     calculator.updateDisplay();
 });
 
-const decimalStyleButton = document.querySelector('[data-decimal-style]');
-decimalStyleButton.addEventListener('click', () => {
+decimalStyleButton.addEventListener("click", function() {
     calculator.toggleDecimalStyle();
 });
 
 let searchInputFocused = false;
-document.querySelector('input').addEventListener('mouseover', e => {
+document.querySelector("input").addEventListener("mouseover", function() {
     searchInputFocused = true;
 });
 
-document.querySelector('#presearchPackage').addEventListener('mouseover', e => {
+document.querySelector("#presearchPackage").addEventListener("mouseover", function() {
     searchInputFocused = false;
 });
 
-document.addEventListener('keydown', function (event) {
+document.addEventListener("keydown", function(event) {
     if (searchInputFocused) return;
     event.preventDefault();
     switch (event.key) {
-        case '+':
+        case "+":
             calculator.chooseOperation(event.key);
             calculator.updateDisplay();
             break;
-        case '-':
+        case "-":
             calculator.chooseOperation(event.key);
             calculator.updateDisplay();
             break;
-        case '*':
+        case "*":
             calculator.chooseOperation(event.key);
             calculator.updateDisplay();
             break;
-        case '/':
+        case "/":
             calculator.chooseOperation(event.key);
             calculator.updateDisplay();
             break;
-        case '%':
+        case "%":
             calculator.chooseOperation(event.key);
             calculator.updateDisplay();
             break;
-        case '1':
+        case "1":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '2':
+        case "2":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '3':
+        case "3":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '4':
+        case "4":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '5':
+        case "5":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '6':
+        case "6":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '7':
+        case "7":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '8':
+        case "8":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '9':
+        case "9":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '0':
+        case "0":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case '.':
+        case ".":
             calculator.appendNumber(event.key);
             calculator.updateDisplay();
             break;
-        case 'Enter':
+        case ",":
+            calculator.appendNumber(event.key);
+            calculator.updateDisplay();
+            break;
+        case "Enter":
             calculator.compute();
             calculator.updateDisplay();
             break;
-        case '=':
+        case "=":
             calculator.compute();
             calculator.updateDisplay();
             break;
-        case 'Backspace':
+        case "Backspace":
             calculator.delete();
             calculator.updateDisplay();
             break;
-        case 'Delete':
+        case "Delete":
             calculator.clear();
             calculator.updateDisplay();
             break;
