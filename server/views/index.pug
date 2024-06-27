@@ -24,8 +24,8 @@ block content
     }
   div(x-show="$store.showSettings && $store.showSettings.show" x-on:mouseover="hideSettings(true, false, true)" class="fixed w-screen h-screen z-20 top-0 left-0")
   div(class="h-full dark:bg-background-dark300 dark:text-white")
-    div(class="bg-presearch-default dark:bg-background-dark500" style="height: 90px") 
-      div(class="absolute mt-3 md:mt-5 top-0 ml-2") 
+    div(class="bg-presearch-default dark:bg-background-dark500" style="height: 90px")
+      div(class="absolute mt-3 md:mt-5 top-0 ml-2")
           include _partials/icons/home/logo-p_
       div(class="absolute top-0 right-0 mr-2 mt-6 md:mt-8 md:mr-8")
           include _partials/user-info-homepage.pug
@@ -40,14 +40,13 @@ block content
         div(class="mt-1") 3. Run #[span(class="bg-gray-300 dark:bg-background-dark400 text-sm rounded p-1 mb-1") npm run create-package {packageName}] command
         div(class="mt-1") 4. Open #[span(class="text-presearch-default text-sm") presearch-packages/packages/{packageName}] directory in your favorite code editor
         h2(class="mb-2 mt-8") How to test?
-        div(class="mt-1") If you are already created your package, it should appear on the list of packages. 
+        div(class="mt-1") If you already created your package, it should appear on the list of packages. 
         div(class="mt-1") You can click on it or navigate to #[span(class="text-presearch-default text-sm") http://localhost:4000/{packageName}].
         div(class="mt-1") Then just preform a search - that's all!
         h2(class="mb-2 mt-8") Have fun! ;-)
-      div(class="p-4 self-end mr-8 rounded bg-gray-200 dark:bg-background-dark400") 
+      div(class="p-4 self-end mr-8 rounded bg-gray-200 dark:bg-background-dark400")
         h2(class="mx-2") List of packages:
         div(class="ml-2")
           each packageName, index in Object.keys(packageObject)
             div(class="mt-2")
               a(href=`/${packageName}`) !{packageName}
-    
