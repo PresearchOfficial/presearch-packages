@@ -30,7 +30,9 @@
         "mathjs": "^9.5.1",
         "node-fetch": "^2.6.7",
         "periodic-table": "^0.0.8",
-        "wikijs": "^6.3.2"
+        "wikijs": "^6.3.2",
+        "fs": "0.0.1-security",
+        "path": "^0.12.7"
     },
     "devDependencies": {
         "pre-commit": "^1.2.2"
