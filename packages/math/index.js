@@ -1475,8 +1475,8 @@ CSS
 
   .decimal-style-button {
     padding: 0px 4px; /* Reduce padding to fit text */
-    line-height: 0.85em; /* Adjust line height to fit text within button */
-    font-size: 0.8em; /* Adjust font size if necessary */
+    line-height: 1.1; /* Adjust line height to fit text within button */
+    font-size: 0.8rem !important; /* Adjust font size if necessary */
     height: 40px;
     width: 80px;
     border-radius: 10px;
