@@ -26,19 +26,20 @@ app.use((req, res, next) => {
 const TEAM_ID = process.env["API.MAP_TEAM_ID"];
 const KEY_ID = process.env["API.MAP_KEY_ID"];
 const MAPS_ID = process.env["API.MAP_MAPS_ID"];
-const privateKeyPath = process.env["API.MAP_PRIVATE_KEY_PATH"];
+const privateKey = process.env["API.MAP_PRIVATE_KEY"];
 let KEY_PRIVATE;
-try {
-  KEY_PRIVATE = fs.readFileSync(privateKeyPath, 'utf8');
-} catch (err) {
-  console.error("Error reading private key file:", err);
-  process.exit(1); // Exit the process if the private key file cannot be read
+if (privateKey) {
+  KEY_PRIVATE = privateKey.replace(/\\n/g, '\n');
+} else {
+  console.error("Error reading private key from environment variable");
+  process.exit(1); 
 }
 
 // Function to generate the JWT token
 function generateMapkitToken() {
     const now = Math.floor(Date.now() / 1000);
-    const expires = now + 3600; // Token valid for 1 hour
+    // 3600 means a Token is valid for 1 hour
+    const expires = now + 3600; 
   
     const payload = {
       iss: TEAM_ID,
