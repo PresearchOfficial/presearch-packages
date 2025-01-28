@@ -1,11 +1,6 @@
 "use strict";
 
-const express = require("express");
-const app = express();
-
-// Allow all origins (for development)
-const cors = require('cors');
-app.use(cors());
+const generateMapkitToken = require("../map/generateJWT");
 
 function escapeHTML(str) {
   return str
@@ -16,19 +11,25 @@ function escapeHTML(str) {
     .replace(/'/g, "&#39;");
 }
 
-async function map(query, token) {
-  const escapedQuery = escapeHTML(query);
-  let isUSA = "true";
+const _triggers = [
+  "map",
+  "location",
+  "address",
+  "direction",
+  "route",
+]
 
+async function map(query, token = generateMapkitToken()) {
   let searchLocation = "";
-  if (query.toLowerCase().includes("map of ")) {
-    searchLocation = query.toLowerCase().split("map of ")[1].trim();
-  } else if (query.toLowerCase().includes("location of ")) {
-    searchLocation = query.toLowerCase().split("location of ")[1].trim();
-  } else if (query.toLowerCase().includes("address:")) {
-    searchLocation = query.toLowerCase().split("address:")[1].trim();
-  } else {
-    searchLocation = query.trim();
+  for (const trigger of _triggers) {
+    if (query.toLowerCase().includes(trigger)) {
+      searchLocation = query.toLowerCase().split(trigger).join("").trim();
+      break;
+    }
+  }
+
+  if (!searchLocation) {
+    return null;
   }
 
   return `
@@ -41,7 +42,7 @@ async function map(query, token) {
           style="
             position: absolute;
             bottom: 10px;
-            right: 125px; 
+            right: 125px;
             z-index: 1000;
             background: #F8F8F8;
             border: none;
@@ -194,7 +195,7 @@ async function map(query, token) {
             const search = new mapkit.Search();
             search.search(query, (error, data) => {
               if (error || !data.places || data.places.length === 0) {
-                return resolve(false); 
+                return resolve(false);
               }
               const place = data.places[0];
               // Some versions of mapkit return a "countryCode", or we can check formattedAddress
@@ -339,7 +340,7 @@ async function map(query, token) {
 
         /**
          * Fetch route. First, we check if either startLoc or endLoc is in the US to set isUSA.
-         * Then we fetch directions. 
+         * Then we fetch directions.
          */
         async function getTransportRoute(transportType) {
           const startLoc = document.getElementById("startLocation").value;
@@ -349,8 +350,8 @@ async function map(query, token) {
 
           if (!startLoc || !endLoc) {
             alert("Please enter both start and end locations.");
-            travelInfo.style.display = "none"; 
-            directionsButton.style.display = "none"; 
+            travelInfo.style.display = "none";
+            directionsButton.style.display = "none";
             return;
           }
 
@@ -370,15 +371,15 @@ async function map(query, token) {
             directions.route(request, (error, data) => {
               if (error) {
                 console.error("Error fetching directions:", error);
-                travelInfo.style.display = "none"; 
+                travelInfo.style.display = "none";
                 directionsButton.style.display = "none";
               } else if (data && data.routes && data.routes.length > 0) {
                 displayRoutes(data.routes, startLoc, endLoc, transportType);
-                travelInfo.style.display = "flex"; 
-                directionsButton.style.display = "flex"; 
+                travelInfo.style.display = "flex";
+                directionsButton.style.display = "flex";
               } else {
                 console.warn("No routes found.");
-                travelInfo.style.display = "none"; 
+                travelInfo.style.display = "none";
                 directionsButton.style.display = "none";
               }
             });
@@ -420,7 +421,7 @@ async function map(query, token) {
           // Determine which transport type is currently active
           const driveButton = document.getElementById('driveButton');
           const walkButton = document.getElementById('walkButton');
-          
+
           let transportType = 'Automobile'; // default
           if (walkButton.style.background === 'rgb(66, 133, 244)') {
             transportType = 'Walking';
@@ -433,7 +434,7 @@ async function map(query, token) {
         function updateTransportButtons(transportType) {
           const driveButton = document.getElementById('driveButton');
           const walkButton = document.getElementById('walkButton');
-          
+
           if (transportType === 'Automobile') {
             driveButton.style.background = '#4285f4';
             driveButton.style.color = 'white';
@@ -460,7 +461,7 @@ async function map(query, token) {
 
           // Update button styles
           updateTransportButtons(transportType);
-        
+
           // Remove old markers/routes
           map.removeAnnotations(map.annotations);
           map.removeOverlays(map.overlays);
@@ -578,14 +579,7 @@ async function map(query, token) {
 
 async function trigger(query) {
   query = query.toLowerCase();
-  return (
-    query.includes("map") ||
-    query.includes("location") ||
-    query.includes("address") ||
-    query.includes("direction") ||
-    query.includes("route") ||
-    /^[a-z\s]+(?:,\s*[a-z\s]+)?$/.test(query)
-  );
+  return _triggers.some(trigger => query.includes(trigger));
 }
 
 module.exports = { map, trigger };
