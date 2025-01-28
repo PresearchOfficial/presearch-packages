@@ -33,6 +33,25 @@ async function map(query, token = generateMapkitToken()) {
   }
 
   return `
+    <style>
+      #mapWrapper .route-inputs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .dark #mapWrapper input {
+        background: #333;
+        color: white;
+        border-color: #666;
+      }
+
+      @media only screen and (max-width:800px) {
+        #mapWrapper .route-inputs {
+          flex-direction: column;
+        }
+      }
+    </style>
+
     <div id="mapWrapper" class="map-wrapper" style="width: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;">
       <div id="map" style="width: 100%; height: 400px; border-radius: 8px; position: relative; overflow: hidden;">
         <!-- Fullscreen button: bottom-right, offset so it doesn't overlap the zoom controls -->
@@ -80,7 +99,7 @@ async function map(query, token = generateMapkitToken()) {
 
       <!-- Input fields -->
       <div id="routePanel" style="margin-top: 16px;">
-        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+        <div class="route-inputs">
           <div style="flex: 1;">
             <input type="text" id="startLocation" placeholder="Starting point" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
           </div>
@@ -134,6 +153,7 @@ async function map(query, token = generateMapkitToken()) {
       </div>
 
       <script>
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches || document.querySelector('html').classList.contains('dark');
         console.log("Script starting...");
 
         let map, directions;
@@ -172,6 +192,7 @@ async function map(query, token = generateMapkitToken()) {
             showsCompass: mapkit.FeatureVisibility.Visible,
             showsScale: mapkit.FeatureVisibility.Visible,
             showsZoomControl: true,
+            colorScheme: isDarkMode ? "dark" : "light",
             region: new mapkit.CoordinateRegion(
               new mapkit.Coordinate(51.5074, -0.1278),
               new mapkit.CoordinateSpan(0.1, 0.1)
