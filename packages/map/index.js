@@ -216,7 +216,7 @@ async function map(query, token = generateMapkitToken()) {
 
           setTimeout(() => {
             if (initialSearchLocation) {
-              searchLocation(initialSearchLocation);
+              searchForLocation(initialSearchLocation);
             }
             document.getElementById("routePanel").style.display = "block";
           }, 10);
@@ -245,15 +245,16 @@ async function map(query, token = generateMapkitToken()) {
           });
         }
 
-        function searchLocation(query) {
+        function searchForLocation(query) {
           logger("Searching location:", query);
           const search = new mapkit.Search();
           search.search(query, (error, data) => {
             if (error) {
               console.error("Search error:", error);
             } else if (data.places && data.places.length > 0) {
-              const place = data.places[0];
-              logger("Found place:", place);
+
+              const firstPlace = data.places[0];
+              logger("Found place:", firstPlace);
 
               let span = 0.05;
               if (query.toLowerCase().includes('address:')) {
@@ -261,29 +262,30 @@ async function map(query, token = generateMapkitToken()) {
               }
 
               const region = new mapkit.CoordinateRegion(
-                new mapkit.Coordinate(place.coordinate.latitude, place.coordinate.longitude),
+                new mapkit.Coordinate(firstPlace.coordinate.latitude, firstPlace.coordinate.longitude),
                 new mapkit.CoordinateSpan(span, span)
               );
 
               map.region = region;
-
-              const annotation = new mapkit.MarkerAnnotation(
-                new mapkit.Coordinate(place.coordinate.latitude, place.coordinate.longitude),
-                {
-                  title: place.name,
-                  subtitle: place.formattedAddress,
-                  glyphText: "📍"
-                }
-              );
-
               // Clear previous annotations and add only the found location
               map.removeAnnotations(map.annotations);
-              map.addAnnotation(annotation);
+
+              for (const place of data.places.slice(0, 19)) {
+                const annotation = new mapkit.MarkerAnnotation(
+                  new mapkit.Coordinate(place.coordinate.latitude, place.coordinate.longitude),
+                  {
+                    title: place.name,
+                    subtitle: place.formattedAddress,
+                    glyphText: "📍"
+                  }
+                );
+                map.addAnnotation(annotation);
+              }
 
               // Because we have only a single place, we can check if it's in the US
               if (
-                place.countryCode === "US" ||
-                (place.formattedAddress && place.formattedAddress.toLowerCase().includes("usa"))
+                firstPlace.countryCode === "US" ||
+                (firstPlace.formattedAddress && firstPlace.formattedAddress.toLowerCase().includes("usa"))
               ) {
                 isUSA = true;
               } else {
@@ -371,6 +373,12 @@ async function map(query, token = generateMapkitToken()) {
             map.dispatchEvent(new Event("resize"));
           }
         }
+
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && isFullScreen) {
+            toggleFullScreen();
+          }
+        });
 
         /**
          * Fetch route. First, we check if either startLoc or endLoc is in the US to set isUSA.
