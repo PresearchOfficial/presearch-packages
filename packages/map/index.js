@@ -25,13 +25,9 @@ const _triggers = [
 async function map(query, token = generateMapkitToken()) {
   let searchLocation = "";
   for (const trigger of _triggers) {
-    for (const el of [` ${trigger}`, `${trigger} `]) {
-      if (query.toLowerCase().includes(el)) {
-        searchLocation = query.toLowerCase().split(el).join("").trim();
-        break;
-      }
-    }
-    if (searchLocation) {
+    const regex = new RegExp(`\\b${trigger}\\b`);
+    if (regex.test(query)) {
+      searchLocation = query.split(trigger).join("").trim();
       break;
     }
   }
@@ -621,7 +617,10 @@ async function map(query, token = generateMapkitToken()) {
 
 async function trigger(query) {
   query = query.toLowerCase();
-  return _triggers.some(trigger => query.includes(` ${trigger}`) || query.includes(`${trigger} `));
+  return _triggers.some(trigger => {
+    const regex = new RegExp(`\\b${trigger}\\b`);
+    return regex.test(query) && query.split(trigger).join("").trim().length > 0;
+  });
 }
 
 module.exports = { map, trigger };
