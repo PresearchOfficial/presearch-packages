@@ -2,6 +2,8 @@
 
 const generateMapkitToken = require("../map/generateJWT");
 
+const development = process.env.NODE_ENV === "development";
+
 function escapeHTML(str) {
   return str
     .replace(/&/g, "&amp;")
@@ -18,7 +20,7 @@ const _triggers = [
   "directions",
   "direction",
   "route",
-]
+];
 
 async function map(query, token = generateMapkitToken()) {
   let searchLocation = "";
@@ -38,7 +40,7 @@ async function map(query, token = generateMapkitToken()) {
     return null;
   }
 
-  return `
+  return /*html*/ `
     <style>
       #mapWrapper .route-inputs {
         display: flex;
@@ -159,8 +161,17 @@ async function map(query, token = generateMapkitToken()) {
       </div>
 
       <script>
+        const logger = (msg, arg) => {
+          if (${development}) {
+            if (arg) {
+              console.log(msg, arg);
+              return;
+            }
+            console.log(msg);
+          }
+        };
         const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches || document.querySelector('html').classList.contains('dark');
-        console.log("Script starting...");
+        logger("Script starting...");
 
         let map, directions;
         let isFullScreen = false;
@@ -172,11 +183,11 @@ async function map(query, token = generateMapkitToken()) {
         const initialSearchLocation = "${searchLocation}";
 
         function loadMapkit(callback) {
-          console.log("Loading MapKit...");
+          logger("Loading MapKit...");
           var script = document.createElement('script');
           script.src = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js';
           script.onload = () => {
-            console.log("MapKit loaded successfully");
+            logger("MapKit loaded successfully");
             callback();
           };
           script.onerror = function() {
@@ -186,10 +197,10 @@ async function map(query, token = generateMapkitToken()) {
         }
 
         function initializeMap() {
-          console.log("Initializing map...");
+          logger("Initializing map...");
           mapkit.init({
             authorizationCallback: function(done) {
-              console.log("Authorizing...");
+              logger("Authorizing...");
               done("${token}");
             }
           });
@@ -199,10 +210,6 @@ async function map(query, token = generateMapkitToken()) {
             showsScale: mapkit.FeatureVisibility.Visible,
             showsZoomControl: true,
             colorScheme: isDarkMode ? "dark" : "light",
-            region: new mapkit.CoordinateRegion(
-              new mapkit.Coordinate(51.5074, -0.1278),
-              new mapkit.CoordinateSpan(0.1, 0.1)
-            )
           });
 
           directions = new mapkit.Directions();
@@ -212,9 +219,9 @@ async function map(query, token = generateMapkitToken()) {
               searchLocation(initialSearchLocation);
             }
             document.getElementById("routePanel").style.display = "block";
-          }, 500);
+          }, 10);
 
-          console.log("Map initialized");
+          logger("Map initialized");
         }
 
         function locationIsUSA(query) {
@@ -239,14 +246,14 @@ async function map(query, token = generateMapkitToken()) {
         }
 
         function searchLocation(query) {
-          console.log("Searching location:", query);
+          logger("Searching location:", query);
           const search = new mapkit.Search();
           search.search(query, (error, data) => {
             if (error) {
               console.error("Search error:", error);
             } else if (data.places && data.places.length > 0) {
               const place = data.places[0];
-              console.log("Found place:", place);
+              logger("Found place:", place);
 
               let span = 0.05;
               if (query.toLowerCase().includes('address:')) {
@@ -595,7 +602,7 @@ async function map(query, token = generateMapkitToken()) {
         if (travelInfo) travelInfo.style.display = "none";
         if (directionsButton) directionsButton.style.display = "none";
 
-        console.log("Loading map...");
+        logger("Loading map...");
         loadMapkit(() => {
           initializeMap();
         });
