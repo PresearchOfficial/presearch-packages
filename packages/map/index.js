@@ -156,13 +156,56 @@ async function map(query, token = generateJwt()) {
       </div>
 
       <script>
-       function logger() {
-          if (${development}) {
-            console.log(...arguments);
+        (function () {
+          const packageDiv = document.querySelector("#mapWrapper").parentElement.parentElement;
+          // Store the original methods
+          const open = XMLHttpRequest.prototype.open;
+          const send = XMLHttpRequest.prototype.send;
+
+          // Hook into the open method
+          XMLHttpRequest.prototype.open = function (method, url) {
+            this._requestUrl = url;
+            this._isAppleRequest = url.includes(".apple-mapkit.com");
+            return open.apply(this, arguments);
+          };
+
+          // Hook into the send method
+          XMLHttpRequest.prototype.send = function (body) {
+            this.addEventListener('load', function () {
+              if (this._isAppleRequest && this.status !== 200) {
+                packageDiv.style.display = "none";
+              }
+            });
+
+            this.addEventListener('error', function () {
+              if (this._isAppleRequest) {
+                packageDiv.style.display = "none";
+              }
+            });
+
+            return send.apply(this, arguments);
+          };
+        })();
+
+       const logger = {
+          info: function() {
+            if (${development}) {
+              console.log(...arguments);
+            }
+          },
+          warn: function() {
+            if (${development}) {
+              console.warn(...arguments);
+            }
+          },
+          error: function() {
+            if (${development}) {
+              console.error(...arguments);
+            }
           }
         };
         const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches || document.querySelector('html').classList.contains('dark');
-        logger("Script starting...");
+        logger.info("Script starting...");
 
         let map, directions;
         let isFullScreen = false;
@@ -174,24 +217,24 @@ async function map(query, token = generateJwt()) {
         const initialSearchLocation = "${searchLocation}";
 
         function loadMapkit(callback) {
-          logger("Loading MapKit...");
+          logger.info("Loading MapKit...");
           var script = document.createElement('script');
           script.src = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js';
           script.onload = () => {
-            logger("MapKit loaded successfully");
+            logger.info("MapKit loaded successfully");
             callback();
           };
           script.onerror = function() {
-            console.error('Error loading mapkit.js');
+            logger.error('Error loading mapkit.js');
           };
           document.head.appendChild(script);
         }
 
         function initializeMap() {
-          logger("Initializing map...");
+          logger.info("Initializing map...");
           mapkit.init({
             authorizationCallback: function(done) {
-              logger("Authorizing...");
+              logger.info("Authorizing...");
               done("${token}");
             }
           });
@@ -212,7 +255,7 @@ async function map(query, token = generateJwt()) {
             document.getElementById("routePanel").style.display = "block";
           }, 10);
 
-          logger("Map initialized");
+          logger.info("Map initialized");
         }
 
         function locationIsUSA(query) {
@@ -237,15 +280,15 @@ async function map(query, token = generateJwt()) {
         }
 
         function searchForLocation(query) {
-          logger("Searching location:", query);
+          logger.info("Searching location:", query);
           const search = new mapkit.Search();
           search.search(query, (error, data) => {
             if (error) {
-              console.error("Search error:", error);
+              logger.error("Search error:", error);
             } else if (data.places && data.places.length > 0) {
 
               const firstPlace = data.places[0];
-              logger("Found place:", firstPlace);
+              logger.info("Found place:", firstPlace);
 
               let span = 0.05;
               if (query.toLowerCase().includes('address:')) {
@@ -403,7 +446,7 @@ async function map(query, token = generateJwt()) {
 
             directions.route(request, (error, data) => {
               if (error) {
-                console.error("Error fetching directions:", error);
+                logger.error("Error fetching directions:", error);
                 travelInfo.style.display = "none";
                 directionsButton.style.display = "none";
               } else if (data && data.routes && data.routes.length > 0) {
@@ -411,13 +454,13 @@ async function map(query, token = generateJwt()) {
                 travelInfo.style.display = "flex";
                 directionsButton.style.display = "flex";
               } else {
-                console.warn("No routes found.");
+                logger.warn("Warning: No routes found.");
                 travelInfo.style.display = "none";
                 directionsButton.style.display = "none";
               }
             });
           } catch (err) {
-            console.error("Error determining US location:", err);
+            logger.error("Error determining US location:", err);
             travelInfo.style.display = "none";
             directionsButton.style.display = "none";
           }
@@ -601,7 +644,7 @@ async function map(query, token = generateJwt()) {
         if (travelInfo) travelInfo.style.display = "none";
         if (directionsButton) directionsButton.style.display = "none";
 
-        logger("Loading map...");
+        logger.info("Loading map...");
         loadMapkit(() => {
           initializeMap();
         });
