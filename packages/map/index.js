@@ -1,7 +1,6 @@
 "use strict";
 
-const generateMapkitToken = require("../map/generateJWT");
-
+const generateJwt = require("./generateJwt");
 const development = process.env.NODE_ENV === "development";
 
 function escapeHTML(str) {
@@ -22,7 +21,7 @@ const _triggers = [
   "route",
 ];
 
-async function map(query, token = generateMapkitToken()) {
+async function map(query, token = generateJwt()) {
   let searchLocation = "";
   for (const trigger of _triggers) {
     const regex = new RegExp(`\\b${trigger}\\b`);
@@ -157,13 +156,9 @@ async function map(query, token = generateMapkitToken()) {
       </div>
 
       <script>
-        const logger = (msg, arg) => {
+       function logger() {
           if (${development}) {
-            if (arg) {
-              console.log(msg, arg);
-              return;
-            }
-            console.log(msg);
+            console.log(...arguments);
           }
         };
         const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches || document.querySelector('html').classList.contains('dark');
