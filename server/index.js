@@ -7,34 +7,38 @@ const packageObject = require(`${__dirname}/../index`);
 const app = express();
 const PORT = 4000;
 
+// Allow all origins (for development)
+const cors = require('cors');
+app.use(cors());
+
 app.set("view engine", "pug");
 app.set("title", "Presearch");
 app.set("PRESEARCH_DOMAIN", "/");
 app.use(express.static("public"));
 
-// share current path and query with views
+// Share current path and query with views
 app.use((req, res, next) => {
     res.locals.path = req.path;
     next();
 });
 
-const checkOverlapingTrigger = async (query) => {
+
+const checkOverlappingTrigger = async (query) => {
     return new Promise(async (resolve, reject) => {
         const packages = Object.keys(packageObject);
         const triggeredPackages = [];
         for (const packageName of packages) {
             const trigger = await packageObject[packageName].trigger(query);
             if (trigger) {
-                triggeredPackages.push(packageName)
+                triggeredPackages.push(packageName);
             }
         }
         if (triggeredPackages.length > 1) {
-            return resolve(triggeredPackages)
+            return resolve(triggeredPackages);
         }
-        resolve(false)
-    })
-    
-}
+        resolve(false);
+    });
+};
 
 const addRoutesTimeout = setTimeout(() => {
     if (packageObject && Object.keys(packageObject).length) {
@@ -48,7 +52,7 @@ const addRoutesTimeout = setTimeout(() => {
                 const geolocation = req.query.geolocation && req.query.geolocation === "1" ? { city: 'London', coords: { lat: 51.5095, lon: -0.0955 } } : null;
                 const trigger = await packageObject[packageName].trigger(query);
                 if (trigger) {
-                    const overlappingPackages = await checkOverlapingTrigger(query);
+                    const overlappingPackages = await checkOverlappingTrigger(query);
                     const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`], geolocation);
                     const packageError = (packageData && packageData.error) && packageData.error;
                     const totalTime = Date.now() - startTime;

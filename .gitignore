@@ -60,4 +60,7 @@ typings/
 # next.js build output
 .next
 
+# MapKitJS specific files
+.p8
+
 .DS_Store
