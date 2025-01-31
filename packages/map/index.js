@@ -1,6 +1,6 @@
 "use strict";
 
-const generateJwt = require("./generateJwt");
+const generateJwt = require("./generateKey");
 const development = process.env.NODE_ENV === "development";
 
 function escapeHTML(str) {
