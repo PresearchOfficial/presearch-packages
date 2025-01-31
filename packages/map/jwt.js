@@ -1,4 +1,4 @@
-const generateJwt = require("./generateJwt");
+const generateJwt = require("./generateKey");
 
 const args = process.argv.slice(2);
 const [seconds] = args;
