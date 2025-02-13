@@ -4,38 +4,89 @@ const generateJwt = require("./generateKey");
 const development = process.env.NODE_ENV === "development";
 
 function escapeHTML(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
-const _triggers = [
-  "map",
-  "location",
-  "address",
-  "directions",
-  "direction",
-  "route",
-];
+const _triggers = {
+    en: ["map", "location", "address", "directions", "direction", "route"],
+    es: ["mapa", "mapas", "ubicación", "ubicaciones", "dirección", "direcciones", "ruta", "rutas"],
+    fr: ["carte", "emplacement", "adresse"],
+    de: ["richtung", "karte", "standort", "adresse", "richtungen"],
+    nl: ["kaart", "locatie", "adres"],
+    it: ["mappa", "posizione", "percorso", "posizione"],
+    pt: ["localização", "endereço", "direção"],
+    pl: ["mapa", "lokalizacja", "adres", "trasa"],
+    tr: ["harita", "konum", "adres", "yön", "rota"],
+    zh: ["dìtú", "wèizhì", "dìzhǐ", "fāngxiàng", "lùxiàn"],
+    ja: ["hōkō", "rūto", "basho", "chizu"],
+    ko: ["banghyang", "gyeonglo", "jido", "wichi"],
+};
+
+const _fromToTriggers = {
+    en: ["from", "to"],
+    es: ["desde", "hasta"],
+    fr: ["de", "à"],
+    de: ["von", "nach"],
+    it: ["da", "a"],
+    nl: ["van", "naar"],
+    pt: ["de", "para"],
+    pl: ["z", "do"],
+    tr: ["nereden", "nereye"],
+    zh: ["cóng", "dào"],
+    ja: ["shuppatsu-chi", "mokutekichi"],
+    ko: ["culbalji", "dochakji"],
+};
+
+const _nonLatinTriggers = {
+    ru: ["карта", "местоположение", "адрес", "направление", "маршрут"],
+    zh: ["地图", "位置", "地址", "方向", "路线"],
+    ja: ["地図", "位置", "アドレス", "方向", "ルート"],
+    ko: ["지도", "위치", "주소", "방향", "경로", "출발지/도착지"],
+};
+
+const _nonLatinFromToTriggers = {
+    ru: ["от", "до"],
+    zh: ["从", "到"],
+    ja: ["から", "まで"],
+    ko: ["에서", "까지"],
+};
 
 async function map(query, token = generateJwt()) {
-  let searchLocation = "";
-  for (const trigger of _triggers) {
-    const regex = new RegExp(`\\b${trigger}\\b`);
-    if (regex.test(query)) {
-      searchLocation = query.split(trigger).join("").trim();
-      break;
+    let searchLocation = "";
+    query = query.toLowerCase();
+
+    for (const [lang, triggers] of Object.entries(_triggers)) {
+        for (const trigger of triggers) {
+            const regex = new RegExp(`\\b${trigger}\\b`);
+            if (regex.test(query)) {
+                searchLocation = query.split(trigger).join("").trim();
+                break;
+            }
+        }
     }
-  }
 
-  if (!searchLocation) {
-    return null;
-  }
+    let fromToLocations;
 
-  return /*html*/ `
+    if (!searchLocation) {
+        for (const [from, to] of Object.values(_fromToTriggers)) {
+            const fromRegex = new RegExp(`\\b${from}\\b`);
+            const toRegex = new RegExp(`\\b${to}\\b`);
+            if (fromRegex.test(query) && toRegex.test(query)) {
+                fromToLocations = query
+                    .split(from)
+                    .join("")
+                    .split(to)
+                    .map((loc) => loc.trim());
+                break;
+            }
+        }
+    }
+
+    if (!searchLocation && !fromToLocations && query !== "map") {
+        return null;
+    }
+
+    return /*html*/ `
     <style>
       #mapWrapper .route-inputs {
         display: flex;
@@ -46,6 +97,10 @@ async function map(query, token = generateJwt()) {
         background: #333;
         color: white;
         border-color: #666;
+      }
+
+      .dark #mapWrapper #travelInfo {
+        color: white;
       }
 
       @media only screen and (max-width:800px) {
@@ -215,6 +270,8 @@ async function map(query, token = generateJwt()) {
 
         // For single location searches:
         const initialSearchLocation = "${searchLocation}";
+        const fromToLocations = ${JSON.stringify(fromToLocations)};
+        const query = "${query}";
 
         function loadMapkit(callback) {
           logger.info("Loading MapKit...");
@@ -251,6 +308,10 @@ async function map(query, token = generateJwt()) {
           setTimeout(() => {
             if (initialSearchLocation) {
               searchForLocation(initialSearchLocation);
+            } else if (fromToLocations) {
+              document.getElementById("startLocation").value = fromToLocations[0];
+              document.getElementById("endLocation").value = fromToLocations[1];
+              getTransportRoute("Automobile");
             }
             document.getElementById("routePanel").style.display = "block";
           }, 10);
@@ -411,6 +472,13 @@ async function map(query, token = generateJwt()) {
         document.addEventListener("keydown", (e) => {
           if (e.key === "Escape" && isFullScreen) {
             toggleFullScreen();
+          }
+          if (e.key === "Enter") {
+            const startInput = document.getElementById("startLocation");
+            const endInput = document.getElementById("endLocation");
+            if (startInput === document.activeElement || endInput === document.activeElement) {
+              getTransportRoute("Automobile");
+            }
           }
         });
 
@@ -654,11 +722,28 @@ async function map(query, token = generateJwt()) {
 }
 
 async function trigger(query) {
-  query = query.toLowerCase();
-  return _triggers.some(trigger => {
-    const regex = new RegExp(`\\b${trigger}\\b`);
-    return regex.test(query) && query.split(trigger).join("").trim().length > 0;
-  });
+    query = query.toLowerCase();
+    if (query === "map") return true;
+    try {
+        const triggered = Object.values(_triggers).some((triggerArray) => {
+            return triggerArray.some((trigger) => {
+                const regex = new RegExp(`\\b${trigger}\\b`);
+                return regex.test(query) && query.split(trigger).join("").trim().length > 0;
+            });
+        });
+        if (triggered) return true;
+
+        const triggeredFromTo = Object.values(_fromToTriggers).some((fromToArray) => {
+            return fromToArray.every((trigger) => {
+                const regex = new RegExp(`\\b${trigger}\\b`);
+                return regex.test(query) && query.split(trigger).join("").trim().length > 0;
+            });
+        });
+        return triggeredFromTo;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
 }
 
 module.exports = { map, trigger };
