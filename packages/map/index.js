@@ -21,6 +21,8 @@ const _triggers = {
     ja: ["hōkō", "rūto", "basho", "chizu"],
     ko: ["banghyang", "gyeonglo", "jido", "wichi"],
 };
+const _triggersArray = Object.values(_triggers).flat();
+const _triggersSet = new Set(_triggersArray);
 
 const _fromToTriggers = {
     en: ["from", "to"],
@@ -55,18 +57,15 @@ async function map(query, token = generateJwt()) {
     let searchLocation = "";
     query = query.toLowerCase();
 
-    for (const [lang, triggers] of Object.entries(_triggers)) {
-        for (const trigger of triggers) {
-            const regex = new RegExp(`\\b${trigger}\\b`);
-            if (regex.test(query)) {
-                searchLocation = query.split(trigger).join("").trim();
-                break;
-            }
+    for (const trigger of _triggersArray) {
+        const regex = new RegExp(`\\b${trigger}\\b`);
+        if (regex.test(query)) {
+            searchLocation = query.split(trigger).join("").trim();
+            break;
         }
     }
 
     let fromToLocations;
-
     if (!searchLocation) {
         for (const [from, to] of Object.values(_fromToTriggers)) {
             const fromRegex = new RegExp(`\\b${from}\\b`);
@@ -82,8 +81,10 @@ async function map(query, token = generateJwt()) {
         }
     }
 
-    if (!searchLocation && !fromToLocations && query !== "map") {
-        return null;
+    if (!searchLocation && !fromToLocations) {
+        if (!_triggersSet.has(query)) {
+            return null;
+        }
     }
 
     return /*html*/ `
@@ -723,13 +724,12 @@ async function map(query, token = generateJwt()) {
 
 async function trigger(query) {
     query = query.toLowerCase();
-    if (query === "map") return true;
     try {
-        const triggered = Object.values(_triggers).some((triggerArray) => {
-            return triggerArray.some((trigger) => {
-                const regex = new RegExp(`\\b${trigger}\\b`);
-                return regex.test(query) && query.split(trigger).join("").trim().length > 0;
-            });
+        if (_triggersSet.has(query)) return true;
+
+        const triggered = _triggersArray.some((trigger) => {
+            const regex = new RegExp(`\\b${trigger}\\b`);
+            return regex.test(query) && query.split(trigger).join("").trim().length > 0;
         });
         if (triggered) return true;
 
