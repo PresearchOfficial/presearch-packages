@@ -72,9 +72,9 @@ async function map(query, token = generateJwt()) {
             const toRegex = new RegExp(`\\b${to}\\b`);
             if (fromRegex.test(query) && toRegex.test(query)) {
                 fromToLocations = query
-                    .split(from)
+                    .split(fromRegex)
                     .join("")
-                    .split(to)
+                    .split(toRegex)
                     .map((loc) => loc.trim());
                 break;
             }
@@ -210,6 +210,13 @@ async function map(query, token = generateJwt()) {
         </div>
         <div id="routeSteps" style="padding: 16px;"></div>
       </div>
+
+      <div id="changeLocationPanel" style="flex: 1; display: flex; gap: 8px; margin-bottom: 16px;">
+      <input type="text" id="changeLocation" placeholder="Search location" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
+      <button onclick="searchForLocation(document.getElementById('changeLocation').value)" style="background: #4285f4; color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer;">
+        Search
+      </button>
+    </div>
 
       <script>
         (function () {
@@ -477,8 +484,12 @@ async function map(query, token = generateJwt()) {
           if (e.key === "Enter") {
             const startInput = document.getElementById("startLocation");
             const endInput = document.getElementById("endLocation");
+            const searchLocationInput = document.getElementById("changeLocation");
             if (startInput === document.activeElement || endInput === document.activeElement) {
               getTransportRoute("Automobile");
+            }
+            if (searchLocationInput === document.activeElement) {
+              searchForLocation(searchLocationInput.value);
             }
           }
         });
