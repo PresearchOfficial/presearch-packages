@@ -60,7 +60,7 @@ async function map(query, token = generateJwt()) {
     for (const trigger of _triggersArray) {
         const regex = new RegExp(`\\b${trigger}\\b`);
         if (regex.test(query)) {
-            searchLocation = query.split(trigger).join("").trim();
+            searchLocation = query.split(regex).join("").trim();
             break;
         }
     }
@@ -740,14 +740,14 @@ async function trigger(query) {
 
         const triggered = _triggersArray.some((trigger) => {
             const regex = new RegExp(`\\b${trigger}\\b`);
-            return regex.test(query) && query.split(trigger).join("").trim().length > 0;
+            return regex.test(query) && query.split(regex).join("").trim().length > 0;
         });
         if (triggered) return true;
 
         const triggeredFromTo = Object.values(_fromToTriggers).some((fromToArray) => {
             return fromToArray.every((trigger) => {
                 const regex = new RegExp(`\\b${trigger}\\b`);
-                return regex.test(query) && query.split(trigger).join("").trim().length > 0;
+                return regex.test(query) && query.split(regex).join("").trim().length > 0;
             });
         });
         return triggeredFromTo;
