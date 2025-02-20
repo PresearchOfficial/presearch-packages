@@ -1,5 +1,5 @@
 div(class="flex-1 flex items-center relative w-52")
-    form(action=`${path}` method="GET" class="w-full" x-on:submit="resultsFormSubmit($event, $refs.searchInput.value)")
+    form(action=`${path}` name="q" method="GET" class="w-full" x-on:submit="resultsFormSubmit($event, $refs.searchInput.value)")
         div(class="relative overflow-hidden shadow rounded flex items-center mt-3 md:mt-5")
             input(x-ref="searchInput" placeholder="Test your package ᕙ(⇀‸↼‶)ᕗ" type="text" autocomplete="off" name="q" value=`${requestQuery ? decodeURIComponent(requestQuery) : ""}` class="w-full h-12 pr-20 focus:outline-none pl-4 font-light dark:bg-background-dark300 dark:text-gray-50 text-sm sm:text-base" autofocus=requestQuery ? false : true)
             div(x-data="searchForm()" class="absolute top-0 right-0 flex items-center h-full ml-2 mr-2")

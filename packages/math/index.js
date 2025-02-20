@@ -1,92 +1,91 @@
 "use strict";
-const mathjs = require('mathjs');
+const mathjs = require("mathjs");
 var mj = mathjs.create(mathjs.all);
-mj.config({ number: 'BigNumber' });
+mj.config({ number: "BigNumber" });
 
 // The goal of these queries are to allow the math calculator to show even when common misspellings are used (improve accessiblity).
 // Selection of mistypings of the word "calculator" from https://www.spellchecker.net/calculator
 // If at some point presearch implements a search helper, this section will not be needed.
-  // Example of Google "search helper": Google "cacualtor" -> "Showing results for calculator" - "Search instead for cacualtor"
+// Example of Google "search helper": Google "cacualtor" -> "Showing results for calculator" - "Search instead for cacualtor"
 const mistypedQueries = [
-  "calculators",
-  "calcultor",
-  "cacualtor",
-  "caluculator",
-  "claculate",
-  "caluculate",
-  "counculater",
-  "calcualtors",
-  "calcualator",
-  "calcuatle",
-  "caculator",
-  "calulate",
-  "calculars",
-  "calculutors",
-  "calulater",
-  "calcualtor",
-  "calcualate",
-  "caluculators",
-  "callculate",
-  "caluclator",
-  "calculaters",
-  "calaculate",
-  "caluclate",
-  "calculater",
-  "cacluator",
-  "calculet",
-  "calclate",
-  "caclulate",
-  "calcluate",
-  "calcukate",
-  "calaculator",
-  "canculate",
-  "caculate",
-  "calculaor",
-  "calcalate",
-  "calcuate",
-  "calculat",
-  "calcolator",
-  "calcuator",
-  "calulator",
-  "calculaotr",
-  "claculator",
-  "calcilate",
-  "callulator",
-  "calculte",
-  "caculater",
-  "calicullar",
-  "calucator",
-  "cacultor",
-  "calculattor",
-  "calquator"
+    "calculators",
+    "calcultor",
+    "cacualtor",
+    "caluculator",
+    "claculate",
+    "caluculate",
+    "counculater",
+    "calcualtors",
+    "calcualator",
+    "calcuatle",
+    "caculator",
+    "calulate",
+    "calculars",
+    "calculutors",
+    "calulater",
+    "calcualtor",
+    "calcualate",
+    "caluculators",
+    "callculate",
+    "caluclator",
+    "calculaters",
+    "calaculate",
+    "caluclate",
+    "calculater",
+    "cacluator",
+    "calculet",
+    "calclate",
+    "caclulate",
+    "calcluate",
+    "calcukate",
+    "calaculator",
+    "canculate",
+    "caculate",
+    "calculaor",
+    "calcalate",
+    "calcuate",
+    "calculat",
+    "calcolator",
+    "calcuator",
+    "calulator",
+    "calculaotr",
+    "claculator",
+    "calcilate",
+    "callulator",
+    "calculte",
+    "caculater",
+    "calicullar",
+    "calucator",
+    "cacultor",
+    "calculattor",
+    "calquator",
 ];
 const properQueries = ["cal", "calc", "calculate", "calculator"];
 const eligibleQueries = properQueries.concat(mistypedQueries);
 
 async function math(query) {
-  let expression;
-  let answer;
-  if (eligibleQueries.includes(query)) {
-    expression = 0;
-    answer = '';
-  } else {
-    try {
-      //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
-      let result = query.replace(/×/gi, "*");
-      result = result.replace(/⋅/gi, "*");
-      result = result.replace(/÷/gi, "/");
-      result = result.replace(/,/gi, "");
-      const data = mj.evaluate(result);
-      const decimalPart = String(data).split('.')[1];
-      expression = result;
-      answer = `= ${decimalPart && decimalPart > 6 ? data.toFixed(6) : data}`
-    } catch (error) {
-      return { error };
+    let expression;
+    let answer;
+    if (eligibleQueries.includes(query)) {
+        expression = 0;
+        answer = "";
+    } else {
+        try {
+            //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
+            let result = query.replace(/×/gi, "*");
+            result = result.replace(/⋅/gi, "*");
+            result = result.replace(/÷/gi, "/");
+            result = result.replace(/,/gi, "");
+            const data = mj.evaluate(result);
+            const decimalPart = String(data).split(".")[1];
+            expression = result;
+            answer = `= ${decimalPart && decimalPart > 6 ? data.toFixed(6) : data}`;
+        } catch (error) {
+            return { error };
+        }
     }
-  }
 
-
-  return `
+    return /*html*/ `
 
 <div id="presearchPackage">
 <table>
@@ -1043,13 +1042,15 @@ const decimalStyles = {
     English: { decimal: ".", grouping: "," }
 };
 
+let answer = "${answer}";
+
 class Calculator {
     constructor(previousOperandTextElement, currentOperandTextElement) {
         this.previousOperandTextElement = previousOperandTextElement;
         this.currentOperandTextElement = currentOperandTextElement;
         this.decimalStyle = "English"; // Default decimal style
         this.setSeparators(); // Set the decimal and grouping separators based on the style
-        this.clear(); // Initialize the calculator by clearing previous operations
+        if (!answer) this.clear(); // Initialize the calculator by clearing previous operations
     }
 
     // Set the decimal and grouping separators according to the current decimal style
@@ -1295,17 +1296,10 @@ decimalStyleButton.addEventListener("click", function() {
     calculator.toggleDecimalStyle();
 });
 
-let searchInputFocused = false;
-document.querySelector("input").addEventListener("mouseover", function() {
-    searchInputFocused = true;
-});
-
-document.querySelector("#presearchPackage").addEventListener("mouseover", function() {
-    searchInputFocused = false;
-});
+const searchInput = document.querySelector("input[name=q]");
 
 document.addEventListener("keydown", function(event) {
-    if (searchInputFocused) return;
+    if (searchInput && searchInput === document.activeElement) return;
     event.preventDefault();
     switch (event.key) {
         case "+":
@@ -1396,16 +1390,8 @@ document.addEventListener("keydown", function(event) {
             return;
     }
 });
-
-
-
-
-
-/*
-CSS
-*/
-
 </script>
+
 <style>
   #presearchPackage .output-container{
     width: 100%;
@@ -1504,28 +1490,28 @@ CSS
   `;
 }
 async function trigger(query) {
-  //ignore phone numbers
-  const regexPhoneNumber = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
-  if (query.match(regexPhoneNumber)) {
-    return false;
-  }
-  query = query.toLowerCase();
-  if (eligibleQueries.includes(query)) {
-    return true
-  }
-  const chars = new RegExp(/([a-zA-Z])+/g);
-  if (!isNaN(query) || chars.test(query)) return false;
-  try {
-    //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
-    let result = query.replace(/×/gi, "*");
-    result = result.replace(/⋅/gi, "*");
-    result = result.replace(/÷/gi, "/");
-    result = result.replace(/,/gi, "");
-    mj.evaluate(result);
-    return true;
-  } catch (error) {
-    return false;
-  }
+    //ignore phone numbers
+    const regexPhoneNumber = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    if (query.match(regexPhoneNumber)) {
+        return false;
+    }
+    query = query.toLowerCase();
+    if (eligibleQueries.includes(query)) {
+        return true;
+    }
+    const chars = new RegExp(/([a-zA-Z])+/g);
+    if (!isNaN(query) || chars.test(query)) return false;
+    try {
+        //x and ⋅ are multiplication symbols not a letter x and decimal pointer(.)
+        let result = query.replace(/×/gi, "*");
+        result = result.replace(/⋅/gi, "*");
+        result = result.replace(/÷/gi, "/");
+        result = result.replace(/,/gi, "");
+        mj.evaluate(result);
+        return true;
+    } catch (error) {
+        return false;
+    }
 }
 
 module.exports = { math, trigger };
