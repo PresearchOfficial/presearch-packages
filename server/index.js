@@ -22,7 +22,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 const checkOverlappingTrigger = async (query) => {
     return new Promise(async (resolve, reject) => {
         const packages = Object.keys(packageObject);
@@ -56,16 +55,37 @@ const addRoutesTimeout = setTimeout(() => {
                     const packageData = await packageObject[packageName][packageName](query, process.env[`API.${packageName.toUpperCase()}`], geolocation);
                     const packageError = (packageData && packageData.error) && packageData.error;
                     const totalTime = Date.now() - startTime;
-                    return res.render("search", { title: packageName, packageData, packageError, triggered: true, overlappingPackages, query, packageInfo: JSON.stringify({ version, author }), totalTime });
+
+                    if (Array.isArray(packageData) && packageData[0]?.redirect) {
+                        return res.redirect(packageData[0].url);
+                    }
+
+                    return res.render("search", {
+                        title: packageName,
+                        packageData,
+                        packageError,
+                        triggered: true,
+                        overlappingPackages,
+                        query,
+                        packageInfo: JSON.stringify({ version, author }),
+                        totalTime,
+                        bangMap: packageObject[packageName].bangMap // Pass bangMap
+                    });
                 }
-                res.render("search", { title: packageName, triggered: false, query, packageInfo});
+                res.render("search", {
+                    title: packageName,
+                    triggered: false,
+                    query,
+                    packageInfo,
+                    bangMap: packageObject[packageName].bangMap // Pass bangMap
+                });
             });
         });
     }
 }, 200);
 
 app.get("/", async (req, res) => {
-    res.render("index", { packageObject });
+    res.render("index", { packageObject, bangMap: packageObject.searchBangs?.bangMap });
 });
 
 app.listen(PORT, () => console.log(`Server listening on: ${PORT}`));
