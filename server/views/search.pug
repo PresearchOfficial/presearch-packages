@@ -10,3 +10,187 @@ block content
             div(class="w-full 2lg:flex 2lg:flex-row-reverse 2lg:justify-end")
                 include ./_partials/special-sections/info
                 include ./_partials/standard-results
+
+        // Popup for bang suggestions
+        #bangPopup.bang-popup(style="display: none;")
+            h3 Available Search Bangs
+            ul#bangList
+
+    style.
+        .search-bar {
+            width: 100%;
+            max-width: 400px;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        .bang-popup {
+            position: absolute;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            max-width: 600px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .bang-popup h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+        .bang-popup ul {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .bang-popup li {
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        .bang-popup img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        .bang-popup a {
+            color: #007bff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .bang-popup a:hover {
+            text-decoration: underline;
+        }
+        .bang-popup .text-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .bang-popup .site-name {
+            font-size: 14px;
+        }
+        .bang-popup .bang-acronym {
+            font-size: 12px;
+            color: #555;
+            margin-left: 5px;
+        }
+        .dark .bang-popup {
+            background: #333;
+            border-color: #555;
+        }
+        .dark .bang-popup h3 {
+            color: #fff;
+        }
+        .dark .bang-popup a {
+            color: #66b0ff;
+        }
+        .dark .bang-popup .bang-acronym {
+            color: #aaa;
+        }
+        .bang-popup li:hover {
+            background-color: #f5f5f5;
+        }
+        .dark .bang-popup li:hover {
+            background-color: #444;
+        }
+
+    script.
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchBar = document.querySelector('input[name="q"]');
+            const bangPopup = document.querySelector('#bangPopup');
+            const bangList = document.querySelector('#bangList');
+            const bangMap = !{JSON.stringify(bangMap || {})};
+
+            if (!searchBar) {
+                console.error('Search bar not found.');
+                return;
+            }
+
+            if (!bangPopup || !bangList) {
+                console.error('Popup elements not found. bangPopup:', bangPopup, 'bangList:', bangList);
+                return;
+            }
+
+            // Map of bang acronyms to their favicon URLs
+            const bangIcons = {
+                '!w': 'https://en.wikipedia.org/favicon.ico',
+                '!imdb': 'https://www.imdb.com/favicon.ico',
+                '!a': 'https://www.amazon.com/favicon.ico',
+                '!e': 'https://www.ebay.com/favicon.ico',
+                '!so': 'https://stackoverflow.com/favicon.ico',
+                '!gh': 'https://github.com/favicon.ico',
+                '!z': 'https://www.zillow.com/favicon.ico',
+                '!x': 'https://www.google.com/s2/favicons?domain=x.com',
+                '!li': 'https://www.google.com/s2/favicons?domain=linkedin.com',
+                '!r': 'https://www.reddit.com/favicon.ico',
+                '!ste': 'https://store.steampowered.com/favicon.ico',
+                '!nf': 'https://www.netflix.com/favicon.ico',
+                '!p': 'https://www.pinterest.com/favicon.ico',
+                '!wa': 'https://www.google.com/s2/favicons?domain=wolframalpha.com',
+                '!yt': 'https://www.youtube.com/favicon.ico',
+                '!g': 'https://www.google.com/favicon.ico',
+                '!b': 'https://www.bing.com/favicon.ico',
+                '!y': 'https://search.yahoo.com/favicon.ico',
+                '!d': 'https://duckduckgo.com/favicon.ico',
+                '!q': 'https://www.quora.com/favicon.ico',
+                '!fb': 'https://www.facebook.com/favicon.ico',
+                '!t': 'https://www.tiktok.com/favicon.ico',
+            };
+
+            // Populate the popup with bangs and icons
+            function populateBangList() {
+                bangList.innerHTML = '';
+                Object.keys(bangMap).forEach(bang => {
+                    // Clean up the site name (e.g., "en.wikipedia.org" -> "Wikipedia")
+                    const fullSiteName = bangMap[bang].split('/')[2].replace('www.', '');
+                    const siteName = fullSiteName.split('.')[0].replace('en', 'Wikipedia');
+                    const iconUrl = bangIcons[bang] || '/favicon.ico';
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.innerHTML = `
+                        <img src="${iconUrl}" alt="${siteName} icon" />
+                        <div class="text-container">
+                            <span class="site-name">${siteName}</span>
+                            <span class="bang-acronym">${bang}</span>
+                        </div>
+                    `;
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const currentQuery = searchBar.value.slice(0,-1);
+                        const newQuery = currentQuery ? `${currentQuery} ${bang}` : bang;
+                        searchBar.value = newQuery; // Append the bang to the end
+                        searchBar.focus(); // Focus the search bar
+                        bangPopup.style.display = 'none'; // Close the popup
+                    });
+                    li.appendChild(a);
+                    bangList.appendChild(li);
+                });
+            }
+
+            // Show/hide the popup based on input
+            searchBar.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if (query.includes('!')) {
+                    const rect = searchBar.getBoundingClientRect();
+                    bangPopup.style.top = `${rect.bottom + window.scrollY}px`;
+                    bangPopup.style.left = `${rect.left + window.scrollX}px`;
+                    bangPopup.style.display = 'block';
+                    populateBangList();
+                } else {
+                    bangPopup.style.display = 'none';
+                }
+            });
+
+            // Hide the popup when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!searchBar.contains(e.target) && !bangPopup.contains(e.target)) {
+                    bangPopup.style.display = 'none';
+                }
+            });
+        });
